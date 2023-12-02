@@ -1,0 +1,46 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="30dp"
+    android:alpha="0.9"
+    android:viewportWidth="30"
+    android:viewportHeight="30">
+    <group>
+        <clip-path android:pathData="M15,0L15,0A15,15 0,0 1,30 15L30,15A15,15 0,0 1,15 30L15,30A15,15 0,0 1,0 15L0,15A15,15 0,0 1,15 0z" />
+        <path
+            android:fillColor="#F0F0F0"
+            android:pathData="M-7,0H38V30H-7V0Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M18.313,0H12.688V12.188H-7V17.813H12.688V30H18.313V17.813H38V12.188H18.313V0Z" />
+        <path
+            android:fillColor="#0052B4"
+            android:pathData="M27.969,20L38,25.901V20H27.969ZM21,20L38,30V27.172L25.807,20H21ZM33.472,30L21,22.663V30H33.472Z" />
+        <path
+            android:fillColor="#F0F0F0"
+            android:pathData="M21,20L38,30V27.172L25.807,20H21Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M21,20L38,30V27.172L25.807,20H21Z" />
+        <path
+            android:fillColor="#0052B4"
+            android:pathData="M1.117,20L-7,24.509V20H1.117ZM11,21.272V30H-4.71L11,21.272Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M5.91,20L-7,27.172V30L11,20H5.91Z" />
+        <path
+            android:fillColor="#0052B4"
+            android:pathData="M3.621,10L-7,4.099V10H3.621ZM11,10L-7,0V2.828L5.91,10H11ZM-2.205,0L11,7.337V0H-2.205Z" />
+        <path
+            android:fillColor="#F0F0F0"
+            android:pathData="M11,10L-7,0V2.828L5.91,10H11Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M11,10L-7,0V2.828L5.91,10H11Z" />
+        <path
+            android:fillColor="#0052B4"
+            android:pathData="M30.334,10L38,5.491V10H30.334ZM21,8.728V0H35.837L21,8.728Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M25.807,10L38,2.828V0L21,10H25.807Z" />
+    </group>
+</vector>

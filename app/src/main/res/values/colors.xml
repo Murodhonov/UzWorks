@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!--    app's base colors   -->
+    <color name="black_blue">#130160</color>
+    <color name="black_blue_60">#99130160</color>
+    <color name="white_blue">#EAF1FF</color>
+    <color name="yellow">#FF9228</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#00BA29</color>
+    <color name="text_color">#524B6B</color>
+    <color name="blue">#2096C7</color>
+    <color name="purple">#BEAFFE</color>
+
+    <color name="enabled">#130160</color>
+    <color name="disabled">#EAF1FF</color>
+
+    <color name="middle_red">#FF9E9E</color>
+
+    <color name="registration_background">#F9F9F9</color>
+    <color name="middle_green">#3300BA29</color>
+
+</resources>

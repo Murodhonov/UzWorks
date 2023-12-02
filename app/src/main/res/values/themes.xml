@@ -1,0 +1,72 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.UzWorks" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="materialCardViewStyle">@style/CardViewStyle</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+    </style>
+
+    <style name="Theme.UzWorks" parent="Base.Theme.UzWorks" />
+
+    <!--
+            TextViews style
+    -->
+
+    <style name="TextViewStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/dmsans_regular</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+
+    <!--
+            EditTexts style in registration
+    -->
+    <style name="RegistrationEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/registration_edit_text_background</item>
+        <item name="android:fontFamily">@font/dmsans_regular</item>
+        <item name="android:textColorHint">@color/text_color</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!--
+            EditTexts style in registration
+    -->
+    <style name="MainEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/inapp_edit_text_background</item>
+        <item name="android:fontFamily">@font/dmsans_regular</item>
+        <item name="android:textColorHint">@color/text_color</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!--
+            CardView style
+    -->
+
+    <style name="CardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="android:backgroundTint">@color/enabled</item>
+        <item name="cornerRadius">7dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?selectableItemBackgroundBorderless</item>
+        <item name="cardElevation">3dp</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+
+    <!--
+        Button style
+    -->
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">10dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/dmsans_bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/black_blue</item>
+    </style>
+
+</resources>
