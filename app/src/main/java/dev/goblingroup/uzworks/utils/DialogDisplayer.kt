@@ -225,7 +225,7 @@ private fun setChipGroup(
         chip.setChipStrokeColorResource(R.color.middle_green)
         chip.setTextColor(resources.getColor(R.color.text_color))
         chip.typeface = ResourcesCompat.getFont(context, R.font.dmsans_regular)
-        chip.chipCornerRadius = dpToPx(resources, 7f)
+        chip.chipCornerRadius = dpToPx(7f)
         chip.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
         chipGroup.addView(chip)
     }

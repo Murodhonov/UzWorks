@@ -5,9 +5,12 @@ import android.util.TypedValue
 import androidx.navigation.NavOptions
 import dev.goblingroup.uzworks.R
 
-fun dpToPx(resources: Resources, dp: Float): Float {
-    val metrics = resources.displayMetrics
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics)
+fun dpToPx(distance: Float): Float {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        distance,
+        Resources.getSystem().displayMetrics
+    )
 }
 
 fun getNavOptions(): NavOptions {

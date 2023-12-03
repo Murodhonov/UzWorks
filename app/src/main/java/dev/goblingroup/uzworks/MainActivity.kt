@@ -31,8 +31,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         binding.apply {
+            setContentView(root)
+            window.statusBarColor = getColor(R.color.black_blue)
             bottomBar.tag = bottomBar.visibility
             bottomBar
                 .viewTreeObserver
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                             showBottomNavigation()
                         }
                     }
+
                     else -> {
                         if (canHideAnimate()) {
                             hideBottomNavigation()
@@ -97,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     private fun showBottomNavigation() {
         binding.apply {
             val showAnimation = TranslateAnimation(
-                0f, 0f, bottomBar.height.toFloat() + dpToPx(resources, 10f), 0f
+                0f, 0f, bottomBar.height.toFloat() + dpToPx(10f), 0f
             )
             showAnimation.duration = 300 // Adjust the duration as needed
 
@@ -124,7 +126,7 @@ class MainActivity : AppCompatActivity() {
     private fun hideBottomNavigation() {
         binding.apply {
             val hideAnimation = TranslateAnimation(
-                0f, 0f, 0f, bottomBar.height.toFloat() + dpToPx(resources, 10f)
+                0f, 0f, 0f, bottomBar.height.toFloat() + dpToPx(10f)
             )
             hideAnimation.duration = 300 // Adjust the duration as needed
 
