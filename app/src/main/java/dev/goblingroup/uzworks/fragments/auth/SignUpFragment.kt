@@ -52,18 +52,21 @@ class SignUpFragment : Fragment() {
             fullNameEt.addTextChangedListener {
                 if (fullNameErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     fullNameErrorLayout.visibility = View.GONE
+                    fullNameEt.setBackgroundResource(R.drawable.registration_edit_text_background)
                 }
             }
 
             usernameEt.addTextChangedListener {
                 if (usernameErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     usernameErrorLayout.visibility = View.GONE
+                    usernameEt.setBackgroundResource(R.drawable.registration_edit_text_background)
                 }
             }
 
             passwordEt.addTextChangedListener {
                 if (passwordErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     passwordErrorLayout.visibility = View.GONE
+                    passwordEt.setBackgroundResource(R.drawable.registration_edit_text_background)
                 }
             }
 
@@ -72,6 +75,7 @@ class SignUpFragment : Fragment() {
                         .isNotEmpty()
                 ) {
                     confirmPasswordErrorLayout.visibility = View.GONE
+                    confirmPasswordEt.setBackgroundResource(R.drawable.registration_edit_text_background)
                     confirmPasswordErrorTv.text = "Confirm password should enter"
                 }
             }
@@ -100,6 +104,7 @@ class SignUpFragment : Fragment() {
                 if (confirmPasswordEt.text.toString() != passwordEt.text.toString()) {
                     confirmPasswordErrorTv.text = "Please confirm the password"
                     confirmPasswordErrorLayout.visibility = View.VISIBLE
+                    confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
                 } else {
                     findNavController().navigate(
                         resId = R.id.selectRoleFragment,
@@ -110,15 +115,19 @@ class SignUpFragment : Fragment() {
             } else {
                 if (fullNameEt.text.toString().isEmpty()) {
                     fullNameErrorLayout.visibility = View.VISIBLE
+                    fullNameEt.setBackgroundResource(R.drawable.error_edit_text_background)
                 }
                 if (usernameEt.text.toString().isEmpty()) {
                     usernameErrorLayout.visibility = View.VISIBLE
+                    usernameEt.setBackgroundResource(R.drawable.error_edit_text_background)
                 }
                 if (passwordEt.text.toString().isEmpty()) {
                     passwordErrorLayout.visibility = View.VISIBLE
+                    passwordEt.setBackgroundResource(R.drawable.error_edit_text_background)
                 }
                 if (confirmPasswordEt.text.toString().isEmpty()) {
                     confirmPasswordErrorLayout.visibility = View.VISIBLE
+                    confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
                 }
             }
         }

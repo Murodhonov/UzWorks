@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearSnapHelper
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.rv_adapters.WorksAdapter
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
@@ -35,6 +36,7 @@ class HomeFragment : Fragment() {
                     navOptions = getNavOptions()
                 )
             }
+            LinearSnapHelper().attachToRecyclerView(recommendedWorkAnnouncementsRv)
             recommendedWorkAnnouncementsRv.adapter = adapter
         }
     }

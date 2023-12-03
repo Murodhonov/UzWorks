@@ -45,8 +45,6 @@ class LoginFragment : Fragment() {
                 if (usernameEt.text.toString().isNotEmpty() && passwordEt.text.toString()
                         .isNotEmpty()
                 ) {
-                    usernameErrorLayout.visibility = View.GONE
-                    passwordErrorLayout.visibility = View.GONE
                     findNavController().navigate(
                         resId = R.id.homeFragment,
                         args = null,
@@ -55,9 +53,11 @@ class LoginFragment : Fragment() {
                 } else {
                     if (usernameEt.text.toString().isEmpty()) {
                         usernameErrorLayout.visibility = View.VISIBLE
+                        usernameEt.setBackgroundResource(R.drawable.error_edit_text_background)
                     }
                     if (passwordEt.text.toString().isEmpty()) {
                         passwordErrorLayout.visibility = View.VISIBLE
+                        passwordEt.setBackgroundResource(R.drawable.error_edit_text_background)
                     }
                 }
             }
@@ -85,12 +85,14 @@ class LoginFragment : Fragment() {
             usernameEt.addTextChangedListener {
                 if (usernameErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     usernameErrorLayout.visibility = View.GONE
+                    usernameEt.setBackgroundResource(R.drawable.registration_edit_text_background)
                 }
             }
 
             passwordEt.addTextChangedListener {
                 if (passwordErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     passwordErrorLayout.visibility = View.GONE
+                    passwordEt.setBackgroundResource(R.drawable.registration_edit_text_background)
                 }
             }
         }
