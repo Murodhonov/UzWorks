@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.AnimationSet
 import android.view.animation.TranslateAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -24,8 +25,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
-    private var lastId = -1
+
     private lateinit var bottomMenu: Menu
+
+    private var lastId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,15 +59,10 @@ class MainActivity : AppCompatActivity() {
                     R.id.jobsFragment,
                     R.id.chatsListFragment,
                     R.id.profileFragment -> {
-                        if (canShowAnimate()) {
-                            showBottomNavigation()
-                        }
+                        showToolbarAndBottom()
                     }
-
                     else -> {
-                        if (canHideAnimate()) {
-                            hideBottomNavigation()
-                        }
+                        hideToolbarAndBottom()
                     }
                 }
             }
@@ -82,28 +80,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun canHideAnimate(): Boolean {
-        return lastId == R.id.homeFragment ||
+    private fun showToolbarAndBottom() {
+        binding.apply {
+            if (lastId == R.id.homeFragment ||
                 lastId == R.id.jobsFragment ||
                 lastId == R.id.chatsListFragment ||
                 lastId == R.id.profileFragment
-    }
-
-    private fun canShowAnimate(): Boolean {
-        return lastId != R.id.homeFragment &&
-                lastId != R.id.jobsFragment &&
-                lastId != R.id.chatsListFragment &&
-                lastId != R.id.profileFragment
-    }
-
-    private fun showBottomNavigation() {
-        binding.apply {
-            val showAnimation = TranslateAnimation(
+            ) return
+            // Animation to show the bottom navigation
+            val showBottomBarAnimation = TranslateAnimation(
                 0f, 0f, bottomBar.height.toFloat() + dpToPx(10f), 0f
             )
-            showAnimation.duration = 300 // Adjust the duration as needed
+            showBottomBarAnimation.duration = 300
 
-            showAnimation.setAnimationListener(object : Animation.AnimationListener {
+            // Animation to show the toolbar
+            val showToolbarAnimation = TranslateAnimation(
+                0f, 0f, -toolbar.height.toFloat() - dpToPx(10f), 0f
+            )
+            showToolbarAnimation.duration = 300
+
+            val animationSet = AnimationSet(true)
+            animationSet.addAnimation(showBottomBarAnimation)
+            animationSet.addAnimation(showToolbarAnimation)
+
+            animationSet.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(animation: Animation) {
                     // Animation start
                 }
@@ -111,7 +111,8 @@ class MainActivity : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation) {
                     // Set visibility to VISIBLE after animation ends
                     bottomBar.visibility = View.VISIBLE
-                    updateLastId(navController)
+                    toolbar.visibility = View.VISIBLE
+                    lastId = navController.currentDestination?.id
                 }
 
                 override fun onAnimationRepeat(animation: Animation) {
@@ -119,18 +120,35 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-            bottomBar.startAnimation(showAnimation)
+            bottomBar.startAnimation(animationSet)
+            toolbar.startAnimation(animationSet)
         }
     }
 
-    private fun hideBottomNavigation() {
+    private fun hideToolbarAndBottom() {
         binding.apply {
-            val hideAnimation = TranslateAnimation(
+            if (lastId != R.id.homeFragment &&
+                lastId != R.id.jobsFragment &&
+                lastId != R.id.chatsListFragment &&
+                lastId != R.id.profileFragment
+            ) return
+            // Animation to hide the bottom navigation
+            val hideBottomBarAnimation = TranslateAnimation(
                 0f, 0f, 0f, bottomBar.height.toFloat() + dpToPx(10f)
             )
-            hideAnimation.duration = 300 // Adjust the duration as needed
+            hideBottomBarAnimation.duration = 300
 
-            hideAnimation.setAnimationListener(object : Animation.AnimationListener {
+            // Animation to hide the toolbar
+            val hideToolbarAnimation = TranslateAnimation(
+                0f, 0f, 0f, -toolbar.height.toFloat() - dpToPx(10f)
+            )
+            hideToolbarAnimation.duration = 300
+
+            val animationSet = AnimationSet(true)
+            animationSet.addAnimation(hideBottomBarAnimation)
+            animationSet.addAnimation(hideToolbarAnimation)
+
+            animationSet.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(animation: Animation) {
                     // Animation start
                 }
@@ -138,7 +156,8 @@ class MainActivity : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation) {
                     // Set visibility to GONE after animation ends
                     bottomBar.visibility = View.GONE
-                    updateLastId(navController)
+                    toolbar.visibility = View.GONE
+                    lastId = navController.currentDestination?.id
                 }
 
                 override fun onAnimationRepeat(animation: Animation) {
@@ -146,20 +165,26 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-            bottomBar.startAnimation(hideAnimation)
+            bottomBar.startAnimation(animationSet)
+            toolbar.startAnimation(animationSet)
         }
-    }
-
-    private fun updateLastId(navController: NavController) {
-//        val backStackEntries = navController.backQueue.toList()
-//        lastId = backStackEntries[backStackEntries.size - 1].destination.id
     }
 
     override fun onBackPressed() {
         if (navController.currentDestination?.id == R.id.getStartedFragment || navController.currentDestination?.id == R.id.homeFragment) {
             finishAffinity()
         } else {
-            super.onBackPressed()
+            when (navController.currentDestination?.id) {
+                R.id.jobsFragment,
+                R.id.chatsListFragment,
+                R.id.profileFragment -> {
+                    navController.navigate(R.id.homeFragment)
+                }
+
+                else -> {
+                    super.onBackPressed()
+                }
+            }
         }
     }
 
