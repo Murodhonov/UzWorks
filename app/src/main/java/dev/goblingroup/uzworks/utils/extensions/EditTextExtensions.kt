@@ -3,13 +3,15 @@ package dev.goblingroup.uzworks.utils.extensions
 import android.content.Context
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.widget.EditText
+import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.imageview.ShapeableImageView
 import dev.goblingroup.uzworks.R
 
-fun AppCompatEditText.showHidePassword(
+fun EditText.showHidePassword(
     context: Context,
-    eyeIcon: ShapeableImageView
+    eyeIcon: ImageView
 ) {
     if (this.transformationMethod == PasswordTransformationMethod.getInstance()) {
         /**
