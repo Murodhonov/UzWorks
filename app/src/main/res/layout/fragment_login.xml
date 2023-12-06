@@ -8,102 +8,102 @@
     android:fillViewport="true"
     tools:context=".fragments.auth.LoginFragment">
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/greeting_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_38sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
         android:fontFamily="@font/dmsans_bold"
         android:text="Welcome back"
         android:textColor="@color/black_blue"
-        android:textSize="30sp"
+        android:textSize="@dimen/_23ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/under_greeting_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginStart="@dimen/_23sdp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginEnd="@dimen/_23sdp"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
         android:textAlignment="center"
-        android:textSize="14sp"
+        android:textSize="@dimen/_10ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/greeting_tv" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/username_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginStart="@dimen/_19sdp"
+        android:layout_marginTop="@dimen/_49sdp"
         android:fontFamily="@font/dmsans_bold"
         android:text="Username"
         android:textColor="@color/black_blue"
-        android:textSize="16sp"
+        android:textSize="@dimen/_12ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/under_greeting_tv" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+    <EditText
         android:id="@+id/username_et"
         style="@style/RegistrationEditTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_7sdp"
         android:importantForAutofill="no"
-        android:layout_marginEnd="20dp"
-        android:elevation="3dp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:elevation="@dimen/_2sdp"
         android:hint="username"
         android:imeOptions="actionNext"
         android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@id/username_tv" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:id="@+id/username_error_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
         android:background="@drawable/error_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
+        android:paddingTop="@dimen/_1sdp"
+        android:paddingBottom="@dimen/_1sdp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/username_et">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_marginStart="20dp"
+        <ImageView
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:src="@drawable/ic_error" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="@dimen/_4sdp"
             android:fontFamily="@font/dmsans_bold"
             android:text="Username should enter"
             android:textColor="@color/red"
-            android:textSize="13sp" />
+            android:textSize="@dimen/_10ssp" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/password_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_11sdp"
         android:fontFamily="@font/dmsans_bold"
         android:text="Password"
         android:textColor="@color/black_blue"
@@ -113,15 +113,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/password_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
         android:background="@drawable/registration_edit_text_background"
-        android:elevation="3dp"
+        android:elevation="@dimen/_2sdp"
         app:layout_constraintTop_toBottomOf="@id/password_tv">
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <EditText
             android:id="@+id/password_et"
             style="@style/RegistrationEditTextStyle"
             android:layout_width="match_parent"
@@ -132,15 +132,15 @@
             android:inputType="textPassword"
             android:textColor="@color/black_blue_60" />
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/eye_iv"
-            android:layout_width="24dp"
+            android:layout_width="@dimen/_18sdp"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:padding="4dp"
+            android:layout_margin="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_6sdp"
+            android:padding="@dimen/_3sdp"
             android:src="@drawable/ic_closed_eye"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -148,45 +148,45 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:id="@+id/password_error_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
         android:background="@drawable/error_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
+        android:paddingTop="@dimen/_1sdp"
+        android:paddingBottom="@dimen/_1sdp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/password_layout">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_marginStart="20dp"
+        <ImageView
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:src="@drawable/ic_error" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="@dimen/_4sdp"
             android:fontFamily="@font/dmsans_bold"
             android:text="Password should enter"
             android:textColor="@color/red"
-            android:textSize="13sp" />
+            android:textSize="@dimen/_10ssp" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/forgot_password_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
         android:fontFamily="@font/dmsans_regular"
         android:text="Forgot password ?"
         android:textColor="@color/black_blue"
@@ -197,13 +197,13 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/login_btn"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="40dp"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_30sdp"
         app:layout_constraintTop_toBottomOf="@id/forgot_password_tv">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/dmsans_bold"
@@ -217,103 +217,103 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/sign_in_with_google_btn"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="40dp"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginEnd="@dimen/_30sdp"
         android:backgroundTint="@color/white_blue"
-        app:cardCornerRadius="7dp"
+        app:cardCornerRadius="@dimen/_5sdp"
         app:layout_constraintTop_toBottomOf="@id/login_btn">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:src="@drawable/ic_google" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="Sign in with google"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/text_color"
-                android:textSize="11sp" />
+                android:textSize="@dimen/_8ssp" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/_7sdp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/language_layout"
         app:layout_constraintTop_toBottomOf="@id/sign_in_with_google_btn">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dmsans_regular"
             android:text="You don't have an account yet?" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/sign_up_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="@dimen/_4sdp"
             android:fontFamily="@font/dmsans_regular"
             android:text="Sign up"
             android:textColor="@color/yellow" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/language_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/language_btn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/_34sdp"
+            android:layout_height="@dimen/_34sdp"
             android:layout_gravity="bottom"
             android:background="@drawable/corner_rectangle_background"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_language" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/language_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/_7sdp"
             android:fontFamily="@font/dmsans_bold"
             android:text="@string/code_uz_latin"
             android:textColor="@color/black_blue"
-            android:textSize="15sp"
+            android:textSize="@dimen/_11ssp"
             app:layout_constraintBottom_toBottomOf="@id/language_btn"
             app:layout_constraintLeft_toRightOf="@id/language_btn"
             app:layout_constraintTop_toTopOf="@id/language_btn" />

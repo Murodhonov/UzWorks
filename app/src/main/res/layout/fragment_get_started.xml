@@ -5,84 +5,83 @@
     android:layout_height="match_parent"
     android:background="@color/registration_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="20dp"
+    android:padding="@dimen/_15sdp"
     tools:context=".fragments.onboarding.GetStartedFragment">
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:layout_gravity="end"
         android:textColor="@color/black_blue"
         android:id="@+id/get_started_top_tv"
         android:layout_width="wrap_content"
-        android:textSize="18sp"
+        android:textSize="@dimen/_13ssp"
         android:layout_height="wrap_content"
         app:layout_constraintRight_toRightOf="parent"
         android:fontFamily="@font/dmsans_bold"
         android:text="@string/app_name"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:id="@+id/get_started_iv"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="@dimen/_230sdp"
+        android:layout_height="@dimen/_230sdp"
+        android:layout_marginTop="@dimen/_38sdp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:src="@drawable/ic_get_started"
         app:layout_constraintTop_toBottomOf="@id/get_started_top_tv" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:layout_width="match_parent"
         android:id="@+id/get_started_title_tv"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:fontFamily="@font/dmsans_bold"
-        android:textSize="40sp"
+        android:textSize="@dimen/_30ssp"
         android:textAlignment="textStart"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/get_started_iv" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/get_started_bottom_tv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:textSize="15sp"
-        android:layout_marginTop="10dp"
+        android:textSize="@dimen/_11ssp"
+        android:layout_marginTop="@dimen/_7sdp"
         app:layout_constraintBottom_toTopOf="@id/next_btn"
         android:text="@string/get_started_bottom"
         app:layout_constraintTop_toBottomOf="@id/get_started_title_tv" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:id="@+id/language_btn"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/_34sdp"
+        android:layout_height="@dimen/_34sdp"
         android:background="@drawable/corner_rectangle_background"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_language" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/language_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="@dimen/_7sdp"
         android:fontFamily="@font/dmsans_bold"
         android:text="@string/code_uz_latin"
         android:textColor="@color/black_blue"
-        android:textSize="19sp"
-        android:textStyle=""
+        android:textSize="@dimen/_14ssp"
         app:layout_constraintBottom_toBottomOf="@id/language_btn"
         app:layout_constraintLeft_toRightOf="@id/language_btn"
         app:layout_constraintTop_toTopOf="@id/language_btn" />
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:id="@+id/next_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

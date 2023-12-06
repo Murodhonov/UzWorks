@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:padding="10dp"
+    android:layout_margin="@dimen/_8sdp"
+    android:padding="@dimen/_8sdp"
     android:background="@drawable/bottom_navigation_background"
     app:layout_constraintBottom_toBottomOf="parent">
 
@@ -13,9 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white_blue"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="@dimen/_8sdp"
         app:strokeColor="@color/black_blue"
-        app:strokeWidth="1dp"
+        app:strokeWidth="@dimen/_1sdp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,25 +25,25 @@
             android:id="@+id/home_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="19.5dp"
-            android:paddingTop="10.4dp"
-            android:paddingEnd="19.5dp"
-            android:paddingBottom="10.4dp">
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_8sdp">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/home_icon"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_home"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/home_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="Home"
                 android:textColor="@color/black_blue"
@@ -59,7 +59,7 @@
         android:id="@+id/jobs_btn"
         android:layout_width="wrap_content"
         android:backgroundTint="@color/white_blue"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="@dimen/_8sdp"
         android:layout_height="wrap_content"
         app:strokeColor="@color/black_blue"
         app:cardElevation="0dp"
@@ -72,25 +72,25 @@
             android:id="@+id/jobs_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="19.5dp"
-            android:paddingTop="10.4dp"
-            android:paddingEnd="19.5dp"
-            android:paddingBottom="10.4dp">
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_8sdp">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/jobs_icon"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_jobs"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/jobs_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="Jobs"
                 android:textColor="@color/black_blue"
@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         app:strokeColor="@color/black_blue"
         android:backgroundTint="@color/white_blue"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="@dimen/_8sdp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/jobs_btn"
@@ -120,25 +120,25 @@
             android:id="@+id/chat_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="19.5dp"
-            android:paddingTop="10.4dp"
-            android:paddingEnd="19.5dp"
-            android:paddingBottom="10.4dp">
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_8sdp">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/chat_icon"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_chat"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/chat_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="Chat"
                 android:textColor="@color/black_blue"
@@ -157,7 +157,7 @@
         app:strokeColor="@color/black_blue"
         android:backgroundTint="@color/white_blue"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="@dimen/_8sdp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -167,29 +167,29 @@
             android:id="@+id/profile_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="19.5dp"
-            android:paddingTop="10.4dp"
-            android:paddingEnd="19.5dp"
-            android:paddingBottom="10.4dp">
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_8sdp">
 
             <!--
             TODO this icon's viewportWidth was 17
             -->
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/profile_icon"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_profile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/profile_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="Profile"
                 android:textColor="@color/black_blue"

@@ -7,48 +7,48 @@
     android:layout_height="match_parent"
     tools:context=".fragments.auth.SignUpFragment">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/registration_background"
         android:orientation="vertical"
-        android:paddingBottom="20dp">
+        android:paddingBottom="@dimen/_15sdp">
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/back"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:padding="2dp"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:padding="@dimen/_1sdp"
             android:src="@drawable/ic_back" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:fontFamily="@font/dmsans_bold"
             android:text="Create an account"
             android:textColor="@color/black_blue"
-            android:textSize="25sp" />
+            android:textSize="@dimen/_19ssp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
+            android:layout_margin="@dimen/_7sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
             android:textAlignment="center" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="@dimen/_19sdp"
             android:fontFamily="@font/dmsans_bold"
             android:text="Fullname"
             android:textColor="@color/black_blue" />
@@ -57,51 +57,51 @@
             android:id="@+id/full_name_et"
             style="@style/RegistrationEditTextStyle"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="20dp"
-            android:elevation="3dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:elevation="@dimen/_2sdp"
             android:hint="fullname"
             android:imeOptions="actionNext"
             android:inputType="textPersonName" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/full_name_error_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:visibility="gone"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:background="@drawable/error_background"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp">
+            android:paddingTop="@dimen/_1sdp"
+            android:paddingBottom="@dimen/_1sdp">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:layout_marginStart="20dp"
+            <ImageView
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_15sdp"
                 android:src="@drawable/ic_error" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:textSize="13sp"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:textSize="@dimen/_10ssp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="Full name should enter"
                 android:textColor="@color/red" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginStart="@dimen/_19sdp"
+            android:layout_marginTop="@dimen/_11sdp"
             android:fontFamily="@font/dmsans_bold"
             android:text="Username"
             android:textColor="@color/black_blue" />
@@ -110,51 +110,51 @@
             android:id="@+id/username_et"
             style="@style/RegistrationEditTextStyle"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="20dp"
-            android:elevation="3dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:elevation="@dimen/_2sdp"
             android:hint="username"
             android:imeOptions="actionNext"
             android:inputType="text" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/username_error_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:background="@drawable/error_background"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp">
+            android:paddingTop="@dimen/_1sdp"
+            android:paddingBottom="@dimen/_1sdp">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:layout_marginStart="20dp"
+            <ImageView
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_15sdp"
                 android:src="@drawable/ic_error" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:textSize="@dimen/_10ssp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="Username should enter"
                 android:textColor="@color/red" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginStart="@dimen/_19sdp"
+            android:layout_marginTop="@dimen/_11sdp"
             android:fontFamily="@font/dmsans_bold"
             android:text="Password"
             android:textColor="@color/black_blue"
@@ -163,12 +163,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="20dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:background="@drawable/registration_edit_text_background"
-            android:elevation="3dp">
+            android:elevation="@dimen/_2sdp">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/password_et"
@@ -180,15 +180,15 @@
                 android:inputType="textPassword"
                 android:textColor="@color/black_blue_60" />
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/password_eye_iv"
-                android:layout_width="24dp"
+                android:layout_width="@dimen/_18sdp"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:padding="4dp"
+                android:layout_margin="@dimen/_3sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:padding="@dimen/_3sdp"
                 android:src="@drawable/ic_closed_eye"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -196,42 +196,42 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/password_error_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:visibility="gone"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:background="@drawable/error_background"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp">
+            android:paddingTop="@dimen/_1sdp"
+            android:paddingBottom="@dimen/_1sdp">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:layout_marginStart="20dp"
+            <ImageView
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_15sdp"
                 android:src="@drawable/ic_error" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:textSize="@dimen/_10ssp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="Password should enter"
                 android:textColor="@color/red" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginStart="@dimen/_19sdp"
+            android:layout_marginTop="@dimen/_11sdp"
             android:fontFamily="@font/dmsans_bold"
             android:text="Confirm Password"
             android:textColor="@color/black_blue"
@@ -240,12 +240,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="20dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:background="@drawable/registration_edit_text_background"
-            android:elevation="3dp">
+            android:elevation="@dimen/_2sdp">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/confirm_password_et"
@@ -257,15 +257,15 @@
                 android:inputType="textPassword"
                 android:textColor="@color/black_blue_60" />
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/confirm_password_eye_iv"
-                android:layout_width="24dp"
+                android:layout_width="@dimen/_18sdp"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:padding="4dp"
+                android:layout_margin="@dimen/_3sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:padding="@dimen/_3sdp"
                 android:src="@drawable/ic_closed_eye"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -273,47 +273,47 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/confirm_password_error_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:background="@drawable/error_background"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp">
+            android:paddingTop="@dimen/_1sdp"
+            android:paddingBottom="@dimen/_1sdp">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:layout_marginStart="20dp"
+            <ImageView
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_15sdp"
                 android:src="@drawable/ic_error" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/confirm_password_error_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:textSize="13sp"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:textSize="@dimen/_10ssp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="Confirm password should enter"
                 android:textColor="@color/red" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/continue_btn"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="40dp">
+            android:layout_height="@dimen/_34sdp"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_30sdp">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/dmsans_bold"
@@ -327,64 +327,64 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/sign_up_with_google_btn"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="40dp"
+            android:layout_height="@dimen/_34sdp"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
             android:backgroundTint="@color/white_blue"
-            app:cardCornerRadius="7dp">
+            app:cardCornerRadius="@dimen/_5sdp">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:id="@+id/layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:src="@drawable/ic_google" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/dmsans_bold"
                     android:text="Sign up with Google"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/text_color" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/_7sdp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dmsans_regular"
                 android:text="You have already an account?"
                 android:textColor="@color/text_color" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/sign_in_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="@dimen/_3sdp"
                 android:fontFamily="@font/dmsans_regular"
                 android:text="Sign in"
                 android:textColor="@color/yellow" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
 </ScrollView>

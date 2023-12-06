@@ -5,31 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_blue"
-    android:paddingTop="35dp"
+    android:paddingTop="@dimen/_26sdp"
     tools:context=".fragments.main.profile.SettingsFragment">
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:id="@+id/back"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="@dimen/_19sdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_back"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/settings_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:fontFamily="@font/dmsans_medium"
         android:text="Settings"
         android:textColor="@color/black_blue"
-        android:textSize="18sp"
+        android:textSize="@dimen/_13ssp"
         app:layout_constraintLeft_toLeftOf="@id/back"
         app:layout_constraintTop_toBottomOf="@id/back" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,36 +37,36 @@
         app:layout_constraintTop_toBottomOf="@+id/settings_tv">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_marginStart="25dp"
+            android:layout_height="@dimen/_44sdp"
             android:id="@+id/notification_switch"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="@dimen/_19sdp"
             android:layout_width="match_parent"
-            android:layout_marginEnd="25dp"
+            android:layout_marginTop="@dimen/_7sdp"
             android:backgroundTint="@color/white"
-            android:layout_height="58dp"
-            app:cardCornerRadius="10dp">
+            android:layout_marginEnd="@dimen/_19sdp"
+            app:cardCornerRadius="@dimen/_7sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp">
+                android:padding="@dimen/_7sdp">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:id="@+id/notification_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:src="@drawable/ic_notification"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/_7sdp"
                     android:fontFamily="@font/dmsans_regular"
                     android:text="Notification"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/_10ssp"
                     android:textColor="@color/black_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/notification_iv"
@@ -75,18 +75,18 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/notification_track"
                     android:background="@drawable/switch_track_on"
-                    android:paddingStart="2.6dp"
-                    android:paddingEnd="2.6dp"
-                    android:layout_width="39dp"
-                    android:layout_height="19.5dp"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:paddingStart="@dimen/_2sdp"
+                    android:paddingEnd="@dimen/_2sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <View
                         android:id="@+id/notification_thumb"
-                        android:layout_width="13dp"
-                        android:layout_height="13dp"
+                        android:layout_width="@dimen/_10sdp"
+                        android:layout_height="@dimen/_10sdp"
                         android:background="@drawable/switch_thumb_on"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -99,36 +99,36 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_marginStart="25dp"
+            android:layout_height="@dimen/_44sdp"
             android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="@dimen/_19sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:layout_marginEnd="@dimen/_19sdp"
             android:id="@+id/theme_switch"
             android:backgroundTint="@color/white"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="@dimen/_7sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp">
+                android:padding="@dimen/_7sdp">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:id="@+id/theme_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:src="@drawable/ic_night_light"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/_7sdp"
                     android:fontFamily="@font/dmsans_regular"
                     android:text="Dark mode"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/_10ssp"
                     android:textColor="@color/black_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/theme_iv"
@@ -137,18 +137,18 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/theme_track"
                     android:background="@drawable/switch_track_on"
-                    android:paddingStart="2.6dp"
-                    android:paddingEnd="2.6dp"
-                    android:layout_width="39dp"
-                    android:layout_height="19.5dp"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:paddingStart="@dimen/_2sdp"
+                    android:paddingEnd="@dimen/_2sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <View
                         android:id="@+id/theme_thumb"
-                        android:layout_width="13dp"
-                        android:layout_height="13dp"
+                        android:layout_width="@dimen/_10sdp"
+                        android:layout_height="@dimen/_10sdp"
                         android:background="@drawable/switch_thumb_on"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -161,44 +161,44 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_marginStart="25dp"
+            android:layout_height="@dimen/_44sdp"
             android:id="@+id/language_btn"
             android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="@dimen/_19sdp"
+            android:layout_marginTop="@dimen/_7sdp"
             android:backgroundTint="@color/white"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp">
+            android:layout_marginEnd="@dimen/_19sdp"
+            app:cardCornerRadius="@dimen/_7sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp">
+                android:padding="@dimen/_7sdp">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:id="@+id/language_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:src="@drawable/ic_language"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/_7sdp"
                     android:fontFamily="@font/dmsans_regular"
                     android:text="Language"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/_10ssp"
                     android:textColor="@color/black_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/language_iv"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                <ImageView
+                    android:layout_width="@dimen/_10sdp"
+                    android:layout_height="@dimen/_10sdp"
                     android:src="@drawable/ic_right"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -209,44 +209,44 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_marginStart="25dp"
+            android:layout_height="@dimen/_44sdp"
             android:id="@+id/password_btn"
             android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="@dimen/_19sdp"
+            android:layout_marginTop="@dimen/_7sdp"
             android:backgroundTint="@color/white"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp">
+            android:layout_marginEnd="@dimen/_19sdp"
+            app:cardCornerRadius="@dimen/_7sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp">
+                android:padding="@dimen/_7sdp">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:id="@+id/password_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:src="@drawable/ic_password"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/_7sdp"
                     android:fontFamily="@font/dmsans_regular"
                     android:text="Password"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/_10ssp"
                     android:textColor="@color/black_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/password_iv"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                <ImageView
+                    android:layout_width="@dimen/_10sdp"
+                    android:layout_height="@dimen/_10sdp"
                     android:src="@drawable/ic_right"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -258,43 +258,43 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/logout_btn"
-            android:layout_marginStart="25dp"
+            android:layout_height="@dimen/_44sdp"
             android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="@dimen/_19sdp"
+            android:layout_marginTop="@dimen/_7sdp"
             android:backgroundTint="@color/white"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp">
+            android:layout_marginEnd="@dimen/_19sdp"
+            app:cardCornerRadius="@dimen/_7sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp">
+                android:padding="@dimen/_7sdp">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:id="@+id/logout_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:src="@drawable/ic_logout"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/_7sdp"
                     android:fontFamily="@font/dmsans_regular"
                     android:text="Logout"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/_10ssp"
                     android:textColor="@color/red"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/logout_iv"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                <ImageView
+                    android:layout_width="@dimen/_10sdp"
+                    android:layout_height="@dimen/_10sdp"
                     android:src="@drawable/ic_right_red"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -304,19 +304,29 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="58dp"
-        android:layout_marginBottom="55dp"
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/save_btn"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        android:text="Save"
-        android:textSize="16sp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginStart="@dimen/_80sdp"
+        android:layout_marginBottom="55dp"
+        android:layout_marginEnd="@dimen/_80sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/dmsans_bold"
+            android:gravity="center"
+            android:text="Save"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

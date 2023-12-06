@@ -4,63 +4,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_blue"
-    android:paddingBottom="10dp"
+    android:paddingBottom="@dimen/_7sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.main.home.HomeFragment">
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/greeting_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
         android:fontFamily="@font/dmsans_bold"
         android:text="Assalomu Aleykum\nNabijonov Abdulaziz"
         android:textColor="@color/black_blue"
-        android:textSize="22sp"
+        android:textSize="@dimen/_16ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ad_layout"
         android:layout_width="match_parent"
-        android:layout_height="195dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="@dimen/_150sdp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
         app:layout_constraintTop_toBottomOf="@id/greeting_tv"
-        app:layout_goneMarginTop="10dp">
+        app:layout_goneMarginTop="@dimen/_7sdp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/ad_card"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="@dimen/_130sdp"
             android:layout_gravity="bottom"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:backgroundTint="@color/black_blue"
-            app:cardCornerRadius="7dp"
+            app:cardCornerRadius="@dimen/_5sdp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/ad_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
             android:text="50% off\nReklama uchun\nkatta chegirma yutib\noling"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="@dimen/_13ssp"
             app:layout_constraintLeft_toLeftOf="@id/ad_card"
             app:layout_constraintTop_toTopOf="@id/ad_card" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="195dp"
-            android:layout_height="195dp"
+        <ImageView
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_150sdp"
             android:layout_gravity="bottom|right"
             android:src="@drawable/ic_ad_face"
             app:layout_constraintBottom_toBottomOf="@id/ad_card"
@@ -70,191 +70,191 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/yellow"
-            app:cardCornerRadius="5dp"
+            app:cardCornerRadius="@dimen/_3sdp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="@id/ad_card"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ad_title_tv">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_3sdp"
                 android:text="Join now"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="@dimen/_11ssp" />
 
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/statistics_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
         android:fontFamily="@font/dmsans_bold"
         android:text="Statistikalar"
         android:textColor="@color/black_blue"
-        android:textSize="14sp"
+        android:textSize="@dimen/_10ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ad_layout" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         app:layout_constraintBottom_toTopOf="@id/recommended_works_tv"
         app:layout_constraintTop_toBottomOf="@id/statistics_tv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="@dimen/_7sdp">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:backgroundTint="#AFECFE"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="@dimen/_7sdp"
             android:layout_weight="1"
-            app:cardCornerRadius="7dp"
+            app:cardCornerRadius="@dimen/_5sdp"
             app:cardElevation="0dp">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingTop="30dp"
-                android:paddingBottom="30dp">
+                android:paddingTop="@dimen/_23sdp"
+                android:paddingBottom="@dimen/_23sdp">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                <ImageView
+                    android:layout_width="@dimen/_23sdp"
+                    android:layout_height="@dimen/_23sdp"
                     android:src="@drawable/ic_users" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/_7sdp"
                     android:fontFamily="@font/dmsans_bold"
                     android:text="44.5k"
                     android:textColor="@color/black_blue"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/_10ssp" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
+                    android:layout_marginTop="@dimen/_2sdp"
                     android:text="Obunachilar Soni"
                     android:textColor="@color/black_blue"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/_9ssp" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/_7sdp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/_3sdp"
                 android:backgroundTint="#BEAFFE"
                 android:layout_weight="1"
-                app:cardCornerRadius="7dp"
+                app:cardCornerRadius="@dimen/_5sdp"
                 app:cardElevation="0dp">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_7sdp">
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="@dimen/_7sdp"
                         android:fontFamily="@font/dmsans_bold"
                         android:text="66.8k"
                         android:textColor="@color/black_blue"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/_10ssp" />
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:text="Ishlar"
                         android:textColor="@color/black_blue"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/_9ssp" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/_3sdp"
                 android:layout_weight="1"
-                app:cardCornerRadius="7dp"
+                app:cardCornerRadius="@dimen/_5sdp"
                 android:backgroundTint="#FFD6AD"
                 app:cardElevation="0dp">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_7sdp">
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="@dimen/_7sdp"
                         android:fontFamily="@font/dmsans_bold"
                         android:text="38.9k"
                         android:textColor="@color/black_blue"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/_10ssp" />
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:text="Ishchilar"
                         android:textColor="@color/black_blue"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/_9ssp" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/recommended_works_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
         android:fontFamily="@font/dmsans_bold"
         android:text="Taklif qilingan ishlar"
         android:textColor="@color/black_blue"
-        android:textSize="14sp"
+        android:textSize="@dimen/_10ssp"
         app:layout_constraintBottom_toTopOf="@id/recommended_work_announcements_rv"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -262,7 +262,7 @@
         android:id="@+id/recommended_work_announcements_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/_3sdp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -3,170 +3,170 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
+    android:layout_marginStart="@dimen/_7sdp"
     android:backgroundTint="@color/white"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
-    app:cardCornerRadius="10dp"
+    android:layout_marginTop="@dimen/_3sdp"
+    android:layout_marginEnd="@dimen/_7sdp"
+    app:cardCornerRadius="@dimen/_7sdp"
     app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="15dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="15dp"
-        android:paddingBottom="10dp">
+        android:paddingStart="@dimen/_11sdp"
+        android:paddingTop="@dimen/_7sdp"
+        android:paddingEnd="@dimen/_11sdp"
+        android:paddingBottom="@dimen/_7sdp">
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/iv"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/_34sdp"
+            android:layout_height="@dimen/_34sdp"
             android:src="@drawable/ic_logo_9"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:layout_marginTop="@dimen/_2sdp"
             android:fontFamily="@font/dmsans_bold"
             android:text="Menenjer Kerak"
             android:textColor="@color/black_blue"
-            android:textSize="13sp"
+            android:textSize="@dimen/_10ssp"
             app:layout_constraintBottom_toTopOf="@id/address_tv"
             app:layout_constraintLeft_toRightOf="@id/iv"
             app:layout_constraintTop_toTopOf="@+id/iv" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/address_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
             android:fontFamily="@font/dmsans_regular"
             android:text="Baliqchi, Andijon"
             android:textColor="@color/text_color"
-            android:textSize="11sp"
+            android:textSize="@dimen/_8ssp"
             app:layout_constraintBottom_toBottomOf="@+id/iv"
             app:layout_constraintLeft_toRightOf="@id/iv"
             app:layout_constraintTop_toBottomOf="@id/title_tv" />
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/save_iv"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/_6sdp"
             android:src="@drawable/ic_saved"
             app:layout_constraintBottom_toBottomOf="@id/iv"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/cost_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/_7sdp"
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/cost_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="2 500 000 so'm"
                 android:textColor="@color/black_blue"
-                android:textSize="13sp" />
+                android:textSize="@dimen/_10ssp" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/per_time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dmsans_bold"
                 android:text="/Oy"
                 android:textColor="@color/yellow"
-                android:textSize="13sp" />
+                android:textSize="@dimen/_10ssp" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/gender_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/_7sdp"
             android:background="@drawable/corner_rectangle_background"
             android:gravity="center"
-            android:paddingStart="10dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="4dp"
+            android:paddingStart="@dimen/_7sdp"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingEnd="@dimen/_7sdp"
+            android:paddingBottom="@dimen/_3sdp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cost_layout">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/gender_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Erkak"
                 android:textColor="@color/text_color"
-                android:textSize="11sp" />
+                android:textSize="@dimen/_8ssp" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/work_type_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/_7sdp"
             android:background="@drawable/corner_rectangle_background"
             android:gravity="center"
-            android:paddingStart="10dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="4dp"
+            android:paddingStart="@dimen/_7sdp"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingEnd="@dimen/_7sdp"
+            android:paddingBottom="@dimen/_3sdp"
             app:layout_constraintLeft_toRightOf="@id/gender_layout"
             app:layout_constraintTop_toTopOf="@id/gender_layout">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/work_type_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ish turi"
                 android:textColor="@color/text_color"
-                android:textSize="11sp" />
+                android:textSize="@dimen/_8ssp" />
 
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/open_work_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/corner_rectangle_background"
             android:backgroundTint="@color/green"
             android:gravity="center"
-            android:paddingStart="18dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="18dp"
-            android:paddingBottom="4dp"
+            android:paddingStart="@dimen/_13sdp"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingEnd="@dimen/_13sdp"
+            android:paddingBottom="@dimen/_3sdp"
             app:layout_constraintBottom_toBottomOf="@id/gender_layout"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/gender_layout">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/open_work_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ko'rish"
                 android:textColor="@color/text_color"
-                android:textSize="11sp" />
+                android:textSize="@dimen/_8ssp" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -7,10 +7,10 @@
     android:gravity="center"
     tools:context=".fragments.onboarding.SplashFragment">
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:id="@+id/logo"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
+        android:layout_width="@dimen/_170sdp"
+        android:layout_height="@dimen/_170sdp"
         android:src="@drawable/uz_works_logo" />
 
 </LinearLayout>

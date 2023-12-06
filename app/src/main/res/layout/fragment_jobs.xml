@@ -4,24 +4,24 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
+    android:paddingBottom="@dimen/_7sdp"
     android:background="@color/white_blue"
     tools:context=".fragments.main.jobs.JobsFragment">
 
     <FrameLayout
         android:id="@+id/custom_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_margin="@dimen/_7sdp"
         android:background="@drawable/corner_dash_stroke_rectangle"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/select"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -29,20 +29,20 @@
                 android:background="@drawable/selected_tab_indicator_background"
                 android:text="" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/all_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -51,9 +51,9 @@
                 android:gravity="center"
                 android:text="Barchasi"
                 android:textColor="@color/black_blue"
-                android:textSize="14sp" />
+                android:textSize="@dimen/_10ssp" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/saved_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -62,9 +62,9 @@
                 android:gravity="center"
                 android:text="Saqlanganlar"
                 android:textColor="@color/text_color"
-                android:textSize="14sp" />
+                android:textSize="@dimen/_10ssp" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
     </FrameLayout>
 
@@ -72,7 +72,7 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/_7sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/custom_tab_layout" />
 
