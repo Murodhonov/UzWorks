@@ -57,12 +57,21 @@ class MainActivity : AppCompatActivity() {
                 when (destination.id) {
                     R.id.homeFragment,
                     R.id.jobsFragment,
-                    R.id.chatsListFragment,
-                    R.id.profileFragment -> {
-                        showToolbarAndBottom()
+                    R.id.chatsListFragment -> {
+//                        showToolbarAndBottom()
+                        showToolbar()
+                        showBottomBar()
                     }
+
+                    R.id.profileFragment -> {
+//                        showToolbarAndBottom()
+                        showBottomBar()
+                        hideToolBar()
+                    }
+
                     else -> {
-                        hideToolbarAndBottom()
+                        hideToolBar()
+                        hideBottomBar()
                     }
                 }
             }
@@ -77,6 +86,138 @@ class MainActivity : AppCompatActivity() {
             bottomMenu = MenuBuilder(this@MainActivity)
             inflater.inflate(R.menu.bottom_menu, bottomMenu)
             bottomBar.setupWithNavController(bottomMenu, navController)
+        }
+    }
+
+    private fun showBottomBar() {
+        binding.apply {
+            if (lastId == R.id.homeFragment ||
+                lastId == R.id.jobsFragment ||
+                lastId == R.id.chatsListFragment ||
+                lastId == R.id.profileFragment
+            ) return
+            // Animation to show the bottom navigation
+            val showBottomBarAnimation = TranslateAnimation(
+                0f, 0f, bottomBar.height.toFloat() + dpToPx(7f), 0f
+            )
+            showBottomBarAnimation.duration = 300
+
+            showBottomBarAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    // Animation start
+                }
+
+                override fun onAnimationEnd(animation: Animation) {
+                    // Set visibility to VISIBLE after animation ends
+                    bottomBar.visibility = View.VISIBLE
+                    lastId = navController.currentDestination?.id
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {
+                    // Animation repeat
+                }
+            })
+
+            bottomBar.startAnimation(showBottomBarAnimation)
+        }
+    }
+
+    private fun showToolbar() {
+        binding.apply {
+            if (lastId == R.id.homeFragment ||
+                lastId == R.id.jobsFragment ||
+                lastId == R.id.chatsListFragment ||
+                lastId == R.id.profileFragment
+            ) return
+            // Animation to show the toolbar
+            val showToolbarAnimation = TranslateAnimation(
+                0f, 0f, -toolbar.height.toFloat() - dpToPx(7f), 0f
+            )
+            showToolbarAnimation.duration = 300
+
+            showToolbarAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    // Animation start
+                }
+
+                override fun onAnimationEnd(animation: Animation) {
+                    // Set visibility to VISIBLE after animation ends
+                    toolbar.visibility = View.VISIBLE
+                    lastId = navController.currentDestination?.id
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {
+                    // Animation repeat
+                }
+            })
+
+            toolbar.startAnimation(showToolbarAnimation)
+        }
+    }
+
+    private fun hideBottomBar() {
+        binding.apply {
+            if (lastId != R.id.homeFragment &&
+                lastId != R.id.jobsFragment &&
+                lastId != R.id.chatsListFragment &&
+                lastId != R.id.profileFragment
+            ) return
+            // Animation to hide the bottom navigation
+            val hideBottomBarAnimation = TranslateAnimation(
+                0f, 0f, 0f, bottomBar.height.toFloat() + dpToPx(7f)
+            )
+            hideBottomBarAnimation.duration = 300
+
+            hideBottomBarAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    // Animation start
+                }
+
+                override fun onAnimationEnd(animation: Animation) {
+                    // Set visibility to GONE after animation ends
+                    bottomBar.visibility = View.GONE
+                    lastId = navController.currentDestination?.id
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {
+                    // Animation repeat
+                }
+            })
+
+            bottomBar.startAnimation(hideBottomBarAnimation)
+        }
+    }
+
+    private fun hideToolBar() {
+        binding.apply {
+            if (lastId != R.id.homeFragment &&
+                lastId != R.id.jobsFragment &&
+                lastId != R.id.chatsListFragment &&
+                lastId != R.id.profileFragment
+            ) return
+            // Animation to hide the toolbar
+            val hideToolbarAnimation = TranslateAnimation(
+                0f, 0f, 0f, -toolbar.height.toFloat() - dpToPx(7f)
+            )
+            hideToolbarAnimation.duration = 300
+
+            hideToolbarAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    // Animation start
+                }
+
+                override fun onAnimationEnd(animation: Animation) {
+                    // Set visibility to GONE after animation ends
+                    toolbar.visibility = View.GONE
+                    lastId = navController.currentDestination?.id
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {
+                    // Animation repeat
+                }
+            })
+
+            toolbar.startAnimation(hideToolbarAnimation)
         }
     }
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:backgroundTint="@color/white"
     android:layout_width="match_parent"
+    android:clickable="false"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/_8sdp"
     app:cardElevation="0dp">

@@ -9,11 +9,10 @@
 
         <OnSwipe
             motion:dragDirection="dragUp"
-            motion:touchAnchorId="@id/create_account_tv"
+            motion:touchAnchorId="@id/tv_1"
             motion:touchAnchorSide="top" />
 
     </Transition>
-
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
@@ -26,7 +25,7 @@
             motion:layout_constraintTop_toTopOf="parent" />
 
         <Constraint
-            android:id="@+id/create_account_tv"
+            android:id="@+id/tv_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_15sdp"
@@ -37,13 +36,13 @@
             motion:layout_constraintTop_toBottomOf="@id/back" />
 
         <Constraint
-            android:id="@+id/under_create_account_tv"
+            android:id="@+id/tv_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_15sdp"
-            motion:layout_constraintTop_toBottomOf="@id/create_account_tv" />
+            motion:layout_constraintTop_toBottomOf="@id/tv_1" />
 
         <Constraint
             android:id="@+id/inputs_layout"
@@ -52,7 +51,7 @@
             android:layout_marginTop="@dimen/_20sdp"
             android:orientation="vertical"
             motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toBottomOf="@id/under_create_account_tv">
+            motion:layout_constraintTop_toBottomOf="@id/tv_2">
 
         </Constraint>
     </ConstraintSet>
@@ -68,7 +67,7 @@
             motion:layout_constraintTop_toTopOf="parent" />
 
         <Constraint
-            android:id="@+id/create_account_tv"
+            android:id="@+id/tv_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
@@ -77,7 +76,7 @@
             motion:layout_constraintTop_toTopOf="@id/back" />
 
         <Constraint
-            android:id="@+id/under_create_account_tv"
+            android:id="@+id/tv_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
@@ -88,7 +87,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_20sdp"
             android:orientation="vertical"
-            motion:layout_constraintTop_toBottomOf="@id/create_account_tv">
+            motion:layout_constraintTop_toBottomOf="@id/tv_1">
 
         </Constraint>
     </ConstraintSet>

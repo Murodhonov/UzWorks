@@ -1,100 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:paddingBottom="@dimen/_7sdp"
     android:background="@color/white_blue"
+    app:layoutDescription="@xml/fragment_profile_scene"
     tools:context=".fragments.main.profile.ProfileFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <View
         android:id="@+id/profile_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@drawable/profile_background"
-        android:paddingStart="@dimen/_7sdp"
-        android:paddingTop="@dimen/_15sdp"
-        android:paddingEnd="@dimen/_7sdp"
-        android:paddingBottom="@dimen/_15sdp"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="@id/stretcher"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.betulnecanli.circularimagewithring.CircularImageWithRingView
-            android:id="@+id/avatar_iv"
-            android:layout_width="@dimen/_44sdp"
-            android:layout_height="@dimen/_44sdp"
-            android:scaleType="center"
-            android:src="@drawable/default_profile_image"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:ringColor="@android:color/transparent" />
+    <com.betulnecanli.circularimagewithring.CircularImageWithRingView
+        android:id="@+id/avatar_iv"
+        android:layout_width="@dimen/_44sdp"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:scaleType="center"
+        android:src="@drawable/default_profile_image"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:ringColor="@android:color/transparent" />
 
-        <TextView
-            android:id="@+id/user_name_tv"
+    <TextView
+        android:id="@+id/user_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:fontFamily="@font/dmsans_medium"
+        android:text="Nabijnov Abdulaziz"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_11ssp"
+        app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
+        app:layout_constraintTop_toBottomOf="@id/avatar_iv" />
+
+    <TextView
+        android:id="@+id/address_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dmsans_regular"
+        android:text="Andijon, Baliqchi"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
+        app:layout_constraintTop_toBottomOf="@id/user_name_tv" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/change_image_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:backgroundTint="#342576"
+        app:cardCornerRadius="@dimen/_6sdp"
+        app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
+        app:layout_constraintTop_toBottomOf="@id/address_tv">
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:fontFamily="@font/dmsans_medium"
-            android:text="Nabijnov Abdulaziz"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_11ssp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/avatar_iv" />
+            android:paddingStart="@dimen/_7sdp"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingEnd="@dimen/_7sdp"
+            android:paddingBottom="@dimen/_3sdp">
 
-        <TextView
-            android:id="@+id/address_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/dmsans_regular"
-            android:text="Andijon, Baliqchi"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_10ssp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/user_name_tv" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/change_image_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_7sdp"
-            app:cardCornerRadius="@dimen/_6sdp"
-            android:backgroundTint="#342576"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/address_tv">
-
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/_7sdp"
-                android:paddingTop="@dimen/_3sdp"
-                android:paddingEnd="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_3sdp">
+                android:text="Change image"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10ssp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Change image"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
 
-            </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-        </com.google.android.material.card.MaterialCardView>
+    <View
+        android:id="@+id/stretcher"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/change_image_btn" />
 
-        <ImageView
-            android:id="@+id/settings"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:src="@drawable/ic_settings"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/settings"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/profile_pieces"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/profile_layout">
 
@@ -362,6 +370,11 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_7sdp" />
+
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
