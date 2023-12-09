@@ -9,7 +9,7 @@
 
         <OnSwipe
             app:dragDirection="dragUp"
-            app:touchAnchorId="@id/root"
+            app:touchAnchorId="@id/user_name_tv"
             app:touchAnchorSide="top" />
 
     </Transition>
@@ -79,6 +79,7 @@
             android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_20ssp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

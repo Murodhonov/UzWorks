@@ -18,7 +18,24 @@
         app:layout_constraintBottom_toBottomOf="@id/stretcher"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.betulnecanli.circularimagewithring.CircularImageWithRingView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/avatar_iv"
+        android:layout_width="@dimen/_44sdp"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:cardCornerRadius="@dimen/_100sdp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/default_profile_image" />
+
+    </androidx.cardview.widget.CardView>
+
+    <!--<com.betulnecanli.circularimagewithring.CircularImageWithRingView
         android:id="@+id/avatar_iv"
         android:layout_width="@dimen/_44sdp"
         android:layout_height="@dimen/_44sdp"
@@ -28,7 +45,7 @@
         android:src="@drawable/default_profile_image"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:ringColor="@android:color/transparent" />
+        app:ringColor="@android:color/transparent" />-->
 
     <TextView
         android:id="@+id/user_name_tv"
