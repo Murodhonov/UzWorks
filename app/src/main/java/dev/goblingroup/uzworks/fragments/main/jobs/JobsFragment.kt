@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.tabs.TabLayoutMediator
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.view_pager_adapters.JobsViewPagerAdapter
 import dev.goblingroup.uzworks.databinding.FragmentJobsBinding
@@ -41,22 +42,28 @@ class JobsFragment : Fragment() {
 
                     })
             viewPager.adapter = adapter
-            viewPager.isUserInputEnabled = false
+//            viewPager.isUserInputEnabled = false
 
-            allTv.setOnClickListener {
-                select.animate().x(0F).duration = 100
-                allTv.setTextColor(resources.getColor(R.color.black_blue))
-                savedTv.setTextColor(resources.getColor(R.color.text_color))
-                viewPager.setCurrentItem(0, true)
-            }
+            TabLayoutMediator(
+                tabLayout, viewPager
+            ) { tab, position ->
+                tab.text = arrayListOf("Barcha", "Saqlanganlar")[position]
+            }.attach()
 
-            savedTv.setOnClickListener {
-                allTv.setTextColor(resources.getColor(R.color.text_color))
-                savedTv.setTextColor(resources.getColor(R.color.black_blue))
-                val size = savedTv.width
-                select.animate().x(size.toFloat()).duration = 100
-                viewPager.setCurrentItem(1, true)
-            }
+//            allTv.setOnClickListener {
+//                select.animate().x(0F).duration = 100
+//                allTv.setTextColor(resources.getColor(R.color.black_blue))
+//                savedTv.setTextColor(resources.getColor(R.color.text_color))
+//                viewPager.setCurrentItem(0, true)
+//            }
+//
+//            savedTv.setOnClickListener {
+//                allTv.setTextColor(resources.getColor(R.color.text_color))
+//                savedTv.setTextColor(resources.getColor(R.color.black_blue))
+//                val size = savedTv.width
+//                select.animate().x(size.toFloat()).duration = 100
+//                viewPager.setCurrentItem(1, true)
+//            }
         }
     }
 

@@ -69,4 +69,9 @@
         <item name="android:backgroundTint">@color/black_blue</item>
     </style>
 
+    <style name="CustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">@dimen/_40ssp</item>
+        <item name="android:fontFamily">@font/dmsans_bold</item>
+    </style>
+
 </resources>

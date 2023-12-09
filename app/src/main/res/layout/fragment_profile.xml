@@ -35,18 +35,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!--<com.betulnecanli.circularimagewithring.CircularImageWithRingView
-        android:id="@+id/avatar_iv"
-        android:layout_width="@dimen/_44sdp"
-        android:layout_height="@dimen/_44sdp"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:scaleType="center"
-        android:src="@drawable/default_profile_image"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:ringColor="@android:color/transparent" />-->
-
     <TextView
         android:id="@+id/user_name_tv"
         android:layout_width="wrap_content"
