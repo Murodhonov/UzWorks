@@ -8,7 +8,7 @@
     android:background="@color/white_blue"
     tools:context=".fragments.main.jobs.JobsFragment">
 
-    <!--<FrameLayout
+    <FrameLayout
         android:id="@+id/custom_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
@@ -16,26 +16,16 @@
         android:background="@drawable/corner_dash_stroke_rectangle"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/select"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/selected_tab_indicator_background"
-                android:text="" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="" />
-
-        </LinearLayout>
+            android:background="@drawable/corner_dash_stroke_rectangle"
+            app:tabBackground="@drawable/selected_tab_indicator_background"
+            app:tabIndicator="@drawable/selected_tab_indicator_background"
+            app:tabIndicatorAnimationMode="elastic"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="@dimen/_30sdp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,22 +56,7 @@
 
         </LinearLayout>
 
-    </FrameLayout>-->
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_30sdp"
-        android:layout_margin="@dimen/_7sdp"
-        android:background="@drawable/corner_dash_stroke_rectangle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabGravity="fill"
-        app:tabIndicatorAnimationMode="elastic"
-        app:tabIndicatorGravity="stretch"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/black_blue"
-        app:tabTextAppearance="@style/CustomTabText"
-        app:tabTextColor="@color/text_color" />
+    </FrameLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
@@ -89,6 +64,6 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_7sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout" />
+        app:layout_constraintTop_toBottomOf="@id/custom_tab_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

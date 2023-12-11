@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.fragments.main.jobs
 
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.view_pager_adapters.JobsViewPagerAdapter
@@ -42,28 +46,43 @@ class JobsFragment : Fragment() {
 
                     })
             viewPager.adapter = adapter
-//            viewPager.isUserInputEnabled = false
 
             TabLayoutMediator(
                 tabLayout, viewPager
             ) { tab, position ->
-                tab.text = arrayListOf("Barcha", "Saqlanganlar")[position]
+
             }.attach()
 
-//            allTv.setOnClickListener {
-//                select.animate().x(0F).duration = 100
-//                allTv.setTextColor(resources.getColor(R.color.black_blue))
-//                savedTv.setTextColor(resources.getColor(R.color.text_color))
-//                viewPager.setCurrentItem(0, true)
-//            }
-//
-//            savedTv.setOnClickListener {
-//                allTv.setTextColor(resources.getColor(R.color.text_color))
-//                savedTv.setTextColor(resources.getColor(R.color.black_blue))
-//                val size = savedTv.width
-//                select.animate().x(size.toFloat()).duration = 100
-//                viewPager.setCurrentItem(1, true)
-//            }
+            allTv.setOnClickListener {
+                allTv.setTextColor(resources.getColor(R.color.black_blue))
+                savedTv.setTextColor(resources.getColor(R.color.text_color))
+                viewPager.setCurrentItem(0, true)
+            }
+
+            savedTv.setOnClickListener {
+                allTv.setTextColor(resources.getColor(R.color.text_color))
+                savedTv.setTextColor(resources.getColor(R.color.black_blue))
+                viewPager.setCurrentItem(1, true)
+            }
+
+            viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                    when (position) {
+                        0 -> {
+                            allTv.setTextColor(resources.getColor(R.color.black_blue))
+                            savedTv.setTextColor(resources.getColor(R.color.text_color))
+                        }
+                        1 -> {
+                            allTv.setTextColor(resources.getColor(R.color.text_color))
+                            savedTv.setTextColor(resources.getColor(R.color.black_blue))
+                        }
+                    }
+                }
+            })
         }
     }
 
