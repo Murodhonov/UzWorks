@@ -96,12 +96,16 @@
             android:id="@+id/address_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/user_name_tv"
+            app:layout_constraintTop_toTopOf="@id/user_name_tv"
             android:visibility="gone" />
 
         <Constraint
             android:id="@+id/change_image_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/user_name_tv"
+            app:layout_constraintTop_toTopOf="@id/user_name_tv"
             android:visibility="gone" />
 
         <Constraint

@@ -16,16 +16,26 @@
         android:background="@drawable/corner_dash_stroke_rectangle"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/corner_dash_stroke_rectangle"
-            app:tabBackground="@drawable/selected_tab_indicator_background"
-            app:tabIndicator="@drawable/selected_tab_indicator_background"
-            app:tabIndicatorAnimationMode="elastic"
-            app:tabIndicatorFullWidth="true"
-            app:tabIndicatorHeight="@dimen/_30sdp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/select"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selected_tab_indicator_background"
+                android:text="" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

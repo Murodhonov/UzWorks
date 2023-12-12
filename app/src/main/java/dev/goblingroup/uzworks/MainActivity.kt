@@ -312,7 +312,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (navController.currentDestination?.id == R.id.getStartedFragment || navController.currentDestination?.id == R.id.homeFragment) {
+        if (navController.currentDestination?.id == R.id.getStartedFragment ||
+            navController.currentDestination?.id == R.id.homeFragment ||
+            navController.currentDestination?.id == R.id.loginFragment
+        ) {
             finishAffinity()
         } else {
             when (navController.currentDestination?.id) {

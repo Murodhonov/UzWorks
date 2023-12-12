@@ -3,6 +3,7 @@ package dev.goblingroup.uzworks.fragments.auth
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -87,6 +88,15 @@ class SignUpFragment : Fragment() {
             confirmPasswordEyeIv.setOnClickListener {
                 confirmPasswordEt.showHidePassword(requireContext(), confirmPasswordEyeIv)
             }
+
+            fullNameEt.onFocusChangeListener =
+                OnFocusChangeListener { view, hasFocus ->
+                    if (hasFocus) {
+                        motionLayout.setTransitionDuration(500)
+                        motionLayout.transitionToEnd()
+                        motionLayout.setTransitionDuration(1000)
+                    }
+                }
         }
     }
 
