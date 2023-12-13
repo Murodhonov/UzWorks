@@ -8,14 +8,6 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/_15sdp">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/_19sdp"
-        android:layout_height="@dimen/_2sdp"
-        android:layout_marginTop="@dimen/_7sdp"
-        app:cardBackgroundColor="@color/black_blue"
-        app:cardCornerRadius="@dimen/_15sdp"
-        app:cardElevation="0dp" />
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/contact_chat_btn"
         android:layout_width="match_parent"
