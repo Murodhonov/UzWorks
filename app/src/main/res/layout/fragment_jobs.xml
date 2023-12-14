@@ -13,58 +13,26 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:layout_margin="@dimen/_7sdp"
-        android:background="@drawable/corner_dash_stroke_rectangle"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:background="@drawable/corner_dash_stroke_rectangle"
+            app:tabGravity="fill"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            app:tabIndicator="@null"
+            app:tabIndicatorColor="@null"
+            app:tabMode="fixed"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextColor="@color/black_blue"
+            app:tabTextColor="@color/text_color" />
 
-            <TextView
-                android:id="@+id/select"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/selected_tab_indicator_background"
-                android:text="" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/all_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="@font/dmsans_bold"
-                android:gravity="center"
-                android:text="Barchasi"
-                android:textColor="@color/black_blue"
-                android:textSize="@dimen/_10ssp" />
-
-            <TextView
-                android:id="@+id/saved_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="@font/dmsans_bold"
-                android:gravity="center"
-                android:text="Saqlanganlar"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_10ssp" />
-
-        </LinearLayout>
+        <View
+            android:id="@+id/indicator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/selected_tab_indicator_background" />
 
     </FrameLayout>
 

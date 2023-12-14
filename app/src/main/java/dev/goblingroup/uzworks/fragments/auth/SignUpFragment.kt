@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.fragments.auth
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +9,30 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.models.request.SignupRequest
+import dev.goblingroup.uzworks.networking.ApiClient
+import dev.goblingroup.uzworks.networking.NetworkHelper
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.vm.AuthViewModel
+import dev.goblingroup.uzworks.vm.AuthViewModelFactory
 
 class SignUpFragment : Fragment() {
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
     private val TAG = "SignUpFragment"
+
+    private lateinit var authViewModel: AuthViewModel
+    private lateinit var networkHelper: NetworkHelper
+
+    private lateinit var loadingDialog: AlertDialog
+    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +45,8 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             continueBtn.setOnClickListener {
-                nextPage()
+                continueClicked()
+
             }
 
             signUpWithGoogleBtn.setOnClickListener {
@@ -100,7 +115,7 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun nextPage() {
+    private fun continueClicked() {
         binding.apply {
             if (
                 fullNameEt.text.toString().isNotEmpty() &&
@@ -116,11 +131,12 @@ class SignUpFragment : Fragment() {
                     confirmPasswordErrorLayout.visibility = View.VISIBLE
                     confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
                 } else {
-                    findNavController().navigate(
+                    signUp()
+                    /*findNavController().navigate(
                         resId = R.id.selectRoleFragment,
                         args = null,
                         navOptions = getNavOptions()
-                    )
+                    )*/
                 }
             } else {
                 if (fullNameEt.text.toString().isEmpty()) {
@@ -141,6 +157,18 @@ class SignUpFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun signUp() {
+        networkHelper = NetworkHelper(requireContext())
+        authViewModel = ViewModelProvider(
+            requireActivity(),
+            AuthViewModelFactory(
+                authService = ApiClient.authService,
+                networkHelper = networkHelper,
+                signupRequest = SignupRequest()
+            )
+        )
     }
 
     override fun onDestroyView() {

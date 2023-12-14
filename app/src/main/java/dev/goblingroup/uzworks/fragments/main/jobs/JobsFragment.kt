@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.tabs.TabLayoutMediator
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.view_pager_adapters.JobsViewPagerAdapter
 import dev.goblingroup.uzworks.databinding.FragmentJobsBinding
@@ -19,6 +22,8 @@ class JobsFragment : Fragment() {
 
     private var _binding: FragmentJobsBinding? = null
     private val binding get() = _binding!!
+
+    private var indicatorWidth: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,22 +46,33 @@ class JobsFragment : Fragment() {
 
                     })
             viewPager.adapter = adapter
-            viewPager.isUserInputEnabled = false
 
-            allTv.setOnClickListener {
-                select.animate().x(0F).duration = 100
-                allTv.setTextColor(resources.getColor(R.color.black_blue))
-                savedTv.setTextColor(resources.getColor(R.color.text_color))
-                viewPager.setCurrentItem(0, true)
+            TabLayoutMediator(
+                tabLayout, viewPager
+            ) { tab, position ->
+                tab.text = arrayListOf("Barcha", "Saqlanganlar")[position]
+            }.attach()
+
+            tabLayout.post {
+                indicatorWidth = tabLayout.width / tabLayout.tabCount
+                val indicatorParams = indicator.layoutParams as FrameLayout.LayoutParams
+                indicatorParams.width = indicatorWidth
+                indicator.layoutParams = indicatorParams
             }
 
-            savedTv.setOnClickListener {
-                allTv.setTextColor(resources.getColor(R.color.text_color))
-                savedTv.setTextColor(resources.getColor(R.color.black_blue))
-                val size = savedTv.width
-                select.animate().x(size.toFloat()).duration = 100
-                viewPager.setCurrentItem(1, true)
-            }
+            viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                    val params = indicator.layoutParams as FrameLayout.LayoutParams
+                    val translationOffSet = (positionOffset + position) * indicatorWidth
+                    params.leftMargin = translationOffSet.toInt()
+                    indicator.layoutParams = params
+                }
+            })
+
         }
     }
 
@@ -89,6 +105,7 @@ class JobsFragment : Fragment() {
                     }
                 }
             }*/
+            Toast.makeText(requireContext(), "dialog", Toast.LENGTH_SHORT).show()
             val bottomSheetDialog = BottomSheetDialog(requireContext())
             val jobPropertiesBinding = SavedJobsPropertiesBinding.inflate(layoutInflater)
             jobPropertiesBinding.apply {
