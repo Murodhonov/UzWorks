@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/registration_background"
-    tools:context=".fragments.auth.SucceedFragment">
+    tools:context=".fragments.auth.succeed.SucceedFragment">
 
     <TextView
         android:id="@+id/tv_1"

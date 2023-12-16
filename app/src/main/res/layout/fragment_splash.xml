@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/black_blue"
     android:gravity="center"
-    tools:context=".fragments.onboarding.SplashFragment">
+    tools:context=".fragments.onboarding.splash.SplashFragment">
 
     <ImageView
         android:id="@+id/logo"

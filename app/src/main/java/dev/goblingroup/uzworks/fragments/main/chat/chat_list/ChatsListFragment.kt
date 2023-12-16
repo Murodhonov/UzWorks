@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.main.chat
+package dev.goblingroup.uzworks.fragments.main.chat.chat_list
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     android:layout_height="match_parent"
-    tools:context=".fragments.auth.SignUpFragment">
+    tools:context=".fragments.auth.signup.SignUpFragment">
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/motion_layout"
@@ -102,6 +102,7 @@
                     android:src="@drawable/ic_error" />
 
                 <TextView
+                    android:id="@+id/fullname_error_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_3sdp"

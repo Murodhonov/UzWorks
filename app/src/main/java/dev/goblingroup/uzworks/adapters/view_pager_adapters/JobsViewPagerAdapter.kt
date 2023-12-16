@@ -2,7 +2,7 @@ package dev.goblingroup.uzworks.adapters.view_pager_adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import dev.goblingroup.uzworks.fragments.main.jobs.JobListFragment
+import dev.goblingroup.uzworks.fragments.main.jobs.job_list.JobListFragment
 
 class JobsViewPagerAdapter(
     fragment: Fragment,

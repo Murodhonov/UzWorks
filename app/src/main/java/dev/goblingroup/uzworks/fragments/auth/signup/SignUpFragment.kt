@@ -1,7 +1,8 @@
-package dev.goblingroup.uzworks.fragments.auth
+package dev.goblingroup.uzworks.fragments.auth.signup
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnFocusChangeListener
@@ -15,24 +16,31 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.SignupRequest
+import dev.goblingroup.uzworks.models.response.SignupResponse
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.networking.NetworkHelper
+import dev.goblingroup.uzworks.resource.SignupResource
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
-import dev.goblingroup.uzworks.vm.AuthViewModel
-import dev.goblingroup.uzworks.vm.AuthViewModelFactory
+import dev.goblingroup.uzworks.utils.splitFullName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class SignUpFragment : Fragment() {
+class SignUpFragment : Fragment(), CoroutineScope {
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
     private val TAG = "SignUpFragment"
 
-    private lateinit var authViewModel: AuthViewModel
+    private lateinit var signupViewModel: SignupViewModel
     private lateinit var networkHelper: NetworkHelper
 
     private lateinit var loadingDialog: AlertDialog
     private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
+
+    private lateinit var userRole: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +52,8 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
+            userRole = arguments?.getString("user role")!!
+
             continueBtn.setOnClickListener {
                 continueClicked()
 
@@ -125,13 +135,21 @@ class SignUpFragment : Fragment() {
             ) {
                 /**
                  * check if password and confirm passwords are equal
+                 * check full name format
                  */
                 if (confirmPasswordEt.text.toString() != passwordEt.text.toString()) {
                     confirmPasswordErrorTv.text = "Please confirm the password"
                     confirmPasswordErrorLayout.visibility = View.VISIBLE
                     confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
                 } else {
-                    signUp()
+                    val (firstName, lastName) = splitFullName(fullName = fullNameEt.text.toString())
+                    if (firstName.isEmpty() || lastName.isEmpty()) {
+                        fullnameErrorTv.text = "Please enter your firstname and lastname"
+                        fullNameErrorLayout.visibility = View.VISIBLE
+                        fullNameEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    } else {
+                        signUp(firstName, lastName)
+                    }
                     /*findNavController().navigate(
                         resId = R.id.selectRoleFragment,
                         args = null,
@@ -159,17 +177,78 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun signUp() {
-        networkHelper = NetworkHelper(requireContext())
-        authViewModel = ViewModelProvider(
-            requireActivity(),
-            AuthViewModelFactory(
-                authService = ApiClient.authService,
-                networkHelper = networkHelper,
-                signupRequest = SignupRequest()
-            )
+    private fun signUp(firstName: String, lastName: String) {
+        binding.apply {
+            networkHelper = NetworkHelper(requireContext())
+            signupViewModel = ViewModelProvider(
+                requireActivity(),
+                SignupViewModelFactory(
+                    authService = ApiClient.authService,
+                    networkHelper = networkHelper,
+                    SignupRequest(
+                        username = usernameEt.text.toString(),
+                        password = passwordEt.text.toString(),
+                        confirmPassword = confirmPasswordEt.text.toString(),
+                        firstName = firstName,
+                        lastName = lastName,
+                        role = userRole
+                    )
+                )
+            )[SignupViewModel::class.java]
+
+            launch {
+                signupViewModel.signup()
+                    .collect {
+                        when (it) {
+                            is SignupResource.SignupError -> {
+                                signupError()
+                            }
+
+                            is SignupResource.SignupLoading -> {
+                                signupLoading()
+                            }
+
+                            is SignupResource.SignupSuccess -> {
+                                signupSuccess(it.signupResponse)
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun signupError() {
+        loadingDialogItemBinding.apply {
+            progressBar.visibility = View.INVISIBLE
+            errorIv.visibility = View.VISIBLE
+            dialogTv.text = "some error while signing up"
+            closeDialog.visibility = View.VISIBLE
+            closeDialog.setOnClickListener {
+                loadingDialog.dismiss()
+            }
+        }
+    }
+
+    private fun signupLoading() {
+        loadingDialog = AlertDialog.Builder(requireContext()).create()
+        loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        loadingDialog.setView(loadingDialogItemBinding.root)
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
+    }
+
+    private fun signupSuccess(signupResponse: SignupResponse) {
+        Log.d(TAG, "signupSuccess: $signupResponse")
+        loadingDialog.dismiss()
+        findNavController().navigate(
+            resId = R.id.succeedFragment,
+            args = null,
+            navOptions = getNavOptions()
         )
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
 
     override fun onDestroyView() {
         super.onDestroyView()

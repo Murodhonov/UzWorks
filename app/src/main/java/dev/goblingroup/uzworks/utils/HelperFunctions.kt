@@ -21,3 +21,17 @@ fun getNavOptions(): NavOptions {
         .setPopExitAnim(R.anim.pop_exit)
         .build()
 }
+
+fun splitFullName(fullName: String): Pair<String, String> {
+    val names = fullName.trim().split(" ")
+
+    return when (names.size) {
+        2 -> {
+            val firstName = names[0]
+            val lastName = names[1]
+            Pair(firstName, lastName)
+        }
+
+        else -> Pair("", "")
+    }
+}

@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.onboarding
+package dev.goblingroup.uzworks.fragments.onboarding.splash
 
 import android.os.Bundle
 import android.os.Handler

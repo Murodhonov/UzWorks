@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_blue"
-    tools:context=".fragments.main.jobs.JobListFragment">
+    tools:context=".fragments.main.jobs.job_list.JobListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recommended_work_announcements_rv"

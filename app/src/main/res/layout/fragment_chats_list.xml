@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white_blue"
     android:paddingBottom="@dimen/_7sdp"
-    tools:context=".fragments.main.chat.ChatsListFragment">
+    tools:context=".fragments.main.chat.chat_list.ChatsListFragment">
 
     <LinearLayout
         android:id="@+id/non_empty_layout"

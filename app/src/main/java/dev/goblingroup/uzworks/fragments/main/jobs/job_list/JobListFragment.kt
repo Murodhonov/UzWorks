@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.main.jobs
+package dev.goblingroup.uzworks.fragments.main.jobs.job_list
 
 import android.os.Bundle
 import android.view.LayoutInflater

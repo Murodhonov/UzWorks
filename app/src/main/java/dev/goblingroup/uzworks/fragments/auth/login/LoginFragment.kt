@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.auth
+package dev.goblingroup.uzworks.fragments.auth.login
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -16,15 +16,14 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
+import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.networking.NetworkHelper
+import dev.goblingroup.uzworks.resource.LoginResource
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
-import dev.goblingroup.uzworks.vm.AuthResource
-import dev.goblingroup.uzworks.vm.AuthViewModel
-import dev.goblingroup.uzworks.vm.AuthViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +36,7 @@ class LoginFragment : Fragment(), CoroutineScope {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var authViewModel: AuthViewModel
+    private lateinit var loginViewModel: LoginViewModel
     private lateinit var networkHelper: NetworkHelper
 
     private lateinit var loadingDialog: AlertDialog
@@ -57,7 +56,7 @@ class LoginFragment : Fragment(), CoroutineScope {
 
             signUpTv.setOnClickListener {
                 findNavController().navigate(
-                    resId = R.id.signUpFragment,
+                    resId = R.id.selectRoleFragment,
                     args = null,
                     navOptions = getNavOptions()
                 )
@@ -115,45 +114,70 @@ class LoginFragment : Fragment(), CoroutineScope {
             }
 
             networkHelper = NetworkHelper(requireContext())
-
-            authViewModel = ViewModelProvider(
-                requireActivity(),
-                AuthViewModelFactory(
-                    authService = ApiClient.authService,
-                    networkHelper = networkHelper,
-                    loginRequest = LoginRequest(
-                        username = usernameEt.text.toString(),
-                        password = passwordEt.text.toString()
-                    )
-                )
-            )[AuthViewModel::class.java]
         }
     }
 
     private fun login() {
-        launch {
-            authViewModel.login()
-                .collect {
-                    when (it) {
-                        is AuthResource.AuthError -> {
-                            authError(it)
-                        }
+        binding.apply {
+            try {
+                if (!loadingDialog.isShowing) {
+                    loadingDialog.show()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "login: $e")
+                Log.e(TAG, "login: ${e.stackTrace}")
+            }
+            networkHelper = NetworkHelper(requireContext())
+            loginViewModel = ViewModelProvider(
+                this@LoginFragment,
+                LoginViewModelFactory(
+                    authService = ApiClient.authService,
+                    networkHelper = networkHelper,
+                    loginRequest = LoginRequest(
+                        usernameEt.text.toString(),
+                        passwordEt.text.toString()
+                    )
+                )
+            )[LoginViewModel::class.java]
+            launch {
+                loginViewModel.login()
+                    .observe(viewLifecycleOwner) {
+                        when (it) {
+                            is LoginResource.LoginError -> {
+                                loginError(it)
+                            }
 
-                        is AuthResource.AuthLoading -> {
-                            authLoading()
-                        }
+                            is LoginResource.LoginLoading -> {
+                                loginLoading()
+                            }
 
-                        is AuthResource.AuthSuccess -> {
-                            authSuccess()
+                            is LoginResource.LoginSuccess -> {
+                                loginSuccess(it.loginResponse)
+                            }
                         }
                     }
-                }
+                /*.collect {
+                    when (it) {
+                        is LoginResource.LoginError -> {
+                            loginError(it)
+                        }
+
+                        is LoginResource.LoginLoading -> {
+                            loginLoading()
+                        }
+
+                        is LoginResource.LoginSuccess -> {
+                            loginSuccess(it.loginResponse)
+                        }
+                    }
+                }*/
+            }
         }
     }
 
-    private fun authError(authError: AuthResource.AuthError<Unit>) {
-        Log.e(TAG, "login: error ${authError.authError}")
-        Log.e(TAG, "login: error $authError")
+    private fun loginError(loginError: LoginResource.LoginError<Unit>) {
+        Log.e(TAG, "login: error ${loginError.loginError}")
+        Log.e(TAG, "login: error $loginError")
         loadingDialogItemBinding.apply {
             progressBar.visibility = View.INVISIBLE
             errorIv.visibility = View.VISIBLE
@@ -165,7 +189,7 @@ class LoginFragment : Fragment(), CoroutineScope {
         }
     }
 
-    private fun authLoading() {
+    private fun loginLoading() {
         loadingDialog = AlertDialog.Builder(requireContext()).create()
         loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
         loadingDialog.setView(loadingDialogItemBinding.root)
@@ -173,7 +197,7 @@ class LoginFragment : Fragment(), CoroutineScope {
         loadingDialog.show()
     }
 
-    private fun authSuccess() {
+    private fun loginSuccess(loginResponse: LoginResponse) {
         loadingDialog.dismiss()
         findNavController().navigate(
             resId = R.id.homeFragment,

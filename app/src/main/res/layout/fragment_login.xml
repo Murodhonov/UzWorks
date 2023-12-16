@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".fragments.auth.LoginFragment">
+    tools:context=".fragments.auth.login.LoginFragment">
 
     <TextView
         android:id="@+id/greeting_tv"
@@ -256,8 +256,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginStart="@dimen/_50sdp"
+        android:layout_marginEnd="@dimen/_50sdp"
         android:gravity="center_horizontal"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/language_layout"
         app:layout_constraintTop_toBottomOf="@id/sign_in_with_google_btn">
 
@@ -273,7 +275,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_4sdp"
             android:fontFamily="@font/dmsans_regular"
-            android:text="Sign up"
+            android:text="Create an account"
             android:textColor="@color/yellow" />
 
     </LinearLayout>

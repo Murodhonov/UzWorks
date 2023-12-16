@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.main.profile
+package dev.goblingroup.uzworks.fragments.main.profile.update_password
 
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@color/registration_background"
     app:layoutDescription="@xml/fragment_select_role_scene"
-    tools:context=".fragments.auth.SelectRoleFragment">
+    tools:context=".fragments.auth.select_role.SelectRoleFragment">
 
     <ImageView
         android:id="@+id/back"

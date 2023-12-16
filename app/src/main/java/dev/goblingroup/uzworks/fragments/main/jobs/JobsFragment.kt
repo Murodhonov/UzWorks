@@ -16,6 +16,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.view_pager_adapters.JobsViewPagerAdapter
 import dev.goblingroup.uzworks.databinding.FragmentJobsBinding
 import dev.goblingroup.uzworks.databinding.SavedJobsPropertiesBinding
+import dev.goblingroup.uzworks.fragments.main.jobs.job_list.JobListFragment
 import dev.goblingroup.uzworks.utils.getNavOptions
 
 class JobsFragment : Fragment() {

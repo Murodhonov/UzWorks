@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.main.profile
+package dev.goblingroup.uzworks.fragments.main.profile.settings
 
 import android.os.Bundle
 import android.util.Log

@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.auth
+package dev.goblingroup.uzworks.fragments.auth.select_role
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -47,9 +47,11 @@ class SelectRoleFragment : Fragment() {
             }
 
             signUpBtn.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putString("user role", status)
                 findNavController().navigate(
-                    resId = R.id.succeedFragment,
-                    args = null,
+                    resId = R.id.signUpFragment,
+                    args = bundle,
                     navOptions = getNavOptions()
                 )
             }
