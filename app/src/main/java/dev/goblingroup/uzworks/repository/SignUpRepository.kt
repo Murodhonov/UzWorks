@@ -1,11 +1,11 @@
 package dev.goblingroup.uzworks.repository
 
-import dev.goblingroup.uzworks.models.request.SignupRequest
+import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.networking.AuthService
 
-class SignupRepository(
+class SignUpRepository(
     private val authService: AuthService,
-    private val signupRequest: SignupRequest
+    private val signupRequest: SignUpRequest
 ) {
 
     fun signup() = authService.signup(signupRequest = signupRequest)

@@ -2,38 +2,38 @@ package dev.goblingroup.uzworks.fragments.auth.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.goblingroup.uzworks.models.request.SignupRequest
+import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.networking.AuthService
 import dev.goblingroup.uzworks.networking.NetworkHelper
-import dev.goblingroup.uzworks.repository.SignupRepository
-import dev.goblingroup.uzworks.resource.SignupResource
+import dev.goblingroup.uzworks.repository.SignUpRepository
+import dev.goblingroup.uzworks.resource.SignUpResource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class SignupViewModel(
+class SignUpViewModel(
     authService: AuthService,
     private val networkHelper: NetworkHelper,
-    private val signupRequest: SignupRequest
+    private val signupRequest: SignUpRequest
 ) : ViewModel() {
 
-    private val signupRepository = SignupRepository(authService, signupRequest)
+    private val signupRepository = SignUpRepository(authService, signupRequest)
     private val signupStateFlow =
-        MutableStateFlow<SignupResource<Unit>>(SignupResource.SignupLoading())
+        MutableStateFlow<SignUpResource<Unit>>(SignUpResource.SignUpLoading())
 
-    fun signup(): StateFlow<SignupResource<Unit>> {
+    fun signup(): StateFlow<SignUpResource<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 signupRepository.signup()
                     .catch {
-                        signupStateFlow.emit(SignupResource.SignupError(it))
+                        signupStateFlow.emit(SignUpResource.SignUpError(it))
                     }
                     .collect {
-                        signupStateFlow.emit(SignupResource.SignupSuccess(it))
+                        signupStateFlow.emit(SignUpResource.SignUpSuccess(it))
                     }
             } else {
-                signupStateFlow.emit(SignupResource.SignupError(Throwable("No internet connection")))
+                signupStateFlow.emit(SignUpResource.SignUpError(Throwable("No internet connection")))
             }
         }
         return signupStateFlow

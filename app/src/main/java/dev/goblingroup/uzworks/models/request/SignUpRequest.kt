@@ -1,6 +1,6 @@
 package dev.goblingroup.uzworks.models.request
 
-data class SignupRequest(
+data class SignUpRequest(
     var username: String,
     var password: String,
     var confirmPassword: String,

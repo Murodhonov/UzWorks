@@ -2,19 +2,19 @@ package dev.goblingroup.uzworks.fragments.auth.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import dev.goblingroup.uzworks.models.request.SignupRequest
+import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.networking.AuthService
 import dev.goblingroup.uzworks.networking.NetworkHelper
 
-class SignupViewModelFactory(
+class SignUpViewModelFactory(
     private val authService: AuthService,
     private val networkHelper: NetworkHelper,
-    private val signupRequest: SignupRequest
+    var signupRequest: SignUpRequest
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SignupViewModel::class.java)) {
-            return SignupViewModel(
+        if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
+            return SignUpViewModel(
                 authService = authService,
                 networkHelper = networkHelper,
                 signupRequest = signupRequest

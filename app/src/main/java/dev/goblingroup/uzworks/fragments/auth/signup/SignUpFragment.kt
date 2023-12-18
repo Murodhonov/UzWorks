@@ -13,13 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.databinding.ErrorDialogItemBinding
+import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
-import dev.goblingroup.uzworks.models.request.SignupRequest
-import dev.goblingroup.uzworks.models.response.SignupResponse
+import dev.goblingroup.uzworks.models.request.SignUpRequest
+import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.networking.NetworkHelper
-import dev.goblingroup.uzworks.resource.SignupResource
+import dev.goblingroup.uzworks.resource.SignUpResource
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.splitFullName
@@ -34,11 +34,12 @@ class SignUpFragment : Fragment(), CoroutineScope {
     private val binding get() = _binding!!
     private val TAG = "SignUpFragment"
 
-    private lateinit var signupViewModel: SignupViewModel
+    private lateinit var signupViewModel: SignUpViewModel
+    private lateinit var signupViewModelFactory: SignUpViewModelFactory
     private lateinit var networkHelper: NetworkHelper
 
-    private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogItemBinding: ErrorDialogItemBinding
+    private lateinit var authDialog: AlertDialog
+    private lateinit var authDialogBinding: AuthDialogItemBinding
 
     private lateinit var userRole: String
 
@@ -54,9 +55,63 @@ class SignUpFragment : Fragment(), CoroutineScope {
         binding.apply {
             userRole = arguments?.getString("user role")!!
 
-            continueBtn.setOnClickListener {
-                continueClicked()
+            networkHelper = NetworkHelper(requireContext())
+            signupViewModelFactory = SignUpViewModelFactory(
+                authService = ApiClient.authService,
+                networkHelper = networkHelper,
+                signupRequest = SignUpRequest(
+                    username = usernameEt.text.toString(),
+                    password = passwordEt.text.toString(),
+                    confirmPassword = confirmPasswordEt.text.toString(),
+                    firstName = "",
+                    lastName = "",
+                    role = ""
+                )
+            )
 
+            continueBtn.setOnClickListener {
+                if (
+                    fullNameEt.text.toString().isNotEmpty() &&
+                    usernameEt.text.toString().isNotEmpty() &&
+                    passwordEt.text.toString().isNotEmpty() &&
+                    confirmPasswordEt.text.toString().isNotEmpty()
+                ) {
+                    /**
+                     * check if password and confirm passwords are equal
+                     * check full name format
+                     */
+                    if (confirmPasswordEt.text.toString() != passwordEt.text.toString()) {
+                        confirmPasswordErrorTv.text = "Please confirm the password"
+                        confirmPasswordErrorLayout.visibility = View.VISIBLE
+                        confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    } else {
+                        val (firstName, lastName) = splitFullName(fullName = fullNameEt.text.toString())
+                        if (firstName.isEmpty() || lastName.isEmpty()) {
+                            fullnameErrorTv.text = "Please enter your firstname and lastname"
+                            fullNameErrorLayout.visibility = View.VISIBLE
+                            fullNameEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                        } else {
+                            signUp(firstName, lastName)
+                        }
+                    }
+                } else {
+                    if (fullNameEt.text.toString().isEmpty()) {
+                        fullNameErrorLayout.visibility = View.VISIBLE
+                        fullNameEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    }
+                    if (usernameEt.text.toString().isEmpty()) {
+                        usernameErrorLayout.visibility = View.VISIBLE
+                        usernameEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    }
+                    if (passwordEt.text.toString().isEmpty()) {
+                        passwordErrorLayout.visibility = View.VISIBLE
+                        passwordEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    }
+                    if (confirmPasswordEt.text.toString().isEmpty()) {
+                        confirmPasswordErrorLayout.visibility = View.VISIBLE
+                        confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    }
+                }
             }
 
             signUpWithGoogleBtn.setOnClickListener {
@@ -125,90 +180,32 @@ class SignUpFragment : Fragment(), CoroutineScope {
         }
     }
 
-    private fun continueClicked() {
-        binding.apply {
-            if (
-                fullNameEt.text.toString().isNotEmpty() &&
-                usernameEt.text.toString().isNotEmpty() &&
-                passwordEt.text.toString().isNotEmpty() &&
-                confirmPasswordEt.text.toString().isNotEmpty()
-            ) {
-                /**
-                 * check if password and confirm passwords are equal
-                 * check full name format
-                 */
-                if (confirmPasswordEt.text.toString() != passwordEt.text.toString()) {
-                    confirmPasswordErrorTv.text = "Please confirm the password"
-                    confirmPasswordErrorLayout.visibility = View.VISIBLE
-                    confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
-                } else {
-                    val (firstName, lastName) = splitFullName(fullName = fullNameEt.text.toString())
-                    if (firstName.isEmpty() || lastName.isEmpty()) {
-                        fullnameErrorTv.text = "Please enter your firstname and lastname"
-                        fullNameErrorLayout.visibility = View.VISIBLE
-                        fullNameEt.setBackgroundResource(R.drawable.error_edit_text_background)
-                    } else {
-                        signUp(firstName, lastName)
-                    }
-                    /*findNavController().navigate(
-                        resId = R.id.selectRoleFragment,
-                        args = null,
-                        navOptions = getNavOptions()
-                    )*/
-                }
-            } else {
-                if (fullNameEt.text.toString().isEmpty()) {
-                    fullNameErrorLayout.visibility = View.VISIBLE
-                    fullNameEt.setBackgroundResource(R.drawable.error_edit_text_background)
-                }
-                if (usernameEt.text.toString().isEmpty()) {
-                    usernameErrorLayout.visibility = View.VISIBLE
-                    usernameEt.setBackgroundResource(R.drawable.error_edit_text_background)
-                }
-                if (passwordEt.text.toString().isEmpty()) {
-                    passwordErrorLayout.visibility = View.VISIBLE
-                    passwordEt.setBackgroundResource(R.drawable.error_edit_text_background)
-                }
-                if (confirmPasswordEt.text.toString().isEmpty()) {
-                    confirmPasswordErrorLayout.visibility = View.VISIBLE
-                    confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
-                }
-            }
-        }
-    }
-
     private fun signUp(firstName: String, lastName: String) {
         binding.apply {
-            networkHelper = NetworkHelper(requireContext())
+            signupViewModelFactory.signupRequest.username = usernameEt.text.toString()
+            signupViewModelFactory.signupRequest.password = passwordEt.text.toString()
+            signupViewModelFactory.signupRequest.confirmPassword = confirmPasswordEt.text.toString()
+            signupViewModelFactory.signupRequest.firstName = firstName
+            signupViewModelFactory.signupRequest.lastName = lastName
+            signupViewModelFactory.signupRequest.role = userRole
             signupViewModel = ViewModelProvider(
-                requireActivity(),
-                SignupViewModelFactory(
-                    authService = ApiClient.authService,
-                    networkHelper = networkHelper,
-                    SignupRequest(
-                        username = usernameEt.text.toString(),
-                        password = passwordEt.text.toString(),
-                        confirmPassword = confirmPasswordEt.text.toString(),
-                        firstName = firstName,
-                        lastName = lastName,
-                        role = userRole
-                    )
-                )
-            )[SignupViewModel::class.java]
+                owner = this@SignUpFragment,
+                factory = signupViewModelFactory
+            )[SignUpViewModel::class.java]
 
             launch {
                 signupViewModel.signup()
                     .collect {
                         when (it) {
-                            is SignupResource.SignupError -> {
-                                signupError()
+                            is SignUpResource.SignUpError -> {
+                                signupError(it.signupError)
                             }
 
-                            is SignupResource.SignupLoading -> {
+                            is SignUpResource.SignUpLoading -> {
                                 signupLoading()
                             }
 
-                            is SignupResource.SignupSuccess -> {
+                            is SignUpResource.SignUpSuccess -> {
                                 signupSuccess(it.signupResponse)
                             }
                         }
@@ -217,28 +214,31 @@ class SignUpFragment : Fragment(), CoroutineScope {
         }
     }
 
-    private fun signupError() {
-        loadingDialogItemBinding.apply {
+    private fun signupError(signUpError: Throwable) {
+        authDialogBinding.apply {
+            Log.e(TAG, "signupError: $signUpError")
+            Log.e(TAG, "signupError: ${signUpError.stackTrace}")
+            Log.e(TAG, "signupError: ${signUpError.printStackTrace()}")
             errorIv.visibility = View.VISIBLE
             dialogTv.text = "some error while signing up"
             closeDialog.visibility = View.VISIBLE
             closeDialog.setOnClickListener {
-                loadingDialog.dismiss()
+                authDialog.dismiss()
             }
         }
     }
 
     private fun signupLoading() {
-        loadingDialog = AlertDialog.Builder(requireContext()).create()
-        loadingDialogItemBinding = ErrorDialogItemBinding.inflate(layoutInflater)
-        loadingDialog.setView(loadingDialogItemBinding.root)
-        loadingDialog.setCancelable(false)
-        loadingDialog.show()
+        authDialog = AlertDialog.Builder(requireContext()).create()
+        authDialogBinding = AuthDialogItemBinding.inflate(layoutInflater)
+        authDialog.setView(authDialogBinding.root)
+        authDialog.setCancelable(false)
+        authDialog.show()
     }
 
-    private fun signupSuccess(signupResponse: SignupResponse) {
-        Log.d(TAG, "signupSuccess: $signupResponse")
-        loadingDialog.dismiss()
+    private fun signupSuccess(signupResponse: SignUpResponse) {
+        Log.d(TAG, "signupSuccess: for ${signupViewModelFactory.signupRequest} $signupResponse")
+        authDialog.dismiss()
         findNavController().navigate(
             resId = R.id.succeedFragment,
             args = null,
