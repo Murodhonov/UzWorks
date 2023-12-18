@@ -10,10 +10,10 @@ import dev.goblingroup.uzworks.networking.AuthService
 import dev.goblingroup.uzworks.networking.NetworkHelper
 import dev.goblingroup.uzworks.repository.LoginRepository
 import dev.goblingroup.uzworks.resource.LoginResource
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.lang.Exception
 
 class LoginViewModel(
     authService: AuthService,
@@ -27,7 +27,6 @@ class LoginViewModel(
 
     fun login(): LiveData<LoginResource<Unit>> {
         viewModelScope.launch {
-            Log.d("TAG", "login: updateCredentials login request state $loginRequest")
             if (networkHelper.isNetworkConnected()) {
                 loginRepository.login()
                     .catch {

@@ -15,7 +15,10 @@ class LoginViewModelFactory(
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            Log.d("TAG", "create: updateCredentials $loginRequest sent to view model")
+            Log.d(
+                "TAG",
+                "create: updateCredentials loginRequest in ${this::class.java.simpleName} $loginRequest"
+            )
             return LoginViewModel(
                 authService = authService,
                 networkHelper = networkHelper,

@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.databinding.ErrorDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.SignupRequest
 import dev.goblingroup.uzworks.models.response.SignupResponse
 import dev.goblingroup.uzworks.networking.ApiClient
@@ -38,7 +38,7 @@ class SignUpFragment : Fragment(), CoroutineScope {
     private lateinit var networkHelper: NetworkHelper
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
+    private lateinit var loadingDialogItemBinding: ErrorDialogItemBinding
 
     private lateinit var userRole: String
 
@@ -219,7 +219,6 @@ class SignUpFragment : Fragment(), CoroutineScope {
 
     private fun signupError() {
         loadingDialogItemBinding.apply {
-            progressBar.visibility = View.INVISIBLE
             errorIv.visibility = View.VISIBLE
             dialogTv.text = "some error while signing up"
             closeDialog.visibility = View.VISIBLE
@@ -231,7 +230,7 @@ class SignUpFragment : Fragment(), CoroutineScope {
 
     private fun signupLoading() {
         loadingDialog = AlertDialog.Builder(requireContext()).create()
-        loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        loadingDialogItemBinding = ErrorDialogItemBinding.inflate(layoutInflater)
         loadingDialog.setView(loadingDialogItemBinding.root)
         loadingDialog.setCancelable(false)
         loadingDialog.show()

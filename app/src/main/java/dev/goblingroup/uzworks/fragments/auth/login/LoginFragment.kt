@@ -1,20 +1,29 @@
 package dev.goblingroup.uzworks.fragments.auth.login
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.databinding.ErrorDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.ApiClient
@@ -37,10 +46,11 @@ class LoginFragment : Fragment(), CoroutineScope {
     private val binding get() = _binding!!
 
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var loginViewModelFactory: LoginViewModelFactory
     private lateinit var networkHelper: NetworkHelper
 
-    private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
+    private lateinit var errorDialog: AlertDialog
+    private lateinit var errorBinding: ErrorDialogItemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +71,13 @@ class LoginFragment : Fragment(), CoroutineScope {
                     navOptions = getNavOptions()
                 )
             }
+
+            networkHelper = NetworkHelper(requireContext())
+            loginViewModelFactory = LoginViewModelFactory(
+                ApiClient.authService,
+                networkHelper,
+                LoginRequest(usernameEt.text.toString(), passwordEt.text.toString())
+            )
 
             loginBtn.setOnClickListener {
                 if (usernameEt.text.toString().isNotEmpty() && passwordEt.text.toString()
@@ -119,32 +136,22 @@ class LoginFragment : Fragment(), CoroutineScope {
 
     private fun login() {
         binding.apply {
-            try {
-                if (!loadingDialog.isShowing) {
-                    loadingDialog.show()
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "login: $e")
-                Log.e(TAG, "login: ${e.stackTrace}")
-            }
-            networkHelper = NetworkHelper(requireContext())
+            loginViewModelFactory.loginRequest.username = usernameEt.text.toString()
+            loginViewModelFactory.loginRequest.password = passwordEt.text.toString()
             loginViewModel = ViewModelProvider(
                 this@LoginFragment,
-                LoginViewModelFactory(
-                    authService = ApiClient.authService,
-                    networkHelper = networkHelper,
-                    loginRequest = LoginRequest(
-                        usernameEt.text.toString(),
-                        passwordEt.text.toString()
-                    )
-                )
+                loginViewModelFactory
             )[LoginViewModel::class.java]
+            Log.d(
+                TAG,
+                "login: updateCredentials loginRequest in ${this@LoginFragment::class.java.simpleName} ${loginViewModelFactory.loginRequest}"
+            )
             launch {
                 loginViewModel.login()
                     .observe(viewLifecycleOwner) {
                         when (it) {
                             is LoginResource.LoginError -> {
-                                loginError(it)
+                                loginError(it.loginError)
                             }
 
                             is LoginResource.LoginLoading -> {
@@ -156,54 +163,119 @@ class LoginFragment : Fragment(), CoroutineScope {
                             }
                         }
                     }
-                /*.collect {
-                    when (it) {
-                        is LoginResource.LoginError -> {
-                            loginError(it)
-                        }
-
-                        is LoginResource.LoginLoading -> {
-                            loginLoading()
-                        }
-
-                        is LoginResource.LoginSuccess -> {
-                            loginSuccess(it.loginResponse)
-                        }
-                    }
-                }*/
             }
         }
     }
 
-    private fun loginError(loginError: LoginResource.LoginError<Unit>) {
-        Log.e(TAG, "login: error ${loginError.loginError}")
-        Log.e(TAG, "login: error $loginError")
-        loadingDialogItemBinding.apply {
+    private fun loginError(loginError: Throwable) {
+        binding.apply {
             progressBar.visibility = View.INVISIBLE
-            errorIv.visibility = View.VISIBLE
-            dialogTv.text = "Username yoki password xato"
-            closeDialog.visibility = View.VISIBLE
-            closeDialog.setOnClickListener {
-                loadingDialog.dismiss()
-            }
+            val expandAnim =
+                AnimationUtils.loadAnimation(requireContext(), R.anim.expand_anim)
+            loginBtn.startAnimation(expandAnim)
+            loginTv.startAnimation(expandAnim)
+            expandAnim.setAnimationListener(object : AnimationListener {
+                override fun onAnimationStart(p0: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animation?) {
+                    loginBtn.visibility = View.VISIBLE
+                    loginTv.visibility = View.VISIBLE
+                    if (loginResponse == null) {
+                        errorDialog = AlertDialog.Builder(requireContext()).create()
+                        errorBinding = ErrorDialogItemBinding.inflate(layoutInflater)
+                        errorDialog.setView(errorBinding.root)
+                        errorDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        errorDialog.show()
+                        Log.e(TAG, "login: error $loginError")
+                    } else {
+                        try {
+                            if (errorDialog.isShowing) errorDialog.dismiss()
+                        } catch (e: Exception) {
+                            Log.e(
+                                TAG,
+                                "onAnimationEnd: error dialog hasn't been shown yet",
+                            )
+                        }
+                        findNavController().navigate(
+                            resId = R.id.homeFragment,
+                            args = null,
+                            navOptions = getNavOptions()
+                        )
+                        Log.d(TAG, "loginSuccess: $loginResponse")
+                    }
+                }
+
+                override fun onAnimationRepeat(p0: Animation?) {
+
+                }
+
+            })
         }
     }
 
     private fun loginLoading() {
-        loadingDialog = AlertDialog.Builder(requireContext()).create()
-        loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
-        loadingDialog.setView(loadingDialogItemBinding.root)
-        loadingDialog.setCancelable(false)
-        loadingDialog.show()
+        binding.apply {
+            val scaleXLoginBtn = ObjectAnimator.ofFloat(
+                loginBtn, View.SCALE_X, resources.getDimension(
+                    com.intuit.sdp.R.dimen._34sdp
+                ) / loginBtn.width
+            )
+
+            val collapseXTv = ObjectAnimator.ofFloat(loginTv, View.SCALE_X, 0f)
+            val collapseYTv = ObjectAnimator.ofFloat(loginTv, View.SCALE_Y, 0f)
+            loginTv.pivotX = loginTv.width * 0.5f
+            loginTv.pivotY = loginTv.height * 0.5f
+
+            val animatorSet = AnimatorSet()
+            animatorSet.playTogether(scaleXLoginBtn, collapseXTv, collapseYTv)
+            animatorSet.duration = 400
+            animatorSet.start()
+            animatorSet.addListener(object : AnimatorListener {
+                override fun onAnimationStart(p0: Animator) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator) {
+                    val collapseAnim =
+                        AnimationUtils.loadAnimation(requireContext(), R.anim.collapse_anim)
+                    loginBtn.startAnimation(collapseAnim)
+                    collapseAnim.setAnimationListener(object : AnimationListener {
+                        override fun onAnimationStart(p0: Animation?) {
+
+                        }
+
+                        override fun onAnimationEnd(p0: Animation?) {
+                            loginBtn.visibility = View.INVISIBLE
+                            progressBar.visibility = View.VISIBLE
+                        }
+
+                        override fun onAnimationRepeat(p0: Animation?) {
+
+                        }
+
+                    })
+                }
+
+                override fun onAnimationCancel(p0: Animator) {
+
+                }
+
+                override fun onAnimationRepeat(p0: Animator) {
+
+                }
+
+            })
+        }
     }
 
     private fun loginSuccess(loginResponse: LoginResponse) {
-        loadingDialog.dismiss()
-        findNavController().navigate(
-            resId = R.id.homeFragment,
-            args = null,
-            navOptions = getNavOptions()
-        )
+        stopLoading(loginResponse = loginResponse, loginError = null)
+    }
+
+    private fun stopLoading(loginResponse: LoginResponse? = null, loginError: Throwable? = null) {
+
     }
 
     private fun chooseLanguage() {
