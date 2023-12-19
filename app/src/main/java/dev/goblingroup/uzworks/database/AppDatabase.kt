@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import dev.goblingroup.uzworks.database.dao.UserDao
+import dev.goblingroup.uzworks.database.entity.UserEntity
 
-@Database(entities = [], version = 1)
+@Database(entities = [UserEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
-//    abstract fun modelDao(): ModelDao
+    abstract fun userDao(): UserDao
 
     companion object {
         private var INSTANCE: AppDatabase? = null

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
@@ -41,6 +42,7 @@ class LoginFragment : Fragment(), CoroutineScope {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var loginViewModelFactory: LoginViewModelFactory
     private lateinit var networkHelper: NetworkHelper
+    private lateinit var appDatabase: AppDatabase
 
     private lateinit var authDialog: AlertDialog
     private lateinit var authDialogBinding: AuthDialogItemBinding
@@ -66,10 +68,13 @@ class LoginFragment : Fragment(), CoroutineScope {
             }
 
             networkHelper = NetworkHelper(requireContext())
+            appDatabase = AppDatabase.getInstance(requireContext())
             loginViewModelFactory = LoginViewModelFactory(
-                ApiClient.authService,
-                networkHelper,
-                LoginRequest(usernameEt.text.toString(), passwordEt.text.toString())
+                appDatabase = appDatabase,
+                authService = ApiClient.authService,
+                networkHelper = networkHelper,
+                loginRequest = LoginRequest(usernameEt.text.toString(), passwordEt.text.toString()),
+                context = requireContext()
             )
 
             loginBtn.setOnClickListener {
@@ -129,8 +134,8 @@ class LoginFragment : Fragment(), CoroutineScope {
 
     private fun login() {
         binding.apply {
-            loginViewModelFactory.loginRequest.username = usernameEt.text.toString()
-            loginViewModelFactory.loginRequest.password = passwordEt.text.toString()
+            loginViewModelFactory.loginRequest?.username = usernameEt.text.toString()
+            loginViewModelFactory.loginRequest?.password = passwordEt.text.toString()
             loginViewModel = ViewModelProvider(
                 owner = this@LoginFragment,
                 factory = loginViewModelFactory

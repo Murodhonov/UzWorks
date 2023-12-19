@@ -8,7 +8,7 @@ data class LoginResponse(
     val firstname: String,
     val gender: String,
     val lastName: String,
-    val phoneNumber: Any,
+    val phoneNumber: String,
     val token: String,
     val userId: String
 )
