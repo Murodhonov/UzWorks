@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import dev.goblingroup.uzworks.database.entity.UserEntity
-import retrofit2.http.DELETE
 
 @Dao
 interface UserDao {
@@ -26,6 +25,7 @@ interface UserDao {
     )
     fun updateUser(userEntity: UserEntity)
 
-    @DELETE
-    fun deleteUser(userEntity: UserEntity)
+    @Query("DELETE FROM USERS_TABLE")
+    fun deleteUser()
+
 }
