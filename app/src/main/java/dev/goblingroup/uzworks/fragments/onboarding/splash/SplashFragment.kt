@@ -1,12 +1,14 @@
 package dev.goblingroup.uzworks.fragments.onboarding.splash
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -45,11 +47,13 @@ class SplashFragment : Fragment(), CoroutineScope {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            expandLogo = AnimationUtils.loadAnimation(requireContext(), R.anim.expand_logo)
-            expand()
-
             networkHelper = NetworkHelper(requireContext())
             appDatabase = AppDatabase.getInstance(requireContext())
+
+            Log.d("TAG", "expand: testing room ${appDatabase.userDao().getUser()}")
+
+            expandLogo = AnimationUtils.loadAnimation(requireContext(), R.anim.expand_logo)
+            expand()
         }
     }
 
@@ -100,8 +104,7 @@ class SplashFragment : Fragment(), CoroutineScope {
                         is LoginResource.LoginSuccess -> {
                             findNavController().navigate(
                                 resId = R.id.homeFragment,
-                                args = null,
-                                navOptions = getNavOptions()
+                                args = null
                             )
                         }
                     }

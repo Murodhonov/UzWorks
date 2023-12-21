@@ -5,6 +5,17 @@ import android.content.SharedPreferences
 
 class MySharedPreference private constructor(context: Context) {
 
+    companion object {
+        private var mySharedPreferences: MySharedPreference? = null
+
+        fun getInstance(context: Context): MySharedPreference {
+            if (mySharedPreferences == null) {
+                mySharedPreferences = MySharedPreference(context)
+            }
+            return mySharedPreferences as MySharedPreference
+        }
+    }
+
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("user_data", Context.MODE_PRIVATE)
 
@@ -24,15 +35,12 @@ class MySharedPreference private constructor(context: Context) {
         return sharedPreferences.getString("user_id", null)
     }
 
-    companion object {
-        private var mySharedPreferences: MySharedPreference? = null
+    fun getUserRoles(): String? {
+        return sharedPreferences.getString("user_roles", "")
+    }
 
-        fun getInstance(context: Context): MySharedPreference {
-            if (mySharedPreferences == null) {
-                mySharedPreferences = MySharedPreference(context)
-            }
-            return mySharedPreferences as MySharedPreference
-        }
+    fun setUserRoles(rolesJson: String): Boolean {
+        return sharedPreferences.edit().putString("user_roles", rolesJson).commit()
     }
 
 }

@@ -11,8 +11,6 @@ data class UserEntity(
     val username: String,
     @ColumnInfo(name = "password")
     val password: String,
-    @ColumnInfo(name = "roles")
-    val roles: List<String>,
     @ColumnInfo(name = "birth_date")
     val birthDate: String,
     @ColumnInfo(name = "email")

@@ -1,6 +1,7 @@
 package dev.goblingroup.uzworks
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -16,6 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dev.goblingroup.uzworks.databinding.ActivityMainBinding
 import dev.goblingroup.uzworks.utils.dpToPx
+import dev.goblingroup.uzworks.utils.getNavOptions
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,7 +38,9 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         binding.apply {
             setContentView(root)
-            window.statusBarColor = getColor(R.color.black_blue)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                window.statusBarColor = getColor(R.color.black_blue)
+            }
             bottomBar.tag = bottomBar.visibility
             bottomBar
                 .viewTreeObserver
@@ -74,6 +78,14 @@ class MainActivity : AppCompatActivity() {
                         hideBottomBar()
                     }
                 }
+            }
+
+            profilePicture.setOnClickListener {
+                navController.navigate(
+                    resId = R.id.profileFragment,
+                    args = null,
+                    navOptions = getNavOptions()
+                )
             }
 
         }

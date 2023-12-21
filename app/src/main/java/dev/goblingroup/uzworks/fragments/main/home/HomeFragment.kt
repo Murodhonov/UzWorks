@@ -9,7 +9,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSnapHelper
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.rv_adapters.WorksAdapter
+import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
+import dev.goblingroup.uzworks.networking.NetworkHelper
 import dev.goblingroup.uzworks.utils.getNavOptions
 
 class HomeFragment : Fragment() {
@@ -18,6 +20,9 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var appDatabase: AppDatabase
+    private lateinit var networkHelper: NetworkHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +34,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
+            appDatabase = AppDatabase.getInstance(requireContext())
+            networkHelper = NetworkHelper(requireContext())
+
+
             val adapter = WorksAdapter {
                 findNavController().navigate(
                     resId = R.id.jobDetailsFragment,

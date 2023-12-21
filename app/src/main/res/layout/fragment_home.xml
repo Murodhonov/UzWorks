@@ -268,4 +268,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/work_announcements_layout" />
 
+    <TextView
+        android:id="@+id/no_works_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:text="Hozircha taklif qilingan ishlar mavjud emas"
+        android:textAlignment="center"
+        android:textColor="@color/black_blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recommended_works_tv" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

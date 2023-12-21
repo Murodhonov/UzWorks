@@ -12,6 +12,8 @@ import dev.goblingroup.uzworks.networking.AuthService
 import dev.goblingroup.uzworks.networking.NetworkHelper
 import dev.goblingroup.uzworks.repository.LoginRepository
 import dev.goblingroup.uzworks.resource.LoginResource
+import dev.goblingroup.uzworks.service.UserRoleImpl
+import dev.goblingroup.uzworks.service.UserRoleService
 import dev.goblingroup.uzworks.singleton.MySharedPreference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,8 +43,7 @@ class LoginViewModel(
             // room is not empty
             LoginRequest(user.username, user.password)
         } else {
-            // room is empty
-            loginRequest!!
+            LoginRequest("", "")
         }
     }
 
@@ -56,8 +57,9 @@ class LoginViewModel(
                         loginStateFlow.emit(LoginResource.LoginError(Throwable(errorMessage)))
                     }
                     .collect {
-                        loginRepository.addUser(it.mapToEntity(loginRequest!!))
                         if (saveAuth(it)) {
+                            if (appDatabase.userDao().getUser() == null)
+                                loginRepository.addUser(it.mapToEntity(loginRequest!!))
                             loginStateFlow.emit(
                                 LoginResource.LoginSuccess(
                                     loginResponse = it
@@ -79,9 +81,11 @@ class LoginViewModel(
     }
 
     private fun saveAuth(loginResponse: LoginResponse): Boolean {
+        val userRoleService: UserRoleService = UserRoleImpl()
+        val rolesSaved = userRoleService.setUserRoles(loginResponse.access, context)
         val tokenSaved = MySharedPreference.getInstance(context).setToken(loginResponse.token)
         val userIdSaved = MySharedPreference.getInstance(context).setUserId(loginResponse.userId)
-        return tokenSaved && userIdSaved
+        return tokenSaved && userIdSaved && rolesSaved
     }
 
 }
