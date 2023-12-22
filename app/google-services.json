@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "460679346955",
+    "project_id": "uzworks-73062",
+    "storage_bucket": "uzworks-73062.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460679346955:android:550a17a4c8a4449cd6000e",
+        "android_client_info": {
+          "package_name": "dev.goblingroup.uzworks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzJP5XiWhRnfwnrJP9gjosqOYkQotFcqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

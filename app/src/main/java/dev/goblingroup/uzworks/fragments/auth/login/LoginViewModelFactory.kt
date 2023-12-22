@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.networking.AuthService
-import dev.goblingroup.uzworks.networking.NetworkHelper
+import dev.goblingroup.uzworks.utils.NetworkHelper
 
 class LoginViewModelFactory(
     private val appDatabase: AppDatabase,

@@ -18,7 +18,7 @@ import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.networking.NetworkHelper
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.resource.SignUpResource
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions

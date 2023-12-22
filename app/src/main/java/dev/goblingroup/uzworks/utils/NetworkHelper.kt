@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.networking
+package dev.goblingroup.uzworks.utils
 
 import android.content.Context
 import android.net.ConnectivityManager

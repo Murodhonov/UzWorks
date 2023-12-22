@@ -1,37 +1,37 @@
 package dev.goblingroup.uzworks.networking
 
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.POST
+import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
+import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface JobService {
 
-    @POST("api/Job/Create")
-    fun create(
-        @Body title: String,
-        @Body salary: Int,
-        @Body gender: String,
-        @Body workingTime: String,
-        @Body workingSchedule: String,
-        @Body deadline: String,
-        @Body tgLink: String,
-        @Body instagramLink: String,
-        @Body tgUserName: String,
-        @Body phoneNumber: String,
-        @Body benefit: String,
-        @Body requirement: String,
-        @Body minAge: Int,
-        @Body maxAge: Int,
-        @Body latitude: Double,
-        @Body longitude: Double,
-        @Body categoryId: String,
-        @Body districtId: String,
-    )
+    @GET("api/Job/GetById/{id}")
+    fun getJobById(
+        @Path("id") id: String
+    ): Flow<Response<Unit>>
 
-    @DELETE("api/Job/Delete/{id}")
-    fun delete(
-        @Path("id") jobId: String
-    )
+    @GET("api/Job/GetAll")
+    fun getAllJobs(
+        @Path("pageNumber") pageNumber: Int,
+        @Path("pageSize") pageSize: Int,
+        @Path("jobCategoryId") jobCategoryId: String,
+        @Path("maxAge") maxAge: Int,
+        @Path("minAge") minAge: Int,
+        @Path("maxSalary") maxSalary: Int,
+        @Path("minSalary") minSalary: Int,
+        @Path("gender") gender: String,
+        @Path("regionId") regionId: String,
+        @Path("districtId") districtId: String,
+    ): Flow<Response<Unit>>
+
+    @GET("api/Job/GetCount")
+    fun countJobs(): Flow<Response<Unit>>
+
+    @GET("api/Job/GetJobsByUserId/{id}")
+    fun getJobsByUserId(
+        @Path("id") userId: String
+    ): Flow<Response<Unit>>
 
 }

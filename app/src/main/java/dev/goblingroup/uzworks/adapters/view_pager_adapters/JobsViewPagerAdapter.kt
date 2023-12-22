@@ -11,7 +11,7 @@ class JobsViewPagerAdapter(
 ) :
     FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = tabList.size
 
     override fun createFragment(position: Int): Fragment {
         return JobListFragment.newInstance(tabList[position]).apply {

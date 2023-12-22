@@ -11,7 +11,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.rv_adapters.WorksAdapter
 import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
-import dev.goblingroup.uzworks.networking.NetworkHelper
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.getNavOptions
 
 class HomeFragment : Fragment() {

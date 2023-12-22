@@ -21,7 +21,7 @@ import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.networking.NetworkHelper
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.resource.LoginResource
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
@@ -175,6 +175,10 @@ class LoginFragment : Fragment(), CoroutineScope {
                 closeDialog.setOnClickListener {
                     authDialog.dismiss()
                 }
+                Log.e(TAG, "loginError: login error $loginError")
+                Log.e(TAG, "loginError: login error ${loginError.stackTrace}")
+                Log.e(TAG, "loginError: login error ${loginError.printStackTrace()}")
+                Log.e(TAG, "loginError: login error ${loginError.message}")
             }
         }
     }

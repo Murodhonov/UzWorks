@@ -1,6 +1,7 @@
 package dev.goblingroup.uzworks.fragments.auth.login
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +10,7 @@ import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.AuthService
-import dev.goblingroup.uzworks.networking.NetworkHelper
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.repository.LoginRepository
 import dev.goblingroup.uzworks.resource.LoginResource
 import dev.goblingroup.uzworks.service.UserRoleImpl
@@ -19,7 +20,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 class LoginViewModel(
     private val appDatabase: AppDatabase,
@@ -28,6 +28,8 @@ class LoginViewModel(
     private val loginRequest: LoginRequest? = null,
     private val context: Context
 ) : ViewModel() {
+
+    private val TAG = "LoginViewModel"
 
     private var loginRepository =
         LoginRepository(
@@ -43,18 +45,17 @@ class LoginViewModel(
             // room is not empty
             LoginRequest(user.username, user.password)
         } else {
-            LoginRequest("", "")
+            loginRequest ?: LoginRequest("", "")
         }
     }
 
     fun login(): StateFlow<LoginResource<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                Log.d(TAG, "login: loginRequest -> $loginRequest")
                 loginRepository.login()
                     .catch {
-                        val errorMessage =
-                            if (it is IOException) "Network error" else "Error occurred"
-                        loginStateFlow.emit(LoginResource.LoginError(Throwable(errorMessage)))
+                        loginStateFlow.emit(LoginResource.LoginError(Throwable(it)))
                     }
                     .collect {
                         if (saveAuth(it)) {

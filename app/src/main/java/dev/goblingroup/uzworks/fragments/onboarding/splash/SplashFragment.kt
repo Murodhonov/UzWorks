@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -18,7 +17,7 @@ import dev.goblingroup.uzworks.databinding.FragmentSplashBinding
 import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModel
 import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModelFactory
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.networking.NetworkHelper
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.resource.LoginResource
 import dev.goblingroup.uzworks.utils.getNavOptions
 import kotlinx.coroutines.CoroutineScope

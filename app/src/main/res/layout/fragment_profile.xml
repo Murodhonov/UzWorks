@@ -375,6 +375,16 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <Button
+            android:id="@+id/admin_panel_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/_7sdp"
+            android:text="Admin panel" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
