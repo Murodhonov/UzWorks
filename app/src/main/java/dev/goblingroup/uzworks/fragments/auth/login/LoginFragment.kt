@@ -21,9 +21,10 @@ import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.resource.LoginResource
+import dev.goblingroup.uzworks.utils.ConstValues.SUPER_ADMIN
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
@@ -202,7 +203,7 @@ class LoginFragment : Fragment(), CoroutineScope {
     private fun loginSuccess(loginResponse: LoginResponse) {
         authDialog.dismiss()
         findNavController().navigate(
-            resId = R.id.homeFragment,
+            resId = if (loginResponse.access.contains(SUPER_ADMIN)) R.id.adminPanelFragment else R.id.homeFragment,
             args = null,
             navOptions = getNavOptions()
         )

@@ -15,10 +15,9 @@ data class JobResponse(
     val phoneNumber: String,
     val requirement: String,
     val salary: Int,
-    val tgLink: String,
+    val telegramLink: String,
     val tgUserName: String,
     val title: String,
-    val userName: String,
     val workingSchedule: String,
     val workingTime: String
 )

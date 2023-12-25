@@ -13,13 +13,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
+import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModel
+import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModelFactory
+import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.utils.NetworkHelper
+import dev.goblingroup.uzworks.resource.LoginResource
 import dev.goblingroup.uzworks.resource.SignUpResource
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.splitFullName
@@ -237,13 +242,45 @@ class SignUpFragment : Fragment(), CoroutineScope {
     }
 
     private fun signupSuccess(signupResponse: SignUpResponse) {
-        Log.d(TAG, "signupSuccess: for ${signupViewModelFactory.signupRequest} $signupResponse")
-        authDialog.dismiss()
-        findNavController().navigate(
-            resId = R.id.succeedFragment,
-            args = null,
-            navOptions = getNavOptions()
-        )
+        binding.apply {
+            val loginViewModel = ViewModelProvider(
+                owner = this@SignUpFragment,
+                LoginViewModelFactory(
+                    appDatabase = AppDatabase.getInstance(requireContext()),
+                    authService = ApiClient.authService,
+                    networkHelper,
+                    loginRequest = LoginRequest(
+                        usernameEt.text.toString(),
+                        passwordEt.text.toString()
+                    ),
+                    context = requireContext()
+                )
+            )[LoginViewModel::class.java]
+            launch {
+                loginViewModel.login()
+                    .collect {
+                        when (it) {
+                            is LoginResource.LoginError -> {
+
+                            }
+
+                            is LoginResource.LoginLoading -> {
+
+                            }
+
+                            is LoginResource.LoginSuccess -> {
+                                Log.d(TAG, "signupSuccess: for ${signupViewModelFactory.signupRequest} $signupResponse")
+                                authDialog.dismiss()
+                                findNavController().navigate(
+                                    resId = R.id.succeedFragment,
+                                    args = null,
+                                    navOptions = getNavOptions()
+                                )
+                            }
+                        }
+                    }
+            }
+        }
     }
 
     override val coroutineContext: CoroutineContext

@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.networking
 
+import dev.goblingroup.uzworks.models.response.JobCategoryResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.GET
@@ -13,6 +14,6 @@ interface JobCategoryService {
     ): Flow<Response<Unit>>
 
     @GET("api/JobCategory/GetAll")
-    fun getAllJobCategories(): Flow<Response<Unit>>
+    fun getAllJobCategories(): Flow<List<JobCategoryResponse>>
 
 }

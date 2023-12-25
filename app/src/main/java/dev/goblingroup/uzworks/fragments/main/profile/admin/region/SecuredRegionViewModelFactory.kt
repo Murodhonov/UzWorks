@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.main.profile.admin
+package dev.goblingroup.uzworks.fragments.main.profile.admin.region
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

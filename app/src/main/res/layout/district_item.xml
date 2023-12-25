@@ -34,4 +34,15 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/delete_progress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:indeterminateTint="@color/black_blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/delete"
+        app:layout_constraintLeft_toLeftOf="@id/delete"
+        app:layout_constraintRight_toRightOf="@id/delete"
+        app:layout_constraintTop_toTopOf="@id/delete" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

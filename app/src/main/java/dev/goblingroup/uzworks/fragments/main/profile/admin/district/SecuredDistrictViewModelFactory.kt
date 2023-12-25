@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.main.profile.admin
+package dev.goblingroup.uzworks.fragments.main.profile.admin.district
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,7 +10,7 @@ import dev.goblingroup.uzworks.utils.NetworkHelper
 class SecuredDistrictViewModelFactory(
     private val securedDistrictService: SecuredDistrictService,
     var districtRequest: DistrictRequest,
-    private val districtId: String,
+    var districtId: String,
     var districtEditRequest: DistrictEditRequest,
     private val networkHelper: NetworkHelper
 ) : ViewModelProvider.Factory {

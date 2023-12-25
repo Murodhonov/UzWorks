@@ -19,6 +19,8 @@ class AdminPanelFragment : Fragment() {
     private var _binding: FragmentAdminPanelBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var adminPanelAdapter: AdminPanelAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,12 +32,14 @@ class AdminPanelFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             val tabList = arrayListOf(DISTRICT, JOB, JOB_CATEGORY, REGION, WORKER)
-            val adminPanelAdapter = AdminPanelAdapter(this@AdminPanelFragment, tabList)
+            adminPanelAdapter = AdminPanelAdapter(this@AdminPanelFragment, tabList)
             viewPager.adapter = adminPanelAdapter
 
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                 tab.text = tabList[position]
             }.attach()
+
+
 
         }
     }

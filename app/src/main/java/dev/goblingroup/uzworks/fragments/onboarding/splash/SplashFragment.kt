@@ -17,8 +17,9 @@ import dev.goblingroup.uzworks.databinding.FragmentSplashBinding
 import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModel
 import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModelFactory
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.resource.LoginResource
+import dev.goblingroup.uzworks.utils.ConstValues.SUPER_ADMIN
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.getNavOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -102,7 +103,7 @@ class SplashFragment : Fragment(), CoroutineScope {
 
                         is LoginResource.LoginSuccess -> {
                             findNavController().navigate(
-                                resId = R.id.homeFragment,
+                                resId = if (it.loginResponse.access.contains(SUPER_ADMIN)) R.id.adminPanelFragment else R.id.homeFragment,
                                 args = null
                             )
                         }

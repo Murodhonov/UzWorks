@@ -7,7 +7,7 @@ import dev.goblingroup.uzworks.networking.SecuredDistrictService
 class SecuredDistrictRepository(
     private val securedDistrictService: SecuredDistrictService,
     private val districtRequest: DistrictRequest,
-    private val districtId: String,
+    var districtId: String,
     private val districtEditRequest: DistrictEditRequest
 ) {
 

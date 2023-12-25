@@ -1,5 +1,6 @@
-package dev.goblingroup.uzworks.fragments.main.profile.admin
+package dev.goblingroup.uzworks.fragments.main.profile.admin.district
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.goblingroup.uzworks.models.request.DistrictEditRequest
@@ -63,12 +64,22 @@ class SecuredDistrictViewModel(
     fun deleteDistrict(): StateFlow<DeleteDistrictResource<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                Log.d(TAG, "deleteDistrict: ${securedDistrictRepository.districtId} is deleting")
                 securedDistrictRepository.deleteDistrict()
                     .catch {
                         deleteStateFlow.emit(DeleteDistrictResource.DeleteError(it))
                     }
                     .collect {
-                        deleteStateFlow.emit(DeleteDistrictResource.DeleteSuccess())
+                        if (it.isSuccessful) {
+                            deleteStateFlow.emit(DeleteDistrictResource.DeleteSuccess())
+                        } else {
+                            Log.e(TAG, "deleteDistrict: ${it.body()}")
+                            Log.e(TAG, "deleteDistrict: ${it.errorBody()}")
+                            Log.e(TAG, "deleteDistrict: ${it.code()}")
+                            Log.e(TAG, "deleteDistrict: ${it.message()}")
+                            Log.e(TAG, "deleteDistrict: ${it.headers()}")
+                            Log.e(TAG, "deleteDistrict: ${it.raw()}")
+                        }
                     }
             } else {
                 deleteStateFlow.emit(DeleteDistrictResource.DeleteError(Throwable(NO_INTERNET)))
@@ -93,5 +104,4 @@ class SecuredDistrictViewModel(
         }
         return editStateFlow
     }
-
 }
