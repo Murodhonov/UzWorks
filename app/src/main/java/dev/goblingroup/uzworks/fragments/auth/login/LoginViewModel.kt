@@ -12,7 +12,7 @@ import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.AuthService
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.repository.LoginRepository
-import dev.goblingroup.uzworks.resource.LoginResource
+import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.service.UserRoleImpl
 import dev.goblingroup.uzworks.service.UserRoleService
 import dev.goblingroup.uzworks.singleton.MySharedPreference
@@ -37,7 +37,7 @@ class LoginViewModel(
             loginRequest = getLoginRequest(),
             userDao = appDatabase.userDao()
         )
-    private val loginStateFlow = MutableStateFlow<LoginResource<Unit>>(LoginResource.LoginLoading())
+    private val loginStateFlow = MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
     private fun getLoginRequest(): LoginRequest {
         val user = appDatabase.userDao().getUser()
@@ -49,21 +49,21 @@ class LoginViewModel(
         }
     }
 
-    fun login(): StateFlow<LoginResource<Unit>> {
+    fun login(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 Log.d(TAG, "login: loginRequest -> $loginRequest")
                 loginRepository.login()
                     .catch {
-                        loginStateFlow.emit(LoginResource.LoginError(Throwable(it)))
+                        loginStateFlow.emit(ApiStatus.Error(Throwable(it)))
                     }
                     .collect {
                         if (saveAuth(it)) {
                             if (appDatabase.userDao().getUser() == null)
                                 loginRepository.addUser(it.mapToEntity(loginRequest!!))
                             loginStateFlow.emit(
-                                LoginResource.LoginSuccess(
-                                    loginResponse = it
+                                ApiStatus.Success(
+                                    response = it
                                 )
                             )
                         } else {
@@ -75,7 +75,7 @@ class LoginViewModel(
                         }
                     }
             } else {
-                loginStateFlow.emit(LoginResource.LoginError(Throwable("No internet connection")))
+                loginStateFlow.emit(ApiStatus.Error(Throwable("No internet connection")))
             }
         }
         return loginStateFlow

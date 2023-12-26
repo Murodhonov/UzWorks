@@ -16,8 +16,9 @@ import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.FragmentSplashBinding
 import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModel
 import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModelFactory
+import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.resource.LoginResource
+import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.SUPER_ADMIN
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.getNavOptions
@@ -89,7 +90,7 @@ class SplashFragment : Fragment(), CoroutineScope {
             loginViewModel.login()
                 .collect {
                     when (it) {
-                        is LoginResource.LoginError -> {
+                        is ApiStatus.Error -> {
                             findNavController().navigate(
                                 resId = R.id.getStartedFragment,
                                 args = null,
@@ -97,13 +98,13 @@ class SplashFragment : Fragment(), CoroutineScope {
                             )
                         }
 
-                        is LoginResource.LoginLoading -> {
+                        is ApiStatus.Loading -> {
 
                         }
 
-                        is LoginResource.LoginSuccess -> {
+                        is ApiStatus.Success -> {
                             findNavController().navigate(
-                                resId = if (it.loginResponse.access.contains(SUPER_ADMIN)) R.id.adminPanelFragment else R.id.homeFragment,
+                                resId = if ((it.response as LoginResponse).access.contains(SUPER_ADMIN)) R.id.adminPanelFragment else R.id.homeFragment,
                                 args = null
                             )
                         }

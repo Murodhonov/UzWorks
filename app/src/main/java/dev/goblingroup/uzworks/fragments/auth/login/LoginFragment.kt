@@ -21,7 +21,7 @@ import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.resource.LoginResource
+import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.SUPER_ADMIN
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
 import dev.goblingroup.uzworks.utils.NetworkHelper
@@ -149,16 +149,16 @@ class LoginFragment : Fragment(), CoroutineScope {
                 loginViewModel.login()
                     .collect {
                         when (it) {
-                            is LoginResource.LoginError -> {
-                                loginError(it.loginError)
+                            is ApiStatus.Error -> {
+                                loginError(it.error)
                             }
 
-                            is LoginResource.LoginLoading -> {
+                            is ApiStatus.Loading -> {
                                 loginLoading()
                             }
 
-                            is LoginResource.LoginSuccess -> {
-                                loginSuccess(it.loginResponse)
+                            is ApiStatus.Success -> {
+                                loginSuccess(it.response as LoginResponse)
                             }
                         }
                     }
