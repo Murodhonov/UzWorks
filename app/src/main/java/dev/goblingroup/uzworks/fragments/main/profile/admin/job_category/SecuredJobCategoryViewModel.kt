@@ -6,9 +6,7 @@ import dev.goblingroup.uzworks.models.request.JobCategoryEditRequest
 import dev.goblingroup.uzworks.models.request.JobCategoryRequest
 import dev.goblingroup.uzworks.networking.SecuredJobCategoryService
 import dev.goblingroup.uzworks.repository.secured.SecuredJobCategoryRepository
-import dev.goblingroup.uzworks.resource.secured_resource.job_category.CreateJobCategoryResource
-import dev.goblingroup.uzworks.resource.secured_resource.job_category.DeleteJobCategoryResource
-import dev.goblingroup.uzworks.resource.secured_resource.job_category.EditJobCategoryResource
+import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,60 +33,60 @@ class SecuredJobCategoryViewModel(
         )
 
     private val createStateFlow =
-        MutableStateFlow<CreateJobCategoryResource<Unit>>(CreateJobCategoryResource.CreateLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
     private val deleteStateFlow =
-        MutableStateFlow<DeleteJobCategoryResource<Unit>>(DeleteJobCategoryResource.DeleteLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
     private val editStateFlow =
-        MutableStateFlow<EditJobCategoryResource<Unit>>(EditJobCategoryResource.EditLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createDistrict(): StateFlow<CreateJobCategoryResource<Unit>> {
+    fun createDistrict(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedJobCategoryRepository.createJobCategory()
                     .catch {
-                        createStateFlow.emit(CreateJobCategoryResource.CreateError(it))
+                        createStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        createStateFlow.emit(CreateJobCategoryResource.CreateSuccess())
+                        createStateFlow.emit(ApiStatus.Success(null))
                     }
             } else {
-                createStateFlow.emit(CreateJobCategoryResource.CreateError(Throwable(NO_INTERNET)))
+                createStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return createStateFlow
     }
 
-    fun deleteDistrict(): StateFlow<DeleteJobCategoryResource<Unit>> {
+    fun deleteDistrict(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedJobCategoryRepository.deleteJobCategory()
                     .catch {
-                        deleteStateFlow.emit(DeleteJobCategoryResource.DeleteError(it))
+                        deleteStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        deleteStateFlow.emit(DeleteJobCategoryResource.DeleteSuccess())
+                        deleteStateFlow.emit(ApiStatus.Success(null))
                     }
             } else {
-                deleteStateFlow.emit(DeleteJobCategoryResource.DeleteError(Throwable(NO_INTERNET)))
+                deleteStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return deleteStateFlow
     }
 
-    fun editDistrict(): StateFlow<EditJobCategoryResource<Unit>> {
+    fun editDistrict(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedJobCategoryRepository.editJobCategory()
                     .catch {
-                        editStateFlow.emit(EditJobCategoryResource.EditError(it))
+                        editStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        editStateFlow.emit(EditJobCategoryResource.EditSuccess())
+                        editStateFlow.emit(ApiStatus.Success(null))
                     }
             } else {
-                editStateFlow.emit(EditJobCategoryResource.EditError(Throwable(NO_INTERNET)))
+                editStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return editStateFlow

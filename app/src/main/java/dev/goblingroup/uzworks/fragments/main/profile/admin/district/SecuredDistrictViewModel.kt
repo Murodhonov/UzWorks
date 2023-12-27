@@ -7,9 +7,7 @@ import dev.goblingroup.uzworks.models.request.DistrictEditRequest
 import dev.goblingroup.uzworks.models.request.DistrictRequest
 import dev.goblingroup.uzworks.networking.SecuredDistrictService
 import dev.goblingroup.uzworks.repository.secured.SecuredDistrictRepository
-import dev.goblingroup.uzworks.resource.secured_resource.district.CreateDistrictResource
-import dev.goblingroup.uzworks.resource.secured_resource.district.DeleteDistrictResource
-import dev.goblingroup.uzworks.resource.secured_resource.district.EditDistrictResource
+import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,42 +34,42 @@ class SecuredDistrictViewModel(
         )
 
     private val createStateFlow =
-        MutableStateFlow<CreateDistrictResource<Unit>>(CreateDistrictResource.CreateLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
     private val deleteStateFlow =
-        MutableStateFlow<DeleteDistrictResource<Unit>>(DeleteDistrictResource.DeleteLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
     private val editStateFlow =
-        MutableStateFlow<EditDistrictResource<Unit>>(EditDistrictResource.EditLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createDistrict(): StateFlow<CreateDistrictResource<Unit>> {
+    fun createDistrict(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedDistrictRepository.createDistrict()
                     .catch {
-                        createStateFlow.emit(CreateDistrictResource.CreateError(it))
+                        createStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        createStateFlow.emit(CreateDistrictResource.CreateSuccess())
+                        createStateFlow.emit(ApiStatus.Success(it))
                     }
             } else {
-                createStateFlow.emit(CreateDistrictResource.CreateError(Throwable(NO_INTERNET)))
+                createStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return createStateFlow
     }
 
-    fun deleteDistrict(): StateFlow<DeleteDistrictResource<Unit>> {
+    fun deleteDistrict(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 Log.d(TAG, "deleteDistrict: ${securedDistrictRepository.districtId} is deleting")
                 securedDistrictRepository.deleteDistrict()
                     .catch {
-                        deleteStateFlow.emit(DeleteDistrictResource.DeleteError(it))
+                        deleteStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
                         if (it.isSuccessful) {
-                            deleteStateFlow.emit(DeleteDistrictResource.DeleteSuccess())
+                            deleteStateFlow.emit(ApiStatus.Success(null))
                         } else {
                             Log.e(TAG, "deleteDistrict: ${it.body()}")
                             Log.e(TAG, "deleteDistrict: ${it.errorBody()}")
@@ -82,24 +80,24 @@ class SecuredDistrictViewModel(
                         }
                     }
             } else {
-                deleteStateFlow.emit(DeleteDistrictResource.DeleteError(Throwable(NO_INTERNET)))
+                deleteStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return deleteStateFlow
     }
 
-    fun editDistrict(): StateFlow<EditDistrictResource<Unit>> {
+    fun editDistrict(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedDistrictRepository.editDistrict()
                     .catch {
-                        editStateFlow.emit(EditDistrictResource.EditError(it))
+                        editStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        editStateFlow.emit(EditDistrictResource.EditSuccess())
+                        editStateFlow.emit(ApiStatus.Success(null))
                     }
             } else {
-                editStateFlow.emit(EditDistrictResource.EditError(Throwable(NO_INTERNET)))
+                editStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return editStateFlow

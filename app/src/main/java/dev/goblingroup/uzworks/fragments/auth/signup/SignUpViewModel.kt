@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.networking.AuthService
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.repository.SignUpRepository
-import dev.goblingroup.uzworks.resource.SignUpResource
+import dev.goblingroup.uzworks.utils.ApiStatus
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -20,20 +20,20 @@ class SignUpViewModel(
 
     private val signupRepository = SignUpRepository(authService, signupRequest)
     private val signupStateFlow =
-        MutableStateFlow<SignUpResource<Unit>>(SignUpResource.SignUpLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun signup(): StateFlow<SignUpResource<Unit>> {
+    fun signup(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 signupRepository.signup()
                     .catch {
-                        signupStateFlow.emit(SignUpResource.SignUpError(it))
+                        signupStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        signupStateFlow.emit(SignUpResource.SignUpSuccess(it))
+                        signupStateFlow.emit(ApiStatus.Success(it))
                     }
             } else {
-                signupStateFlow.emit(SignUpResource.SignUpError(Throwable("No internet connection")))
+                signupStateFlow.emit(ApiStatus.Error(Throwable("No internet connection")))
             }
         }
         return signupStateFlow

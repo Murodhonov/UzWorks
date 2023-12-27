@@ -18,8 +18,7 @@ import dev.goblingroup.uzworks.models.request.DistrictEditRequest
 import dev.goblingroup.uzworks.models.request.DistrictRequest
 import dev.goblingroup.uzworks.models.response.DistrictResponse
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.resource.district.DistrictResource
-import dev.goblingroup.uzworks.resource.secured_resource.district.DeleteDistrictResource
+import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,17 +66,17 @@ class DistrictControlFragment : Fragment(), CoroutineScope {
                 viewModel.loadDistricts()
                     .collect {
                         when (it) {
-                            is DistrictResource.DistrictError -> {
+                            is ApiStatus.Error -> {
                                 progressBar.visibility = View.INVISIBLE
                             }
 
-                            is DistrictResource.DistrictLoading -> {
+                            is ApiStatus.Loading -> {
                                 progressBar.visibility = View.VISIBLE
                             }
 
-                            is DistrictResource.DistrictSuccess -> {
+                            is ApiStatus.Success -> {
                                 progressBar.visibility = View.INVISIBLE
-                                districtList = ArrayList(it.districtList)
+                                districtList = ArrayList(it.response as List<DistrictResponse>)
                                 success(districtList)
                             }
                         }
@@ -127,7 +126,7 @@ class DistrictControlFragment : Fragment(), CoroutineScope {
             securedViewModel.deleteDistrict()
                 .collect {
                     when (it) {
-                        is DeleteDistrictResource.DeleteError -> {
+                        is ApiStatus.Error -> {
                             deleteButton.visibility = View.VISIBLE
                             deleteProgressBar.visibility = View.INVISIBLE
                             Toast.makeText(
@@ -137,12 +136,12 @@ class DistrictControlFragment : Fragment(), CoroutineScope {
                             ).show()
                         }
 
-                        is DeleteDistrictResource.DeleteLoading -> {
+                        is ApiStatus.Loading -> {
                             deleteButton.visibility = View.INVISIBLE
                             deleteProgressBar.visibility = View.VISIBLE
                         }
 
-                        is DeleteDistrictResource.DeleteSuccess -> {
+                        is ApiStatus.Success -> {
 //                            deleteProgressBar.visibility = View.GONE
                             deleteSuccess(position)
                         }

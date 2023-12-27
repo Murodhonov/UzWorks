@@ -79,15 +79,23 @@ class JobsFragment : Fragment() {
 
     private fun jobClick() {
         binding.apply {
-            /*if (viewPager.currentItem == 0) {
-                findNavController().navigate(R.id.action_jobsFragment_to_jobDetailsFragment)
+            if (viewPager.currentItem == 0) {
+                findNavController().navigate(
+                    resId = R.id.jobDetailsFragment,
+                    args = null,
+                    navOptions = getNavOptions()
+                )
             } else {
                 val bottomSheetDialog = BottomSheetDialog(requireContext())
                 val jobPropertiesBinding = SavedJobsPropertiesBinding.inflate(layoutInflater)
                 jobPropertiesBinding.apply {
                     bottomSheetDialog.setContentView(root)
                     contactChatBtn.setOnClickListener {
-                        findNavController().navigate(R.id.action_jobsFragment_to_chatFragment)
+                        findNavController().navigate(
+                            resId = R.id.chatFragment,
+                            args = null,
+                            navOptions = getNavOptions()
+                        )
                     }
                     shareBtn.setOnClickListener {
                         val shareIntent = Intent(Intent.ACTION_SEND)
@@ -95,7 +103,11 @@ class JobsFragment : Fragment() {
                         shareIntent.putExtra(Intent.EXTRA_TEXT, "public link is in progress")
                     }
                     seeMoreBtn.setOnClickListener {
-                        findNavController().navigate(R.id.action_jobsFragment_to_jobDetailsFragment)
+                        findNavController().navigate(
+                            resId = R.id.jobDetailsFragment,
+                            args = null,
+                            navOptions = getNavOptions()
+                        )
                     }
                     deleteBtn.setOnClickListener {
                         Toast.makeText(
@@ -105,8 +117,8 @@ class JobsFragment : Fragment() {
                         ).show()
                     }
                 }
-            }*/
-            Toast.makeText(requireContext(), "dialog", Toast.LENGTH_SHORT).show()
+            }
+            /*Toast.makeText(requireContext(), "dialog", Toast.LENGTH_SHORT).show()
             val bottomSheetDialog = BottomSheetDialog(requireContext())
             val jobPropertiesBinding = SavedJobsPropertiesBinding.inflate(layoutInflater)
             jobPropertiesBinding.apply {
@@ -150,7 +162,7 @@ class JobsFragment : Fragment() {
                     bottomSheetDialog.dismiss()
                 }
             }
-            bottomSheetDialog.show()
+            bottomSheetDialog.show()*/
         }
     }
 

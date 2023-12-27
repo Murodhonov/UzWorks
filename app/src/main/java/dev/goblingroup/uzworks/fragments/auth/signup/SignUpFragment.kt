@@ -23,7 +23,6 @@ import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.utils.ApiStatus
-import dev.goblingroup.uzworks.resource.SignUpResource
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
@@ -202,16 +201,16 @@ class SignUpFragment : Fragment(), CoroutineScope {
                 signupViewModel.signup()
                     .collect {
                         when (it) {
-                            is SignUpResource.SignUpError -> {
-                                signupError(it.signupError)
+                            is ApiStatus.Error -> {
+                                signupError(it.error)
                             }
 
-                            is SignUpResource.SignUpLoading -> {
+                            is ApiStatus.Loading -> {
                                 signupLoading()
                             }
 
-                            is SignUpResource.SignUpSuccess -> {
-                                signupSuccess(it.signupResponse)
+                            is ApiStatus.Success -> {
+                                signupSuccess(it.response as SignUpResponse)
                             }
                         }
                     }

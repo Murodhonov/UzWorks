@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.goblingroup.uzworks.networking.DistrictService
 import dev.goblingroup.uzworks.repository.DistrictRepository
-import dev.goblingroup.uzworks.resource.district.DistrictByIdResource
-import dev.goblingroup.uzworks.resource.district.DistrictByRegionIdResource
-import dev.goblingroup.uzworks.resource.district.DistrictResource
+import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,60 +27,60 @@ class DistrictViewModel(
         )
 
     private val getStateFlow =
-        MutableStateFlow<DistrictResource<Unit>>(DistrictResource.DistrictLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
     private val districtByIdFlow =
-        MutableStateFlow<DistrictByIdResource<Unit>>(DistrictByIdResource.Loading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
     private val districtByRegionIdFlow =
-        MutableStateFlow<DistrictByRegionIdResource<Unit>>(DistrictByRegionIdResource.Loading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun getDistrictById(): StateFlow<DistrictByIdResource<Unit>> {
+    fun getDistrictById(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 districtRepository.getDistrictById()
                     .catch {
-                        districtByIdFlow.emit(DistrictByIdResource.Error(it))
+                        districtByIdFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        districtByIdFlow.emit(DistrictByIdResource.Success(it))
+                        districtByIdFlow.emit(ApiStatus.Success(it))
                     }
             } else {
-                districtByIdFlow.emit(DistrictByIdResource.Error(Throwable(NO_INTERNET)))
+                districtByIdFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return districtByIdFlow
     }
 
-    fun loadDistricts(): StateFlow<DistrictResource<Unit>> {
+    fun loadDistricts(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 districtRepository.getAllDistricts()
                     .catch {
-                        getStateFlow.emit(DistrictResource.DistrictError(it))
+                        getStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        getStateFlow.emit(DistrictResource.DistrictSuccess(it))
+                        getStateFlow.emit(ApiStatus.Success(it))
                     }
             } else {
-                getStateFlow.emit(DistrictResource.DistrictError(Throwable(NO_INTERNET)))
+                getStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return getStateFlow
     }
 
-    fun getDistrictByRegionId(): StateFlow<DistrictByRegionIdResource<Unit>> {
+    fun getDistrictByRegionId(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 districtRepository.getDistrictByRegionId()
                     .catch {
-                        districtByRegionIdFlow.emit(DistrictByRegionIdResource.Error(it))
+                        districtByRegionIdFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        districtByRegionIdFlow.emit(DistrictByRegionIdResource.Success(it))
+                        districtByRegionIdFlow.emit(ApiStatus.Success(it))
                     }
             } else {
-                districtByRegionIdFlow.emit(DistrictByRegionIdResource.Error(Throwable(NO_INTERNET)))
+                districtByRegionIdFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return districtByRegionIdFlow

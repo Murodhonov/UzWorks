@@ -4,6 +4,7 @@ import dev.goblingroup.uzworks.models.response.JobResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface JobService {
 
@@ -14,16 +15,16 @@ interface JobService {
 
     @GET("api/Job/GetAll")
     fun getAllJobs(
-        @Path("pageNumber") pageNumber: Int = 1,
-        @Path("pageSize") pageSize: Int = 10,
-        @Path("jobCategoryId") jobCategoryId: String? = null,
-        @Path("maxAge") maxAge: Int? = null,
-        @Path("minAge") minAge: Int? = null,
-        @Path("maxSalary") maxSalary: Int? = null,
-        @Path("minSalary") minSalary: Int? = null,
-        @Path("gender") gender: String? = null,
-        @Path("regionId") regionId: String? = null,
-        @Path("districtId") districtId: String? = null,
+        @Query("pageNumber") pageNumber: Int? = null,
+        @Query("pageSize") pageSize: Int = 10,
+        @Query("jobCategoryId") jobCategoryId: String? = null,
+        @Query("maxAge") maxAge: Int? = null,
+        @Query("minAge") minAge: Int? = null,
+        @Query("maxSalary") maxSalary: Int? = null,
+        @Query("minSalary") minSalary: Int? = null,
+        @Query("gender") gender: String? = null,
+        @Query("regionId") regionId: String? = null,
+        @Query("districtId") districtId: String? = null,
     ): Flow<List<JobResponse>>
 
     @GET("api/Job/GetCount")

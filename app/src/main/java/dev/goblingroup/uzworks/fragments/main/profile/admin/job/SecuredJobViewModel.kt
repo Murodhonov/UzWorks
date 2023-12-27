@@ -6,9 +6,7 @@ import dev.goblingroup.uzworks.models.request.JobEditRequest
 import dev.goblingroup.uzworks.models.request.JobRequest
 import dev.goblingroup.uzworks.networking.SecuredJobService
 import dev.goblingroup.uzworks.repository.secured.SecuredJobRepository
-import dev.goblingroup.uzworks.resource.secured_resource.job.CreateJobResource
-import dev.goblingroup.uzworks.resource.secured_resource.job.DeleteJobResource
-import dev.goblingroup.uzworks.resource.secured_resource.job.EditJobResource
+import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,60 +33,60 @@ class SecuredJobViewModel(
         )
 
     private val createStateFlow =
-        MutableStateFlow<CreateJobResource<Unit>>(CreateJobResource.CreateLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
     private val deleteStateFlow =
-        MutableStateFlow<DeleteJobResource<Unit>>(DeleteJobResource.DeleteLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
     private val editStateFlow =
-        MutableStateFlow<EditJobResource<Unit>>(EditJobResource.EditLoading())
+        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createDistrict(): StateFlow<CreateJobResource<Unit>> {
+    fun createDistrict(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedJobRepository.createJob()
                     .catch {
-                        createStateFlow.emit(CreateJobResource.CreateError(it))
+                        createStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        createStateFlow.emit(CreateJobResource.CreateSuccess())
+                        createStateFlow.emit(ApiStatus.Success(null))
                     }
             } else {
-                createStateFlow.emit(CreateJobResource.CreateError(Throwable(NO_INTERNET)))
+                createStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return createStateFlow
     }
 
-    fun deleteDistrict(): StateFlow<DeleteJobResource<Unit>> {
+    fun deleteDistrict(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedJobRepository.deleteJob()
                     .catch {
-                        deleteStateFlow.emit(DeleteJobResource.DeleteError(it))
+                        deleteStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        deleteStateFlow.emit(DeleteJobResource.DeleteSuccess())
+                        deleteStateFlow.emit(ApiStatus.Success(null))
                     }
             } else {
-                deleteStateFlow.emit(DeleteJobResource.DeleteError(Throwable(NO_INTERNET)))
+                deleteStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return deleteStateFlow
     }
 
-    fun editDistrict(): StateFlow<EditJobResource<Unit>> {
+    fun editDistrict(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedJobRepository.editJob()
                     .catch {
-                        editStateFlow.emit(EditJobResource.EditError(it))
+                        editStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        editStateFlow.emit(EditJobResource.EditSuccess())
+                        editStateFlow.emit(ApiStatus.Success(null))
                     }
             } else {
-                editStateFlow.emit(EditJobResource.EditError(Throwable(NO_INTERNET)))
+                editStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
         return editStateFlow
