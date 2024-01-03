@@ -8,13 +8,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import dev.goblingroup.uzworks.adapters.rv_adapters.JobAdapter
 import dev.goblingroup.uzworks.databinding.FragmentJobListBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.pagination.PaginationScrollListener
-import dev.goblingroup.uzworks.resource.JobResource
+import dev.goblingroup.uzworks.singleton.MySharedPreference
 import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.vm.JobsViewModel
@@ -23,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
-import kotlin.math.ceil
 
 class JobListFragment : Fragment(), CoroutineScope {
 
@@ -39,11 +36,6 @@ class JobListFragment : Fragment(), CoroutineScope {
     private lateinit var jobsViewModel: JobsViewModel
     private lateinit var jobsViewModelFactory: JobsViewModelFactory
     private lateinit var networkHelper: NetworkHelper
-
-    private var currentPage = 1
-    private var TOTAL_PAGES = 0
-    private var isLastPage = false
-    private var isLoading = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,126 +65,49 @@ class JobListFragment : Fragment(), CoroutineScope {
                 jobService = ApiClient.jobService,
                 networkHelper = networkHelper,
                 jobId = "",
-                userId = ""
+                userId = MySharedPreference.getInstance(requireContext()).getUserId().toString()
             )
+            loadJobs()
+        }
+    }
+
+    private fun loadJobs() {
+        launch {
             jobsViewModel = ViewModelProvider(
                 owner = this@JobListFragment,
                 factory = jobsViewModelFactory
             )[JobsViewModel::class.java]
 
-            val linearLayoutManager = LinearLayoutManager(requireContext())
-            recommendedWorkAnnouncementsRv.layoutManager = linearLayoutManager
-            jobAdapter = JobAdapter { position ->
-                /**
-                 * item clicked
-                 */
-            }
-            recommendedWorkAnnouncementsRv.adapter = jobAdapter
-
-            loadFirstPage()
-
-            recommendedWorkAnnouncementsRv.addOnScrollListener(object :
-                PaginationScrollListener(linearLayoutManager) {
-                override fun loadMoreItems() {
-                    currentPage++
-                    isLoading = true
-                    loadNextPage()
-                }
-
-                override fun isLastPage(): Boolean {
-                    return isLastPage
-                }
-
-                override fun isLoading(): Boolean {
-                    return isLoading
-                }
-
-            })
-        }
-    }
-
-    private fun loadFirstPage() {
-        binding.apply {
-            launch {
-                jobsViewModel.loadFirstPage()
-                    .collect {
-                        when (it) {
-                            is JobResource.Error -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "something went wrong",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            is JobResource.Loading -> {
-                                progress.visibility = View.VISIBLE
-                            }
-
-                            is JobResource.Success -> {
-                                progress.visibility = View.GONE
-                                getTotalPages(it.jobList)
-                            }
-
-                        }
-                    }
-            }
-        }
-    }
-
-    private fun getTotalPages(jobList: List<JobResponse>) {
-        launch {
-            jobsViewModel.countJobs()
+            jobsViewModel.getAllJobs()
                 .collect {
                     when (it) {
                         is ApiStatus.Error -> {
-                            Log.e(TAG, "getTotalPages: total pages failed")
+                            Toast.makeText(requireContext(), "some error", Toast.LENGTH_SHORT)
+                                .show()
+                            Log.e(TAG, "loadJobs: ${it.error}")
+                            Log.e(TAG, "loadJobs: ${it.error.printStackTrace()}")
+                            Log.e(TAG, "loadJobs: ${it.error.stackTrace}")
+                            Log.e(TAG, "loadJobs: ${it.error.message}")
                         }
 
                         is ApiStatus.Loading -> {
-                            Log.d(TAG, "getTotalPages: total pages loading")
+                            Toast.makeText(requireContext(), "loading...", Toast.LENGTH_SHORT)
+                                .show()
                         }
 
                         is ApiStatus.Success -> {
-                            TOTAL_PAGES = ceil((it.response as Int).toDouble() / 10).toInt()
-                            jobAdapter.addAll(jobList)
-                            if (currentPage <= TOTAL_PAGES) {
-                                jobAdapter.addLoadingFooter()
-                            } else {
-                                isLastPage = true
-                            }
+                            success(it.response as List<JobResponse>)
                         }
                     }
                 }
         }
     }
 
-    private fun loadNextPage() {
-        launch {
-            jobsViewModel.loadNextPage(currentPage)
-                .collect {
-                    when (it) {
-                        is JobResource.Error -> {
-
-                        }
-
-                        is JobResource.Loading -> {
-
-                        }
-
-                        is JobResource.Success -> {
-                            jobAdapter.removeLoadingFooter()
-                            isLoading = false
-                            jobAdapter.addAll(it.jobList)
-
-                            if (currentPage != TOTAL_PAGES) {
-                                jobAdapter.addLoadingFooter()
-                            } else {
-                                isLastPage = true
-                            }
-                        }
-                    }
-                }
+    private fun success(jobList: List<JobResponse>) {
+        binding.apply {
+            jobAdapter = JobAdapter(jobList) {
+                jobClickListener?.onJobClick(it)
+            }
         }
     }
 

@@ -1,23 +1,17 @@
 package dev.goblingroup.uzworks.adapters.rv_adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.databinding.LoadItemBinding
 import dev.goblingroup.uzworks.databinding.WorkAnnouncementsLayoutBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 
 class JobAdapter(
+    private val jobList: List<JobResponse>,
     private val onItemClick: (Int) -> Unit
-) : RecyclerView.Adapter<ViewHolder>() {
-
-    private val LOADING = 0
-    private val ITEM = 1
-    private var isLoadingAdded = false
-    private var jobList = ArrayList<JobResponse>()
+) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
 
     inner class JobViewHolder(val workBinding: WorkAnnouncementsLayoutBinding) :
         ViewHolder(workBinding.root) {
@@ -40,46 +34,8 @@ class JobAdapter(
 
     }
 
-    inner class LoadViewHolder(val loadItemBinding: LoadItemBinding) :
-        ViewHolder(loadItemBinding.root) {
-        fun onBind() {
-            loadItemBinding.progress.visibility = View.VISIBLE
-        }
-
-    }
-
-    fun addAll(list: List<JobResponse>) {
-        list.forEach {
-            add(it)
-        }
-    }
-
-    private fun add(jobResponse: JobResponse) {
-        jobList.add(jobResponse)
-        notifyItemInserted(jobList.size - 1)
-    }
-
-    fun addLoadingFooter() {
-        isLoadingAdded = true
-        add(JobResponse())
-    }
-
-    fun removeLoadingFooter() {
-        isLoadingAdded = false
-        val lastPosition = jobList.size - 1
-        jobList.removeAt(lastPosition)
-        notifyItemRemoved(lastPosition)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return if (viewType == LOADING) LoadViewHolder(
-            LoadItemBinding.inflate(
-                LayoutInflater.from(
-                    parent.context
-                ), parent, false
-            )
-        )
-        else JobViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
+        return JobViewHolder(
             WorkAnnouncementsLayoutBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -90,17 +46,8 @@ class JobAdapter(
 
     override fun getItemCount(): Int = jobList.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (holder is JobViewHolder) {
-            holder.onBind(position)
-        } else if (holder is LoadViewHolder) {
-            holder.onBind()
-        }
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        if (position == jobList.size - 1 && isLoadingAdded) return LOADING
-        return ITEM
+    override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
+        holder.onBind(position)
     }
 
 }

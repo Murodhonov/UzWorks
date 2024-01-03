@@ -10,7 +10,7 @@ class JobRepository(
 
     fun getJobById() = jobService.getJobById(jobId)
 
-    fun getAllJobs(pageNumber: Int) = jobService.getAllJobs(pageNumber = pageNumber)
+    fun getAllJobs() = jobService.getAllJobs()
 
     fun countJobs() = jobService.countJobs()
 

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.goblingroup.uzworks.networking.JobService
 import dev.goblingroup.uzworks.repository.JobRepository
-import dev.goblingroup.uzworks.resource.JobResource
 import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
@@ -22,42 +21,46 @@ class JobsViewModel(
 
     private val jobRepository = JobRepository(jobService, jobId, userId)
 
-    private val jobStateFlow = MutableStateFlow<JobResource<Unit>>(JobResource.Loading())
+    private val jobByIdStateFlow = MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    private val countStateFLow = MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
+    private val jobsStateFlow = MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun loadFirstPage(): StateFlow<JobResource<Unit>> {
+    private val countStateFlow = MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
+
+    private val jobsByIdStateFlow = MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
+
+    fun getJobById(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                jobRepository.getAllJobs(pageNumber = 1)
+                jobRepository.getJobById()
                     .catch {
-                        jobStateFlow.emit(JobResource.Error(it))
+                        jobByIdStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        jobStateFlow.emit(JobResource.Success(it))
+                        jobByIdStateFlow.emit(ApiStatus.Success(it))
                     }
             } else {
-                jobStateFlow.emit(JobResource.Error(Throwable(NO_INTERNET)))
+                jobByIdStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
-        return jobStateFlow
+        return jobByIdStateFlow
     }
 
-    fun loadNextPage(pageNumber: Int): StateFlow<JobResource<Unit>> {
+    fun getAllJobs(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                jobRepository.getAllJobs(pageNumber)
+                jobRepository.getAllJobs()
                     .catch {
-                        jobStateFlow.emit(JobResource.Error(it))
+                        jobsStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        jobStateFlow.emit(JobResource.Success(it))
+                        jobsStateFlow.emit(ApiStatus.Success(it))
                     }
             } else {
-                jobStateFlow.emit(JobResource.Error(Throwable(NO_INTERNET)))
+                jobsStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
-        return jobStateFlow
+        return jobsStateFlow
     }
 
     fun countJobs(): StateFlow<ApiStatus<Unit>> {
@@ -65,16 +68,33 @@ class JobsViewModel(
             if (networkHelper.isNetworkConnected()) {
                 jobRepository.countJobs()
                     .catch {
-                        countStateFLow.emit(ApiStatus.Error(it))
+                        countStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        countStateFLow.emit(ApiStatus.Success(it))
+                        countStateFlow.emit(ApiStatus.Success(it))
                     }
             } else {
-                countStateFLow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+                countStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
-        return countStateFLow
+        return countStateFlow
+    }
+
+    fun getJobsByUserId(): StateFlow<ApiStatus<Unit>> {
+        viewModelScope.launch {
+            if (networkHelper.isNetworkConnected()) {
+                jobRepository.getJobByUserId()
+                    .catch {
+                        jobsByIdStateFlow.emit(ApiStatus.Error(it))
+                    }
+                    .collect {
+                        jobsByIdStateFlow.emit(ApiStatus.Success(it))
+                    }
+            } else {
+                jobsByIdStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+            }
+        }
+        return jobsByIdStateFlow
     }
 
 }
