@@ -8,16 +8,16 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.WorkAnnouncementsLayoutBinding
 import dev.goblingroup.uzworks.vm.JobsViewModel
 
-class JobAdapter(
+class SavedJobsAdapter(
     private val jobsViewModel: JobsViewModel,
     private val onItemClick: (Int) -> Unit,
-) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
+) : RecyclerView.Adapter<SavedJobsAdapter.JobViewHolder>() {
 
     inner class JobViewHolder(val workBinding: WorkAnnouncementsLayoutBinding) :
         ViewHolder(workBinding.root) {
         fun onBind(position: Int) {
             workBinding.apply {
-                val job = jobsViewModel.listDatabaseJobs()[position]
+                val job = jobsViewModel.listSavedJobs()[position]
 
                 titleTv.text = job.title
                 costTv.text = "${job.salary} so'm"
@@ -29,6 +29,7 @@ class JobAdapter(
                 }
 
                 saveIv.setOnClickListener {
+                    val itemCount = jobsViewModel.listSavedJobs().size
                     if (job.isSaved) {
                         /**
                          * image should change to un saved
@@ -41,6 +42,8 @@ class JobAdapter(
                         saveIv.setImageResource(R.drawable.ic_saved)
                     }
                     jobsViewModel.updateJobSaved(job.id, !job.isSaved)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, itemCount - position)
                 }
 
 
@@ -62,7 +65,7 @@ class JobAdapter(
         )
     }
 
-    override fun getItemCount(): Int = jobsViewModel.listDatabaseJobs().size
+    override fun getItemCount(): Int = jobsViewModel.listSavedJobs().size
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         holder.onBind(position)

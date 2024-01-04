@@ -118,51 +118,6 @@ class JobsFragment : Fragment() {
                     }
                 }
             }
-            /*Toast.makeText(requireContext(), "dialog", Toast.LENGTH_SHORT).show()
-            val bottomSheetDialog = BottomSheetDialog(requireContext())
-            val jobPropertiesBinding = SavedJobsPropertiesBinding.inflate(layoutInflater)
-            jobPropertiesBinding.apply {
-                bottomSheetDialog.setContentView(root)
-                contactChatBtn.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                    findNavController().navigate(
-                        resId = R.id.chatFragment,
-                        args = null,
-                        navOptions = getNavOptions()
-                    )
-                }
-                shareBtn.setOnClickListener {
-                    val shareIntent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(
-                            Intent.EXTRA_TEXT,
-                            "There should be a public link to job announcement"
-                        )
-                        type = "text/plain"
-                    }
-                    if (shareIntent.resolveActivity(requireContext().packageManager) != null) {
-                        startActivity(Intent.createChooser(shareIntent, "Share using"))
-                    }
-                    bottomSheetDialog.dismiss()
-                }
-                seeMoreBtn.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                    findNavController().navigate(
-                        resId = R.id.jobDetailsFragment,
-                        args = null,
-                        navOptions = getNavOptions()
-                    )
-                }
-                deleteBtn.setOnClickListener {
-                    Toast.makeText(
-                        requireContext(),
-                        "delete job from saved is in progress",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    bottomSheetDialog.dismiss()
-                }
-            }
-            bottomSheetDialog.show()*/
         }
     }
 

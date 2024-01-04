@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -15,7 +14,6 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.rv_adapters.JobAdapter
 import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
-import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.singleton.MySharedPreference
 import dev.goblingroup.uzworks.utils.ApiStatus
@@ -38,8 +36,10 @@ class HomeFragment : Fragment(), CoroutineScope {
     private lateinit var appDatabase: AppDatabase
     private lateinit var networkHelper: NetworkHelper
 
-    private lateinit var jobsViewModel: JobsViewModel by viewModels()
+    private lateinit var jobsViewModel: JobsViewModel
     private lateinit var jobsViewModelFactory: JobsViewModelFactory
+
+    private lateinit var linearSnapHelper: LinearSnapHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,10 +53,12 @@ class HomeFragment : Fragment(), CoroutineScope {
         binding.apply {
             appDatabase = AppDatabase.getInstance(requireContext())
             networkHelper = NetworkHelper(requireContext())
+            linearSnapHelper = LinearSnapHelper()
             val user = appDatabase.userDao().getUser()
 
             greetingTv.text = "Assalomu alaykum\n${user?.firstname} ${user?.lastName}"
             jobsViewModelFactory = JobsViewModelFactory(
+                appDatabase = appDatabase,
                 jobService = ApiClient.jobService,
                 networkHelper = networkHelper,
                 jobId = "",
@@ -85,29 +87,31 @@ class HomeFragment : Fragment(), CoroutineScope {
                         }
 
                         is ApiStatus.Loading -> {
-                            Toast.makeText(requireContext(), "loading...", Toast.LENGTH_SHORT)
-                                .show()
+                            binding.progress.visibility = View.VISIBLE
                         }
 
                         is ApiStatus.Success -> {
-                            success(it.response as List<JobResponse>)
+                            success()
                         }
                     }
                 }
         }
     }
 
-    private fun success(jobList: List<JobResponse>) {
-        binding.apply {
-            val adapter = JobAdapter(jobList) {
-                findNavController().navigate(
-                    resId = R.id.jobDetailsFragment,
-                    args = null,
-                    navOptions = getNavOptions()
-                )
+    private fun success() {
+        if (_binding != null) {
+            binding.apply {
+                binding.progress.visibility = View.GONE
+                val adapter = JobAdapter(jobsViewModel) {
+                    findNavController().navigate(
+                        resId = R.id.jobDetailsFragment,
+                        args = null,
+                        navOptions = getNavOptions()
+                    )
+                }
+                linearSnapHelper.attachToRecyclerView(recommendedWorkAnnouncementsRv)
+                recommendedWorkAnnouncementsRv.adapter = adapter
             }
-            LinearSnapHelper().attachToRecyclerView(recommendedWorkAnnouncementsRv)
-            recommendedWorkAnnouncementsRv.adapter = adapter
         }
     }
 

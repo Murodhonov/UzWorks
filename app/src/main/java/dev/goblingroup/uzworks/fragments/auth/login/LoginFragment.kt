@@ -190,6 +190,7 @@ class LoginFragment : Fragment(), CoroutineScope {
             authDialogBinding = AuthDialogItemBinding.inflate(layoutInflater)
             authDialog.setView(authDialogBinding.root)
             authDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            authDialog.setCancelable(false)
             authDialogBinding.apply {
                 progressBar.visibility = View.VISIBLE
                 errorIv.visibility = View.INVISIBLE
