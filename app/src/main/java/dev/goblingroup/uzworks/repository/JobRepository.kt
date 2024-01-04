@@ -45,7 +45,9 @@ class JobRepository(
         emit(jobDao.addJobs(newJobs))
     }
 
-    fun updateJobSaved(jobId: String, isSaved: Boolean) = jobDao.updateJobSaved(jobId, isSaved)
+    fun saveJob(jobId: String) = jobDao.saveJob(jobId)
+
+    fun unSaveJob(jobId: String) = jobDao.unSaveJob(jobId)
 
     fun isJobSaved(jobId: String) = jobDao.isJobSaved(jobId)
 

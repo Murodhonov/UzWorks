@@ -15,8 +15,11 @@ interface JobDao {
     @Insert(entity = JobEntity::class, onConflict = OnConflictStrategy.REPLACE)
     fun addJobs(jobList: List<JobEntity>)
 
-    @Query("UPDATE jobs_table SET is_saved = :isSaved WHERE job_id = :jobId")
-    fun updateJobSaved(jobId: String, isSaved: Boolean)
+    @Query("UPDATE jobs_table SET is_saved = 1 WHERE job_id = :jobId")
+    fun saveJob(jobId: String)
+
+    @Query("UPDATE jobs_table SET is_saved = 0 WHERE job_id = :jobId")
+    fun unSaveJob(jobId: String)
 
     @Query("SELECT is_saved FROM jobs_table WHERE job_id = :jobId")
     fun isJobSaved(jobId: String): Boolean

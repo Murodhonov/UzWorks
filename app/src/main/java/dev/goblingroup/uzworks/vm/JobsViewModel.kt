@@ -111,7 +111,9 @@ class JobsViewModel(
 
     fun addJob(jobEntity: JobEntity) = jobRepository.addJob(jobEntity)
 
-    fun updateJobSaved(jobId: String, isSaved: Boolean) = jobRepository.updateJobSaved(jobId, isSaved)
+    fun saveJob(jobId: String) = jobRepository.saveJob(jobId)
+
+    fun unSaveJob(jobId: String) = jobRepository.unSaveJob(jobId)
 
     fun isJobSaved(jobId: String) = jobRepository.isJobSaved(jobId)
 

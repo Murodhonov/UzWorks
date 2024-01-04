@@ -17,30 +17,29 @@ class JobAdapter(
         ViewHolder(workBinding.root) {
         fun onBind(position: Int) {
             workBinding.apply {
-                val job = jobsViewModel.listDatabaseJobs()[position]
+                titleTv.text = jobsViewModel.listDatabaseJobs()[position].tgUserName
+                costTv.text = "${jobsViewModel.listDatabaseJobs()[position].salary} so'm"
 
-                titleTv.text = job.title
-                costTv.text = "${job.salary} so'm"
-
-                if (job.isSaved) {
+                if (jobsViewModel.listDatabaseJobs()[position].isSaved) {
                     saveIv.setImageResource(R.drawable.ic_saved)
                 } else {
                     saveIv.setImageResource(R.drawable.ic_unsaved)
                 }
 
                 saveIv.setOnClickListener {
-                    if (job.isSaved) {
+                    if (jobsViewModel.listDatabaseJobs()[position].isSaved) {
                         /**
-                         * image should change to un saved
+                         * should unSave
                          */
                         saveIv.setImageResource(R.drawable.ic_unsaved)
+                        jobsViewModel.unSaveJob(jobsViewModel.listDatabaseJobs()[position].id)
                     } else {
                         /**
-                         * image should change to saved
+                         * should save
                          */
                         saveIv.setImageResource(R.drawable.ic_saved)
+                        jobsViewModel.saveJob(jobsViewModel.listDatabaseJobs()[position].id)
                     }
-                    jobsViewModel.updateJobSaved(job.id, !job.isSaved)
                 }
 
 

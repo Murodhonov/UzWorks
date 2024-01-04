@@ -79,6 +79,7 @@ class JobsFragment : Fragment() {
 
     private fun jobClick() {
         binding.apply {
+            Toast.makeText(requireContext(), "job clicked", Toast.LENGTH_SHORT).show()
             if (viewPager.currentItem == 0) {
                 findNavController().navigate(
                     resId = R.id.jobDetailsFragment,
@@ -91,6 +92,7 @@ class JobsFragment : Fragment() {
                 jobPropertiesBinding.apply {
                     bottomSheetDialog.setContentView(root)
                     contactChatBtn.setOnClickListener {
+                        bottomSheetDialog.dismiss()
                         findNavController().navigate(
                             resId = R.id.chatFragment,
                             args = null,
@@ -98,11 +100,14 @@ class JobsFragment : Fragment() {
                         )
                     }
                     shareBtn.setOnClickListener {
+                        bottomSheetDialog.dismiss()
                         val shareIntent = Intent(Intent.ACTION_SEND)
-                        shareIntent.type = "Public link to job"
+                        shareIntent.type = "text/plain"
                         shareIntent.putExtra(Intent.EXTRA_TEXT, "public link is in progress")
+                        startActivity(Intent.createChooser(shareIntent, "Share via"))
                     }
                     seeMoreBtn.setOnClickListener {
+                        bottomSheetDialog.dismiss()
                         findNavController().navigate(
                             resId = R.id.jobDetailsFragment,
                             args = null,
@@ -117,6 +122,7 @@ class JobsFragment : Fragment() {
                         ).show()
                     }
                 }
+                bottomSheetDialog.show()
             }
         }
     }

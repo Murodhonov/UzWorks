@@ -69,10 +69,12 @@ class JobListFragment : Fragment(), CoroutineScope {
             val title = arguments?.getString("title")
             when (title) {
                 "Barcha" -> {
+                    Toast.makeText(requireContext(), "all", Toast.LENGTH_SHORT).show()
                     loadJobs()
                 }
 
                 "Saqlanganlar" -> {
+                    Toast.makeText(requireContext(), "saved", Toast.LENGTH_SHORT).show()
                     loadSavedJobs()
                 }
             }
@@ -110,12 +112,14 @@ class JobListFragment : Fragment(), CoroutineScope {
             val savedJobList = jobsViewModel.listSavedJobs()
             if (savedJobList.isNotEmpty()) {
                 emptyLayout.visibility = View.GONE
-                savedJobsAdapter = SavedJobsAdapter(jobsViewModel) {
-                    jobClickListener?.onJobClick(it)
-                }
+                savedJobsAdapter = SavedJobsAdapter(
+                    jobsViewModel, {
+                        jobClickListener?.onJobClick(it)
+                    }, {
+                        emptyLayout.visibility = View.VISIBLE
+                    })
+                recommendedWorkAnnouncementsRv.adapter = savedJobsAdapter
             } else {
-                Toast.makeText(requireContext(), "there are no any saved jobs", Toast.LENGTH_SHORT)
-                    .show()
                 emptyLayout.visibility = View.VISIBLE
             }
         }

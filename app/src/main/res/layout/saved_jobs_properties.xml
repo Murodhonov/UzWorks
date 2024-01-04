@@ -12,7 +12,7 @@
         android:id="@+id/contact_chat_btn"
         android:layout_width="match_parent"
         android:layout_marginStart="@dimen/_23sdp"
-        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_23sdp"
         app:cardCornerRadius="@dimen/_5sdp"

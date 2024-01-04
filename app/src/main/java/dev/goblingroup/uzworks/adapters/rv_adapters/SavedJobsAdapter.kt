@@ -11,6 +11,7 @@ import dev.goblingroup.uzworks.vm.JobsViewModel
 class SavedJobsAdapter(
     private val jobsViewModel: JobsViewModel,
     private val onItemClick: (Int) -> Unit,
+    private val onSavedItemsCleared: () -> Unit
 ) : RecyclerView.Adapter<SavedJobsAdapter.JobViewHolder>() {
 
     inner class JobViewHolder(val workBinding: WorkAnnouncementsLayoutBinding) :
@@ -19,7 +20,7 @@ class SavedJobsAdapter(
             workBinding.apply {
                 val job = jobsViewModel.listSavedJobs()[position]
 
-                titleTv.text = job.title
+                titleTv.text = job.tgUserName
                 costTv.text = "${job.salary} so'm"
 
                 if (job.isSaved) {
@@ -29,21 +30,12 @@ class SavedJobsAdapter(
                 }
 
                 saveIv.setOnClickListener {
-                    val itemCount = jobsViewModel.listSavedJobs().size
-                    if (job.isSaved) {
-                        /**
-                         * image should change to un saved
-                         */
-                        saveIv.setImageResource(R.drawable.ic_unsaved)
-                    } else {
-                        /**
-                         * image should change to saved
-                         */
-                        saveIv.setImageResource(R.drawable.ic_saved)
-                    }
-                    jobsViewModel.updateJobSaved(job.id, !job.isSaved)
+                    jobsViewModel.unSaveJob(job.id)
                     notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, itemCount - position)
+                    notifyItemRangeChanged(position, jobsViewModel.listSavedJobs().size - position)
+                    if (jobsViewModel.listSavedJobs().isEmpty()) {
+                        onSavedItemsCleared.invoke()
+                    }
                 }
 
 
