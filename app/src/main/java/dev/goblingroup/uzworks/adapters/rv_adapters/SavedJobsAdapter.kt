@@ -10,7 +10,7 @@ import dev.goblingroup.uzworks.vm.JobsViewModel
 
 class SavedJobsAdapter(
     private val jobsViewModel: JobsViewModel,
-    private val onItemClick: (Int) -> Unit,
+    private val onItemClick: (String) -> Unit,
     private val onSavedItemsCleared: () -> Unit
 ) : RecyclerView.Adapter<SavedJobsAdapter.JobViewHolder>() {
 
@@ -40,7 +40,7 @@ class SavedJobsAdapter(
 
 
                 root.setOnClickListener {
-                    onItemClick.invoke(position)
+                    onItemClick.invoke(job.id)
                 }
             }
         }

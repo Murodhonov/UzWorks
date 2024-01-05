@@ -41,16 +41,6 @@ class MainActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 window.statusBarColor = getColor(R.color.black_blue)
             }
-            bottomBar.tag = bottomBar.visibility
-            bottomBar
-                .viewTreeObserver
-                .addOnGlobalLayoutListener {
-                    val visibility = bottomBar.visibility
-                    if (bottomBar.tag as Int != visibility) {
-                        Log.d(TAG, "onCreate: bottom navigation visibility changed")
-                        bottomBar.tag = bottomBar.visibility
-                    }
-                }
 
             navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment

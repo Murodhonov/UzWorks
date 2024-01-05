@@ -16,7 +16,8 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.view_pager_adapters.JobsViewPagerAdapter
 import dev.goblingroup.uzworks.databinding.FragmentJobsBinding
 import dev.goblingroup.uzworks.databinding.SavedJobsPropertiesBinding
-import dev.goblingroup.uzworks.fragments.main.jobs.job_list.JobListFragment
+import dev.goblingroup.uzworks.fragments.main.jobs.job_list.AllJobsFragment
+import dev.goblingroup.uzworks.fragments.main.jobs.job_list.SavedJobsFragment
 import dev.goblingroup.uzworks.utils.getNavOptions
 
 class JobsFragment : Fragment() {
@@ -36,16 +37,22 @@ class JobsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            val adapter =
-                JobsViewPagerAdapter(
-                    this@JobsFragment,
-                    arrayListOf("Barcha", "Saqlanganlar"),
-                    object : JobListFragment.OnJobClickListener {
-                        override fun onJobClick(position: Int) {
-                            jobClick()
-                        }
+            val adapter = JobsViewPagerAdapter(
+                fragment = this@JobsFragment,
+                tabList = arrayListOf("Barcha", "Saqlanganlar"),
+                object : AllJobsFragment.OnAllJobClickListener {
+                    override fun onAllJobClick(jobId: String) {
+                        openJobDetails(jobId)
+                    }
 
-                    })
+                }, object : SavedJobsFragment.OnSavedJobClickListener {
+                    override fun onSavedJobClick(jobId: String) {
+                        savedJobClicked(jobId)
+                    }
+
+                }
+            )
+
             viewPager.adapter = adapter
 
             TabLayoutMediator(
@@ -77,54 +84,49 @@ class JobsFragment : Fragment() {
         }
     }
 
-    private fun jobClick() {
-        binding.apply {
-            Toast.makeText(requireContext(), "job clicked", Toast.LENGTH_SHORT).show()
-            if (viewPager.currentItem == 0) {
+    private fun savedJobClicked(jobId: String) {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val jobPropertiesBinding = SavedJobsPropertiesBinding.inflate(layoutInflater)
+        jobPropertiesBinding.apply {
+            bottomSheetDialog.setContentView(root)
+            contactChatBtn.setOnClickListener {
+                bottomSheetDialog.dismiss()
                 findNavController().navigate(
-                    resId = R.id.jobDetailsFragment,
+                    resId = R.id.chatFragment,
                     args = null,
                     navOptions = getNavOptions()
                 )
-            } else {
-                val bottomSheetDialog = BottomSheetDialog(requireContext())
-                val jobPropertiesBinding = SavedJobsPropertiesBinding.inflate(layoutInflater)
-                jobPropertiesBinding.apply {
-                    bottomSheetDialog.setContentView(root)
-                    contactChatBtn.setOnClickListener {
-                        bottomSheetDialog.dismiss()
-                        findNavController().navigate(
-                            resId = R.id.chatFragment,
-                            args = null,
-                            navOptions = getNavOptions()
-                        )
-                    }
-                    shareBtn.setOnClickListener {
-                        bottomSheetDialog.dismiss()
-                        val shareIntent = Intent(Intent.ACTION_SEND)
-                        shareIntent.type = "text/plain"
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, "public link is in progress")
-                        startActivity(Intent.createChooser(shareIntent, "Share via"))
-                    }
-                    seeMoreBtn.setOnClickListener {
-                        bottomSheetDialog.dismiss()
-                        findNavController().navigate(
-                            resId = R.id.jobDetailsFragment,
-                            args = null,
-                            navOptions = getNavOptions()
-                        )
-                    }
-                    deleteBtn.setOnClickListener {
-                        Toast.makeText(
-                            requireContext(),
-                            "delete job from saved is in progress",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                bottomSheetDialog.show()
+            }
+            shareBtn.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "public link is in progress")
+                startActivity(Intent.createChooser(shareIntent, "Share via"))
+            }
+            seeMoreBtn.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                openJobDetails(jobId)
+            }
+            deleteBtn.setOnClickListener {
+                Toast.makeText(
+                    requireContext(),
+                    "delete job from saved is in progress",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
+        bottomSheetDialog.show()
+    }
+
+    private fun openJobDetails(jobId: String) {
+        val bundle = Bundle()
+        bundle.putString("clicked_job_id", jobId)
+        findNavController().navigate(
+            resId = R.id.jobDetailsFragment,
+            args = bundle,
+            navOptions = getNavOptions()
+        )
     }
 
     override fun onDestroyView() {

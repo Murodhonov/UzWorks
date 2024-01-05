@@ -10,7 +10,7 @@ import dev.goblingroup.uzworks.vm.JobsViewModel
 
 class JobAdapter(
     private val jobsViewModel: JobsViewModel,
-    private val onItemClick: (Int) -> Unit,
+    private val onItemClick: (String) -> Unit,
 ) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
 
     inner class JobViewHolder(val workBinding: WorkAnnouncementsLayoutBinding) :
@@ -44,7 +44,7 @@ class JobAdapter(
 
 
                 root.setOnClickListener {
-                    onItemClick.invoke(position)
+                    onItemClick.invoke(jobsViewModel.listDatabaseJobs()[position].id)
                 }
             }
         }
