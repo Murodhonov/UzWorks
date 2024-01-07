@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.WorkAnnouncementsLayoutBinding
+import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.JobsViewModel
 
 class JobAdapter(
     private val jobsViewModel: JobsViewModel,
+    private val jobCategoryViewModel: JobCategoryViewModel,
     private val onItemClick: (String) -> Unit,
 ) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
 
@@ -17,8 +19,12 @@ class JobAdapter(
         ViewHolder(workBinding.root) {
         fun onBind(position: Int) {
             workBinding.apply {
-                titleTv.text = jobsViewModel.listDatabaseJobs()[position].tgUserName
-                costTv.text = "${jobsViewModel.listDatabaseJobs()[position].salary} so'm"
+                val job = jobsViewModel.listDatabaseJobs()[position]
+                titleTv.text = job.tgUserName
+                costTv.text = "${job.salary} so'm"
+                genderTv.text = job.gender
+//                categoryTv.text =
+//                    jobCategoryViewModel.findJobCategory(job.categoryId.toString()).title
 
                 if (jobsViewModel.listDatabaseJobs()[position].isSaved) {
                     saveIv.setImageResource(R.drawable.ic_saved)

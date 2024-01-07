@@ -6,16 +6,23 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import dev.goblingroup.uzworks.database.dao.JobCategoryDao
 import dev.goblingroup.uzworks.database.dao.JobDao
 import dev.goblingroup.uzworks.database.dao.UserDao
+import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.database.entity.UserEntity
 
-@Database(entities = [UserEntity::class, JobEntity::class], version = 2, exportSchema = false)
+@Database(
+    entities = [UserEntity::class, JobEntity::class, JobCategoryEntity::class],
+    version = 3,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun jobDao(): JobDao
+    abstract fun jobCategoryDao(): JobCategoryDao
 
     companion object {
         private var INSTANCE: AppDatabase? = null
@@ -25,37 +32,20 @@ abstract class AppDatabase : RoomDatabase() {
             if (INSTANCE == null) {
                 INSTANCE =
                     Room.databaseBuilder(context, AppDatabase::class.java, "uz_works_database")
-                        .addMigrations(MIGRATION_1_2)
+                        .addMigrations(MIGRATION_2_3)
                         .allowMainThreadQueries()
                         .build()
             }
             return INSTANCE!!
         }
 
-        private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+        private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL(
-                    "CREATE TABLE `jobs_table` (" +
-                            "`job_id` TEXT NOT NULL PRIMARY KEY," +
-                            "`benefit` TEXT," +
-                            "`category_id` TEXT," +
-                            "`deadline` TEXT," +
-                            "`district_id` TEXT," +
-                            "`gender` TEXT," +
-                            "`instagram_link` TEXT," +
-                            "`latitude` REAL," +
-                            "`longitude` REAL," +
-                            "`max_age` INTEGER," +
-                            "`min_age` INTEGER," +
-                            "`phone_number` TEXT," +
-                            "`requirement` TEXT," +
-                            "`salary` INTEGER," +
-                            "`telegram_link` TEXT," +
-                            "`tg_username` TEXT," +
-                            "`title` TEXT," +
-                            "`working_schedule` TEXT," +
-                            "`working_time` TEXT," +
-                            "`is_saved` INTEGER NOT NULL)"
+                    "CREATE TABLE `job_category_table` (" +
+                            "`job_category_id` TEXT NOT NULL PRIMARY KEY," +
+                            "`description` TEXT NOT NULL," +
+                            "`title` TEXT NOT NULL)"
                 )
             }
         }

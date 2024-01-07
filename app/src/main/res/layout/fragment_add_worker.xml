@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.main.profile.announcement.AddWorkerFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/_10sdp">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:src="@drawable/ic_left_arrow"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/top_tv"
+            style="@style/BoldTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/dmsans_medium"
+            android:text="Create announcement for worker"
+            app:layout_constraintLeft_toLeftOf="@id/back"
+            app:layout_constraintTop_toBottomOf="@id/back" />
+
+        <View
+            android:id="@+id/stretcher"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@color/black_blue"
+            app:layout_constraintTop_toBottomOf="@id/top_tv" />
+
+        <LinearLayout
+            android:id="@+id/announcement_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/stretcher">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/deadline_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:backgroundTint="@color/light_yellow"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?selectableItemBackgroundBorderless"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp">
+
+                    <TextView
+                        style="@style/BoldTextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dmsans_medium"
+                        android:text="Deadline" />
+
+                    <TextView
+                        android:id="@+id/deadline_tv"
+                        style="@style/NormalTextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20.20.2000" />
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/birthday_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:backgroundTint="@color/light_yellow"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?selectableItemBackgroundBorderless"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp">
+
+                    <TextView
+                        style="@style/BoldTextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dmsans_medium"
+                        android:text="Birthday" />
+
+                    <TextView
+                        android:id="@+id/birthday_tv"
+                        style="@style/NormalTextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20.20.2000" />
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Title" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/create_worker_edit_text_background"
+                android:hint="Some title example for worker"
+                android:imeOptions="actionNext"
+                android:inputType="text" />
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Salary" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:backgroundTint="@color/white_blue"
+                android:hint="2 000 000 so'm"
+                android:imeOptions="actionNext"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Gender" />
+
+            <include layout="@layout/gender_choice_layout" />
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Working time" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/create_worker_edit_text_background"
+                android:hint="Example : 1 haftada 5 kun , 7 soat ishlay olaman ."
+                android:imeOptions="actionNext"
+                android:inputType="text" />
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Telegram profile" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:padding="@dimen/_5sdp"
+                android:text="t.me//" />
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Instagram profile" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:hint="username"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:padding="@dimen/_5sdp" />
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Phone number" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:hint="+998000000000"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:padding="@dimen/_5sdp" />
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Orientation" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:hint="Orientation"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:padding="@dimen/_5sdp" />
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Address" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/_5sdp">
+
+                <TextView
+                    style="@style/BoldTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dmsans_medium"
+                    android:text="Region"
+                    android:textSize="@dimen/_12ssp" />
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@drawable/create_worker_edit_text_background"
+                    android:hint="Enter your region"
+                    android:imeOptions="actionNext"
+                    android:padding="@dimen/_5sdp"
+                    android:textSize="@dimen/_12ssp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/_5sdp">
+
+                <TextView
+                    style="@style/BoldTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dmsans_medium"
+                    android:text="District"
+                    android:textSize="@dimen/_12ssp" />
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@drawable/create_worker_edit_text_background"
+                    android:hint="Enter your district"
+                    android:imeOptions="actionNext"
+                    android:padding="@dimen/_5sdp"
+                    android:textSize="@dimen/_12ssp" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Category" />
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/create_worker_edit_text_background"
+                android:hint="Select your category"
+                android:inputType="none"
+                android:padding="@dimen/_5sdp"
+                android:textColorHint="@color/black_blue"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

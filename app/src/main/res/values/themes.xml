@@ -6,6 +6,7 @@
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="materialCardViewStyle">@style/CardViewStyle</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="editTextStyle">@style/CustomEditTextStyle</item>
     </style>
 
     <style name="Theme.UzWorks" parent="Base.Theme.UzWorks" />
@@ -21,27 +22,15 @@
 
 
     <!--
-            EditTexts style in registration
+            Custom edit text style
     -->
-    <style name="RegistrationEditTextStyle" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/registration_edit_text_background</item>
+    <style name="CustomEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/edit_text_background</item>
         <item name="android:fontFamily">@font/dmsans_regular</item>
         <item name="android:textColorHint">@color/text_color</item>
         <item name="android:textColor">@color/black_blue</item>
         <item name="android:padding">@dimen/_7sdp</item>
         <item name="android:textSize">@dimen/_11ssp</item>
-    </style>
-
-    <!--
-            EditTexts style in registration
-    -->
-    <style name="MainEditTextStyle" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/inapp_edit_text_background</item>
-        <item name="android:fontFamily">@font/dmsans_regular</item>
-        <item name="android:textColorHint">@color/text_color</item>
-        <item name="android:textColor">@color/black_blue</item>
-        <item name="android:padding">@dimen/_7sdp</item>
-        <item name="android:textSize">@dimen/_12ssp</item>
     </style>
 
     <!--
@@ -69,9 +58,16 @@
         <item name="android:backgroundTint">@color/black_blue</item>
     </style>
 
-    <style name="CustomTabText" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">@dimen/_40ssp</item>
+    <style name="BoldTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:textSize">@dimen/_13ssp</item>
         <item name="android:fontFamily">@font/dmsans_bold</item>
+    </style>
+
+    <style name="NormalTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="textColor">@color/black_blue</item>
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:fontFamily">@font/dmsans_regular</item>
     </style>
 
 </resources>

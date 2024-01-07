@@ -132,7 +132,7 @@
             app:layout_constraintTop_toTopOf="@id/gender_layout">
 
             <TextView
-                android:id="@+id/work_type_tv"
+                android:id="@+id/category_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ish turi"

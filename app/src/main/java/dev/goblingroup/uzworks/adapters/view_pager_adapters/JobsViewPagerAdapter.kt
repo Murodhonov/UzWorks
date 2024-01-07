@@ -7,18 +7,21 @@ import dev.goblingroup.uzworks.fragments.main.jobs.job_list.SavedJobsFragment
 
 class JobsViewPagerAdapter(
     fragment: Fragment,
-    private val tabList: List<String>,
     private val allJobsClickListener: AllJobsFragment.OnAllJobClickListener,
-    private val savedJobsClickListener: SavedJobsFragment.OnSavedJobClickListener
+    private val savedJobsClickListener: SavedJobsFragment.OnSavedJobClickListener,
+    private val onFindJobClickListener: SavedJobsFragment.OnFindJobClickListener
 ) :
     FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = tabList.size
+    override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
-        return if (position == 0) AllJobsFragment.newInstance(tabList[position])
+        return if (position == 0) AllJobsFragment.newInstance()
             .apply { setOnJobClickListener(allJobsClickListener) }
-        else SavedJobsFragment.newInstance(tabList[position])
-            .apply { setOnJobClickListener(savedJobsClickListener) }
+        else SavedJobsFragment.newInstance()
+            .apply {
+                setOnJobClickListener(savedJobsClickListener)
+                setOnFindJobClickListener(onFindJobClickListener)
+            }
     }
 }

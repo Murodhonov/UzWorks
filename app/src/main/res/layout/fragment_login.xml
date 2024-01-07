@@ -53,7 +53,7 @@
 
     <EditText
         android:id="@+id/username_et"
-        style="@style/RegistrationEditTextStyle"
+        style="@style/CustomEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:layout_marginStart="@dimen/_15sdp"
@@ -117,13 +117,13 @@
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_4sdp"
         android:layout_marginEnd="@dimen/_15sdp"
-        android:background="@drawable/registration_edit_text_background"
+        android:background="@drawable/edit_text_background"
         android:elevation="@dimen/_2sdp"
         app:layout_constraintTop_toBottomOf="@id/password_tv">
 
         <EditText
             android:id="@+id/password_et"
-            style="@style/RegistrationEditTextStyle"
+            style="@style/CustomEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="password"

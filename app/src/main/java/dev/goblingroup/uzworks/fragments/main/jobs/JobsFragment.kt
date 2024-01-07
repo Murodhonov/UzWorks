@@ -39,7 +39,6 @@ class JobsFragment : Fragment() {
         binding.apply {
             val adapter = JobsViewPagerAdapter(
                 fragment = this@JobsFragment,
-                tabList = arrayListOf("Barcha", "Saqlanganlar"),
                 object : AllJobsFragment.OnAllJobClickListener {
                     override fun onAllJobClick(jobId: String) {
                         openJobDetails(jobId)
@@ -48,6 +47,11 @@ class JobsFragment : Fragment() {
                 }, object : SavedJobsFragment.OnSavedJobClickListener {
                     override fun onSavedJobClick(jobId: String) {
                         savedJobClicked(jobId)
+                    }
+
+                }, object : SavedJobsFragment.OnFindJobClickListener {
+                    override fun onFindJobClick() {
+                        viewPager.setCurrentItem(0, true)
                     }
 
                 }

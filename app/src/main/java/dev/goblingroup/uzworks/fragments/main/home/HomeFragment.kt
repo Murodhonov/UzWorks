@@ -19,6 +19,8 @@ import dev.goblingroup.uzworks.singleton.MySharedPreference
 import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.vm.JobCategoryViewModel
+import dev.goblingroup.uzworks.vm.JobCategoryViewModelFactory
 import dev.goblingroup.uzworks.vm.JobsViewModel
 import dev.goblingroup.uzworks.vm.JobsViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -40,6 +42,9 @@ class HomeFragment : Fragment(), CoroutineScope {
     private lateinit var jobsViewModelFactory: JobsViewModelFactory
 
     private lateinit var linearSnapHelper: LinearSnapHelper
+
+    private lateinit var jobCategoryViewModel: JobCategoryViewModel
+    private lateinit var jobCategoryViewModelFactory: JobCategoryViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,8 +106,18 @@ class HomeFragment : Fragment(), CoroutineScope {
     private fun success() {
         if (_binding != null) {
             binding.apply {
+                jobCategoryViewModelFactory = JobCategoryViewModelFactory(
+                    appDatabase,
+                    ApiClient.jobCategoryService,
+                    networkHelper
+                )
+                jobCategoryViewModel = ViewModelProvider(
+                    owner = this@HomeFragment,
+                    factory = jobCategoryViewModelFactory
+                )[JobCategoryViewModel::class.java]
+
                 binding.progress.visibility = View.GONE
-                val adapter = JobAdapter(jobsViewModel) {
+                val adapter = JobAdapter(jobsViewModel, jobCategoryViewModel) {
                     findNavController().navigate(
                         resId = R.id.jobDetailsFragment,
                         args = null,

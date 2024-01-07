@@ -28,6 +28,8 @@ import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
+import dev.goblingroup.uzworks.vm.LoginViewModel
+import dev.goblingroup.uzworks.vm.LoginViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -118,14 +120,14 @@ class LoginFragment : Fragment(), CoroutineScope {
             usernameEt.addTextChangedListener {
                 if (usernameErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     usernameErrorLayout.visibility = View.GONE
-                    usernameEt.setBackgroundResource(R.drawable.registration_edit_text_background)
+                    usernameEt.setBackgroundResource(R.drawable.edit_text_background)
                 }
             }
 
             passwordEt.addTextChangedListener {
                 if (passwordErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     passwordErrorLayout.visibility = View.GONE
-                    passwordEt.setBackgroundResource(R.drawable.registration_edit_text_background)
+                    passwordEt.setBackgroundResource(R.drawable.edit_text_background)
                 }
             }
 

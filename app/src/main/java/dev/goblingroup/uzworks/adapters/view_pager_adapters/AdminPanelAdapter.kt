@@ -2,11 +2,11 @@ package dev.goblingroup.uzworks.adapters.view_pager_adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import dev.goblingroup.uzworks.fragments.main.profile.admin.district.DistrictControlFragment
-import dev.goblingroup.uzworks.fragments.main.profile.admin.job.JobControlFragment
-import dev.goblingroup.uzworks.fragments.main.profile.admin.job_category.JobCategoryControlFragment
-import dev.goblingroup.uzworks.fragments.main.profile.admin.region.RegionControlFragment
-import dev.goblingroup.uzworks.fragments.main.profile.admin.worker.WorkerControlFragment
+import dev.goblingroup.uzworks.fragments.main.admin.district.DistrictControlFragment
+import dev.goblingroup.uzworks.fragments.main.admin.job.JobControlFragment
+import dev.goblingroup.uzworks.fragments.main.admin.job_category.JobCategoryControlFragment
+import dev.goblingroup.uzworks.fragments.main.admin.region.RegionControlFragment
+import dev.goblingroup.uzworks.fragments.main.admin.worker.WorkerControlFragment
 import dev.goblingroup.uzworks.utils.ConstValues.DISTRICT
 import dev.goblingroup.uzworks.utils.ConstValues.JOB
 import dev.goblingroup.uzworks.utils.ConstValues.JOB_CATEGORY

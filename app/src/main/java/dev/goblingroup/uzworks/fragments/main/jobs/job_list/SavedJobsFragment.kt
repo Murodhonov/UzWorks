@@ -14,6 +14,8 @@ import dev.goblingroup.uzworks.databinding.FragmentSavedJobsBinding
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.singleton.MySharedPreference
 import dev.goblingroup.uzworks.utils.NetworkHelper
+import dev.goblingroup.uzworks.vm.JobCategoryViewModel
+import dev.goblingroup.uzworks.vm.JobCategoryViewModelFactory
 import dev.goblingroup.uzworks.vm.JobsViewModel
 import dev.goblingroup.uzworks.vm.JobsViewModelFactory
 
@@ -24,12 +26,19 @@ class SavedJobsFragment : Fragment() {
     private var _binding: FragmentSavedJobsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var appDatabase: AppDatabase
-    private lateinit var networkHelper: NetworkHelper
+    private var jobClickListener: OnSavedJobClickListener? = null
+    private var findJobClickListener: OnFindJobClickListener? = null
+
     private lateinit var savedJobsAdapter: SavedJobsAdapter
+
     private lateinit var jobsViewModel: JobsViewModel
     private lateinit var jobsViewModelFactory: JobsViewModelFactory
-    private var jobClickListener: OnSavedJobClickListener? = null
+
+    private lateinit var appDatabase: AppDatabase
+    private lateinit var networkHelper: NetworkHelper
+
+    private lateinit var jobCategoryViewModel: JobCategoryViewModel
+    private lateinit var jobCategoryViewModelFactory: JobCategoryViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +67,9 @@ class SavedJobsFragment : Fragment() {
                 factory = jobsViewModelFactory
             )[JobsViewModel::class.java]
             loadSavedJobs()
+            findJobBtn.setOnClickListener {
+                findJobClickListener?.onFindJobClick()
+            }
         }
     }
 
@@ -65,13 +77,27 @@ class SavedJobsFragment : Fragment() {
         binding.apply {
             val savedJobList = jobsViewModel.listSavedJobs()
             if (savedJobList.isNotEmpty()) {
+                jobCategoryViewModelFactory = JobCategoryViewModelFactory(
+                    appDatabase,
+                    ApiClient.jobCategoryService,
+                    networkHelper
+                )
+                jobCategoryViewModel = ViewModelProvider(
+                    owner = requireActivity(),
+                    factory = jobCategoryViewModelFactory
+                )[JobCategoryViewModel::class.java]
+
                 emptyLayout.visibility = View.GONE
                 savedJobsAdapter = SavedJobsAdapter(
-                    jobsViewModel, { clickedJobId ->
+                    jobsViewModel,
+                    jobCategoryViewModel,
+                    { clickedJobId ->
                         jobClickListener?.onSavedJobClick(clickedJobId)
-                    }, {
+                    },
+                    {
                         emptyLayout.visibility = View.VISIBLE
-                    })
+                    }
+                )
                 recommendedWorkAnnouncementsRv.adapter = savedJobsAdapter
             } else {
                 emptyLayout.visibility = View.VISIBLE
@@ -81,6 +107,14 @@ class SavedJobsFragment : Fragment() {
 
     interface OnSavedJobClickListener {
         fun onSavedJobClick(jobId: String)
+    }
+
+    interface OnFindJobClickListener {
+        fun onFindJobClick()
+    }
+
+    fun setOnFindJobClickListener(listener: OnFindJobClickListener) {
+        findJobClickListener = listener
     }
 
     fun setOnJobClickListener(listener: OnSavedJobClickListener) {
@@ -116,6 +150,7 @@ class SavedJobsFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause: lifecycle checking")
+        loadSavedJobs()
     }
 
     override fun onStart() {
@@ -136,7 +171,7 @@ class SavedJobsFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(title: String) =
+        fun newInstance() =
             SavedJobsFragment().apply {
                 arguments = Bundle().apply {
 

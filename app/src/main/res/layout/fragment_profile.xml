@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/dmsans_regular"
-        android:text="Andijon, Baliqchi"
+        android:text="Address unknown"
         android:textColor="@color/white"
         android:textSize="@dimen/_10ssp"
         app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
@@ -142,7 +142,7 @@
                     android:layout_marginStart="@dimen/_7sdp"
                     android:fontFamily="@font/dmsans_bold"
                     android:textSize="@dimen/_12ssp"
-                    android:text="Kerakli ma’lumotlar"
+                    android:text="Shaxsiy ma’lumotlar"
                     android:textColor="@color/black_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/personal_info_iv"
@@ -375,15 +375,71 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <Button
-            android:id="@+id/admin_panel_btn"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/announcement_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_7sdp"
             android:layout_marginTop="@dimen/_7sdp"
-            android:visibility="gone"
             android:layout_marginEnd="@dimen/_7sdp"
-            android:text="Admin panel" />
+            android:backgroundTint="@color/white"
+            app:cardCornerRadius="@dimen/_7sdp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_7sdp">
+
+                <ImageView
+                    android:id="@+id/announcement_iv"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:src="@drawable/ic_announcement"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/announcement_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_7sdp"
+                    android:fontFamily="@font/dmsans_bold"
+                    android:text="E’lon berish"
+                    android:textColor="@color/black_blue"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/announcement_iv"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:background="@drawable/circle_for_profile_pieces"
+                    android:padding="@dimen/_3sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="@color/black_blue"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="1.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/black_blue"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <View
             android:layout_width="match_parent"

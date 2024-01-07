@@ -16,8 +16,8 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
-import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModel
-import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModelFactory
+import dev.goblingroup.uzworks.vm.LoginViewModel
+import dev.goblingroup.uzworks.vm.LoginViewModelFactory
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.SignUpResponse
@@ -27,6 +27,8 @@ import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.splitFullName
+import dev.goblingroup.uzworks.vm.SignUpViewModel
+import dev.goblingroup.uzworks.vm.SignUpViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -137,21 +139,21 @@ class SignUpFragment : Fragment(), CoroutineScope {
             fullNameEt.addTextChangedListener {
                 if (fullNameErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     fullNameErrorLayout.visibility = View.GONE
-                    fullNameEt.setBackgroundResource(R.drawable.registration_edit_text_background)
+                    fullNameEt.setBackgroundResource(R.drawable.edit_text_background)
                 }
             }
 
             usernameEt.addTextChangedListener {
                 if (usernameErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     usernameErrorLayout.visibility = View.GONE
-                    usernameEt.setBackgroundResource(R.drawable.registration_edit_text_background)
+                    usernameEt.setBackgroundResource(R.drawable.edit_text_background)
                 }
             }
 
             passwordEt.addTextChangedListener {
                 if (passwordErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
                     passwordErrorLayout.visibility = View.GONE
-                    passwordEt.setBackgroundResource(R.drawable.registration_edit_text_background)
+                    passwordEt.setBackgroundResource(R.drawable.edit_text_background)
                 }
             }
 
@@ -160,7 +162,7 @@ class SignUpFragment : Fragment(), CoroutineScope {
                         .isNotEmpty()
                 ) {
                     confirmPasswordErrorLayout.visibility = View.GONE
-                    confirmPasswordEt.setBackgroundResource(R.drawable.registration_edit_text_background)
+                    confirmPasswordEt.setBackgroundResource(R.drawable.edit_text_background)
                     confirmPasswordErrorTv.text = "Confirm password should enter"
                 }
             }

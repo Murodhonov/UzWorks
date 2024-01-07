@@ -16,6 +16,8 @@ import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.singleton.MySharedPreference
 import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.NetworkHelper
+import dev.goblingroup.uzworks.vm.JobCategoryViewModel
+import dev.goblingroup.uzworks.vm.JobCategoryViewModelFactory
 import dev.goblingroup.uzworks.vm.JobsViewModel
 import dev.goblingroup.uzworks.vm.JobsViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +41,9 @@ class AllJobsFragment : Fragment(), CoroutineScope {
 
     private lateinit var appDatabase: AppDatabase
     private lateinit var networkHelper: NetworkHelper
+
+    private lateinit var jobCategoryViewModel: JobCategoryViewModel
+    private lateinit var jobCategoryViewModelFactory: JobCategoryViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,7 +104,17 @@ class AllJobsFragment : Fragment(), CoroutineScope {
     private fun success() {
         if (_binding != null) {
             binding.apply {
-                jobAdapter = JobAdapter(jobsViewModel) { clickedJobId ->
+                jobCategoryViewModelFactory = JobCategoryViewModelFactory(
+                    appDatabase,
+                    ApiClient.jobCategoryService,
+                    networkHelper
+                )
+                jobCategoryViewModel = ViewModelProvider(
+                    owner = requireActivity(),
+                    factory = jobCategoryViewModelFactory
+                )[JobCategoryViewModel::class.java]
+
+                jobAdapter = JobAdapter(jobsViewModel, jobCategoryViewModel) { clickedJobId ->
                     jobClickListener?.onAllJobClick(clickedJobId)
                 }
                 recommendedWorkAnnouncementsRv.adapter = jobAdapter
@@ -144,6 +159,7 @@ class AllJobsFragment : Fragment(), CoroutineScope {
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause: lifecycle checking")
+        loadJobs()
     }
 
     override fun onStart() {
@@ -168,10 +184,10 @@ class AllJobsFragment : Fragment(), CoroutineScope {
     companion object {
 
         @JvmStatic
-        fun newInstance(title: String) =
+        fun newInstance() =
             AllJobsFragment().apply {
                 arguments = Bundle().apply {
-                    putString("title", title)
+//                    putString("title", title)
                 }
             }
     }

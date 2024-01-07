@@ -8,12 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.AppDatabase
-import dev.goblingroup.uzworks.database.entity.UserEntity
 import dev.goblingroup.uzworks.databinding.FragmentProfileBinding
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import dev.goblingroup.uzworks.service.UserRoleImpl
-import dev.goblingroup.uzworks.service.UserRoleService
-import dev.goblingroup.uzworks.utils.ConstValues.SUPER_ADMIN
 import dev.goblingroup.uzworks.utils.aboutDialog
 import dev.goblingroup.uzworks.utils.experienceDialog
 import dev.goblingroup.uzworks.utils.fieldsDialog
@@ -27,8 +23,6 @@ class ProfileFragment : Fragment() {
 
     private lateinit var appDatabase: AppDatabase
     private lateinit var networkHelper: NetworkHelper
-    private lateinit var user: UserEntity
-    private lateinit var userRoleService: UserRoleService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,22 +61,13 @@ class ProfileFragment : Fragment() {
                 experienceDialog(requireContext(), layoutInflater)
             }
 
-            adminPanelBtn.setOnClickListener {
+            announcementBtn.setOnClickListener {
                 findNavController().navigate(
-                    resId = R.id.adminPanelFragment,
+                    resId = R.id.addWorkerFragment,
                     args = null,
                     navOptions = getNavOptions()
                 )
             }
-
-
-            user = appDatabase.userDao().getUser()!!
-            userRoleService = UserRoleImpl()
-            val userRoleList = userRoleService.getUserRoleList(requireContext())
-            if (userRoleList.contains(SUPER_ADMIN)) {
-                adminPanelBtn.visibility = View.VISIBLE
-            }
-
         }
     }
 

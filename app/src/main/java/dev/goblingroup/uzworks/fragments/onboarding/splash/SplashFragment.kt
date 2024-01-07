@@ -14,8 +14,8 @@ import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.FragmentSplashBinding
-import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModel
-import dev.goblingroup.uzworks.fragments.auth.login.LoginViewModelFactory
+import dev.goblingroup.uzworks.vm.LoginViewModel
+import dev.goblingroup.uzworks.vm.LoginViewModelFactory
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.utils.ApiStatus

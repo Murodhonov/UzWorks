@@ -21,11 +21,9 @@
 
             <EditText
                 android:id="@+id/search_et"
-                style="@style/MainEditTextStyle"
                 android:textSize="@dimen/_11ssp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_width="0dp"
-                android:backgroundTint="@color/white"
                 app:layout_constraintRight_toLeftOf="@id/more_iv"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="5dp"
