@@ -2,10 +2,12 @@ package dev.goblingroup.uzworks.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.networking.DistrictService
 import dev.goblingroup.uzworks.utils.NetworkHelper
 
 class DistrictViewModelFactory(
+    private val appDatabase: AppDatabase,
     private val districtService: DistrictService,
     private val networkHelper: NetworkHelper,
     var districtId: String,
@@ -15,6 +17,7 @@ class DistrictViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DistrictViewModel::class.java)) {
             return DistrictViewModel(
+                appDatabase = appDatabase,
                 districtService = districtService,
                 networkHelper = networkHelper,
                 districtId = districtId,

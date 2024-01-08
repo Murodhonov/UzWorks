@@ -8,8 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSelectRoleBinding
-import dev.goblingroup.uzworks.utils.ConstValues.EMPLOYEE
-import dev.goblingroup.uzworks.utils.ConstValues.EMPLOYER
+import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.getNavOptions
 
 class SelectRoleFragment : Fragment() {
@@ -18,7 +17,7 @@ class SelectRoleFragment : Fragment() {
     private val binding get() = _binding!!
     private val TAG = "SelectRoleFragment"
 
-    private var status = EMPLOYEE
+    private var status = UserRole.EMPLOYEE.roleName
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +67,7 @@ class SelectRoleFragment : Fragment() {
 
     private fun selectEmployer() {
         binding.apply {
-            if (status != EMPLOYER) {
+            if (status != UserRole.EMPLOYER.roleName) {
                 employerBtn.cardElevation = 0F
                 employerBtn.strokeWidth = (2 * resources.displayMetrics.density).toInt()
                 employerCircle.setBackgroundResource(R.drawable.selected_circle_background)
@@ -79,13 +78,13 @@ class SelectRoleFragment : Fragment() {
                 employeeCircle.setBackgroundResource(R.drawable.unselected_circle_background)
                 employeeTv.setTextColor(resources.getColor(R.color.black_blue_60))
             }
-            status = EMPLOYER
+            status = UserRole.EMPLOYER.roleName
         }
     }
 
     private fun selectEmployee() {
         binding.apply {
-            if (status != EMPLOYEE) {
+            if (status != UserRole.EMPLOYEE.roleName) {
                 employeeBtn.cardElevation = 0F
                 employeeBtn.strokeWidth = (2 * resources.displayMetrics.density).toInt()
                 employeeCircle.setBackgroundResource(R.drawable.selected_circle_background)
@@ -96,7 +95,7 @@ class SelectRoleFragment : Fragment() {
                 employerCircle.setBackgroundResource(R.drawable.unselected_circle_background)
                 employerTv.setTextColor(resources.getColor(R.color.black_blue_60))
             }
-            status = EMPLOYEE
+            status = UserRole.EMPLOYEE.roleName
         }
     }
 

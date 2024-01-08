@@ -53,37 +53,37 @@ class DistrictControlFragment : Fragment(), CoroutineScope {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            networkHelper = NetworkHelper(requireContext())
-            viewModelFactory = DistrictViewModelFactory(
-                districtService = ApiClient.districtService,
-                networkHelper = networkHelper,
-                districtId = "",
-                regionId = ""
-            )
-            viewModel = ViewModelProvider(
-                owner = this@DistrictControlFragment,
-                factory = viewModelFactory
-            )[DistrictViewModel::class.java]
-            launch {
-                viewModel.loadDistricts()
-                    .collect {
-                        when (it) {
-                            is ApiStatus.Error -> {
-                                progressBar.visibility = View.INVISIBLE
-                            }
-
-                            is ApiStatus.Loading -> {
-                                progressBar.visibility = View.VISIBLE
-                            }
-
-                            is ApiStatus.Success -> {
-                                progressBar.visibility = View.INVISIBLE
-                                districtList = ArrayList(it.response as List<DistrictResponse>)
-                                success(districtList)
-                            }
-                        }
-                    }
-            }
+//            networkHelper = NetworkHelper(requireContext())
+//            viewModelFactory = DistrictViewModelFactory(
+//                districtService = ApiClient.districtService,
+//                networkHelper = networkHelper,
+//                districtId = "",
+//                regionId = ""
+//            )
+//            viewModel = ViewModelProvider(
+//                owner = this@DistrictControlFragment,
+//                factory = viewModelFactory
+//            )[DistrictViewModel::class.java]
+//            launch {
+//                viewModel.getDistrictStateFlow()
+//                    .collect {
+//                        when (it) {
+//                            is ApiStatus.Error -> {
+//                                progressBar.visibility = View.INVISIBLE
+//                            }
+//
+//                            is ApiStatus.Loading -> {
+//                                progressBar.visibility = View.VISIBLE
+//                            }
+//
+//                            is ApiStatus.Success -> {
+//                                progressBar.visibility = View.INVISIBLE
+//                                districtList = ArrayList(it.response as List<DistrictResponse>)
+//                                success(districtList)
+//                            }
+//                        }
+//                    }
+//            }
         }
     }
 
