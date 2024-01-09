@@ -1,41 +1,82 @@
 package dev.goblingroup.uzworks.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Filter
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 
 class DistrictAdapter(
-    context: Context,
+    private val context: Context,
+    private val resourceId: Int,
     private val districtList: List<DistrictEntity>
 ) : ArrayAdapter<DistrictEntity>(
     context,
-    android.R.layout.simple_dropdown_item_1line,
+    resourceId,
     districtList
 ) {
-
-    init {
-        if (districtList.isEmpty()) {
-            add(DistrictEntity(id = "-1", name = "Select region first", regionId = ""))
-        } else {
-            add(DistrictEntity(id = "-1", name = "Select district", regionId = ""))
-            addAll(districtList)
-        }
-    }
-
-    override fun isEnabled(position: Int) = position != 0
+    private val tempItems: ArrayList<DistrictEntity> = ArrayList(districtList)
+    private val suggestions: ArrayList<DistrictEntity> = ArrayList()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = super.getView(position, convertView, parent)
-        if (position == 0) {
-            val textView = view.findViewById<TextView>(android.R.id.text1)
-            textView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
+        var view = convertView
+        try {
+            if (convertView == null) {
+                val inflater = (context as Activity).layoutInflater
+                view = inflater.inflate(resourceId, parent, false)
+            }
+            val district = getItem(position)
+            val name = view!!.findViewById<TextView>(R.id.tv)
+            name.text = district?.name
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return view!!
+    }
+
+    override fun getItem(position: Int): DistrictEntity? = districtList[position]
+
+    override fun getCount(): Int = districtList.size
+
+    override fun getItemId(position: Int): Long = position.toLong()
+
+    override fun getFilter(): Filter = districtFilter
+
+    private val districtFilter: Filter = object : Filter() {
+        override fun convertResultToString(resultValue: Any?): CharSequence {
+            val district = resultValue as DistrictEntity
+            return district.name
         }
 
-        return view
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            return if (constraint != null) {
+                suggestions.clear()
+                for (district in tempItems) {
+                    if (district.name.lowercase().startsWith(constraint.toString().toLowerCase())) {
+                        suggestions.add(district)
+                    }
+                }
+                val filterResults = FilterResults()
+                filterResults.values = suggestions
+                filterResults.count = suggestions.size
+                filterResults
+            } else {
+                FilterResults()
+            }
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            val tempValues = results?.values as ArrayList<DistrictEntity>
+            if (results != null && results.count > 0) {
+                clear()
+                for (districtObj in districtList)
+            }
+        }
+
     }
 
 }

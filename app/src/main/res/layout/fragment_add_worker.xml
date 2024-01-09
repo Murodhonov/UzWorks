@@ -273,15 +273,39 @@
                     android:text="Region"
                     android:textSize="@dimen/_12ssp" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/region_choice"
+                <!--                <AutoCompleteTextView-->
+                <!--                    android:id="@+id/region_choice"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/_5sdp"-->
+                <!--                    android:background="@drawable/create_worker_edit_text_background"-->
+                <!--                    android:hint="Enter your region"-->
+                <!--                    android:padding="@dimen/_5sdp"-->
+                <!--                    android:textSize="@dimen/_12ssp" />-->
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:background="@drawable/create_worker_edit_text_background"
-                    android:hint="Enter your region"
-                    android:padding="@dimen/_5sdp"
-                    android:textSize="@dimen/_12ssp" />
+                    android:backgroundTint="@android:color/transparent"
+                    app:endIconMode="dropdown_menu"
+                    app:endIconTint="@color/yellow"
+                    app:hintEnabled="false">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/region_choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/create_worker_edit_text_background"
+                        android:ellipsize="end"
+                        android:hint="Select region"
+                        android:inputType="none"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
             </LinearLayout>
 
@@ -299,16 +323,28 @@
                     android:text="District"
                     android:textSize="@dimen/_12ssp" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/district_choice"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:background="@drawable/create_worker_edit_text_background"
-                    android:hint="Select region first"
-                    android:textColor="@color/text_color"
-                    android:padding="@dimen/_5sdp"
-                    android:textSize="@dimen/_12ssp" />
+                    android:backgroundTint="@android:color/transparent"
+                    app:endIconMode="dropdown_menu"
+                    app:endIconTint="@color/yellow"
+                    app:hintEnabled="false">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/district_choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/create_worker_edit_text_background"
+                        android:ellipsize="end"
+                        android:hint="Select region first"
+                        android:inputType="none"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 

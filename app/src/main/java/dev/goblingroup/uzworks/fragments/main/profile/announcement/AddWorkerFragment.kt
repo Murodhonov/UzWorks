@@ -5,10 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import dev.goblingroup.uzworks.adapters.DistrictAdapter
+import dev.goblingroup.uzworks.adapters.RegionAdapter
 import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
@@ -40,6 +41,8 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
     private lateinit var districtViewModel: DistrictViewModel
     private lateinit var districtViewModelFactory: DistrictViewModelFactory
 
+    private var districtId: String = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,7 +60,10 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
             loadDistricts()
 
             regionChoice.setOnItemClickListener { parent, view, position, id ->
-
+                districtChoice.hint = "Select district"
+//                regionChoice.setText("")
+//                regionChoice.append(regionViewModel.listRegions()[position].name)
+                setDistricts(position)
             }
         }
     }
@@ -105,12 +111,28 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
 
     private fun setRegions(regionList: List<RegionEntity>) {
         binding.apply {
-            val adapter = ArrayAdapter(
+            val regionAdapter = RegionAdapter(
                 requireContext(),
-                android.R.layout.simple_dropdown_item_1line,
                 regionList
             )
-            regionChoice.setAdapter(adapter)
+            regionChoice.setAdapter(regionAdapter)
+            regionChoice.clearFocus()
+        }
+    }
+
+    private fun setDistricts(position: Int) {
+        binding.apply {
+            val regionId = regionViewModel.listRegions()[position].id
+            val districtList = districtViewModel.listDistrictsByRegionId(regionId)
+            val districtAdapter = DistrictAdapter(
+                requireContext(),
+                districtList
+            )
+            districtChoice.setAdapter(districtAdapter)
+            districtChoice.setOnItemClickListener { parent, view, position, id ->
+                districtChoice.setText(districtList[position].name)
+                districtId = districtList[position].id
+            }
         }
     }
 
