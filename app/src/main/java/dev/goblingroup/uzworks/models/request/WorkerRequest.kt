@@ -1,18 +1,18 @@
 package dev.goblingroup.uzworks.models.request
 
 data class WorkerRequest(
-    val birthDate: String,
-    val categoryId: String,
-    val deadline: String,
-    val districtId: String,
-    val gender: String,
-    val instagramLink: String,
-    val location: String,
-    val phoneNumber: String,
-    val salary: Int,
-    val tgLink: String,
-    val tgUserName: String,
-    val title: String,
-    val workingSchedule: String,
-    val workingTime: String
+    var birthDate: String,
+    var categoryId: String,
+    var deadline: String,
+    var districtId: String,
+    var gender: String,
+    var instagramLink: String,
+    var location: String,
+    var phoneNumber: String,
+    var salary: Int,
+    var telegramLink: String,
+    var tgUserName: String,
+    var title: String,
+    var workingSchedule: String,
+    var workingTime: String
 )

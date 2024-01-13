@@ -72,4 +72,6 @@ class JobCategoryViewModel(
     fun findJobCategory(jobCategoryId: String) =
         jobCategoryRepository.findJobCategory(jobCategoryId)
 
+    fun listJobCategories() = jobCategoryRepository.listCategories()
+
 }

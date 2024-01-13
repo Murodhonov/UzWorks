@@ -6,7 +6,7 @@ import dev.goblingroup.uzworks.networking.SecuredWorkerService
 
 class SecuredWorkerRepository(
     private val securedWorkerService: SecuredWorkerService,
-    private val workerRequest: WorkerRequest,
+    val workerRequest: WorkerRequest,
     private val workerId: String,
     private val workerEditRequest: WorkerEditRequest
 ) {

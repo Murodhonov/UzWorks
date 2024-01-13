@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:fillViewport="true"
     android:layout_height="match_parent"
     tools:context=".fragments.main.profile.announcement.AddWorkerFragment">
 
@@ -29,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/dmsans_medium"
+            android:textSize="@dimen/_14ssp"
             android:text="Create announcement for worker"
             app:layout_constraintLeft_toLeftOf="@id/back"
             app:layout_constraintTop_toBottomOf="@id/back" />
@@ -70,6 +72,7 @@
                         style="@style/BoldTextViewStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14ssp"
                         android:fontFamily="@font/dmsans_medium"
                         android:text="Deadline" />
 
@@ -77,6 +80,7 @@
                         android:id="@+id/deadline_tv"
                         style="@style/NormalTextViewStyle"
                         android:layout_width="wrap_content"
+                        android:textSize="@dimen/_11ssp"
                         android:layout_height="wrap_content"
                         android:text="dd.mm.yyyy" />
 
@@ -107,6 +111,7 @@
                         style="@style/BoldTextViewStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14ssp"
                         android:fontFamily="@font/dmsans_medium"
                         android:text="Birthday" />
 
@@ -115,6 +120,7 @@
                         style="@style/NormalTextViewStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/_11ssp"
                         android:text="dd.yy.yyyy" />
 
                 </LinearLayout>
@@ -127,15 +133,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_14ssp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Title" />
 
             <EditText
+                android:id="@+id/title_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/create_worker_edit_text_background"
                 android:hint="Some title example for worker"
+                android:textSize="@dimen/_12ssp"
                 android:imeOptions="actionNext"
                 android:inputType="text" />
 
@@ -144,15 +153,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_14ssp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Salary" />
 
             <EditText
+                android:id="@+id/salary_et"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:backgroundTint="@color/white_blue"
                 android:hint="2 000 000 so'm"
+                android:textSize="@dimen/_12ssp"
                 android:imeOptions="actionNext"
                 android:inputType="numberDecimal" />
 
@@ -161,10 +173,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_14ssp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Gender" />
 
-            <include layout="@layout/gender_choice_layout" />
+            <include
+                android:id="@+id/gender_layout"
+                layout="@layout/gender_choice_layout" />
 
             <TextView
                 style="@style/BoldTextViewStyle"
@@ -172,15 +187,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dmsans_medium"
+                android:textSize="@dimen/_14ssp"
                 android:text="Working time" />
 
             <EditText
+                android:id="@+id/working_time_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/create_worker_edit_text_background"
                 android:hint="Example : 1 haftada 5 kun , 7 soat ishlay olaman ."
                 android:imeOptions="actionNext"
+                android:textSize="@dimen/_12ssp"
                 android:inputType="text" />
 
             <TextView
@@ -188,16 +206,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_14ssp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Telegram profile" />
 
             <EditText
+                android:id="@+id/tg_user_name_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
                 android:padding="@dimen/_5sdp"
+                android:textSize="@dimen/_12ssp"
                 android:text="t.me//" />
 
             <TextView
@@ -206,6 +227,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dmsans_medium"
+                android:textSize="@dimen/_14ssp"
                 android:text="Instagram profile" />
 
             <EditText
@@ -213,6 +235,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:hint="username"
+                android:textSize="@dimen/_12ssp"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
                 android:padding="@dimen/_5sdp" />
@@ -221,15 +244,18 @@
                 style="@style/BoldTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/_14ssp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Phone number" />
 
             <EditText
+                android:id="@+id/phone_number_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:hint="+998000000000"
+                android:text="+998"
+                android:textSize="@dimen/_12ssp"
                 android:imeOptions="actionNext"
                 android:inputType="phone"
                 android:padding="@dimen/_5sdp" />
@@ -237,16 +263,19 @@
             <TextView
                 style="@style/BoldTextViewStyle"
                 android:layout_width="wrap_content"
+                android:textSize="@dimen/_14ssp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Orientation" />
 
             <EditText
+                android:id="@+id/orientation_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:hint="Orientation"
+                android:textSize="@dimen/_12ssp"
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:padding="@dimen/_5sdp" />
@@ -255,6 +284,7 @@
                 style="@style/BoldTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/_14ssp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Address" />
@@ -273,16 +303,6 @@
                     android:text="Region"
                     android:textSize="@dimen/_12ssp" />
 
-                <!--                <AutoCompleteTextView-->
-                <!--                    android:id="@+id/region_choice"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginStart="@dimen/_5sdp"-->
-                <!--                    android:background="@drawable/create_worker_edit_text_background"-->
-                <!--                    android:hint="Enter your region"-->
-                <!--                    android:padding="@dimen/_5sdp"-->
-                <!--                    android:textSize="@dimen/_12ssp" />-->
-
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
@@ -300,8 +320,10 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/create_worker_edit_text_background"
                         android:ellipsize="end"
-                        android:hint="Select region"
                         android:inputType="none"
+                        android:textColor="@color/black_blue"
+                        android:textSize="@dimen/_12ssp"
+                        android:hint="Select region"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -340,8 +362,10 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/create_worker_edit_text_background"
                         android:ellipsize="end"
-                        android:hint="Select region first"
                         android:inputType="none"
+                        android:hint="Select region first"
+                        android:textColor="@color/black_blue"
+                        android:textSize="@dimen/_12ssp"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -352,21 +376,35 @@
                 style="@style/BoldTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/_14ssp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Category" />
 
-            <AutoCompleteTextView
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/create_worker_edit_text_background"
-                android:hint="Select your category"
-                android:inputType="none"
-                android:padding="@dimen/_5sdp"
-                android:textColorHint="@color/black_blue"
-                android:textSize="@dimen/_12ssp" />
+                android:backgroundTint="@android:color/transparent"
+                app:endIconMode="dropdown_menu"
+                app:endIconTint="@color/yellow"
+                app:hintEnabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/job_category_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/create_worker_edit_text_background"
+                    android:ellipsize="end"
+                    android:hint="Select job category"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:textColor="@color/black_blue"
+                    android:textSize="@dimen/_12ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -377,6 +415,7 @@
                     android:id="@+id/save_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:cardElevation="0dp"
                     android:backgroundTint="@color/black_blue"
                     app:cardCornerRadius="@dimen/_7sdp"
                     app:layout_constraintRight_toRightOf="parent"
@@ -390,16 +429,19 @@
                         android:layout_marginEnd="@dimen/_7sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:text="Save"
+                        android:textSize="@dimen/_14ssp"
                         android:textColor="@color/white" />
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cancel_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/red"
                     android:padding="@dimen/_5sdp"
                     app:cardCornerRadius="@dimen/_7sdp"
+                    app:cardElevation="0dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="@id/save_btn">
 
@@ -411,6 +453,7 @@
                         android:layout_marginEnd="@dimen/_7sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:text="Cancel"
+                        android:textSize="@dimen/_14ssp"
                         android:textColor="@color/white" />
 
                 </androidx.cardview.widget.CardView>

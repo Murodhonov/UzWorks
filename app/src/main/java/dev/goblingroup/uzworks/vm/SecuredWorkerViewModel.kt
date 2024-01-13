@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
@@ -41,15 +42,19 @@ class SecuredWorkerViewModel(
     private val editStateFlow =
         MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createDistrict(): StateFlow<ApiStatus<Unit>> {
+    fun createWorker(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                Log.d(
+                    TAG,
+                    "createWorker: starting create worker ${securedWorkerRepository.workerRequest} in view model"
+                )
                 securedWorkerRepository.createWorker()
                     .catch {
                         createStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        createStateFlow.emit(ApiStatus.Success(null))
+                        createStateFlow.emit(ApiStatus.Success(it))
                     }
             } else {
                 createStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
@@ -58,7 +63,7 @@ class SecuredWorkerViewModel(
         return createStateFlow
     }
 
-    fun deleteDistrict(): StateFlow<ApiStatus<Unit>> {
+    fun deleteWorker(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedWorkerRepository.deleteWorker()
@@ -75,7 +80,7 @@ class SecuredWorkerViewModel(
         return deleteStateFlow
     }
 
-    fun editDistrict(): StateFlow<ApiStatus<Unit>> {
+    fun editWorker(): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 securedWorkerRepository.editWorker()

@@ -1,7 +1,7 @@
 package dev.goblingroup.uzworks.networking
 
 import android.content.Context
-import android.widget.Toast
+import android.util.Log
 import dev.goblingroup.uzworks.singleton.MySharedPreference
 import me.sianaki.flowretrofitadapter.FlowCallAdapterFactory
 import okhttp3.Interceptor
@@ -16,9 +16,14 @@ object ApiClient {
 
     fun initialize(context: Context) {
         authToken = MySharedPreference.getInstance(context).getToken()
+        Log.d(
+            "TAG",
+            "initialize: ${this::class.java.simpleName} ${authToken} got token from shared preference"
+        )
     }
 
     private fun getRetrofit(): Retrofit {
+        Log.d("TAG", "getRetrofit: ${this::class.java.simpleName} is working")
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -37,6 +42,11 @@ object ApiClient {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .build()
+
+        Log.d(
+            "TAG",
+            "getSecuredRetrofit: ${this::class.java.simpleName} $authToken got token and added"
+        )
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)

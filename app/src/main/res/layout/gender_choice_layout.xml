@@ -21,8 +21,8 @@
 
             <LinearLayout
                 android:id="@+id/male_stroke"
-                android:layout_width="@dimen/_13sdp"
-                android:layout_height="@dimen/_13sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:background="@drawable/gender_stroke_selected"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -33,20 +33,21 @@
                     android:id="@+id/male_circle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_3sdp"
+                    android:layout_margin="@dimen/_4sdp"
                     android:background="@drawable/circle_background"
                     android:backgroundTint="@color/black_blue" />
 
             </LinearLayout>
 
             <TextView
+                android:id="@+id/male_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:fontFamily="@font/dmsans_regular"
                 android:text="Male"
                 android:textColor="@color/black_blue"
-                android:textSize="@dimen/_9ssp"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/male_stroke"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -71,8 +72,8 @@
 
             <LinearLayout
                 android:id="@+id/female_stroke"
-                android:layout_width="@dimen/_13sdp"
-                android:layout_height="@dimen/_13sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:background="@drawable/gender_stroke_unselected"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -83,7 +84,7 @@
                     android:id="@+id/female_circle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_3sdp"
+                    android:layout_margin="@dimen/_4sdp"
                     android:background="@drawable/circle_background"
                     android:backgroundTint="@color/black_blue"
                     android:visibility="gone" />
@@ -91,13 +92,14 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/female_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:fontFamily="@font/dmsans_regular"
                 android:text="Female"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_9ssp"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/female_stroke"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -12,3 +12,9 @@ enum class UserRole(val roleName: String) {
     NEW_USER("NewUser"),
     SUPERVISOR("Supervisor")
 }
+
+enum class DateEnum(val dateLabel: String) {
+    DATE("Date"),
+    MONTH("Month"),
+    YEAR("Year")
+}

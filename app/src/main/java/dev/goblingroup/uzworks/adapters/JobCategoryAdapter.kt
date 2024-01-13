@@ -8,16 +8,16 @@ import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.TextView
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.database.entity.DistrictEntity
+import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 
-class DistrictAdapter(
+class JobCategoryAdapter(
     private val context: Context,
     private val resourceId: Int,
-    private val items: List<DistrictEntity>
-) : ArrayAdapter<DistrictEntity>(context, resourceId, items) {
+    private val jobCategoryList: List<JobCategoryEntity>
+) : ArrayAdapter<JobCategoryEntity>(context, resourceId, jobCategoryList) {
 
-    private val tempItems: List<DistrictEntity> = ArrayList(items)
-    private val suggestions: MutableList<DistrictEntity> = ArrayList()
+    private val tempItems: List<JobCategoryEntity> = ArrayList(jobCategoryList)
+    private val suggestions: MutableList<JobCategoryEntity> = ArrayList()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
@@ -26,52 +26,54 @@ class DistrictAdapter(
                 val inflater = (context as Activity).layoutInflater
                 view = inflater.inflate(resourceId, parent, false)
             }
-            val district = getItem(position)
+            val jobCategory = getItem(position)
             val name = view!!.findViewById<TextView>(R.id.tv)
-            name.text = district?.name
+            name.text = jobCategory?.title
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return view!!
     }
 
-    override fun getItem(position: Int): DistrictEntity {
-        return items[position]
+    override fun getItem(position: Int): JobCategoryEntity? {
+        return jobCategoryList[position]
     }
 
     override fun getCount(): Int {
-        return items.size
+        return jobCategoryList.size
     }
 
     override fun getFilter(): Filter {
-        return districtFilter
+        return jobCategoryFilter
     }
 
-    private val districtFilter: Filter = object : Filter() {
+    private val jobCategoryFilter: Filter = object : Filter() {
         override fun convertResultToString(resultValue: Any): CharSequence {
-            val district = resultValue as DistrictEntity
-            return district.name
+            val region = resultValue as JobCategoryEntity
+            return region.title
         }
 
         override fun performFiltering(charSequence: CharSequence?): FilterResults {
-            if (charSequence != null) {
+            return if (charSequence != null) {
                 suggestions.clear()
-                for (district in tempItems) {
-                    if (district.name.toLowerCase().startsWith(charSequence.toString().toLowerCase())) {
-                        suggestions.add(district)
+                for (jobCategory in tempItems) {
+                    if (jobCategory.title.toLowerCase()
+                            .startsWith(charSequence.toString().toLowerCase())
+                    ) {
+                        suggestions.add(jobCategory)
                     }
                 }
                 val filterResults = FilterResults()
                 filterResults.values = suggestions
                 filterResults.count = suggestions.size
-                return filterResults
+                filterResults
             } else {
-                return FilterResults()
+                FilterResults()
             }
         }
 
         override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults) {
-            val tempValues = filterResults.values as ArrayList<DistrictEntity>?
+            val tempValues = filterResults.values as ArrayList<JobCategoryEntity>?
             if (filterResults != null && filterResults.count > 0) {
                 clear()
                 tempValues?.let { addAll(it) }
