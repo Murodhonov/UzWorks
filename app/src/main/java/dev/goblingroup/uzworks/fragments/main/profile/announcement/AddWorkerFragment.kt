@@ -70,7 +70,7 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
 
     private var selectedDistrictId = ""
     private var selectedCategoryId = ""
-    private var selectedGender = ""
+    private var selectedGender = GenderEnum.MALE.label
 
     private var isPhoneEditing = false
     private var isTgUsernameEditing = false
@@ -284,7 +284,7 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
                 telegramLink = "",
                 tgUserName = tgUserNameEt.text.toString(),
                 title = titleEt.text.toString(),
-                workingSchedule = "",
+                workingSchedule = "some working schedule",
                 workingTime = workingTimeEt.text.toString()
             )
             securedWorkerViewModelFactory.workerRequest = workerRequest
