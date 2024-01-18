@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +24,6 @@ import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.UserRole
-import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
 import dev.goblingroup.uzworks.vm.LoginViewModel
@@ -60,8 +58,6 @@ class LoginFragment : Fragment(), CoroutineScope {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            passwordEt.transformationMethod = PasswordTransformationMethod.getInstance()
-
             signUpTv.setOnClickListener {
                 findNavController().navigate(
                     resId = R.id.selectRoleFragment,
@@ -76,23 +72,23 @@ class LoginFragment : Fragment(), CoroutineScope {
                 appDatabase = appDatabase,
                 authService = ApiClient.authService,
                 networkHelper = networkHelper,
-                loginRequest = LoginRequest(usernameEt.text.toString(), passwordEt.text.toString()),
+                loginRequest = LoginRequest(usernameEt.editText?.text.toString(), passwordEt.editText?.text.toString()),
                 context = requireContext()
             )
 
             loginBtn.setOnClickListener {
-                if (usernameEt.text.toString().isNotEmpty() && passwordEt.text.toString()
+                if (usernameEt.editText?.text.toString().isNotEmpty() && passwordEt.editText?.text.toString()
                         .isNotEmpty()
                 ) {
                     login()
                 } else {
-                    if (usernameEt.text.toString().isEmpty()) {
-                        usernameErrorLayout.visibility = View.VISIBLE
-                        usernameEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    if (usernameEt.editText?.text.toString().isEmpty()) {
+                        usernameEt.error = "Username should be entered"
+                        usernameEt.isErrorEnabled = true
                     }
-                    if (passwordEt.text.toString().isEmpty()) {
-                        passwordErrorLayout.visibility = View.VISIBLE
-                        passwordEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    if (passwordEt.editText?.text.toString().isEmpty()) {
+                        passwordEt.error = "Password should be entered"
+                        passwordEt.isErrorEnabled = true
                     }
                 }
             }
@@ -105,10 +101,6 @@ class LoginFragment : Fragment(), CoroutineScope {
                 ).show()
             }
 
-            eyeIv.setOnClickListener {
-                passwordEt.showHidePassword(requireContext(), eyeIv)
-            }
-
             languageBtn.setOnClickListener {
                 chooseLanguage()
             }
@@ -117,17 +109,15 @@ class LoginFragment : Fragment(), CoroutineScope {
                 chooseLanguage()
             }
 
-            usernameEt.addTextChangedListener {
-                if (usernameErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
-                    usernameErrorLayout.visibility = View.GONE
-                    usernameEt.setBackgroundResource(R.drawable.edit_text_background)
+            usernameEt.editText?.addTextChangedListener {
+                if (usernameEt.isErrorEnabled && it.toString().isNotEmpty()) {
+                    usernameEt.isErrorEnabled = false
                 }
             }
 
-            passwordEt.addTextChangedListener {
-                if (passwordErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
-                    passwordErrorLayout.visibility = View.GONE
-                    passwordEt.setBackgroundResource(R.drawable.edit_text_background)
+            passwordEt.editText?.addTextChangedListener {
+                if (passwordEt.isErrorEnabled && it.toString().isNotEmpty()) {
+                    passwordEt.isErrorEnabled = false
                 }
             }
 
@@ -137,8 +127,8 @@ class LoginFragment : Fragment(), CoroutineScope {
 
     private fun login() {
         binding.apply {
-            loginViewModelFactory.loginRequest?.username = usernameEt.text.toString()
-            loginViewModelFactory.loginRequest?.password = passwordEt.text.toString()
+            loginViewModelFactory.loginRequest?.username = usernameEt.editText?.text.toString()
+            loginViewModelFactory.loginRequest?.password = passwordEt.editText?.text.toString()
             loginViewModel = ViewModelProvider(
                 owner = this@LoginFragment,
                 factory = loginViewModelFactory
