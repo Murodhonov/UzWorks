@@ -70,4 +70,17 @@
         <item name="android:fontFamily">@font/dmsans_regular</item>
     </style>
 
+    <style name="TextInputEditTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/input_stroke_color</item>
+        <item name="hintTextColor">@color/black_blue</item>
+        <item name="android:textColorHint">@color/text_color</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/_7sdp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/_7sdp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/_7sdp</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/_7sdp</item>
+        <item name="errorEnabled">true</item>
+        <item name="helperTextEnabled">true</item>
+        <item name="helperTextTextColor">@color/text_color</item>
+    </style>
+
 </resources>
