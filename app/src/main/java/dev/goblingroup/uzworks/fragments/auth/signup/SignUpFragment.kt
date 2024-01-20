@@ -16,8 +16,6 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
-import dev.goblingroup.uzworks.vm.LoginViewModel
-import dev.goblingroup.uzworks.vm.LoginViewModelFactory
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.SignUpResponse
@@ -27,6 +25,8 @@ import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.splitFullName
+import dev.goblingroup.uzworks.vm.LoginViewModel
+import dev.goblingroup.uzworks.vm.LoginViewModelFactory
 import dev.goblingroup.uzworks.vm.SignUpViewModel
 import dev.goblingroup.uzworks.vm.SignUpViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -66,9 +66,9 @@ class SignUpFragment : Fragment(), CoroutineScope {
                 authService = ApiClient.authService,
                 networkHelper = networkHelper,
                 signupRequest = SignUpRequest(
-                    username = usernameEt.text.toString(),
-                    password = passwordEt.text.toString(),
-                    confirmPassword = confirmPasswordEt.text.toString(),
+                    username = usernameEt.editText?.text.toString(),
+                    password = passwordEt.editText?.text.toString(),
+                    confirmPassword = confirmPasswordEt.editText?.text.toString(),
                     firstName = "",
                     lastName = "",
                     role = ""
@@ -77,45 +77,43 @@ class SignUpFragment : Fragment(), CoroutineScope {
 
             continueBtn.setOnClickListener {
                 if (
-                    fullNameEt.text.toString().isNotEmpty() &&
-                    usernameEt.text.toString().isNotEmpty() &&
-                    passwordEt.text.toString().isNotEmpty() &&
-                    confirmPasswordEt.text.toString().isNotEmpty()
+                    fullNameEt.editText?.text.toString().isNotEmpty() &&
+                    usernameEt.editText?.text.toString().isNotEmpty() &&
+                    passwordEt.editText?.text.toString().isNotEmpty() &&
+                    confirmPasswordEt.editText?.text.toString().isNotEmpty()
                 ) {
                     /**
                      * check if password and confirm passwords are equal
                      * check full name format
                      */
-                    if (confirmPasswordEt.text.toString() != passwordEt.text.toString()) {
-                        confirmPasswordErrorTv.text = "Please confirm the password"
-                        confirmPasswordErrorLayout.visibility = View.VISIBLE
-                        confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    if (confirmPasswordEt.editText?.text.toString() != passwordEt.editText?.text.toString()) {
+                        confirmPasswordEt.error = "Please confirm the password"
+                        confirmPasswordEt.isErrorEnabled = true
                     } else {
-                        val (firstName, lastName) = splitFullName(fullName = fullNameEt.text.toString())
+                        val (firstName, lastName) = splitFullName(fullName = fullNameEt.editText?.text.toString())
                         if (firstName.isEmpty() || lastName.isEmpty()) {
-                            fullnameErrorTv.text = "Please enter your firstname and lastname"
-                            fullNameErrorLayout.visibility = View.VISIBLE
-                            fullNameEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                            fullNameEt.error = "Please enter your firstname and lastname"
+                            fullNameEt.isErrorEnabled = true
                         } else {
                             signUp(firstName, lastName)
                         }
                     }
                 } else {
-                    if (fullNameEt.text.toString().isEmpty()) {
-                        fullNameErrorLayout.visibility = View.VISIBLE
-                        fullNameEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    if (fullNameEt.editText?.text.toString().isEmpty()) {
+                        fullNameEt.isErrorEnabled = true
+                        fullNameEt.error = "Enter full name"
                     }
-                    if (usernameEt.text.toString().isEmpty()) {
-                        usernameErrorLayout.visibility = View.VISIBLE
-                        usernameEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    if (usernameEt.editText?.text.toString().isEmpty()) {
+                        usernameEt.isErrorEnabled = true
+                        usernameEt.error = "Enter username"
                     }
-                    if (passwordEt.text.toString().isEmpty()) {
-                        passwordErrorLayout.visibility = View.VISIBLE
-                        passwordEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    if (passwordEt.editText?.text.toString().isEmpty()) {
+                        passwordEt.isErrorEnabled = true
+                        passwordEt.error = "Enter password"
                     }
-                    if (confirmPasswordEt.text.toString().isEmpty()) {
-                        confirmPasswordErrorLayout.visibility = View.VISIBLE
-                        confirmPasswordEt.setBackgroundResource(R.drawable.error_edit_text_background)
+                    if (confirmPasswordEt.editText?.text.toString().isEmpty()) {
+                        confirmPasswordEt.isErrorEnabled = true
+                        confirmPasswordEt.error = "Confirm password"
                     }
                 }
             }
@@ -136,43 +134,31 @@ class SignUpFragment : Fragment(), CoroutineScope {
                 findNavController().popBackStack()
             }
 
-            fullNameEt.addTextChangedListener {
-                if (fullNameErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
-                    fullNameErrorLayout.visibility = View.GONE
-                    fullNameEt.setBackgroundResource(R.drawable.edit_text_background)
+            fullNameEt.editText?.addTextChangedListener {
+                if (fullNameEt.isErrorEnabled && it.toString().isNotEmpty()) {
+                    fullNameEt.isErrorEnabled = false
                 }
             }
 
-            usernameEt.addTextChangedListener {
-                if (usernameErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
-                    usernameErrorLayout.visibility = View.GONE
-                    usernameEt.setBackgroundResource(R.drawable.edit_text_background)
+            usernameEt.editText?.addTextChangedListener {
+                if (usernameEt.isErrorEnabled && it.toString().isNotEmpty()) {
+                    usernameEt.isErrorEnabled = false
                 }
             }
 
-            passwordEt.addTextChangedListener {
-                if (passwordErrorLayout.visibility == View.VISIBLE && it.toString().isNotEmpty()) {
-                    passwordErrorLayout.visibility = View.GONE
-                    passwordEt.setBackgroundResource(R.drawable.edit_text_background)
+            passwordEt.editText?.addTextChangedListener {
+                if (passwordEt.isErrorEnabled && it.toString().isNotEmpty()) {
+                    passwordEt.isErrorEnabled = false
                 }
             }
 
-            confirmPasswordEt.addTextChangedListener {
-                if (confirmPasswordErrorLayout.visibility == View.VISIBLE && it.toString()
+            confirmPasswordEt.editText?.addTextChangedListener {
+                if (confirmPasswordEt.isErrorEnabled && it.toString()
                         .isNotEmpty()
                 ) {
-                    confirmPasswordErrorLayout.visibility = View.GONE
-                    confirmPasswordEt.setBackgroundResource(R.drawable.edit_text_background)
-                    confirmPasswordErrorTv.text = "Confirm password should enter"
+                    confirmPasswordEt.isErrorEnabled = false
+                    confirmPasswordEt.error = "Confirm password"
                 }
-            }
-
-            passwordEyeIv.setOnClickListener {
-                passwordEt.showHidePassword(requireContext(), passwordEyeIv)
-            }
-
-            confirmPasswordEyeIv.setOnClickListener {
-                confirmPasswordEt.showHidePassword(requireContext(), confirmPasswordEyeIv)
             }
 
             fullNameEt.onFocusChangeListener =
@@ -188,9 +174,10 @@ class SignUpFragment : Fragment(), CoroutineScope {
 
     private fun signUp(firstName: String, lastName: String) {
         binding.apply {
-            signupViewModelFactory.signupRequest.username = usernameEt.text.toString()
-            signupViewModelFactory.signupRequest.password = passwordEt.text.toString()
-            signupViewModelFactory.signupRequest.confirmPassword = confirmPasswordEt.text.toString()
+            signupViewModelFactory.signupRequest.username = usernameEt.editText?.text.toString()
+            signupViewModelFactory.signupRequest.password = passwordEt.editText?.text.toString()
+            signupViewModelFactory.signupRequest.confirmPassword =
+                confirmPasswordEt.editText?.text.toString()
             signupViewModelFactory.signupRequest.firstName = firstName
             signupViewModelFactory.signupRequest.lastName = lastName
             signupViewModelFactory.signupRequest.role = userRole
@@ -251,8 +238,8 @@ class SignUpFragment : Fragment(), CoroutineScope {
                     authService = ApiClient.authService,
                     networkHelper,
                     loginRequest = LoginRequest(
-                        usernameEt.text.toString(),
-                        passwordEt.text.toString()
+                        usernameEt.editText?.text.toString(),
+                        passwordEt.editText?.text.toString()
                     ),
                     context = requireContext()
                 )

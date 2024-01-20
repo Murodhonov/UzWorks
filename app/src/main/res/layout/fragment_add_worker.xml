@@ -5,13 +5,15 @@
     android:layout_width="match_parent"
     android:fillViewport="true"
     android:layout_height="match_parent"
+    android:scrollbars="none"
     tools:context=".fragments.main.profile.announcement.AddWorkerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="@dimen/_10sdp">
+        android:padding="@dimen/_10sdp"
+        app:layoutDescription="@xml/fragment_add_worker_scene">
 
         <ImageView
             android:id="@+id/back"
@@ -26,11 +28,15 @@
         <TextView
             android:id="@+id/top_tv"
             style="@style/BoldTextViewStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:ellipsize="marquee"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/dmsans_medium"
             android:textSize="@dimen/_14ssp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            app:layout_constraintRight_toRightOf="parent"
             android:text="Create announcement for worker"
             app:layout_constraintLeft_toLeftOf="@id/back"
             app:layout_constraintTop_toBottomOf="@id/back" />
@@ -50,333 +56,269 @@
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/stretcher">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/deadline_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:backgroundTint="@color/light_yellow"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?selectableItemBackgroundBorderless"
-                app:cardCornerRadius="@dimen/_10sdp"
-                app:cardElevation="0dp">
+                android:backgroundTint="@color/white"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/black_blue"
+                app:strokeWidth="@dimen/_1sdp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/deadline_tv"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_10sdp">
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:text="Deadline"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10ssp" />
 
-                    <TextView
-                        style="@style/BoldTextViewStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/_14ssp"
-                        android:fontFamily="@font/dmsans_medium"
-                        android:text="Deadline" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/ic_calendar" />
 
-                    <TextView
-                        android:id="@+id/deadline_tv"
-                        style="@style/NormalTextViewStyle"
-                        android:layout_width="wrap_content"
-                        android:textSize="@dimen/_11ssp"
-                        android:layout_height="wrap_content"
-                        android:text="dd.mm.yyyy" />
+            </com.google.android.material.card.MaterialCardView>
 
-                </LinearLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/birthday_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:backgroundTint="@color/light_yellow"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?selectableItemBackgroundBorderless"
-                app:cardCornerRadius="@dimen/_10sdp"
-                app:cardElevation="0dp">
+                android:backgroundTint="@color/white"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/black_blue"
+                app:strokeWidth="@dimen/_1sdp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/birthday_tv"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_10sdp">
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:text="Birthday"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10ssp" />
 
-                    <TextView
-                        style="@style/BoldTextViewStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/_14ssp"
-                        android:fontFamily="@font/dmsans_medium"
-                        android:text="Birthday" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/ic_calendar" />
 
-                    <TextView
-                        android:id="@+id/birthday_tv"
-                        style="@style/NormalTextViewStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/_11ssp"
-                        android:text="dd.yy.yyyy" />
+            </com.google.android.material.card.MaterialCardView>
 
-                </LinearLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                style="@style/BoldTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_14ssp"
-                android:fontFamily="@font/dmsans_medium"
-                android:text="Title" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_et"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/create_worker_edit_text_background"
-                android:hint="Some title example for worker"
-                android:textSize="@dimen/_12ssp"
-                android:imeOptions="actionNext"
-                android:inputType="text" />
-
-            <TextView
-                style="@style/BoldTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_14ssp"
-                android:fontFamily="@font/dmsans_medium"
-                android:text="Salary" />
+                app:errorEnabled="false">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:hint="Title"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/salary_et"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:backgroundTint="@color/white_blue"
-                android:hint="2 000 000 so'm"
-                android:textSize="@dimen/_12ssp"
-                android:imeOptions="actionNext"
-                android:inputType="numberDecimal" />
-
-            <TextView
-                style="@style/BoldTextViewStyle"
-                android:layout_width="wrap_content"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_14ssp"
-                android:fontFamily="@font/dmsans_medium"
-                android:text="Gender" />
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:digits="1234567890"
+                    android:hint="Salary"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <include
                 android:id="@+id/gender_layout"
-                layout="@layout/gender_choice_layout" />
+                layout="@layout/gender_choice_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_10sdp" />
 
-            <TextView
-                style="@style/BoldTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_medium"
-                android:textSize="@dimen/_14ssp"
-                android:text="Working time" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/working_time_et"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/create_worker_edit_text_background"
-                android:hint="Example : 1 haftada 5 kun , 7 soat ishlay olaman ."
-                android:imeOptions="actionNext"
-                android:textSize="@dimen/_12ssp"
-                android:inputType="text" />
-
-            <TextView
-                style="@style/BoldTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_14ssp"
-                android:fontFamily="@font/dmsans_medium"
-                android:text="Telegram profile" />
+                android:hint="Working time"
+                app:endIconTint="@color/black_blue"
+                app:errorEnabled="false">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tg_user_name_et"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_height="wrap_content"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:hint="Telegram username"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/instagram_username_et"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName"
-                android:padding="@dimen/_5sdp"
-                android:textSize="@dimen/_12ssp"
-                android:text="t.me//" />
-
-            <TextView
-                style="@style/BoldTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_medium"
-                android:textSize="@dimen/_14ssp"
-                android:text="Instagram profile" />
+                app:errorEnabled="false">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:hint="username"
-                android:textSize="@dimen/_12ssp"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName"
-                android:padding="@dimen/_5sdp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:hint="Instagram profile"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="@dimen/_10ssp" />
 
-            <TextView
-                style="@style/BoldTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_14ssp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_medium"
-                android:text="Phone number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phone_number_et"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="+998"
-                android:textSize="@dimen/_12ssp"
-                android:imeOptions="actionNext"
-                android:inputType="phone"
-                android:padding="@dimen/_5sdp" />
-
-            <TextView
-                style="@style/BoldTextViewStyle"
-                android:layout_width="wrap_content"
-                android:textSize="@dimen/_14ssp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_medium"
-                android:text="Orientation" />
+                app:errorEnabled="false"
+                app:helperText="Enter your phone number with +998"
+                app:helperTextEnabled="true"
+                app:helperTextTextColor="@color/yellow">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:hint="Phone number"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/orientation_et"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:hint="Orientation"
-                android:textSize="@dimen/_12ssp"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:padding="@dimen/_5sdp" />
+                android:layout_marginTop="@dimen/_10sdp"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:hint="Orientation"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 style="@style/BoldTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_12ssp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Address" />
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/_5sdp">
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/create_worker_edit_text_background"
+                android:backgroundTint="@android:color/transparent"
+                app:endIconMode="dropdown_menu"
+                app:endIconTint="@color/black_blue"
+                app:hintEnabled="false">
 
-                <TextView
-                    style="@style/BoldTextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dmsans_medium"
-                    android:text="Region"
-                    android:textSize="@dimen/_12ssp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                <AutoCompleteTextView
+                    android:id="@+id/region_choice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
                     android:background="@drawable/create_worker_edit_text_background"
-                    android:backgroundTint="@android:color/transparent"
-                    app:endIconMode="dropdown_menu"
-                    app:endIconTint="@color/yellow"
-                    app:hintEnabled="false">
+                    android:ellipsize="end"
+                    android:hint="Select region"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:textColor="@color/black_blue"
+                    android:textColorHint="@color/text_color"
+                    android:textSize="@dimen/_10ssp" />
 
-                    <AutoCompleteTextView
-                        android:id="@+id/region_choice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/create_worker_edit_text_background"
-                        android:ellipsize="end"
-                        android:inputType="none"
-                        android:textColor="@color/black_blue"
-                        android:textSize="@dimen/_12ssp"
-                        android:hint="Select region"
-                        android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/district_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/_5sdp">
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/create_worker_edit_text_background"
+                android:backgroundTint="@android:color/transparent"
+                app:endIconMode="dropdown_menu"
+                app:endIconTint="@color/black_blue"
+                app:hintEnabled="false">
 
-                <TextView
-                    style="@style/BoldTextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dmsans_medium"
-                    android:text="District"
-                    android:textSize="@dimen/_12ssp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                <AutoCompleteTextView
+                    android:id="@+id/district_choice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
                     android:background="@drawable/create_worker_edit_text_background"
-                    android:backgroundTint="@android:color/transparent"
-                    app:endIconMode="dropdown_menu"
-                    app:endIconTint="@color/yellow"
-                    app:hintEnabled="false">
+                    android:ellipsize="end"
+                    android:hint="Select region first"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:textColor="@color/black_blue"
+                    android:textColorHint="@color/text_color"
+                    android:textSize="@dimen/_10ssp" />
 
-                    <AutoCompleteTextView
-                        android:id="@+id/district_choice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/create_worker_edit_text_background"
-                        android:ellipsize="end"
-                        android:inputType="none"
-                        android:hint="Select region first"
-                        android:textColor="@color/black_blue"
-                        android:textSize="@dimen/_12ssp"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 style="@style/BoldTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_12ssp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="Category" />
@@ -389,7 +331,8 @@
                 android:background="@drawable/create_worker_edit_text_background"
                 android:backgroundTint="@android:color/transparent"
                 app:endIconMode="dropdown_menu"
-                app:endIconTint="@color/yellow"
+                android:id="@+id/job_category_layout"
+                app:endIconTint="@color/black_blue"
                 app:hintEnabled="false">
 
                 <AutoCompleteTextView
@@ -400,9 +343,10 @@
                     android:ellipsize="end"
                     android:hint="Select job category"
                     android:inputType="none"
+                    android:textColorHint="@color/text_color"
                     android:maxLines="1"
                     android:textColor="@color/black_blue"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_10ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

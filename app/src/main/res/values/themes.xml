@@ -71,9 +71,11 @@
     </style>
 
     <style name="TextInputEditTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="textColor">@color/black_blue</item>
         <item name="boxStrokeColor">@color/input_stroke_color</item>
         <item name="hintTextColor">@color/black_blue</item>
         <item name="android:textColorHint">@color/text_color</item>
+        <item name="android:textSize">@dimen/_10ssp</item>
         <item name="boxCornerRadiusBottomStart">@dimen/_7sdp</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/_7sdp</item>
         <item name="boxCornerRadiusTopStart">@dimen/_7sdp</item>
