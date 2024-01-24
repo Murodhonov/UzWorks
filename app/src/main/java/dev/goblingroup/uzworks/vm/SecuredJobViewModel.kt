@@ -16,9 +16,6 @@ import kotlinx.coroutines.launch
 
 class SecuredJobViewModel(
     securedJobService: SecuredJobService,
-    jobRequest: JobRequest,
-    jobId: String,
-    jobEditRequest: JobEditRequest,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -26,10 +23,7 @@ class SecuredJobViewModel(
 
     private var securedJobRepository =
         SecuredJobRepository(
-            securedJobService = securedJobService,
-            jobRequest = jobRequest,
-            jobId = jobId,
-            jobEditRequest = jobEditRequest
+            securedJobService = securedJobService
         )
 
     private val createStateFlow =
@@ -41,15 +35,15 @@ class SecuredJobViewModel(
     private val editStateFlow =
         MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createDistrict(): StateFlow<ApiStatus<Unit>> {
+    fun createJob(jobRequest: JobRequest): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedJobRepository.createJob()
+                securedJobRepository.createJob(jobRequest)
                     .catch {
                         createStateFlow.emit(ApiStatus.Error(it))
                     }
                     .collect {
-                        createStateFlow.emit(ApiStatus.Success(null))
+                        createStateFlow.emit(ApiStatus.Success(it))
                     }
             } else {
                 createStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
@@ -58,10 +52,10 @@ class SecuredJobViewModel(
         return createStateFlow
     }
 
-    fun deleteDistrict(): StateFlow<ApiStatus<Unit>> {
+    fun deleteJob(jobId: String): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedJobRepository.deleteJob()
+                securedJobRepository.deleteJob(jobId)
                     .catch {
                         deleteStateFlow.emit(ApiStatus.Error(it))
                     }
@@ -75,10 +69,10 @@ class SecuredJobViewModel(
         return deleteStateFlow
     }
 
-    fun editDistrict(): StateFlow<ApiStatus<Unit>> {
+    fun editJob(jobEditRequest: JobEditRequest): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedJobRepository.editJob()
+                securedJobRepository.editJob(jobEditRequest)
                     .catch {
                         editStateFlow.emit(ApiStatus.Error(it))
                     }

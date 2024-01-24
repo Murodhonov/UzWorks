@@ -14,7 +14,7 @@ data class WorkerResponse(
     val location: String,
     val phoneNumber: String,
     val salary: Int,
-    val tgLink: String,
+    val telegramLink: String,
     val tgUserName: String,
     val title: String,
     val userName: String,

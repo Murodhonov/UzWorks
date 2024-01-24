@@ -10,12 +10,12 @@ import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.AuthService
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.repository.LoginRepository
-import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.service.UserRoleImpl
 import dev.goblingroup.uzworks.service.UserRoleService
 import dev.goblingroup.uzworks.singleton.MySharedPreference
+import dev.goblingroup.uzworks.utils.ApiStatus
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -25,7 +25,6 @@ class LoginViewModel(
     private val appDatabase: AppDatabase,
     authService: AuthService,
     private val networkHelper: NetworkHelper,
-    private val loginRequest: LoginRequest? = null,
     private val context: Context
 ) : ViewModel() {
 
@@ -34,12 +33,11 @@ class LoginViewModel(
     private var loginRepository =
         LoginRepository(
             authService = authService,
-            loginRequest = getLoginRequest(),
             userDao = appDatabase.userDao()
         )
     private val loginStateFlow = MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    private fun getLoginRequest(): LoginRequest {
+    private fun getLoginRequest(loginRequest: LoginRequest? = null): LoginRequest {
         val user = appDatabase.userDao().getUser()
         return if (user != null) {
             // room is not empty
@@ -49,11 +47,11 @@ class LoginViewModel(
         }
     }
 
-    fun login(): StateFlow<ApiStatus<Unit>> {
+    fun login(loginRequest: LoginRequest? = null): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 Log.d(TAG, "login: loginRequest -> $loginRequest")
-                loginRepository.login()
+                loginRepository.login(getLoginRequest(loginRequest))
                     .catch {
                         loginStateFlow.emit(ApiStatus.Error(Throwable(it)))
                     }

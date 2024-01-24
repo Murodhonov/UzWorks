@@ -9,15 +9,13 @@ import dev.goblingroup.uzworks.utils.NetworkHelper
 class SignUpViewModelFactory(
     private val authService: AuthService,
     private val networkHelper: NetworkHelper,
-    var signupRequest: SignUpRequest
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
             return SignUpViewModel(
                 authService = authService,
-                networkHelper = networkHelper,
-                signupRequest = signupRequest
+                networkHelper = networkHelper
             ) as T
         }
         return throw Exception("Some error in ${this::class.java.simpleName}")

@@ -14,18 +14,17 @@ import kotlinx.coroutines.launch
 
 class SignUpViewModel(
     authService: AuthService,
-    private val networkHelper: NetworkHelper,
-    private val signupRequest: SignUpRequest
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    private val signupRepository = SignUpRepository(authService, signupRequest)
+    private val signupRepository = SignUpRepository(authService)
     private val signupStateFlow =
         MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun signup(): StateFlow<ApiStatus<Unit>> {
+    fun signup(signupRequest: SignUpRequest): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                signupRepository.signup()
+                signupRepository.signup(signupRequest)
                     .catch {
                         signupStateFlow.emit(ApiStatus.Error(it))
                     }

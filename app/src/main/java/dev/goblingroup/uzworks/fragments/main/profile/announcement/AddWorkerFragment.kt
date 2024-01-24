@@ -21,16 +21,17 @@ import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.FragmentAddWorkerBinding
-import dev.goblingroup.uzworks.models.request.WorkerEditRequest
 import dev.goblingroup.uzworks.models.request.WorkerRequest
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.networking.ApiClient
+import dev.goblingroup.uzworks.networking.SecuredWorkerService
+import dev.goblingroup.uzworks.singleton.MySharedPreference
 import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import dev.goblingroup.uzworks.utils.dateToString
+import dev.goblingroup.uzworks.utils.convertDateFormat
 import dev.goblingroup.uzworks.utils.stringToDate
 import dev.goblingroup.uzworks.vm.DistrictViewModel
 import dev.goblingroup.uzworks.vm.DistrictViewModelFactory
@@ -43,6 +44,9 @@ import dev.goblingroup.uzworks.vm.SecuredWorkerViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -68,8 +72,6 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
     private lateinit var securedWorkerViewModel: SecuredWorkerViewModel
     private lateinit var securedWorkerViewModelFactory: SecuredWorkerViewModelFactory
 
-    private lateinit var workerRequest: WorkerRequest
-
     private var selectedDistrictId = ""
     private var selectedCategoryId = ""
     private var selectedGender = GenderEnum.MALE.label
@@ -88,28 +90,9 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
             appDatabase = AppDatabase.getInstance(requireContext())
             networkHelper = NetworkHelper(requireContext())
 
-            workerRequest = WorkerRequest(
-                birthDate = dateToString(Calendar.getInstance().time),
-                categoryId = selectedCategoryId,
-                deadline = dateToString(Calendar.getInstance().time),
-                districtId = selectedDistrictId,
-                gender = GenderEnum.MALE.label,
-                instagramLink = "",
-                location = orientationEt.editText?.text.toString(),
-                phoneNumber = phoneNumberEt.editText?.text.toString(),
-                salary = 0,
-                telegramLink = "",
-                tgUserName = tgUserNameEt.editText?.text.toString(),
-                title = titleEt.editText?.text.toString(),
-                workingSchedule = "",
-                workingTime = workingTimeEt.editText?.text.toString()
-            )
             Log.d(TAG, "onViewCreated: creating securedWorkerViewModelFactory instance")
             securedWorkerViewModelFactory = SecuredWorkerViewModelFactory(
                 ApiClient.securedWorkerService,
-                workerRequest,
-                "",
-                WorkerEditRequest("", "", "", "", "", "", "", "", "", 0, "", "", "", "", ""),
                 networkHelper
             )
 
@@ -138,7 +121,6 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
-                            workerRequest.deadline = dateToString(selectedCalendar.time)
                             val formatter = SimpleDateFormat(
                                 "dd.MM.yyyy", Locale.getDefault()
                             )
@@ -146,9 +128,9 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
                             deadlineTv.text = formatter.format(selectedCalendar.time)
                         }
                     },
-                    stringToDate(workerRequest.deadline, DateEnum.YEAR.dateLabel),
-                    stringToDate(workerRequest.deadline, DateEnum.MONTH.dateLabel),
-                    stringToDate(workerRequest.deadline, DateEnum.DATE.dateLabel)
+                    stringToDate(deadlineTv.text.toString(), DateEnum.YEAR.dateLabel),
+                    stringToDate(deadlineTv.text.toString(), DateEnum.MONTH.dateLabel),
+                    stringToDate(deadlineTv.text.toString(), DateEnum.DATE.dateLabel)
                 )
 
                 datePickerDialog.show()
@@ -171,7 +153,6 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
-                            workerRequest.birthDate = dateToString(selectedCalendar.time)
                             val formatter = SimpleDateFormat(
                                 "dd.MM.yyyy", Locale.getDefault()
                             )
@@ -179,9 +160,9 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
                             birthdayTv.text = formatter.format(selectedCalendar.time)
                         }
                     },
-                    stringToDate(workerRequest.birthDate, DateEnum.YEAR.dateLabel),
-                    stringToDate(workerRequest.birthDate, DateEnum.MONTH.dateLabel),
-                    stringToDate(workerRequest.birthDate, DateEnum.DATE.dateLabel)
+                    stringToDate(birthdayTv.text.toString(), DateEnum.YEAR.dateLabel),
+                    stringToDate(birthdayTv.text.toString(), DateEnum.MONTH.dateLabel),
+                    stringToDate(birthdayTv.text.toString(), DateEnum.DATE.dateLabel)
                 )
 
                 datePickerDialog.show()
@@ -353,36 +334,32 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
 
     private fun createWorker() {
         binding.apply {
-            workerRequest = WorkerRequest(
-                birthDate = birthdayTv.text.toString(),
-                categoryId = selectedCategoryId,
-                deadline = deadlineTv.text.toString(),
-                districtId = selectedDistrictId,
-                gender = selectedGender,
-                instagramLink = instagramUsernameEt.editText?.text.toString(),
-                location = orientationEt.editText?.text.toString(),
-                phoneNumber = phoneNumberEt.editText?.text.toString(),
-                salary = salaryEt.editText?.text.toString()
-                    .substring(0, salaryEt.editText?.text.toString().length - 5)
-                    .toInt(),
-                telegramLink = "link to post on tg channel",
-                tgUserName = tgUserNameEt.editText?.text.toString(),
-                title = titleEt.editText?.text.toString(),
-                workingSchedule = "some working schedule",
-                workingTime = workingTimeEt.editText?.text.toString()
-            )
-            securedWorkerViewModelFactory.workerRequest = workerRequest
             securedWorkerViewModel = ViewModelProvider(
                 owner = this@AddWorkerFragment,
                 factory = securedWorkerViewModelFactory
             )[SecuredWorkerViewModel::class.java]
 
             launch {
-                Log.d(
-                    TAG,
-                    "createWorker: starting create ${securedWorkerViewModelFactory.workerRequest}"
+                securedWorkerViewModel.createWorker(
+                    workerRequest = WorkerRequest(
+                        birthDate = convertDateFormat(birthdayTv.text.toString()),
+                        categoryId = selectedCategoryId,
+                        deadline = convertDateFormat(deadlineTv.text.toString()),
+                        districtId = selectedDistrictId,
+                        gender = selectedGender,
+                        instagramLink = instagramUsernameEt.editText?.text.toString(),
+                        location = orientationEt.editText?.text.toString(),
+                        phoneNumber = phoneNumberEt.editText?.text.toString(),
+                        salary = salaryEt.editText?.text.toString()
+                            .substring(0, salaryEt.editText?.text.toString().length - 5)
+                            .toInt(),
+                        telegramLink = "link to post on tg channel",
+                        tgUserName = tgUserNameEt.editText?.text.toString(),
+                        title = titleEt.editText?.text.toString(),
+                        workingSchedule = "some working schedule",
+                        workingTime = workingTimeEt.editText?.text.toString()
+                    )
                 )
-                securedWorkerViewModel.createWorker()
                     .collect {
                         when (it) {
                             is ApiStatus.Error -> {

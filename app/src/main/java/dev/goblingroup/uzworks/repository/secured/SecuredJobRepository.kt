@@ -5,17 +5,14 @@ import dev.goblingroup.uzworks.models.request.JobRequest
 import dev.goblingroup.uzworks.networking.SecuredJobService
 
 class SecuredJobRepository(
-    private val securedJobService: SecuredJobService,
-    private val jobRequest: JobRequest,
-    private val jobId: String,
-    private val jobEditRequest: JobEditRequest
+    private val securedJobService: SecuredJobService
 ) {
 
-    fun createJob() = securedJobService.createJob(jobRequest = jobRequest)
+    fun createJob(jobRequest: JobRequest) = securedJobService.createJob(jobRequest = jobRequest)
 
-    fun deleteJob() = securedJobService.deleteJob(jobId = jobId)
+    fun deleteJob(jobId: String) = securedJobService.deleteJob(jobId = jobId)
 
-    fun editJob() =
+    fun editJob(jobEditRequest: JobEditRequest) =
         securedJobService.editJob(jobEditRequest = jobEditRequest)
 
 }

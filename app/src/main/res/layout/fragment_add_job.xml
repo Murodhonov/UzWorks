@@ -10,6 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content"
         android:padding="@dimen/_10sdp">
 
@@ -83,35 +84,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/birthday_btn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:backgroundTint="@color/white"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/black_blue"
-                app:strokeWidth="@dimen/_1sdp">
-
-                <TextView
-                    android:id="@+id/birthday_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:text="Birthday"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_10ssp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:src="@drawable/ic_calendar" />
-
-            </com.google.android.material.card.MaterialCardView>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_et"
                 style="@style/TextInputEditTextStyle"
@@ -153,7 +125,7 @@
                 android:id="@+id/gender_layout"
                 layout="@layout/gender_choice_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_height="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/_10sdp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -298,6 +270,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -305,7 +278,6 @@
                     style="@style/TextInputEditTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
                     app:errorEnabled="false"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -327,7 +299,6 @@
                     style="@style/TextInputEditTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
                     app:errorEnabled="false"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -336,13 +307,241 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_35sdp"
                         android:digits="1234567890"
-                        android:hint="Min age"
+                        android:hint="Max age"
+                        android:minWidth="@dimen/_100sdp"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
-                        android:minWidth="@dimen/_70sdp"
+                        android:textDirection="rtl"
                         android:textSize="@dimen/_10ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_bold"
+                android:text="Choose location"
+                android:textColor="@color/black_blue"
+                android:textSize="@dimen/_12ssp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/black_blue"
+                    app:strokeWidth="@dimen/_1sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/dmsans_bold"
+                        android:text="Current location"
+                        android:textColor="@color/black_blue" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/black_blue"
+                    app:strokeWidth="@dimen/_1sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/dmsans_bold"
+                        android:text="Select on map"
+                        android:textColor="@color/black_blue" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orientation_et"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:hint="Orientation"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_12ssp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Address" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/create_worker_edit_text_background"
+                android:backgroundTint="@android:color/transparent"
+                app:endIconMode="dropdown_menu"
+                app:endIconTint="@color/black_blue"
+                app:hintEnabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/region_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/create_worker_edit_text_background"
+                    android:ellipsize="end"
+                    android:hint="Select region"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:textColor="@color/black_blue"
+                    android:textColorHint="@color/text_color"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/district_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/create_worker_edit_text_background"
+                android:backgroundTint="@android:color/transparent"
+                app:endIconMode="dropdown_menu"
+                app:endIconTint="@color/black_blue"
+                app:hintEnabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/district_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/create_worker_edit_text_background"
+                    android:ellipsize="end"
+                    android:hint="Select region first"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:textColor="@color/black_blue"
+                    android:textColorHint="@color/text_color"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                style="@style/BoldTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_12ssp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/dmsans_medium"
+                android:text="Category" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/create_worker_edit_text_background"
+                android:backgroundTint="@android:color/transparent"
+                app:endIconMode="dropdown_menu"
+                android:id="@+id/job_category_layout"
+                app:endIconTint="@color/black_blue"
+                app:hintEnabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/job_category_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/create_worker_edit_text_background"
+                    android:ellipsize="end"
+                    android:hint="Select job category"
+                    android:inputType="none"
+                    android:textColorHint="@color/text_color"
+                    android:maxLines="1"
+                    android:textColor="@color/black_blue"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/save_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="0dp"
+                    android:backgroundTint="@color/black_blue"
+                    app:cardCornerRadius="@dimen/_7sdp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/_7sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_7sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:text="Save"
+                        android:textSize="@dimen/_14ssp"
+                        android:textColor="@color/white" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/red"
+                    android:padding="@dimen/_5sdp"
+                    app:cardCornerRadius="@dimen/_7sdp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/save_btn">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/_7sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_7sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:text="Cancel"
+                        android:textSize="@dimen/_14ssp"
+                        android:textColor="@color/white" />
+
+                </androidx.cardview.widget.CardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

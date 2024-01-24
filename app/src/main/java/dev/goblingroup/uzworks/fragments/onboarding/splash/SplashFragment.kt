@@ -17,6 +17,7 @@ import dev.goblingroup.uzworks.databinding.FragmentSplashBinding
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.utils.ApiStatus
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.getNavOptions
@@ -96,6 +97,9 @@ class SplashFragment : Fragment(), CoroutineScope {
                                 args = null,
                                 navOptions = getNavOptions()
                             )
+                            Log.e(TAG, "login: ${it.error.message}")
+                            Log.e(TAG, "login: ${it.error.stackTrace}")
+                            Log.e(TAG, "login: ${it.error.printStackTrace()}")
                         }
 
                         is ApiStatus.Loading -> {

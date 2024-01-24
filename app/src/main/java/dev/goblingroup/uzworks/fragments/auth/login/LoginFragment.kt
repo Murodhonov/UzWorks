@@ -72,12 +72,17 @@ class LoginFragment : Fragment(), CoroutineScope {
                 appDatabase = appDatabase,
                 authService = ApiClient.authService,
                 networkHelper = networkHelper,
-                loginRequest = LoginRequest(usernameEt.editText?.text.toString(), passwordEt.editText?.text.toString()),
                 context = requireContext()
             )
 
+            loginViewModel = ViewModelProvider(
+                owner = this@LoginFragment,
+                factory = loginViewModelFactory
+            )[LoginViewModel::class.java]
+
             loginBtn.setOnClickListener {
-                if (usernameEt.editText?.text.toString().isNotEmpty() && passwordEt.editText?.text.toString()
+                if (usernameEt.editText?.text.toString()
+                        .isNotEmpty() && passwordEt.editText?.text.toString()
                         .isNotEmpty()
                 ) {
                     login()
@@ -127,18 +132,13 @@ class LoginFragment : Fragment(), CoroutineScope {
 
     private fun login() {
         binding.apply {
-            loginViewModelFactory.loginRequest?.username = usernameEt.editText?.text.toString()
-            loginViewModelFactory.loginRequest?.password = passwordEt.editText?.text.toString()
-            loginViewModel = ViewModelProvider(
-                owner = this@LoginFragment,
-                factory = loginViewModelFactory
-            )[LoginViewModel::class.java]
-            Log.d(
-                TAG,
-                "login: updateCredentials loginRequest in ${this@LoginFragment::class.java.simpleName} ${loginViewModelFactory.loginRequest}"
-            )
             launch {
-                loginViewModel.login()
+                loginViewModel.login(
+                    loginRequest = LoginRequest(
+                        username = usernameEt.editText?.text.toString(),
+                        password = passwordEt.editText?.text.toString()
+                    )
+                )
                     .collect {
                         when (it) {
                             is ApiStatus.Error -> {

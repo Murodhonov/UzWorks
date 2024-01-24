@@ -37,20 +37,24 @@ class RegionViewModel(
     private fun fetchRegions() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                regionRepository.getAllRegions()
-                    .catch {
-                        regionStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .flatMapConcat { regionList ->
-                        val emptyRegionList = ArrayList<RegionEntity>()
-                        regionList.forEach { regionResponse ->
-                            emptyRegionList.add(regionResponse.mapToEntity())
+                if (regionRepository.listRegions().isNotEmpty()) {
+                    regionStateFlow.emit(ApiStatus.Success(regionRepository.listRegions()))
+                } else {
+                    regionRepository.getAllRegions()
+                        .catch {
+                            regionStateFlow.emit(ApiStatus.Error(it))
                         }
-                        regionRepository.addRegions(emptyRegionList)
-                    }
-                    .collect {
-                        regionStateFlow.emit(ApiStatus.Success(regionRepository.listRegions()))
-                    }
+                        .flatMapConcat { regionList ->
+                            val emptyRegionList = ArrayList<RegionEntity>()
+                            regionList.forEach { regionResponse ->
+                                emptyRegionList.add(regionResponse.mapToEntity())
+                            }
+                            regionRepository.addRegions(emptyRegionList)
+                        }
+                        .collect {
+                            regionStateFlow.emit(ApiStatus.Success(regionRepository.listRegions()))
+                        }
+                }
             } else {
                 if (regionRepository.listRegions().isNotEmpty()) {
                     regionStateFlow.emit(ApiStatus.Success(regionRepository.listRegions()))

@@ -17,7 +17,7 @@ interface AuthService {
 
     @POST("Auth/signup")
     fun signup(
-        @Body signupRequest: SignUpRequest
+        @Body signUpRequest: SignUpRequest
     ): Flow<SignUpResponse>
 
 }

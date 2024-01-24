@@ -17,9 +17,6 @@ import kotlinx.coroutines.launch
 
 class SecuredWorkerViewModel(
     securedWorkerService: SecuredWorkerService,
-    workerRequest: WorkerRequest,
-    workerId: String,
-    workerEditRequest: WorkerEditRequest,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -28,9 +25,6 @@ class SecuredWorkerViewModel(
     private var securedWorkerRepository =
         SecuredWorkerRepository(
             securedWorkerService = securedWorkerService,
-            workerRequest = workerRequest,
-            workerId = workerId,
-            workerEditRequest = workerEditRequest
         )
 
     private val createStateFlow =
@@ -42,14 +36,14 @@ class SecuredWorkerViewModel(
     private val editStateFlow =
         MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createWorker(): StateFlow<ApiStatus<Unit>> {
+    fun createWorker(workerRequest: WorkerRequest): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 Log.d(
                     TAG,
-                    "createWorker: starting create worker ${securedWorkerRepository.workerRequest} in view model"
+                    "createWorker: starting create worker $workerRequest in view model"
                 )
-                securedWorkerRepository.createWorker()
+                securedWorkerRepository.createWorker(workerRequest)
                     .catch {
                         createStateFlow.emit(ApiStatus.Error(it))
                     }
@@ -63,10 +57,10 @@ class SecuredWorkerViewModel(
         return createStateFlow
     }
 
-    fun deleteWorker(): StateFlow<ApiStatus<Unit>> {
+    fun deleteWorker(workerId: String): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedWorkerRepository.deleteWorker()
+                securedWorkerRepository.deleteWorker(workerId)
                     .catch {
                         deleteStateFlow.emit(ApiStatus.Error(it))
                     }
@@ -80,10 +74,10 @@ class SecuredWorkerViewModel(
         return deleteStateFlow
     }
 
-    fun editWorker(): StateFlow<ApiStatus<Unit>> {
+    fun editWorker(workerEditRequest: WorkerEditRequest): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedWorkerRepository.editWorker()
+                securedWorkerRepository.editWorker(workerEditRequest)
                     .catch {
                         editStateFlow.emit(ApiStatus.Error(it))
                     }

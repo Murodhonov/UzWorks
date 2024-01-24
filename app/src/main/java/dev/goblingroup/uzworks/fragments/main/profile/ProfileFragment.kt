@@ -9,7 +9,10 @@ import androidx.navigation.fragment.findNavController
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.FragmentProfileBinding
+import dev.goblingroup.uzworks.service.UserRoleImpl
+import dev.goblingroup.uzworks.service.UserRoleService
 import dev.goblingroup.uzworks.utils.NetworkHelper
+import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.aboutDialog
 import dev.goblingroup.uzworks.utils.experienceDialog
 import dev.goblingroup.uzworks.utils.fieldsDialog
@@ -62,13 +65,26 @@ class ProfileFragment : Fragment() {
             }
 
             announcementBtn.setOnClickListener {
-                findNavController().navigate(
-                    resId = R.id.addWorkerFragment,
-                    args = null,
-                    navOptions = getNavOptions()
-                )
+//                navigateAnnouncement()
+                findNavController().navigate(R.id.addJobFragment)
             }
         }
+    }
+
+    private fun navigateAnnouncement() {
+        val userRoleService: UserRoleService = UserRoleImpl()
+        val direction = if (userRoleService.getUserRoleList(requireContext())
+                .contains(UserRole.EMPLOYEE.roleName)
+        ) {
+            R.id.addWorkerFragment
+        } else {
+            R.id.addJobFragment
+        }
+        findNavController().navigate(
+            resId = direction,
+            args = null,
+            navOptions = getNavOptions()
+        )
     }
 
     override fun onDestroyView() {

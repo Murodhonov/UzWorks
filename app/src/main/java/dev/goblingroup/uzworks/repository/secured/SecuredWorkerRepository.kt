@@ -5,17 +5,14 @@ import dev.goblingroup.uzworks.models.request.WorkerRequest
 import dev.goblingroup.uzworks.networking.SecuredWorkerService
 
 class SecuredWorkerRepository(
-    private val securedWorkerService: SecuredWorkerService,
-    val workerRequest: WorkerRequest,
-    private val workerId: String,
-    private val workerEditRequest: WorkerEditRequest
+    private val securedWorkerService: SecuredWorkerService
 ) {
 
-    fun createWorker() = securedWorkerService.createWorker(workerRequest = workerRequest)
+    fun createWorker(workerRequest: WorkerRequest) = securedWorkerService.createWorker(workerRequest = workerRequest)
 
-    fun deleteWorker() = securedWorkerService.deleteWorker(workerId = workerId)
+    fun deleteWorker(workerId: String) = securedWorkerService.deleteWorker(workerId = workerId)
 
-    fun editWorker() =
+    fun editWorker(workerEditRequest: WorkerEditRequest) =
         securedWorkerService.editWorker(workerEditRequest = workerEditRequest)
 
 }

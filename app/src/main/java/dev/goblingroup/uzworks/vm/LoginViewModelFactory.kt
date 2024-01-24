@@ -13,21 +13,15 @@ class LoginViewModelFactory(
     private val appDatabase: AppDatabase,
     private val authService: AuthService,
     private val networkHelper: NetworkHelper,
-    var loginRequest: LoginRequest? = null,
     private val context: Context
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            Log.d(
-                "TAG",
-                "create: updateCredentials loginRequest in ${this::class.java.simpleName} $loginRequest"
-            )
             return LoginViewModel(
                 appDatabase = appDatabase,
                 authService = authService,
                 networkHelper = networkHelper,
-                loginRequest = loginRequest,
                 context = context
             ) as T
         }

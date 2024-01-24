@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_40sdp"
+    android:layout_height="@dimen/_35sdp"
     android:orientation="horizontal">
 
     <com.google.android.material.card.MaterialCardView
@@ -23,8 +23,8 @@
 
             <LinearLayout
                 android:id="@+id/male_stroke"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:background="@drawable/gender_stroke_selected"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +35,7 @@
                     android:id="@+id/male_circle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_4sdp"
+                    android:layout_margin="@dimen/_3sdp"
                     android:background="@drawable/circle_background"
                     android:backgroundTint="@color/black_blue" />
 
@@ -76,8 +76,8 @@
 
             <LinearLayout
                 android:id="@+id/female_stroke"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:background="@drawable/gender_stroke_unselected"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -88,7 +88,7 @@
                     android:id="@+id/female_circle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_4sdp"
+                    android:layout_margin="@dimen/_3sdp"
                     android:background="@drawable/circle_background"
                     android:backgroundTint="@color/black_blue"
                     android:visibility="gone" />

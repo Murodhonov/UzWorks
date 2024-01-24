@@ -48,20 +48,24 @@ class DistrictViewModel(
     private fun fetchDistricts() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                districtRepository.getAllDistricts()
-                    .catch {
-                        districtStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .flatMapConcat { districtResponseList ->
-                        val emptyDistrictList = ArrayList<DistrictEntity>()
-                        districtResponseList.forEach { districtResponse ->
-                            emptyDistrictList.add(districtResponse.mapToEntity())
+                if (districtRepository.listDistricts().isNotEmpty()) {
+                    districtStateFlow.emit(ApiStatus.Success(districtRepository.listDistricts()))
+                } else {
+                    districtRepository.getAllDistricts()
+                        .catch {
+                            districtStateFlow.emit(ApiStatus.Error(it))
                         }
-                        districtRepository.addDistricts(emptyDistrictList)
-                    }
-                    .collect {
-                        districtStateFlow.emit(ApiStatus.Success(districtRepository.listDistricts()))
-                    }
+                        .flatMapConcat { districtResponseList ->
+                            val emptyDistrictList = ArrayList<DistrictEntity>()
+                            districtResponseList.forEach { districtResponse ->
+                                emptyDistrictList.add(districtResponse.mapToEntity())
+                            }
+                            districtRepository.addDistricts(emptyDistrictList)
+                        }
+                        .collect {
+                            districtStateFlow.emit(ApiStatus.Success(districtRepository.listDistricts()))
+                        }
+                }
             } else {
                 if (districtRepository.listDistricts().isNotEmpty()) {
                     districtStateFlow.emit(ApiStatus.Success(districtRepository.listDistricts()))

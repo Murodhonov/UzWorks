@@ -22,7 +22,6 @@ import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import dev.goblingroup.uzworks.utils.extensions.showHidePassword
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.splitFullName
 import dev.goblingroup.uzworks.vm.LoginViewModel
@@ -64,15 +63,7 @@ class SignUpFragment : Fragment(), CoroutineScope {
             networkHelper = NetworkHelper(requireContext())
             signupViewModelFactory = SignUpViewModelFactory(
                 authService = ApiClient.authService,
-                networkHelper = networkHelper,
-                signupRequest = SignUpRequest(
-                    username = usernameEt.editText?.text.toString(),
-                    password = passwordEt.editText?.text.toString(),
-                    confirmPassword = confirmPasswordEt.editText?.text.toString(),
-                    firstName = "",
-                    lastName = "",
-                    role = ""
-                )
+                networkHelper = networkHelper
             )
 
             continueBtn.setOnClickListener {
@@ -174,20 +165,22 @@ class SignUpFragment : Fragment(), CoroutineScope {
 
     private fun signUp(firstName: String, lastName: String) {
         binding.apply {
-            signupViewModelFactory.signupRequest.username = usernameEt.editText?.text.toString()
-            signupViewModelFactory.signupRequest.password = passwordEt.editText?.text.toString()
-            signupViewModelFactory.signupRequest.confirmPassword =
-                confirmPasswordEt.editText?.text.toString()
-            signupViewModelFactory.signupRequest.firstName = firstName
-            signupViewModelFactory.signupRequest.lastName = lastName
-            signupViewModelFactory.signupRequest.role = userRole
             signupViewModel = ViewModelProvider(
                 owner = this@SignUpFragment,
                 factory = signupViewModelFactory
             )[SignUpViewModel::class.java]
 
             launch {
-                signupViewModel.signup()
+                signupViewModel.signup(
+                    signupRequest = SignUpRequest(
+                        username = usernameEt.editText?.text.toString(),
+                        password = passwordEt.editText?.text.toString(),
+                        confirmPassword = confirmPasswordEt.editText?.text.toString(),
+                        firstName = firstName,
+                        lastName = lastName,
+                        role = userRole
+                    )
+                )
                     .collect {
                         when (it) {
                             is ApiStatus.Error -> {
@@ -237,15 +230,16 @@ class SignUpFragment : Fragment(), CoroutineScope {
                     appDatabase = AppDatabase.getInstance(requireContext()),
                     authService = ApiClient.authService,
                     networkHelper,
-                    loginRequest = LoginRequest(
-                        usernameEt.editText?.text.toString(),
-                        passwordEt.editText?.text.toString()
-                    ),
                     context = requireContext()
                 )
             )[LoginViewModel::class.java]
             launch {
-                loginViewModel.login()
+                loginViewModel.login(
+                    loginRequest = LoginRequest(
+                        usernameEt.editText?.text.toString(),
+                        passwordEt.editText?.text.toString()
+                    )
+                )
                     .collect {
                         when (it) {
                             is ApiStatus.Error -> {
@@ -257,7 +251,6 @@ class SignUpFragment : Fragment(), CoroutineScope {
                             }
 
                             is ApiStatus.Success -> {
-                                Log.d(TAG, "signupSuccess: for ${signupViewModelFactory.signupRequest} $signupResponse")
                                 authDialog.dismiss()
                                 findNavController().navigate(
                                     resId = R.id.succeedFragment,
