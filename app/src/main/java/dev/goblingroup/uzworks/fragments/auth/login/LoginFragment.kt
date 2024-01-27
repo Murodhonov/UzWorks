@@ -11,15 +11,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
 import dev.goblingroup.uzworks.utils.NetworkHelper
@@ -27,12 +26,12 @@ import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
 import dev.goblingroup.uzworks.vm.LoginViewModel
-import dev.goblingroup.uzworks.vm.LoginViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
+@AndroidEntryPoint
 class LoginFragment : Fragment(), CoroutineScope {
 
     private val TAG = "LoginFragment"
@@ -40,10 +39,7 @@ class LoginFragment : Fragment(), CoroutineScope {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var loginViewModel: LoginViewModel
-    private lateinit var loginViewModelFactory: LoginViewModelFactory
-    private lateinit var networkHelper: NetworkHelper
-    private lateinit var appDatabase: AppDatabase
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var authDialog: AlertDialog
     private lateinit var authDialogBinding: AuthDialogItemBinding
@@ -65,20 +61,6 @@ class LoginFragment : Fragment(), CoroutineScope {
                     navOptions = getNavOptions()
                 )
             }
-
-            networkHelper = NetworkHelper(requireContext())
-            appDatabase = AppDatabase.getInstance(requireContext())
-            loginViewModelFactory = LoginViewModelFactory(
-                appDatabase = appDatabase,
-                authService = ApiClient.authService,
-                networkHelper = networkHelper,
-                context = requireContext()
-            )
-
-            loginViewModel = ViewModelProvider(
-                owner = this@LoginFragment,
-                factory = loginViewModelFactory
-            )[LoginViewModel::class.java]
 
             loginBtn.setOnClickListener {
                 if (usernameEt.editText?.text.toString()
@@ -125,8 +107,6 @@ class LoginFragment : Fragment(), CoroutineScope {
                     passwordEt.isErrorEnabled = false
                 }
             }
-
-            networkHelper = NetworkHelper(requireContext())
         }
     }
 

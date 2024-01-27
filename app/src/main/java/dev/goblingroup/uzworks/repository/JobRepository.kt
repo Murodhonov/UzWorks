@@ -6,21 +6,20 @@ import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.networking.JobService
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class JobRepository(
+class JobRepository @Inject constructor(
     private val jobDao: JobDao,
-    private val jobService: JobService,
-    private val jobId: String,
-    private val userId: String
+    private val jobService: JobService
 ) {
 
-    fun getJobById() = jobService.getJobById(jobId)
+    fun getJobById(jobId: String) = jobService.getJobById(jobId)
 
     fun getAllJobs() = jobService.getAllJobs()
 
     fun countJobs() = jobService.countJobs()
 
-    fun getJobByUserId() = jobService.getJobsByUserId(userId = userId)
+    fun getJobByUserId(userId: String) = jobService.getJobsByUserId(userId = userId)
 
     fun addJob(jobEntity: JobEntity) = jobDao.addJob(jobEntity)
 

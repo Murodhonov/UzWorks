@@ -10,38 +10,36 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.SignUpRequest
-import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.utils.ApiStatus
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.splitFullName
 import dev.goblingroup.uzworks.vm.LoginViewModel
-import dev.goblingroup.uzworks.vm.LoginViewModelFactory
 import dev.goblingroup.uzworks.vm.SignUpViewModel
-import dev.goblingroup.uzworks.vm.SignUpViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
+@AndroidEntryPoint
 class SignUpFragment : Fragment(), CoroutineScope {
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
     private val TAG = "SignUpFragment"
 
-    private lateinit var signupViewModel: SignUpViewModel
-    private lateinit var signupViewModelFactory: SignUpViewModelFactory
-    private lateinit var networkHelper: NetworkHelper
+    private val signupViewModel: SignUpViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var authDialog: AlertDialog
     private lateinit var authDialogBinding: AuthDialogItemBinding
@@ -59,12 +57,6 @@ class SignUpFragment : Fragment(), CoroutineScope {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             userRole = arguments?.getString("user role")!!
-
-            networkHelper = NetworkHelper(requireContext())
-            signupViewModelFactory = SignUpViewModelFactory(
-                authService = ApiClient.authService,
-                networkHelper = networkHelper
-            )
 
             continueBtn.setOnClickListener {
                 if (
@@ -165,11 +157,6 @@ class SignUpFragment : Fragment(), CoroutineScope {
 
     private fun signUp(firstName: String, lastName: String) {
         binding.apply {
-            signupViewModel = ViewModelProvider(
-                owner = this@SignUpFragment,
-                factory = signupViewModelFactory
-            )[SignUpViewModel::class.java]
-
             launch {
                 signupViewModel.signup(
                     signupRequest = SignUpRequest(
@@ -192,7 +179,7 @@ class SignUpFragment : Fragment(), CoroutineScope {
                             }
 
                             is ApiStatus.Success -> {
-                                signupSuccess(it.response as SignUpResponse)
+                                signupSuccess()
                             }
                         }
                     }
@@ -222,17 +209,9 @@ class SignUpFragment : Fragment(), CoroutineScope {
         authDialog.show()
     }
 
-    private fun signupSuccess(signupResponse: SignUpResponse) {
+    private fun signupSuccess() {
         binding.apply {
-            val loginViewModel = ViewModelProvider(
-                owner = this@SignUpFragment,
-                LoginViewModelFactory(
-                    appDatabase = AppDatabase.getInstance(requireContext()),
-                    authService = ApiClient.authService,
-                    networkHelper,
-                    context = requireContext()
-                )
-            )[LoginViewModel::class.java]
+
             launch {
                 loginViewModel.login(
                     loginRequest = LoginRequest(

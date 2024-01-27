@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSnapHelper
+import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.rv_adapters.JobAdapter
 import dev.goblingroup.uzworks.database.AppDatabase
@@ -20,14 +22,14 @@ import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
-import dev.goblingroup.uzworks.vm.JobCategoryViewModelFactory
 import dev.goblingroup.uzworks.vm.JobsViewModel
-import dev.goblingroup.uzworks.vm.JobsViewModelFactory
+import dev.goblingroup.uzworks.vm.LoginViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(), CoroutineScope {
 
     private val TAG = "HomeFragment"
@@ -35,16 +37,12 @@ class HomeFragment : Fragment(), CoroutineScope {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var appDatabase: AppDatabase
-    private lateinit var networkHelper: NetworkHelper
-
-    private lateinit var jobsViewModel: JobsViewModel
-    private lateinit var jobsViewModelFactory: JobsViewModelFactory
+    private val jobsViewModel: JobsViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var linearSnapHelper: LinearSnapHelper
 
     private lateinit var jobCategoryViewModel: JobCategoryViewModel
-    private lateinit var jobCategoryViewModelFactory: JobCategoryViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,29 +54,16 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            appDatabase = AppDatabase.getInstance(requireContext())
-            networkHelper = NetworkHelper(requireContext())
             linearSnapHelper = LinearSnapHelper()
-            val user = appDatabase.userDao().getUser()
+            val user = loginViewModel.getUser()
 
             greetingTv.text = "Assalomu alaykum\n${user?.firstname} ${user?.lastName}"
-            jobsViewModelFactory = JobsViewModelFactory(
-                appDatabase = appDatabase,
-                jobService = ApiClient.jobService,
-                networkHelper = networkHelper,
-                jobId = "",
-                userId = MySharedPreference.getInstance(requireContext()).getUserId().toString()
-            )
             loadJobs()
         }
     }
 
     private fun loadJobs() {
         launch {
-            jobsViewModel = ViewModelProvider(
-                owner = this@HomeFragment,
-                factory = jobsViewModelFactory
-            )[JobsViewModel::class.java]
             jobsViewModel.getAllJobs()
                 .collect {
                     when (it) {
@@ -106,16 +91,6 @@ class HomeFragment : Fragment(), CoroutineScope {
     private fun success() {
         if (_binding != null) {
             binding.apply {
-                jobCategoryViewModelFactory = JobCategoryViewModelFactory(
-                    appDatabase,
-                    ApiClient.jobCategoryService,
-                    networkHelper
-                )
-                jobCategoryViewModel = ViewModelProvider(
-                    owner = this@HomeFragment,
-                    factory = jobCategoryViewModelFactory
-                )[JobCategoryViewModel::class.java]
-
                 binding.progress.visibility = View.GONE
                 val adapter = JobAdapter(jobsViewModel, jobCategoryViewModel) {
                     findNavController().navigate(

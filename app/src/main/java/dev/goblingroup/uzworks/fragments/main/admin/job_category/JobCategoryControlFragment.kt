@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import dev.goblingroup.uzworks.databinding.FragmentJobCategoryControlBinding
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.vm.SecuredJobCategoryViewModel
-import dev.goblingroup.uzworks.vm.SecuredJobCategoryViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext

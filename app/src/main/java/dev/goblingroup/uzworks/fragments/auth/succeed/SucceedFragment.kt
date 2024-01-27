@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSucceedBinding
 import dev.goblingroup.uzworks.utils.getNavOptions
 
+@AndroidEntryPoint
 class SucceedFragment : Fragment() {
 
     private var _binding: FragmentSucceedBinding? = null

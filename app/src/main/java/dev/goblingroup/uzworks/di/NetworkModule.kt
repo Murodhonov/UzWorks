@@ -18,6 +18,7 @@ import dev.goblingroup.uzworks.networking.SecuredRegionService
 import dev.goblingroup.uzworks.networking.SecuredWorkerService
 import dev.goblingroup.uzworks.networking.WorkerService
 import dev.goblingroup.uzworks.singleton.MySharedPreference
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import me.sianaki.flowretrofitadapter.FlowCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -29,6 +30,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideNetworkHelper(
+        @ApplicationContext context: Context
+    ): NetworkHelper {
+        return NetworkHelper(context)
+    }
 
     @Provides
     @Singleton

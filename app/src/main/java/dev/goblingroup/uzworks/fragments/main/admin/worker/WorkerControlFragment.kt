@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import dev.goblingroup.uzworks.databinding.FragmentWorkerControlBinding
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.vm.SecuredWorkerViewModel
-import dev.goblingroup.uzworks.vm.SecuredWorkerViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext

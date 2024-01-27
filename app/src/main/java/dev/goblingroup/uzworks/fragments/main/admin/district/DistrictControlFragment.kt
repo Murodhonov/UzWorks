@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import dev.goblingroup.uzworks.adapters.rv_adapters.DistrictAdapter
 import dev.goblingroup.uzworks.databinding.FragmentDistrictControlBinding
 import dev.goblingroup.uzworks.vm.DistrictViewModel
-import dev.goblingroup.uzworks.vm.DistrictViewModelFactory
 import dev.goblingroup.uzworks.models.request.DistrictEditRequest
 import dev.goblingroup.uzworks.models.request.DistrictRequest
 import dev.goblingroup.uzworks.models.response.DistrictResponse
@@ -21,7 +20,6 @@ import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.vm.SecuredDistrictViewModel
-import dev.goblingroup.uzworks.vm.SecuredDistrictViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

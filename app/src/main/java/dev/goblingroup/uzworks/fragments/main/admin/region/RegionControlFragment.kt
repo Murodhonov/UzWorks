@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import dev.goblingroup.uzworks.databinding.FragmentRegionControlBinding
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.vm.SecuredRegionViewModel
-import dev.goblingroup.uzworks.vm.SecuredRegionViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext

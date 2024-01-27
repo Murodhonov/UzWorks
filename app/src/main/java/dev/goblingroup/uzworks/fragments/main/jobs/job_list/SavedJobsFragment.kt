@@ -15,9 +15,7 @@ import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.singleton.MySharedPreference
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
-import dev.goblingroup.uzworks.vm.JobCategoryViewModelFactory
 import dev.goblingroup.uzworks.vm.JobsViewModel
-import dev.goblingroup.uzworks.vm.JobsViewModelFactory
 
 class SavedJobsFragment : Fragment() {
 

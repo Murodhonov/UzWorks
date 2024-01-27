@@ -9,35 +9,31 @@ import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.FragmentSplashBinding
 import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.networking.ApiClient
 import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.LoginViewModel
-import dev.goblingroup.uzworks.vm.LoginViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
+@AndroidEntryPoint
 class SplashFragment : Fragment(), CoroutineScope {
 
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
     private var expandLogo: Animation? = null
 
-    private lateinit var loginViewModel: LoginViewModel
-    private lateinit var loginViewModelFactory: LoginViewModelFactory
-    private lateinit var networkHelper: NetworkHelper
-    private lateinit var appDatabase: AppDatabase
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,11 +45,6 @@ class SplashFragment : Fragment(), CoroutineScope {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            networkHelper = NetworkHelper(requireContext())
-            appDatabase = AppDatabase.getInstance(requireContext())
-
-            Log.d("TAG", "expand: testing room ${appDatabase.userDao().getUser()}")
-
             expandLogo = AnimationUtils.loadAnimation(requireContext(), R.anim.expand_logo)
             expand()
         }
@@ -77,16 +68,6 @@ class SplashFragment : Fragment(), CoroutineScope {
     }
 
     private fun login() {
-        loginViewModelFactory = LoginViewModelFactory(
-            appDatabase = appDatabase,
-            authService = ApiClient.authService,
-            networkHelper = networkHelper,
-            context = requireContext()
-        )
-        loginViewModel = ViewModelProvider(
-            owner = this,
-            factory = loginViewModelFactory
-        )[LoginViewModel::class.java]
         launch {
             loginViewModel.login()
                 .collect {
