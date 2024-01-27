@@ -15,11 +15,13 @@ object ApiClient {
     private var authToken: String? = null
 
     fun initialize(context: Context) {
-        authToken = MySharedPreference.getInstance(context).getToken()
-        Log.d(
-            "TAG",
-            "initialize: ${this::class.java.simpleName} ${authToken} got token from shared preference"
-        )
+        if (authToken == null) {
+            authToken = MySharedPreference.getInstance(context).getToken()
+            Log.d(
+                "TAG",
+                "initialize: ${this::class.java.simpleName} ${authToken} got token from shared preference"
+            )
+        }
     }
 
     private fun getRetrofit(): Retrofit {

@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.goblingroup.uzworks.models.request.JobEditRequest
@@ -35,22 +36,26 @@ class SecuredJobViewModel(
     private val editStateFlow =
         MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createJob(jobRequest: JobRequest): StateFlow<ApiStatus<Unit>> {
-        viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
-                securedJobRepository.createJob(jobRequest)
-                    .catch {
-                        createStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .collect {
-                        createStateFlow.emit(ApiStatus.Success(it))
-                    }
-            } else {
-                createStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
-            }
-        }
-        return createStateFlow
-    }
+//    fun createJob(jobRequest: JobRequest): StateFlow<ApiStatus<Unit>> {
+//        viewModelScope.launch {
+//            if (networkHelper.isNetworkConnected()) {
+//                Log.d(
+//                    TAG,
+//                    "createJob: creating job for $jobRequest object ${this@SecuredJobViewModel::class.java.simpleName}"
+//                )
+//                securedJobRepository.createJob(jobRequest)
+//                    .catch {
+//                        createStateFlow.emit(ApiStatus.Error(it))
+//                    }
+//                    .collect {
+//                        createStateFlow.emit(ApiStatus.Success(it))
+//                    }
+//            } else {
+//                createStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+//            }
+//        }
+//        return createStateFlow
+//    }
 
     fun deleteJob(jobId: String): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {

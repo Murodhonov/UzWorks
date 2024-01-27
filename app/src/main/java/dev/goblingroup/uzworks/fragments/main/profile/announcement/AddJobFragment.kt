@@ -43,6 +43,9 @@ import dev.goblingroup.uzworks.vm.SecuredJobViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -180,11 +183,11 @@ class AddJobFragment : Fragment(), CoroutineScope {
             }
 
             saveBtn.setOnClickListener {
-                if (isFormValid()) {
+//                if (isFormValid()) {
                     createJob()
-                } else {
-                    Toast.makeText(requireContext(), "fill forms", Toast.LENGTH_SHORT).show()
-                }
+//                } else {
+//                    Toast.makeText(requireContext(), "fill forms", Toast.LENGTH_SHORT).show()
+//                }
             }
             cancelBtn.setOnClickListener {
                 findNavController().popBackStack()
@@ -235,72 +238,122 @@ class AddJobFragment : Fragment(), CoroutineScope {
     }
 
     private fun createJob() {
-        binding.apply {
-            securedJobViewModel = ViewModelProvider(
-                owner = this@AddJobFragment,
-                factory = securedJobViewModelFactory
-            )[SecuredJobViewModel::class.java]
+        val jobRequest = JobRequest(
+            benefit = "benefit",
+            categoryId = "abd37ade-8749-4d7e-8d90-042e53d43954",
+            deadline = "2024-01-26T13:11:26.743Z",
+            districtId = "a7f85890-07c3-4541-b3ca-e07fc820db5f",
+            gender = "Male",
+            instagramLink = "sjfkdsf",
+            latitude = 41.3409,
+            longitude = 69.2867,
+            maxAge = 20,
+            minAge = 30,
+            phoneNumber = "+998931895305",
+            requirement = "sdfsgags",
+            salary = 50000,
+            telegramLink = "link of post on telegram channel",
+            tgUserName = "fsdfsdf",
+            title = "frggsgf",
+            workingSchedule = "dfghfdjsghsjfg",
+            workingTime = "hasgujhersgisgf"
+        )
+        Log.d(ConstValues.TAG, "createJob: requesting for create job $jobRequest")
+        ApiClient.initialize(requireContext())
 
-            launch {
-                securedJobViewModel.createJob(jobRequest = JobRequest(
-                    benefit = benefitEt.editText?.text.toString(),
-                    categoryId = selectedCategoryId,
-                    deadline = convertDateFormat(deadlineTv.text.toString()),
-                    districtId = selectedDistrictId,
-                    gender = selectedGender,
-                    instagramLink = instagramUsernameEt.editText?.text.toString(),
-                    latitude = 41.3409,
-                    longitude = 69.2867,
-                    maxAge = maxAgeEt.editText?.text.toString().toInt(),
-                    minAge = minAgeEt.editText?.text.toString().toInt(),
-                    phoneNumber = phoneNumberEt.editText?.text.toString(),
-                    requirement = requirementEt.editText?.text.toString(),
-                    salary = salaryEt.editText?.text.toString()
-                        .substring(0, salaryEt.editText?.text.toString().length - 5)
-                        .toInt(),
-                    telegramLink = "link of post on telegram channel",
-                    tgUserName = tgUserNameEt.editText?.text.toString(),
-                    title = titleEt.editText?.text.toString(),
-                    workingSchedule = workingScheduleEt.editText?.text.toString(),
-                    workingTime = workingTimeEt.editText?.text.toString()
-                ))
-                    .collect {
-                        when (it) {
-                            is ApiStatus.Error -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "some error on creating job",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.e(ConstValues.TAG, "createWorker: ${it.error}")
-                                Log.e(
-                                    ConstValues.TAG,
-                                    "createJob: ${it.error.stackTrace.joinToString()}"
-                                )
-                                Log.e(ConstValues.TAG, "createJob: ${it.error.message}")
-                            }
-
-                            is ApiStatus.Loading -> {
-                                Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-
-                            is ApiStatus.Success -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "successfully created worker",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.d(
-                                    ConstValues.TAG,
-                                    "createJob: ${it.response as JobResponse}"
-                                )
-                            }
-                        }
-                    }
+        ApiClient.securedJobService.createJob(
+            jobRequest = jobRequest
+        ).enqueue(object : Callback<JobResponse> {
+            override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "success", Toast.LENGTH_SHORT).show()
+                    Log.d(ConstValues.TAG, "onResponse: ${response.body()}")
+                } else {
+                    Toast.makeText(requireContext(), "unsuccessful", Toast.LENGTH_SHORT).show()
+                    Log.e(ConstValues.TAG, "onResponse: ${response.code()}")
+                    Log.e(ConstValues.TAG, "onResponse: ${response.message()}")
+                    Log.e(ConstValues.TAG, "onResponse: ${response.errorBody()}")
+                }
             }
-        }
+
+            override fun onFailure(call: Call<JobResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "failed", Toast.LENGTH_SHORT).show()
+                Log.e(ConstValues.TAG, "onFailure: $t")
+                Log.e(ConstValues.TAG, "onFailure: ${t.message}")
+                Log.e(ConstValues.TAG, "onFailure: ${t.printStackTrace()}")
+                Log.e(ConstValues.TAG, "onFailure: ${t.stackTrace}")
+            }
+
+        })
     }
+
+//    private fun createJob() {
+//        binding.apply {
+//            securedJobViewModel = ViewModelProvider(
+//                owner = this@AddJobFragment,
+//                factory = securedJobViewModelFactory
+//            )[SecuredJobViewModel::class.java]
+//
+//            launch {
+//                securedJobViewModel.createJob(jobRequest = JobRequest(
+//                    benefit = benefitEt.editText?.text.toString(),
+//                    categoryId = selectedCategoryId,
+//                    deadline = convertDateFormat(deadlineTv.text.toString()),
+//                    districtId = selectedDistrictId,
+//                    gender = selectedGender,
+//                    instagramLink = instagramUsernameEt.editText?.text.toString(),
+//                    latitude = 41.3409,
+//                    longitude = 69.2867,
+//                    maxAge = maxAgeEt.editText?.text.toString().toInt(),
+//                    minAge = minAgeEt.editText?.text.toString().toInt(),
+//                    phoneNumber = phoneNumberEt.editText?.text.toString(),
+//                    requirement = requirementEt.editText?.text.toString(),
+//                    salary = salaryEt.editText?.text.toString()
+//                        .substring(0, salaryEt.editText?.text.toString().length - 5)
+//                        .toInt(),
+//                    telegramLink = "link of post on telegram channel",
+//                    tgUserName = tgUserNameEt.editText?.text.toString(),
+//                    title = titleEt.editText?.text.toString(),
+//                    workingSchedule = workingScheduleEt.editText?.text.toString(),
+//                    workingTime = workingTimeEt.editText?.text.toString()
+//                ))
+//                    .collect {
+//                        when (it) {
+//                            is ApiStatus.Error -> {
+//                                Toast.makeText(
+//                                    requireContext(),
+//                                    "some error on creating job",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                                Log.e(ConstValues.TAG, "createWorker: ${it.error}")
+//                                Log.e(
+//                                    ConstValues.TAG,
+//                                    "createJob: ${it.error.stackTrace.joinToString()}"
+//                                )
+//                                Log.e(ConstValues.TAG, "createJob: ${it.error.message}")
+//                            }
+//
+//                            is ApiStatus.Loading -> {
+//                                Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT)
+//                                    .show()
+//                            }
+//
+//                            is ApiStatus.Success -> {
+//                                Toast.makeText(
+//                                    requireContext(),
+//                                    "successfully created worker",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                                Log.d(
+//                                    ConstValues.TAG,
+//                                    "createJob: ${it.response as JobResponse}"
+//                                )
+//                            }
+//                        }
+//                    }
+//            }
+//        }
+//    }
 
     private fun isFormValid(): Boolean {
         binding.apply {
