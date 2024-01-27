@@ -28,7 +28,7 @@ class JobsViewModel @Inject constructor(
 
     private val jobByIdStateFlow = MutableStateFlow<ApiStatus<JobResponse>>(ApiStatus.Loading())
 
-    private val _jobsStateFlow = MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
+    private val _jobsStateFlow = MutableStateFlow<ApiStatus<List<JobEntity>>>(ApiStatus.Loading())
     val jobsStateFlow get() = _jobsStateFlow
 
     private val countStateFlow = MutableStateFlow<ApiStatus<Int>>(ApiStatus.Loading())

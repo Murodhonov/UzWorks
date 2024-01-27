@@ -8,18 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.rv_adapters.JobAdapter
-import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
-import dev.goblingroup.uzworks.networking.ApiClient
-import dev.goblingroup.uzworks.singleton.MySharedPreference
 import dev.goblingroup.uzworks.utils.ApiStatus
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.JobsViewModel
@@ -39,10 +34,9 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     private val jobsViewModel: JobsViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
+    private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
     private lateinit var linearSnapHelper: LinearSnapHelper
-
-    private lateinit var jobCategoryViewModel: JobCategoryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +58,7 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     private fun loadJobs() {
         launch {
-            jobsViewModel.getAllJobs()
+            jobsViewModel.jobsStateFlow
                 .collect {
                     when (it) {
                         is ApiStatus.Error -> {
