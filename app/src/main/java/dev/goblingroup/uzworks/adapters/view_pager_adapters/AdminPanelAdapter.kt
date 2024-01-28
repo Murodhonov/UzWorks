@@ -2,15 +2,12 @@ package dev.goblingroup.uzworks.adapters.view_pager_adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import dev.goblingroup.uzworks.fragments.main.admin.district.DistrictControlFragment
-import dev.goblingroup.uzworks.fragments.main.admin.job.JobControlFragment
-import dev.goblingroup.uzworks.fragments.main.admin.job_category.JobCategoryControlFragment
-import dev.goblingroup.uzworks.fragments.main.admin.region.RegionControlFragment
-import dev.goblingroup.uzworks.fragments.main.admin.worker.WorkerControlFragment
-import dev.goblingroup.uzworks.utils.ConstValues.DISTRICT
-import dev.goblingroup.uzworks.utils.ConstValues.JOB
-import dev.goblingroup.uzworks.utils.ConstValues.JOB_CATEGORY
-import dev.goblingroup.uzworks.utils.ConstValues.REGION
+import dev.goblingroup.uzworks.fragments.admin.tabs.DistrictControlFragment
+import dev.goblingroup.uzworks.fragments.admin.tabs.JobCategoryControlFragment
+import dev.goblingroup.uzworks.fragments.admin.tabs.JobControlFragment
+import dev.goblingroup.uzworks.fragments.admin.tabs.RegionControlFragment
+import dev.goblingroup.uzworks.fragments.admin.tabs.WorkerControlFragment
+import dev.goblingroup.uzworks.utils.AdminTabsEnum
 
 class AdminPanelAdapter(
     fragment: Fragment,
@@ -20,20 +17,24 @@ class AdminPanelAdapter(
 
     override fun createFragment(position: Int): Fragment {
         when (tabList[position]) {
-            DISTRICT -> {
+            AdminTabsEnum.DISTRICT.tabTitle -> {
                 return DistrictControlFragment.newInstance()
             }
 
-            JOB -> {
+            AdminTabsEnum.JOB.tabTitle -> {
                 return JobControlFragment.newInstance()
             }
 
-            JOB_CATEGORY -> {
+            AdminTabsEnum.JOB_CATEGORY.tabTitle -> {
                 return JobCategoryControlFragment.newInstance()
             }
 
-            REGION -> {
+            AdminTabsEnum.REGION.tabTitle -> {
                 return RegionControlFragment.newInstance()
+            }
+
+            AdminTabsEnum.WORKER.tabTitle -> {
+                return WorkerControlFragment.newInstance()
             }
 
             else -> {

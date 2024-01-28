@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     android:scrollbars="none"
-    tools:context=".fragments.main.profile.announcement.AddJobFragment">
+    tools:context=".fragments.jobs.AddJobFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

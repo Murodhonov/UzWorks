@@ -3,16 +3,18 @@ package dev.goblingroup.uzworks.repository.secured
 import dev.goblingroup.uzworks.models.request.JobEditRequest
 import dev.goblingroup.uzworks.models.request.JobRequest
 import dev.goblingroup.uzworks.networking.SecuredJobService
+import javax.inject.Inject
 
-class SecuredJobRepository(
+class SecuredJobRepository @Inject constructor(
     private val securedJobService: SecuredJobService
 ) {
 
-    fun createJob(jobRequest: JobRequest) = securedJobService.createJob(jobRequest = jobRequest)
+    suspend fun createJob(jobRequest: JobRequest) =
+        securedJobService.createJob(jobRequest = jobRequest)
 
-    fun deleteJob(jobId: String) = securedJobService.deleteJob(jobId = jobId)
+    suspend fun deleteJob(jobId: String) = securedJobService.deleteJob(jobId = jobId)
 
-    fun editJob(jobEditRequest: JobEditRequest) =
+    suspend fun editJob(jobEditRequest: JobEditRequest) =
         securedJobService.editJob(jobEditRequest = jobEditRequest)
 
 }

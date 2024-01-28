@@ -6,20 +6,19 @@ import dev.goblingroup.uzworks.models.response.DistrictResponse
 import dev.goblingroup.uzworks.networking.DistrictService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class DistrictRepository(
+class DistrictRepository @Inject constructor(
     private val districtService: DistrictService,
-    private val districtDao: DistrictDao,
-    private val districtId: String,
-    private val regionId: String
+    private val districtDao: DistrictDao
 ) {
 
-    fun getDistrictById(): Flow<DistrictResponse> =
+    suspend fun getDistrictById(districtId: String): Flow<DistrictResponse> =
         districtService.getDistrictById(districtId = districtId)
 
-    fun getAllDistricts() = districtService.getAllDistricts()
+    suspend fun getAllDistricts() = districtService.getAllDistricts()
 
-    fun getDistrictByRegionId() = districtService.getDistrictByRegionId(regionId = regionId)
+    suspend fun getDistrictByRegionId(regionId: String) = districtService.getDistrictByRegionId(regionId = regionId)
 
     fun addDistrict(districtEntity: DistrictEntity) = districtDao.addDistrict(districtEntity)
 

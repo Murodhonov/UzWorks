@@ -2,34 +2,24 @@ package dev.goblingroup.uzworks.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.request.RegionEditRequest
-import dev.goblingroup.uzworks.networking.SecuredRegionService
 import dev.goblingroup.uzworks.repository.secured.SecuredRegionRepository
-import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SecuredRegionViewModel(
-    securedRegionService: SecuredRegionService,
-    regionName: String,
-    regionId: String,
-    regionEditRequest: RegionEditRequest,
+@HiltViewModel
+class SecuredRegionViewModel @Inject constructor(
+    private val securedRegionRepository: SecuredRegionRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
     private val TAG = "SecuredDistrictViewMode"
-
-    private var securedRegionRepository =
-        SecuredRegionRepository(
-            securedRegionService = securedRegionService,
-            regionName = regionName,
-            regionId = regionId,
-            regionEditRequest = regionEditRequest
-        )
 
     private val createStateFlow =
         MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
@@ -40,10 +30,10 @@ class SecuredRegionViewModel(
     private val editStateFlow =
         MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createDistrict(): StateFlow<ApiStatus<Unit>> {
+    fun createDistrict(regionName: String): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedRegionRepository.createRegion()
+                securedRegionRepository.createRegion(regionName)
                     .catch {
                         createStateFlow.emit(ApiStatus.Error(it))
                     }
@@ -57,10 +47,10 @@ class SecuredRegionViewModel(
         return createStateFlow
     }
 
-    fun deleteDistrict(): StateFlow<ApiStatus<Unit>> {
+    fun deleteDistrict(regionId: String): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedRegionRepository.deleteRegion()
+                securedRegionRepository.deleteRegion(regionId)
                     .catch {
                         deleteStateFlow.emit(ApiStatus.Error(it))
                     }
@@ -74,10 +64,10 @@ class SecuredRegionViewModel(
         return deleteStateFlow
     }
 
-    fun editDistrict(): StateFlow<ApiStatus<Unit>> {
+    fun editDistrict(regionEditRequest: RegionEditRequest): StateFlow<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedRegionRepository.editRegion()
+                securedRegionRepository.editRegion(regionEditRequest)
                     .catch {
                         editStateFlow.emit(ApiStatus.Error(it))
                     }

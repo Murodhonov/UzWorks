@@ -9,12 +9,12 @@ import retrofit2.http.Query
 interface JobService {
 
     @GET("api/Job/GetById/{id}")
-    fun getJobById(
+    suspend fun getJobById(
         @Path("id") jobId: String
     ): Flow<JobResponse>
 
     @GET("api/Job/GetAll")
-    fun getAllJobs(
+    suspend fun getAllJobs(
         @Query("pageNumber") pageNumber: Int? = null,
         @Query("pageSize") pageSize: Int = 10,
         @Query("jobCategoryId") jobCategoryId: String? = null,
@@ -28,10 +28,10 @@ interface JobService {
     ): Flow<List<JobResponse>>
 
     @GET("api/Job/GetCount")
-    fun countJobs(): Flow<Int>
+    suspend fun countJobs(): Flow<Int>
 
     @GET("api/Job/GetJobsByUserId/{id}")
-    fun getJobsByUserId(
+    suspend fun getJobsByUserId(
         @Path("id") userId: String
     ): Flow<List<JobResponse>>
 

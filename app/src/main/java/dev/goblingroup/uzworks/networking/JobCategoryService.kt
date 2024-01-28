@@ -8,11 +8,11 @@ import retrofit2.http.Path
 interface JobCategoryService {
 
     @GET("api/JobCategory/GetById/{id}")
-    fun getJobCategoryById(
+    suspend fun getJobCategoryById(
         @Path("id") jobCategoryId: String
     ): Flow<JobCategoryResponse>
 
     @GET("api/JobCategory/GetAll")
-    fun getAllJobCategories(): Flow<List<JobCategoryResponse>>
+    suspend fun getAllJobCategories(): Flow<List<JobCategoryResponse>>
 
 }

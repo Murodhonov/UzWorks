@@ -2,29 +2,30 @@ package dev.goblingroup.uzworks.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.request.SignUpRequest
-import dev.goblingroup.uzworks.networking.AuthService
+import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.repository.SignUpRepository
-import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignUpViewModel(
-    authService: AuthService,
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val signUpRepository: SignUpRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    private val signupRepository = SignUpRepository(authService)
     private val signupStateFlow =
-        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
+        MutableStateFlow<ApiStatus<SignUpResponse>>(ApiStatus.Loading())
 
-    fun signup(signupRequest: SignUpRequest): StateFlow<ApiStatus<Unit>> {
+    fun signup(signupRequest: SignUpRequest): StateFlow<ApiStatus<SignUpResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                signupRepository.signup(signupRequest)
+                signUpRepository.signup(signupRequest)
                     .catch {
                         signupStateFlow.emit(ApiStatus.Error(it))
                     }

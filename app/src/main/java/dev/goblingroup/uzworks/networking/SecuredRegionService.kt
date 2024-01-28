@@ -13,17 +13,17 @@ import retrofit2.http.Path
 interface SecuredRegionService {
 
     @POST("api/Region/Create")
-    fun createRegion(
+    suspend fun createRegion(
         @Body regionName: String
     ): Flow<RegionResponse>
 
     @DELETE("api/Region/Delete/{id}")
-    fun deleteRegion(
+    suspend fun deleteRegion(
         @Path("id") regionId: String
     ): Flow<Response<Unit>>
 
     @PUT("api/Region/Edit")
-    fun editRegion(
+    suspend fun editRegion(
         @Body regionEditRequest: RegionEditRequest,
     ): Flow<Response<Unit>>
 

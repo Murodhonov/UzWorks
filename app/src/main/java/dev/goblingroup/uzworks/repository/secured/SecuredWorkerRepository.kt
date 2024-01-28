@@ -3,16 +3,17 @@ package dev.goblingroup.uzworks.repository.secured
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
 import dev.goblingroup.uzworks.models.request.WorkerRequest
 import dev.goblingroup.uzworks.networking.SecuredWorkerService
+import javax.inject.Inject
 
-class SecuredWorkerRepository(
+class SecuredWorkerRepository @Inject constructor(
     private val securedWorkerService: SecuredWorkerService
 ) {
 
-    fun createWorker(workerRequest: WorkerRequest) = securedWorkerService.createWorker(workerRequest = workerRequest)
+    suspend fun createWorker(workerRequest: WorkerRequest) = securedWorkerService.createWorker(workerRequest = workerRequest)
 
-    fun deleteWorker(workerId: String) = securedWorkerService.deleteWorker(workerId = workerId)
+    suspend fun deleteWorker(workerId: String) = securedWorkerService.deleteWorker(workerId = workerId)
 
-    fun editWorker(workerEditRequest: WorkerEditRequest) =
+    suspend fun editWorker(workerEditRequest: WorkerEditRequest) =
         securedWorkerService.editWorker(workerEditRequest = workerEditRequest)
 
 }

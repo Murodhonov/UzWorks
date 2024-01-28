@@ -8,12 +8,12 @@ import retrofit2.http.Path
 interface WorkerService {
 
     @GET("api/Worker/GetById/{id}")
-    fun getById(
+    suspend fun getById(
         @Path("id") userId: String
     ): Flow<Response<Unit>>
 
     @GET("api/Worker/GetAll")
-    fun getAll(
+    suspend fun getAll(
         @Path("pageNumber") pageNumber: Int,
         @Path("pageSize") pageSize: Int,
         @Path("jobCategoryId") jobCategoryId: String,
@@ -27,10 +27,10 @@ interface WorkerService {
     ): Flow<Response<Unit>>
 
     @GET("api/Worker/GetCount")
-    fun count(): Flow<Response<Unit>>
+    suspend fun count(): Flow<Response<Unit>>
 
     @GET("api/Worker/GetWorkersByUserId/{id}")
-    fun getWorkersByUserId(
+    suspend fun getWorkersByUserId(
         @Path("id") userId: String
     ): Flow<Response<Unit>>
 

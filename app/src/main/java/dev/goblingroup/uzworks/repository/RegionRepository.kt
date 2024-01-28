@@ -4,19 +4,18 @@ import dev.goblingroup.uzworks.database.dao.RegionDao
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.networking.RegionService
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class RegionRepository(
+class RegionRepository @Inject constructor(
     private val regionService: RegionService,
-    private val regionDao: RegionDao,
-    private val regionId: String,
-    private val districtId: String
+    private val regionDao: RegionDao
 ) {
 
-    fun getRegionById() = regionService.getById(regionId)
+    suspend fun getRegionById(regionId: String) = regionService.getById(regionId)
 
-    fun getAllRegions() = regionService.getAll()
+    suspend fun getAllRegions() = regionService.getAll()
 
-    fun getRegionByDistrictId() = regionService.getRegionByDistrictId(districtId)
+    suspend fun getRegionByDistrictId(districtId: String) = regionService.getRegionByDistrictId(districtId)
 
     fun addRegion(regionEntity: RegionEntity) = regionDao.addRegion(regionEntity)
 

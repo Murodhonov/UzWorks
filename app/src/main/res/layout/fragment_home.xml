@@ -6,7 +6,7 @@
     android:background="@color/white_blue"
     android:paddingBottom="@dimen/_7sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.main.home.HomeFragment">
+    tools:context=".fragments.HomeFragment">
 
     <TextView
         android:id="@+id/greeting_tv"

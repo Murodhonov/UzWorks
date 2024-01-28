@@ -3,7 +3,6 @@ package dev.goblingroup.uzworks
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -15,10 +14,12 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.databinding.ActivityMainBinding
 import dev.goblingroup.uzworks.utils.dpToPx
 import dev.goblingroup.uzworks.utils.getNavOptions
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             ) return
             // Animation to show the bottom navigation
             val showBottomBarAnimation = TranslateAnimation(
-                0f, 0f, bottomBar.height.toFloat() + dpToPx(7f), 0f
+                0f, 0f, bottomBar.height.toFloat() + 7f.dpToPx(), 0f
             )
             showBottomBarAnimation.duration = 300
 
@@ -133,7 +134,7 @@ class MainActivity : AppCompatActivity() {
             ) return
             // Animation to show the toolbar
             val showToolbarAnimation = TranslateAnimation(
-                0f, 0f, -toolbar.height.toFloat() - dpToPx(7f), 0f
+                0f, 0f, -toolbar.height.toFloat() - 7f.dpToPx(), 0f
             )
             showToolbarAnimation.duration = 300
 
@@ -166,7 +167,7 @@ class MainActivity : AppCompatActivity() {
             ) return
             // Animation to hide the bottom navigation
             val hideBottomBarAnimation = TranslateAnimation(
-                0f, 0f, 0f, bottomBar.height.toFloat() + dpToPx(7f)
+                0f, 0f, 0f, bottomBar.height.toFloat() + 7f.dpToPx()
             )
             hideBottomBarAnimation.duration = 300
 
@@ -199,7 +200,7 @@ class MainActivity : AppCompatActivity() {
             ) return
             // Animation to hide the toolbar
             val hideToolbarAnimation = TranslateAnimation(
-                0f, 0f, 0f, -toolbar.height.toFloat() - dpToPx(7f)
+                0f, 0f, 0f, -toolbar.height.toFloat() - 7f.dpToPx()
             )
             hideToolbarAnimation.duration = 300
 
@@ -232,13 +233,13 @@ class MainActivity : AppCompatActivity() {
             ) return
             // Animation to show the bottom navigation
             val showBottomBarAnimation = TranslateAnimation(
-                0f, 0f, bottomBar.height.toFloat() + dpToPx(7f), 0f
+                0f, 0f, bottomBar.height.toFloat() + 7f.dpToPx(), 0f
             )
             showBottomBarAnimation.duration = 300
 
             // Animation to show the toolbar
             val showToolbarAnimation = TranslateAnimation(
-                0f, 0f, -toolbar.height.toFloat() - dpToPx(7f), 0f
+                0f, 0f, -toolbar.height.toFloat() - 7f.dpToPx(), 0f
             )
             showToolbarAnimation.duration = 300
 
@@ -277,13 +278,13 @@ class MainActivity : AppCompatActivity() {
             ) return
             // Animation to hide the bottom navigation
             val hideBottomBarAnimation = TranslateAnimation(
-                0f, 0f, 0f, bottomBar.height.toFloat() + dpToPx(7f)
+                0f, 0f, 0f, bottomBar.height.toFloat() + 7f.dpToPx()
             )
             hideBottomBarAnimation.duration = 300
 
             // Animation to hide the toolbar
             val hideToolbarAnimation = TranslateAnimation(
-                0f, 0f, 0f, -toolbar.height.toFloat() - dpToPx(7f)
+                0f, 0f, 0f, -toolbar.height.toFloat() - 7f.dpToPx()
             )
             hideToolbarAnimation.duration = 300
 

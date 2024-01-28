@@ -14,17 +14,17 @@ import retrofit2.http.Path
 interface SecuredJobCategoryService {
 
     @POST("api/JobCategory/Create")
-    fun createJobCategory(
+    suspend fun createJobCategory(
         @Body jobCategoryRequest: JobCategoryRequest,
     ): Flow<JobCategoryResponse>
 
     @DELETE("api/JobCategory/Delete/{id}")
-    fun deleteJobCategory(
+    suspend fun deleteJobCategory(
         @Path("id") jobCategoryId: String
     ): Flow<Response<Unit>>
 
     @PUT("api/JobCategory/Edit")
-    fun editJobCategory(
+    suspend fun editJobCategory(
         @Body jobCategoryEditRequest: JobCategoryEditRequest,
     ): Flow<Response<Unit>>
 

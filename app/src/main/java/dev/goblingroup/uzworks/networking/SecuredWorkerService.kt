@@ -14,17 +14,17 @@ import retrofit2.http.Path
 interface SecuredWorkerService {
 
     @POST("api/Worker/Create")
-    fun createWorker(
+    suspend fun createWorker(
         @Body workerRequest: WorkerRequest
     ): Flow<WorkerResponse>
 
     @DELETE("api/Worker/Delete/{id}")
-    fun deleteWorker(
+    suspend fun deleteWorker(
         @Path("id") workerId: String
     ): Flow<Response<Unit>>
 
     @PUT("api/Worker/Edit")
-    fun editWorker(
+    suspend fun editWorker(
         @Body workerEditRequest: WorkerEditRequest
     ): Flow<WorkerResponse>
     

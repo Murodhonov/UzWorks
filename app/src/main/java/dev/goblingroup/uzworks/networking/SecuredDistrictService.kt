@@ -14,17 +14,17 @@ import retrofit2.http.Path
 interface SecuredDistrictService {
 
     @POST("api/District/Create")
-    fun createDistrict(
+    suspend fun createDistrict(
         @Body districtRequest: DistrictRequest,
     ): Flow<DistrictResponse>
 
     @DELETE("api/District/Delete/{id}")
-    fun deleteDistrict(
+    suspend fun deleteDistrict(
         @Path("id") districtId: String
     ): Flow<Response<Unit>>
 
     @PUT("api/District/Edit")
-    fun editDistrict(
+    suspend fun editDistrict(
         @Body districtEditRequest: DistrictEditRequest,
     ): Flow<Response<Unit>>
 

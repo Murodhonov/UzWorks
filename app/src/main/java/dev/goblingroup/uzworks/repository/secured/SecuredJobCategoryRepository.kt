@@ -3,21 +3,19 @@ package dev.goblingroup.uzworks.repository.secured
 import dev.goblingroup.uzworks.models.request.JobCategoryEditRequest
 import dev.goblingroup.uzworks.models.request.JobCategoryRequest
 import dev.goblingroup.uzworks.networking.SecuredJobCategoryService
+import javax.inject.Inject
 
-class SecuredJobCategoryRepository(
-    private val securedJobCategoryService: SecuredJobCategoryService,
-    private val jobCategoryRequest: JobCategoryRequest,
-    private val jobCategoryId: String,
-    private val jobCategoryEditRequest: JobCategoryEditRequest
+class SecuredJobCategoryRepository @Inject constructor(
+    private val securedJobCategoryService: SecuredJobCategoryService
 ) {
 
-    fun createJobCategory() =
+    suspend fun createJobCategory(jobCategoryRequest: JobCategoryRequest) =
         securedJobCategoryService.createJobCategory(jobCategoryRequest = jobCategoryRequest)
 
-    fun deleteJobCategory() =
+    suspend fun deleteJobCategory(jobCategoryId: String) =
         securedJobCategoryService.deleteJobCategory(jobCategoryId = jobCategoryId)
 
-    fun editJobCategory() =
+    suspend fun editJobCategory(jobCategoryEditRequest: JobCategoryEditRequest) =
         securedJobCategoryService.editJobCategory(jobCategoryEditRequest = jobCategoryEditRequest)
 
 }

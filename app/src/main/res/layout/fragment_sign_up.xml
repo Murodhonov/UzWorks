@@ -6,7 +6,7 @@
     android:fillViewport="true"
     android:layout_height="match_parent"
     android:scrollbars="none"
-    tools:context=".fragments.auth.signup.SignUpFragment">
+    tools:context=".fragments.auth.SignUpFragment">
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/motion_layout"

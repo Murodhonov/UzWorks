@@ -8,15 +8,15 @@ import retrofit2.http.Path
 interface RegionService {
 
     @GET("api/Region/GetById/{id}")
-    fun getById(
+    suspend fun getById(
         @Path("id") regionId: String
     ): Flow<RegionResponse>
 
     @GET("api/Region/GetAll")
-    fun getAll(): Flow<List<RegionResponse>>
+    suspend fun getAll(): Flow<List<RegionResponse>>
 
     @GET("api/Region/GetByRegionByDistrictId/{id}")
-    fun getRegionByDistrictId(
+    suspend fun getRegionByDistrictId(
         @Path("id") districtId: String
     ): Flow<RegionResponse>
 

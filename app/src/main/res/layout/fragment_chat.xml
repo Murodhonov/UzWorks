@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_blue"
-    tools:context=".fragments.main.chat.ChatFragment">
+    tools:context=".fragments.chat.ChatFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_layout"

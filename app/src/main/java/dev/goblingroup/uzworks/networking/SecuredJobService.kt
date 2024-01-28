@@ -4,7 +4,6 @@ import dev.goblingroup.uzworks.models.request.JobEditRequest
 import dev.goblingroup.uzworks.models.request.JobRequest
 import dev.goblingroup.uzworks.models.response.JobResponse
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -15,17 +14,17 @@ import retrofit2.http.Path
 interface SecuredJobService {
 
     @POST("api/Job/Create")
-    fun createJob(
+    suspend fun createJob(
         @Body jobRequest: JobRequest,
-    ): Call<JobResponse>
+    ): Flow<JobResponse>
 
     @DELETE("api/Job/Delete/{id}")
-    fun deleteJob(
+    suspend fun deleteJob(
         @Path("id") jobId: String
     ): Flow<Response<Unit>>
 
     @PUT("api/Job/Edit")
-    fun editJob(
+    suspend fun editJob(
         @Body jobEditRequest: JobEditRequest
     ): Flow<Response<Unit>>
 

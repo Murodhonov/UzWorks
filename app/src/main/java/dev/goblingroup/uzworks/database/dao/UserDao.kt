@@ -25,7 +25,7 @@ interface UserDao {
     )
     fun updateUser(userEntity: UserEntity)
 
-    @Query("DELETE FROM USERS_TABLE")
+    @Query("DELETE FROM users_table")
     fun deleteUser()
 
 }

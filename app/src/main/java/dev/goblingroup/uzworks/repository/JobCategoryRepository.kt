@@ -4,15 +4,16 @@ import dev.goblingroup.uzworks.database.dao.JobCategoryDao
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.networking.JobCategoryService
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class JobCategoryRepository(
+class JobCategoryRepository @Inject constructor(
     private val jobCategoryService: JobCategoryService,
     private val jobCategoryDao: JobCategoryDao
 ) {
 
-    fun getJobCategoryById(categoryId: String) = jobCategoryService.getJobCategoryById(categoryId)
+    suspend fun getJobCategoryById(categoryId: String) = jobCategoryService.getJobCategoryById(categoryId)
 
-    fun getAllJobCategories() = jobCategoryService.getAllJobCategories()
+    suspend fun getAllJobCategories() = jobCategoryService.getAllJobCategories()
 
     fun addJobCategory(jobCategoryEntity: JobCategoryEntity) =
         jobCategoryDao.addJobCategory(jobCategoryEntity)

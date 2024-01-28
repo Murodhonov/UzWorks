@@ -5,18 +5,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
+import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.databinding.DistrictItemBinding
-import dev.goblingroup.uzworks.models.response.DistrictResponse
 
 class DistrictAdapter(
-    private var districtList: List<DistrictResponse>,
-    private val onEditClick: (DistrictResponse) -> Unit,
-    private val onDeleteClick: (DistrictResponse, Int, ProgressBar, ImageView) -> Unit
+    private var districtList: List<DistrictEntity>,
+    private val onEditClick: (DistrictEntity) -> Unit,
+    private val onDeleteClick: (DistrictEntity, Int, ProgressBar, ImageView) -> Unit
 ) : RecyclerView.Adapter<DistrictAdapter.FieldsViewHolder>() {
 
     inner class FieldsViewHolder(private var fieldItemBinding: DistrictItemBinding) :
         RecyclerView.ViewHolder(fieldItemBinding.root) {
-        fun onBind(districtResponse: DistrictResponse, position: Int) {
+        fun onBind(districtResponse: DistrictEntity, position: Int) {
             fieldItemBinding.apply {
                 fieldNameTv.text = districtResponse.name
                 edit.setOnClickListener {

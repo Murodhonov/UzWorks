@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/_7sdp"
     android:background="@color/white_blue"
     app:layoutDescription="@xml/fragment_profile_scene"
-    tools:context=".fragments.main.profile.ProfileFragment">
+    tools:context=".fragments.profile.ProfileFragment">
 
     <View
         android:id="@+id/profile_layout"

@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/chatFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.chat.ChatFragment"
+        android:name="dev.goblingroup.uzworks.fragments.chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/chatsListFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.chat.chat_list.ChatsListFragment"
+        android:name="dev.goblingroup.uzworks.fragments.chat.ChatsListFragment"
         android:label="fragment_chats_list"
         tools:layout="@layout/fragment_chats_list" />
     <fragment
@@ -22,72 +22,72 @@
         tools:layout="@layout/fragment_get_started" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.home.HomeFragment"
+        android:name="dev.goblingroup.uzworks.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/jobDetailsFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.jobs.job_details.JobDetailsFragment"
+        android:name="dev.goblingroup.uzworks.fragments.jobs and workers.JobDetailsFragment"
         android:label="fragment_job_details"
         tools:layout="@layout/fragment_job_details" />
     <fragment
         android:id="@+id/jobsFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.jobs.JobsFragment"
+        android:name="dev.goblingroup.uzworks.fragments.jobs and workers.JobsFragment"
         android:label="fragment_jobs"
         tools:layout="@layout/fragment_jobs" />
     <fragment
         android:id="@+id/loginFragment"
-        android:name="dev.goblingroup.uzworks.fragments.auth.login.LoginFragment"
+        android:name="dev.goblingroup.uzworks.fragments.auth.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.profile.ProfileFragment"
+        android:name="dev.goblingroup.uzworks.fragments.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/selectRoleFragment"
-        android:name="dev.goblingroup.uzworks.fragments.auth.select_role.SelectRoleFragment"
+        android:name="dev.goblingroup.uzworks.fragments.auth.SelectRoleFragment"
         android:label="fragment_select_role"
         tools:layout="@layout/fragment_select_role" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.profile.settings.SettingsFragment"
+        android:name="dev.goblingroup.uzworks.fragments.profile.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="dev.goblingroup.uzworks.fragments.auth.signup.SignUpFragment"
+        android:name="dev.goblingroup.uzworks.fragments.auth.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
     <fragment
         android:id="@+id/splashFragment"
-        android:name="dev.goblingroup.uzworks.fragments.onboarding.splash.SplashFragment"
+        android:name="dev.goblingroup.uzworks.fragments.onboarding.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
     <fragment
         android:id="@+id/succeedFragment"
-        android:name="dev.goblingroup.uzworks.fragments.auth.succeed.SucceedFragment"
+        android:name="dev.goblingroup.uzworks.fragments.auth.SucceedFragment"
         android:label="fragment_succeed"
         tools:layout="@layout/fragment_succeed" />
     <fragment
         android:id="@+id/updatePasswordFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.profile.update_password.UpdatePasswordFragment"
+        android:name="dev.goblingroup.uzworks.fragments.profile.UpdatePasswordFragment"
         android:label="fragment_update_password"
         tools:layout="@layout/fragment_update_password" />
     <fragment
         android:id="@+id/adminPanelFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.admin.AdminPanelFragment"
+        android:name="dev.goblingroup.uzworks.fragments.admin.AdminPanelFragment"
         android:label="fragment_admin_panel"
         tools:layout="@layout/fragment_admin_panel" />
     <fragment
         android:id="@+id/addWorkerFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.profile.announcement.AddWorkerFragment"
+        android:name="dev.goblingroup.uzworks.fragments.jobs and workers.AddWorkerFragment"
         android:label="fragment_add_worker"
         tools:layout="@layout/fragment_add_worker" />
     <fragment
         android:id="@+id/addJobFragment"
-        android:name="dev.goblingroup.uzworks.fragments.main.profile.announcement.AddJobFragment"
+        android:name="dev.goblingroup.uzworks.fragments.jobs and workers.AddJobFragment"
         android:label="fragment_add_job"
         tools:layout="@layout/fragment_add_job" />
 </navigation>

@@ -7,7 +7,7 @@
     android:background="@color/white_blue"
     android:id="@+id/settings_root"
     app:layoutDescription="@xml/fragment_settings_scene"
-    tools:context=".fragments.main.profile.settings.SettingsFragment">
+    tools:context=".fragments.profile.SettingsFragment">
 
     <ImageView
         android:id="@+id/back"

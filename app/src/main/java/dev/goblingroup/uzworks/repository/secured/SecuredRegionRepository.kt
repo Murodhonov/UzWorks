@@ -2,19 +2,17 @@ package dev.goblingroup.uzworks.repository.secured
 
 import dev.goblingroup.uzworks.models.request.RegionEditRequest
 import dev.goblingroup.uzworks.networking.SecuredRegionService
+import javax.inject.Inject
 
-class SecuredRegionRepository(
-    private val securedRegionService: SecuredRegionService,
-    private val regionName: String,
-    private val regionId: String,
-    private val regionEditRequest: RegionEditRequest
+class SecuredRegionRepository @Inject constructor(
+    private val securedRegionService: SecuredRegionService
 ) {
 
-    fun createRegion() = securedRegionService.createRegion(regionName = regionName)
+    suspend fun createRegion(regionName: String) = securedRegionService.createRegion(regionName = regionName)
 
-    fun deleteRegion() = securedRegionService.deleteRegion(regionId = regionId)
+    suspend fun deleteRegion(regionId: String) = securedRegionService.deleteRegion(regionId = regionId)
 
-    fun editRegion() =
+    suspend fun editRegion(regionEditRequest: RegionEditRequest) =
         securedRegionService.editRegion(regionEditRequest = regionEditRequest)
 
 }

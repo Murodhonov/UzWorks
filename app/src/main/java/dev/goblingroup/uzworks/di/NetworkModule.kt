@@ -1,6 +1,7 @@
 package dev.goblingroup.uzworks.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +18,6 @@ import dev.goblingroup.uzworks.networking.SecuredJobService
 import dev.goblingroup.uzworks.networking.SecuredRegionService
 import dev.goblingroup.uzworks.networking.SecuredWorkerService
 import dev.goblingroup.uzworks.networking.WorkerService
-import dev.goblingroup.uzworks.singleton.MySharedPreference
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import me.sianaki.flowretrofitadapter.FlowCallAdapterFactory
 import okhttp3.Interceptor
@@ -41,15 +41,15 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBaseUrl(): String = "http://172.16.14.203:28/"
+    fun provideBaseUrl(): String = "http://172.16.12.221:28/"
 
     @Provides
     @Singleton
     @Named(value = "token")
     fun provideToken(
-        @ApplicationContext context: Context
+        sharedPreferences: SharedPreferences
     ): String {
-        return MySharedPreference.getInstance(context).getToken().toString()
+        return sharedPreferences.getString("token", null).toString()
     }
 
     @Provides
@@ -59,7 +59,7 @@ class NetworkModule {
     ): Interceptor {
         return Interceptor { chain ->
             val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer ")
+                .addHeader("Authorization", "Bearer $token")
                 .build()
             chain.proceed(request)
         }

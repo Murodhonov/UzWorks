@@ -36,14 +36,6 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideContext(
-        @ApplicationContext context: Context
-    ): Context {
-        return context.applicationContext
-    }
-
-    @Provides
-    @Singleton
     fun provideUserDao(
         appDatabase: AppDatabase
     ): UserDao {

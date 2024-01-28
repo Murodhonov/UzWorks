@@ -18,3 +18,18 @@ enum class DateEnum(val dateLabel: String) {
     MONTH("Month"),
     YEAR("Year")
 }
+
+enum class LanguageEnum(val language: String) {
+    KIRILL_UZB("Ўзбекча"),
+    LATIN_UZB("O’zbekcha"),
+    RU("Русский"),
+    EN("English")
+}
+
+enum class AdminTabsEnum(val tabTitle: String) {
+    DISTRICT("District"),
+    JOB("Job"),
+    JOB_CATEGORY("Job category"),
+    REGION("Region"),
+    WORKER("Worker")
+}

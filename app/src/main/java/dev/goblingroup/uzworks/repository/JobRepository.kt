@@ -13,13 +13,13 @@ class JobRepository @Inject constructor(
     private val jobService: JobService
 ) {
 
-    fun getJobById(jobId: String) = jobService.getJobById(jobId)
+    suspend fun getJobById(jobId: String) = jobService.getJobById(jobId)
 
-    fun getAllJobs() = jobService.getAllJobs()
+    suspend fun getAllJobs() = jobService.getAllJobs()
 
-    fun countJobs() = jobService.countJobs()
+    suspend fun countJobs() = jobService.countJobs()
 
-    fun getJobByUserId(userId: String) = jobService.getJobsByUserId(userId = userId)
+    suspend fun getJobByUserId(userId: String) = jobService.getJobsByUserId(userId = userId)
 
     fun addJob(jobEntity: JobEntity) = jobDao.addJob(jobEntity)
 

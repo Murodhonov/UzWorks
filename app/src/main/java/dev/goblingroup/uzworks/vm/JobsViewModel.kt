@@ -6,7 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.repository.JobRepository
-import dev.goblingroup.uzworks.utils.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,7 +52,7 @@ class JobsViewModel @Inject constructor(
         return jobByIdStateFlow
     }
 
-    fun getAllJobs() {
+    private fun getAllJobs() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 jobRepository.getAllJobs()
