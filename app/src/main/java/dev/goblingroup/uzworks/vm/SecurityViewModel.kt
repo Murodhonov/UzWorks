@@ -12,6 +12,6 @@ class SecurityViewModel @Inject constructor(
 
     fun getUserRoles() = securityRepository.getUserRoles()
 
-    fun deleteUser() = securityRepository.deleteUser()
+    suspend fun deleteUser() = securityRepository.deleteUser()
 
 }

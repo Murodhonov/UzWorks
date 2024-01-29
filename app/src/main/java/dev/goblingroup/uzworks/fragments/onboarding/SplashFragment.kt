@@ -10,6 +10,7 @@ import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
@@ -19,20 +20,17 @@ import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.LoginViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import dev.goblingroup.uzworks.vm.SplashViewModel
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class SplashFragment : Fragment(), CoroutineScope {
+class SplashFragment : Fragment() {
 
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
     private var expandLogo: Animation? = null
 
-    private val loginViewModel: LoginViewModel by viewModels()
+    private val splashViewModel: SplashViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +51,7 @@ class SplashFragment : Fragment(), CoroutineScope {
         binding.logo.startAnimation(expandLogo)
         expandLogo?.setAnimationListener(object : AnimationListener {
             override fun onAnimationStart(animation: Animation?) {
+
             }
 
             override fun onAnimationEnd(animation: Animation?) {
@@ -67,38 +66,32 @@ class SplashFragment : Fragment(), CoroutineScope {
     }
 
     private fun login() {
-        launch {
-            loginViewModel.login()
-                .collect {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            findNavController().navigate(
-                                resId = R.id.getStartedFragment,
-                                args = null,
-                                navOptions = getNavOptions()
-                            )
-                            Log.e(TAG, "login: ${it.error.message}")
-                            Log.e(TAG, "login: ${it.error.stackTrace}")
-                            Log.e(TAG, "login: ${it.error.printStackTrace()}")
-                        }
+        lifecycleScope.launch {
+            splashViewModel.loginLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        findNavController().navigate(
+                            resId = R.id.getStartedFragment,
+                            args = null,
+                            navOptions = getNavOptions()
+                        )
+                        Log.e(TAG, "login: ${it.error.message}")
+                    }
 
-                        is ApiStatus.Loading -> {
+                    is ApiStatus.Loading -> {
 
-                        }
+                    }
 
-                        is ApiStatus.Success -> {
-                            findNavController().navigate(
-                                resId = if ((it.response as LoginResponse).access.contains(UserRole.SUPER_ADMIN.roleName)) R.id.adminPanelFragment else R.id.homeFragment,
-                                args = null
-                            )
-                        }
+                    is ApiStatus.Success -> {
+                        findNavController().navigate(
+                            resId = if ((it.response as LoginResponse).access.contains(UserRole.SUPER_ADMIN.roleName)) R.id.adminPanelFragment else R.id.homeFragment,
+                            args = null
+                        )
                     }
                 }
+            }
         }
     }
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
 
     override fun onDestroyView() {
         super.onDestroyView()

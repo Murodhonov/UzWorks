@@ -30,7 +30,7 @@ class SecurityRepository @Inject constructor(
         return sharedPreferences.edit().putString("user_id", userId).commit()
     }
 
-    fun deleteUser(): Boolean {
+    suspend fun deleteUser(): Boolean {
         userDao.deleteUser()
         val tokenDeleted = deleteToken()
         val userRolesDeleted = deleteUserRoles()

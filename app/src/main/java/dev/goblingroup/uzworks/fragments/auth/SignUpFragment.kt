@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
@@ -29,7 +30,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class SignUpFragment : Fragment(), CoroutineScope {
+class SignUpFragment : Fragment() {
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
@@ -154,7 +155,7 @@ class SignUpFragment : Fragment(), CoroutineScope {
 
     private fun signUp(firstName: String, lastName: String) {
         binding.apply {
-            launch {
+            lifecycleScope.launch {
                 signupViewModel.signup(
                     signupRequest = SignUpRequest(
                         username = usernameEt.editText?.text.toString(),
@@ -164,8 +165,22 @@ class SignUpFragment : Fragment(), CoroutineScope {
                         lastName = lastName,
                         role = userRole
                     )
-                )
-                    .collect {
+                ).observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            signupError(it.error)
+                        }
+
+                        is ApiStatus.Loading -> {
+                            signupLoading()
+                        }
+
+                        is ApiStatus.Success -> {
+                            signupSuccess()
+                        }
+                    }
+                }
+                    /*.collect {
                         when (it) {
                             is ApiStatus.Error -> {
                                 signupError(it.error)
@@ -179,7 +194,7 @@ class SignUpFragment : Fragment(), CoroutineScope {
                                 signupSuccess()
                             }
                         }
-                    }
+                    }*/
             }
         }
     }
@@ -208,15 +223,33 @@ class SignUpFragment : Fragment(), CoroutineScope {
 
     private fun signupSuccess() {
         binding.apply {
-
-            launch {
+            lifecycleScope.launch {
                 loginViewModel.login(
                     loginRequest = LoginRequest(
                         usernameEt.editText?.text.toString(),
                         passwordEt.editText?.text.toString()
                     )
-                )
-                    .collect {
+                ).observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+
+                        }
+
+                        is ApiStatus.Loading -> {
+
+                        }
+
+                        is ApiStatus.Success -> {
+                            authDialog.dismiss()
+                            findNavController().navigate(
+                                resId = R.id.succeedFragment,
+                                args = null,
+                                navOptions = getNavOptions()
+                            )
+                        }
+                    }
+                }
+                    /*.collect {
                         when (it) {
                             is ApiStatus.Error -> {
 
@@ -235,13 +268,10 @@ class SignUpFragment : Fragment(), CoroutineScope {
                                 )
                             }
                         }
-                    }
+                    }*/
             }
         }
     }
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
 
     override fun onDestroyView() {
         super.onDestroyView()

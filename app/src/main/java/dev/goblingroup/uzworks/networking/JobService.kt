@@ -1,7 +1,7 @@
 package dev.goblingroup.uzworks.networking
 
 import dev.goblingroup.uzworks.models.response.JobResponse
-import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -11,7 +11,7 @@ interface JobService {
     @GET("api/Job/GetById/{id}")
     suspend fun getJobById(
         @Path("id") jobId: String
-    ): Flow<JobResponse>
+    ): Response<JobResponse>
 
     @GET("api/Job/GetAll")
     suspend fun getAllJobs(
@@ -25,14 +25,14 @@ interface JobService {
         @Query("gender") gender: String? = null,
         @Query("regionId") regionId: String? = null,
         @Query("districtId") districtId: String? = null,
-    ): Flow<List<JobResponse>>
+    ): Response<List<JobResponse>>
 
     @GET("api/Job/GetCount")
-    suspend fun countJobs(): Flow<Int>
+    suspend fun countJobs(): Response<Int>
 
     @GET("api/Job/GetJobsByUserId/{id}")
     suspend fun getJobsByUserId(
         @Path("id") userId: String
-    ): Flow<List<JobResponse>>
+    ): Response<List<JobResponse>>
 
 }

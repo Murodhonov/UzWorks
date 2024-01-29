@@ -77,15 +77,21 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    fun provideConverterFactory(): GsonConverterFactory {
+        return GsonConverterFactory.create()
+    }
+
+    @Provides
+    @Singleton
     @Named(value = "secured_retrofit")
     fun provideSecuredRetrofit(
         baseUrl: String,
-        httpClient: OkHttpClient
+        httpClient: OkHttpClient,
+        converterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(FlowCallAdapterFactory.create())
+            .addConverterFactory(converterFactory)
             .client(httpClient)
             .build()
     }
@@ -94,12 +100,13 @@ class NetworkModule {
     @Singleton
     @Named(value = "retrofit")
     fun provideRetrofit(
-        baseUrl: String
+        baseUrl: String,
+        converterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(OkHttpClient.Builder().build())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(converterFactory)
             .build()
     }
 

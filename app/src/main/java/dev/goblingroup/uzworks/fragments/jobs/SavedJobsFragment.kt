@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.adapters.rv_adapters.SavedJobsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentSavedJobsBinding
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.JobsViewModel
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SavedJobsFragment : Fragment() {
@@ -49,23 +51,41 @@ class SavedJobsFragment : Fragment() {
     }
 
     private fun loadSavedJobs() {
-        binding.apply {
-            val savedJobList = jobsViewModel.listSavedJobs()
-            if (savedJobList.isNotEmpty()) {
-                emptyLayout.visibility = View.GONE
-                savedJobsAdapter = SavedJobsAdapter(
-                    jobsViewModel,
-                    jobCategoryViewModel,
-                    { clickedJobId ->
-                        jobClickListener?.onSavedJobClick(clickedJobId)
-                    },
-                    {
-                        emptyLayout.visibility = View.VISIBLE
-                    }
-                )
-                recommendedWorkAnnouncementsRv.adapter = savedJobsAdapter
-            } else {
-                emptyLayout.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            binding.apply {
+                val savedJobList = jobsViewModel.listSavedJobs()
+                if (savedJobList.isNotEmpty()) {
+                    emptyLayout.visibility = View.GONE
+                    savedJobsAdapter = SavedJobsAdapter(
+                        jobsViewModel.listSavedJobs(),
+                        jobCategoryViewModel.listJobCategories(),
+                        { clickedJobId ->
+                            jobClickListener?.onSavedJobClick(clickedJobId)
+                        },
+                        { jobId, position ->
+                            unSave(jobId, position)
+                        }
+                    )
+                    recommendedWorkAnnouncementsRv.adapter = savedJobsAdapter
+                } else {
+                    emptyLayout.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun unSave(jobId: String, position: Int) {
+        lifecycleScope.launch {
+            binding.apply {
+                if (jobsViewModel.unSaveJob(jobId)) {
+                    savedJobsAdapter.notifyItemRemoved(position)
+                    savedJobsAdapter.notifyItemRangeChanged(
+                        position,
+                        jobsViewModel.countSavedJobs() - position
+                    )
+                } else {
+                    emptyLayout.visibility = View.VISIBLE
+                }
             }
         }
     }

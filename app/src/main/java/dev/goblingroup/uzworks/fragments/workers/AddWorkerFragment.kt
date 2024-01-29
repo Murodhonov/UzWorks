@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,26 +24,23 @@ import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.FragmentAddWorkerBinding
 import dev.goblingroup.uzworks.models.request.WorkerRequest
 import dev.goblingroup.uzworks.models.response.WorkerResponse
-import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.stringDateToString
 import dev.goblingroup.uzworks.utils.stringToDate
+import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.DistrictViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.RegionViewModel
 import dev.goblingroup.uzworks.vm.SecuredWorkerViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class AddWorkerFragment : Fragment(), CoroutineScope {
+class AddWorkerFragment : Fragment() {
 
     private var _binding: FragmentAddWorkerBinding? = null
     private val binding get() = _binding!!
@@ -306,7 +304,7 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
 
     private fun createWorker() {
         binding.apply {
-            launch {
+            lifecycleScope.launch {
                 securedWorkerViewModel.createWorker(
                     workerRequest = WorkerRequest(
                         birthDate = birthdayTv.stringDateToString(),
@@ -326,65 +324,63 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
                         workingSchedule = "some working schedule",
                         workingTime = workingTimeEt.editText?.text.toString()
                     )
-                )
-                    .collect {
-                        when (it) {
-                            is ApiStatus.Error -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "some error on creating worker",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.e(TAG, "createWorker: ${it.error}")
-                                Log.e(TAG, "createWorker: ${it.error.stackTrace.joinToString()}")
-                                Log.e(TAG, "createWorker: ${it.error.message}")
-                            }
+                ).observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "some error on creating worker",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e(TAG, "createWorker: ${it.error}")
+                            Log.e(TAG, "createWorker: ${it.error.stackTrace.joinToString()}")
+                            Log.e(TAG, "createWorker: ${it.error.message}")
+                        }
 
-                            is ApiStatus.Loading -> {
-                                Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
+                        is ApiStatus.Loading -> {
+                            Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT)
+                                .show()
+                        }
 
-                            is ApiStatus.Success -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "successfully created worker",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.d(TAG, "createWorker: ${it.response as WorkerResponse}")
-                            }
+                        is ApiStatus.Success -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "successfully created worker",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d(TAG, "createWorker: ${it.response as WorkerResponse}")
                         }
                     }
+                }
             }
         }
     }
 
     private fun loadRegions() {
-        launch {
-            regionViewModel.regionStateFlow
-                .collect {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "some error while loading regions",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.e(TAG, "loadRegions: ${it.error}")
-                            Log.e(TAG, "loadRegions: ${it.error.message}")
-                            Log.e(TAG, "loadRegions: ${it.error.printStackTrace()}")
-                            Log.e(TAG, "loadRegions: ${it.error.stackTrace}")
-                        }
+        lifecycleScope.launch {
+            regionViewModel.regionLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "some error while loading regions",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e(TAG, "loadRegions: ${it.error}")
+                        Log.e(TAG, "loadRegions: ${it.error.message}")
+                        Log.e(TAG, "loadRegions: ${it.error.printStackTrace()}")
+                        Log.e(TAG, "loadRegions: ${it.error.stackTrace}")
+                    }
 
-                        is ApiStatus.Loading -> {
+                    is ApiStatus.Loading -> {
 
-                        }
+                    }
 
-                        is ApiStatus.Success -> {
-                            setRegions(it.response as List<RegionEntity>)
-                        }
+                    is ApiStatus.Success -> {
+                        setRegions(it.response as List<RegionEntity>)
                     }
                 }
+            }
         }
     }
 
@@ -408,76 +404,76 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
 
     private fun setDistricts(regionId: String) {
         binding.apply {
-            val districtAdapter = DistrictAdapter(
-                requireContext(),
-                R.layout.drop_down_item,
-                districtViewModel.listDistrictsByRegionId(regionId)
-            )
-            districtChoice.threshold = 1
-            districtChoice.setAdapter(districtAdapter)
-            districtChoice.setOnItemClickListener { parent, view, position, id ->
-                selectedDistrictId = districtAdapter.getItem(position).id
+            lifecycleScope.launch {
+                val districtAdapter = DistrictAdapter(
+                    requireContext(),
+                    R.layout.drop_down_item,
+                    districtViewModel.listDistrictsByRegionId(regionId)
+                )
+                districtChoice.threshold = 1
+                districtChoice.setAdapter(districtAdapter)
+                districtChoice.setOnItemClickListener { parent, view, position, id ->
+                    selectedDistrictId = districtAdapter.getItem(position).id
+                }
             }
         }
     }
 
     private fun loadDistricts() {
-        launch {
-            districtViewModel.districtStateFlow
-                .collect {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "some error while loading districts",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.e(TAG, "loadDistricts: ${it.error}")
-                            Log.e(TAG, "loadDistricts: ${it.error.message}")
-                            Log.e(TAG, "loadDistricts: ${it.error.printStackTrace()}")
-                            Log.e(TAG, "loadDistricts: ${it.error.stackTrace}")
-                        }
+        lifecycleScope.launch {
+            districtViewModel.districtLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "some error while loading districts",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e(TAG, "loadDistricts: ${it.error}")
+                        Log.e(TAG, "loadDistricts: ${it.error.message}")
+                        Log.e(TAG, "loadDistricts: ${it.error.printStackTrace()}")
+                        Log.e(TAG, "loadDistricts: ${it.error.stackTrace}")
+                    }
 
-                        is ApiStatus.Loading -> {
+                    is ApiStatus.Loading -> {
 
-                        }
+                    }
 
-                        is ApiStatus.Success -> {
-                            (it.response as List<DistrictEntity>).forEach {
-                                Log.d(TAG, "loadDistricts: succeeded $it")
-                            }
+                    is ApiStatus.Success -> {
+                        (it.response as List<DistrictEntity>).forEach {
+                            Log.d(TAG, "loadDistricts: succeeded $it")
                         }
                     }
                 }
+            }
         }
     }
 
     private fun loadCategories() {
-        launch {
-            jobCategoryViewModel.jobCategoriesStateFlow
-                .collect {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "Some error on loading job categories",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.e(TAG, "loadCategories: ${it.error}")
-                            Log.e(TAG, "loadCategories: ${it.error.message}")
-                            Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
-                            Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
-                        }
+        lifecycleScope.launch {
+            jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "Some error on loading job categories",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e(TAG, "loadCategories: ${it.error}")
+                        Log.e(TAG, "loadCategories: ${it.error.message}")
+                        Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
+                        Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
+                    }
 
-                        is ApiStatus.Loading -> {
+                    is ApiStatus.Loading -> {
 
-                        }
+                    }
 
-                        is ApiStatus.Success -> {
-                            setJobCategories(it.response as List<JobCategoryEntity>)
-                        }
+                    is ApiStatus.Success -> {
+                        setJobCategories(it.response as List<JobCategoryEntity>)
                     }
                 }
+            }
         }
     }
 
@@ -492,9 +488,6 @@ class AddWorkerFragment : Fragment(), CoroutineScope {
             }
         }
     }
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
 
     override fun onDestroyView() {
         super.onDestroyView()

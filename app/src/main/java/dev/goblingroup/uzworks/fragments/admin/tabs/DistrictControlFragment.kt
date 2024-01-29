@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.adapters.rv_adapters.DistrictAdapter
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
@@ -17,13 +18,10 @@ import dev.goblingroup.uzworks.databinding.FragmentDistrictControlBinding
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.DistrictViewModel
 import dev.goblingroup.uzworks.vm.SecuredDistrictViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class DistrictControlFragment : Fragment(), CoroutineScope {
+class DistrictControlFragment : Fragment() {
 
     private var _binding: FragmentDistrictControlBinding? = null
     private val binding get() = _binding!!
@@ -44,25 +42,24 @@ class DistrictControlFragment : Fragment(), CoroutineScope {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            launch {
-                districtViewModel.districtStateFlow
-                    .collect {
-                        when (it) {
-                            is ApiStatus.Error -> {
-                                progressBar.visibility = View.INVISIBLE
-                            }
+            lifecycleScope.launch {
+                districtViewModel.districtLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            progressBar.visibility = View.INVISIBLE
+                        }
 
-                            is ApiStatus.Loading -> {
-                                progressBar.visibility = View.VISIBLE
-                            }
+                        is ApiStatus.Loading -> {
+                            progressBar.visibility = View.VISIBLE
+                        }
 
-                            is ApiStatus.Success -> {
-                                progressBar.visibility = View.INVISIBLE
-                                districtList = ArrayList(it.response!!)
-                                success(districtList)
-                            }
+                        is ApiStatus.Success -> {
+                            progressBar.visibility = View.INVISIBLE
+                            districtList = ArrayList(it.response!!)
+                            success(districtList)
                         }
                     }
+                }
             }
         }
     }
@@ -91,31 +88,30 @@ class DistrictControlFragment : Fragment(), CoroutineScope {
         deleteProgressBar: ProgressBar,
         deleteButton: ImageView
     ) {
-        launch {
-            securedDistrictViewModel.deleteDistrict(districtEntity.id)
-                .collect {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            deleteButton.visibility = View.VISIBLE
-                            deleteProgressBar.visibility = View.INVISIBLE
-                            Toast.makeText(
-                                requireContext(),
-                                "error on deleting",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+        lifecycleScope.launch {
+            securedDistrictViewModel.deleteDistrict(districtEntity.id).observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        deleteButton.visibility = View.VISIBLE
+                        deleteProgressBar.visibility = View.INVISIBLE
+                        Toast.makeText(
+                            requireContext(),
+                            "error on deleting",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
 
-                        is ApiStatus.Loading -> {
-                            deleteButton.visibility = View.INVISIBLE
-                            deleteProgressBar.visibility = View.VISIBLE
-                        }
+                    is ApiStatus.Loading -> {
+                        deleteButton.visibility = View.INVISIBLE
+                        deleteProgressBar.visibility = View.VISIBLE
+                    }
 
-                        is ApiStatus.Success -> {
-                            deleteProgressBar.visibility = View.GONE
-                            deleteSuccess(position)
-                        }
+                    is ApiStatus.Success -> {
+                        deleteProgressBar.visibility = View.GONE
+                        deleteSuccess(position)
                     }
                 }
+            }
         }
     }
 
@@ -128,9 +124,6 @@ class DistrictControlFragment : Fragment(), CoroutineScope {
             districtAdapter.notifyItemRangeChanged(position, districtList.size - position)
         }
     }
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
 
     override fun onDestroyView() {
         super.onDestroyView()

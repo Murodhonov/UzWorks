@@ -1,6 +1,7 @@
 package dev.goblingroup.uzworks.vm
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,9 +11,6 @@ import dev.goblingroup.uzworks.models.response.DistrictResponse
 import dev.goblingroup.uzworks.repository.secured.SecuredDistrictRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,72 +22,60 @@ class SecuredDistrictViewModel @Inject constructor(
 
     private val TAG = "SecuredDistrictViewMode"
 
-    private val createStateFlow =
-        MutableStateFlow<ApiStatus<DistrictResponse>>(ApiStatus.Loading())
+    private val createLiveData =
+        MutableLiveData<ApiStatus<DistrictResponse>>(ApiStatus.Loading())
 
-    private val deleteStateFlow =
-        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
+    private val deleteLiveData =
+        MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    private val editStateFlow =
-        MutableStateFlow<ApiStatus<Unit>>(ApiStatus.Loading())
+    private val editLiveData =
+        MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createDistrict(districtRequest: DistrictRequest): StateFlow<ApiStatus<DistrictResponse>> {
+    fun createDistrict(districtRequest: DistrictRequest): LiveData<ApiStatus<DistrictResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedDistrictRepository.createDistrict(districtRequest)
-                    .catch {
-                        createStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .collect {
-                        createStateFlow.emit(ApiStatus.Success(it))
-                    }
+                val response = securedDistrictRepository.createDistrict(districtRequest)
+                if (response.isSuccessful) {
+                    createLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    createLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             } else {
-                createStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+                createLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
-        return createStateFlow
+        return createLiveData
     }
 
-    fun deleteDistrict(districtId: String): StateFlow<ApiStatus<Unit>> {
+    fun deleteDistrict(districtId: String): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedDistrictRepository.deleteDistrict(districtId)
-                    .catch {
-                        deleteStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .collect {
-                        if (it.isSuccessful) {
-                            deleteStateFlow.emit(ApiStatus.Success(null))
-                        } else {
-                            Log.e(TAG, "deleteDistrict: ${it.body()}")
-                            Log.e(TAG, "deleteDistrict: ${it.errorBody()}")
-                            Log.e(TAG, "deleteDistrict: ${it.code()}")
-                            Log.e(TAG, "deleteDistrict: ${it.message()}")
-                            Log.e(TAG, "deleteDistrict: ${it.headers()}")
-                            Log.e(TAG, "deleteDistrict: ${it.raw()}")
-                        }
-                    }
+                val response = securedDistrictRepository.deleteDistrict(districtId)
+                if (response.isSuccessful) {
+                    deleteLiveData.postValue(ApiStatus.Success(null))
+                } else {
+                    deleteLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             } else {
-                deleteStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+                deleteLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
-        return deleteStateFlow
+        return deleteLiveData
     }
 
-    fun editDistrict(districtEditRequest: DistrictEditRequest): StateFlow<ApiStatus<Unit>> {
+    fun editDistrict(districtEditRequest: DistrictEditRequest): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                securedDistrictRepository.editDistrict(districtEditRequest)
-                    .catch {
-                        editStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .collect {
-                        editStateFlow.emit(ApiStatus.Success(null))
-                    }
+                val response = securedDistrictRepository.editDistrict(districtEditRequest)
+                if (response.isSuccessful) {
+                    editLiveData.postValue(ApiStatus.Success(null))
+                } else {
+                    editLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             } else {
-                editStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+                editLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
-        return editStateFlow
+        return editLiveData
     }
 }

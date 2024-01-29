@@ -10,15 +10,15 @@ import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 interface JobCategoryDao {
 
     @Insert(entity = JobCategoryEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    fun addJobCategory(jobCategoryEntity: JobCategoryEntity)
+    suspend fun addJobCategory(jobCategoryEntity: JobCategoryEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addJobCategories(jobCategoryList: List<JobCategoryEntity>)
+    suspend fun addJobCategories(jobCategoryList: List<JobCategoryEntity>)
 
     @Query("SELECT * FROM job_category_table WHERE job_category_id = :categoryId")
-    fun findJobCategory(categoryId: String): JobCategoryEntity
+    suspend fun findJobCategory(categoryId: String): JobCategoryEntity
 
     @Query("SELECT * FROM job_category_table")
-    fun listJobCategories(): List<JobCategoryEntity>
+    suspend fun listJobCategories(): List<JobCategoryEntity>
 
 }

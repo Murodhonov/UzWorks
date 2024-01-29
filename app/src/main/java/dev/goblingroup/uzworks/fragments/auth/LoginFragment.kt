@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
@@ -31,7 +33,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class LoginFragment : Fragment(), CoroutineScope {
+class LoginFragment : Fragment() {
 
     private val TAG = "LoginFragment"
 
@@ -111,14 +113,15 @@ class LoginFragment : Fragment(), CoroutineScope {
 
     private fun login() {
         binding.apply {
-            launch {
+            lifecycleScope.launch {
                 loginViewModel.login(
                     loginRequest = LoginRequest(
                         username = usernameEt.editText?.text.toString(),
                         password = passwordEt.editText?.text.toString()
                     )
                 )
-                    .collect {
+                    .observe(viewLifecycleOwner
+                    ) {
                         when (it) {
                             is ApiStatus.Error -> {
                                 loginError(it.error)
@@ -133,6 +136,22 @@ class LoginFragment : Fragment(), CoroutineScope {
                             }
                         }
                     }
+
+                /*.collect {
+                            when (it) {
+                                is ApiStatus.Error -> {
+                                    loginError(it.error)
+                                }
+
+                                is ApiStatus.Loading -> {
+                                    loginLoading()
+                                }
+
+                                is ApiStatus.Success -> {
+                                    loginSuccess(it.response as LoginResponse)
+                                }
+                            }
+                        }*/
             }
         }
     }
@@ -189,9 +208,6 @@ class LoginFragment : Fragment(), CoroutineScope {
             }
         })
     }
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
 
     override fun onDestroyView() {
         super.onDestroyView()

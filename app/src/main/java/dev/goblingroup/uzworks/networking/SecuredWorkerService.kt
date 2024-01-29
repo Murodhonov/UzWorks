@@ -3,7 +3,6 @@ package dev.goblingroup.uzworks.networking
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
 import dev.goblingroup.uzworks.models.request.WorkerRequest
 import dev.goblingroup.uzworks.models.response.WorkerResponse
-import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -16,16 +15,16 @@ interface SecuredWorkerService {
     @POST("api/Worker/Create")
     suspend fun createWorker(
         @Body workerRequest: WorkerRequest
-    ): Flow<WorkerResponse>
+    ): Response<WorkerResponse>
 
     @DELETE("api/Worker/Delete/{id}")
     suspend fun deleteWorker(
         @Path("id") workerId: String
-    ): Flow<Response<Unit>>
+    ): Response<Unit>
 
     @PUT("api/Worker/Edit")
     suspend fun editWorker(
         @Body workerEditRequest: WorkerEditRequest
-    ): Flow<WorkerResponse>
+    ): Response<WorkerResponse>
     
 }

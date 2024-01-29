@@ -5,42 +5,31 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
+import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.databinding.WorkAnnouncementsLayoutBinding
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
-import dev.goblingroup.uzworks.vm.JobsViewModel
 
 class SavedJobsAdapter(
-    private val jobsViewModel: JobsViewModel,
-    private val jobCategoryViewModel: JobCategoryViewModel,
+    private val jobList: List<JobEntity>,
+    private val jobCategoryList: List<JobCategoryEntity>,
     private val onItemClick: (String) -> Unit,
-    private val onSavedItemsCleared: () -> Unit
+    private val unSaveJob: (String, Int) -> Unit
 ) : RecyclerView.Adapter<SavedJobsAdapter.JobViewHolder>() {
 
     inner class JobViewHolder(val workBinding: WorkAnnouncementsLayoutBinding) :
         ViewHolder(workBinding.root) {
         fun onBind(position: Int) {
             workBinding.apply {
-                val job = jobsViewModel.listSavedJobs()[position]
+                val job = jobList[position]
 
                 titleTv.text = job.tgUserName
                 costTv.text = "${job.salary} so'm"
                 genderTv.text = job.gender
-//                categoryTv.text =
-//                    jobCategoryViewModel.findJobCategory(job.categoryId.toString()).title
-
-                if (job.isSaved) {
-                    saveIv.setImageResource(R.drawable.ic_saved)
-                } else {
-                    saveIv.setImageResource(R.drawable.ic_unsaved)
-                }
+                categoryTv.text = getJobCategory(position)
+                saveIv.setImageResource(R.drawable.ic_saved)
 
                 saveIv.setOnClickListener {
-                    jobsViewModel.unSaveJob(job.id)
-                    notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, jobsViewModel.listSavedJobs().size - position)
-                    if (jobsViewModel.listSavedJobs().isEmpty()) {
-                        onSavedItemsCleared.invoke()
-                    }
+                    unSaveJob.invoke(jobList[position].id, position)
                 }
 
 
@@ -48,6 +37,10 @@ class SavedJobsAdapter(
                     onItemClick.invoke(job.id)
                 }
             }
+        }
+
+        private fun getJobCategory(position: Int): String {
+            return jobCategoryList.find { it.id == jobList[position].categoryId }?.title.toString()
         }
 
     }
@@ -62,7 +55,7 @@ class SavedJobsAdapter(
         )
     }
 
-    override fun getItemCount(): Int = jobsViewModel.listSavedJobs().size
+    override fun getItemCount(): Int = jobList.size
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         holder.onBind(position)

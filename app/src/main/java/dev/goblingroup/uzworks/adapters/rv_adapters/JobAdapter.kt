@@ -5,54 +5,58 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
+import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.databinding.WorkAnnouncementsLayoutBinding
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
-import dev.goblingroup.uzworks.vm.JobsViewModel
 
 class JobAdapter(
-    private val jobsViewModel: JobsViewModel,
-    private val jobCategoryViewModel: JobCategoryViewModel,
+    private val jobList: List<JobEntity>,
+    private val jobCategoryList: List<JobCategoryEntity>,
     private val onItemClick: (String) -> Unit,
+    private val onSaveClick: (Boolean, String) -> Unit
 ) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
 
     inner class JobViewHolder(val workBinding: WorkAnnouncementsLayoutBinding) :
         ViewHolder(workBinding.root) {
         fun onBind(position: Int) {
             workBinding.apply {
-                val job = jobsViewModel.listDatabaseJobs()[position]
+                val job = jobList[position]
                 titleTv.text = job.tgUserName
                 costTv.text = "${job.salary} so'm"
                 genderTv.text = job.gender
-//                categoryTv.text =
-//                    jobCategoryViewModel.findJobCategory(job.categoryId.toString()).title
+                categoryTv.text = getJobCategory(position)
 
-                if (jobsViewModel.listDatabaseJobs()[position].isSaved) {
+                if (jobList[position].isSaved) {
                     saveIv.setImageResource(R.drawable.ic_saved)
                 } else {
                     saveIv.setImageResource(R.drawable.ic_unsaved)
                 }
 
                 saveIv.setOnClickListener {
-                    if (jobsViewModel.listDatabaseJobs()[position].isSaved) {
+                    if (jobList[position].isSaved) {
                         /**
                          * should unSave
                          */
                         saveIv.setImageResource(R.drawable.ic_unsaved)
-                        jobsViewModel.unSaveJob(jobsViewModel.listDatabaseJobs()[position].id)
+                        onSaveClick.invoke(false, jobList[position].id)
                     } else {
                         /**
                          * should save
                          */
                         saveIv.setImageResource(R.drawable.ic_saved)
-                        jobsViewModel.saveJob(jobsViewModel.listDatabaseJobs()[position].id)
+                        onSaveClick.invoke(true, jobList[position].id)
                     }
                 }
 
 
                 root.setOnClickListener {
-                    onItemClick.invoke(jobsViewModel.listDatabaseJobs()[position].id)
+                    onItemClick.invoke(jobList[position].id)
                 }
             }
+        }
+
+        private fun getJobCategory(position: Int): String {
+            return jobCategoryList.find { it.id == jobList[position].categoryId }?.title.toString()
         }
 
     }
@@ -67,7 +71,7 @@ class JobAdapter(
         )
     }
 
-    override fun getItemCount(): Int = jobsViewModel.listDatabaseJobs().size
+    override fun getItemCount(): Int = jobList.size
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         holder.onBind(position)

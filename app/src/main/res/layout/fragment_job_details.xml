@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/_11sdp"
     android:background="@color/white"
-    tools:context=".fragments.jobs and workers.JobDetailsFragment">
+    tools:context=".fragments.jobs.JobDetailsFragment">
 
     <ImageView
         android:id="@+id/back_btn"

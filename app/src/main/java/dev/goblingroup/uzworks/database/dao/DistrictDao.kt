@@ -11,21 +11,21 @@ import dev.goblingroup.uzworks.database.entity.RegionEntity
 interface DistrictDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDistrict(districtEntity: DistrictEntity)
+    suspend fun addDistrict(districtEntity: DistrictEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDistricts(districtList: List<DistrictEntity>)
+    suspend fun addDistricts(districtList: List<DistrictEntity>)
 
     @Query("SELECT * FROM district_table WHERE district_id = :districtId")
-    fun findDistrict(districtId: String): DistrictEntity
+    suspend fun findDistrict(districtId: String): DistrictEntity
 
     @Query("SELECT * FROM district_table")
-    fun listDistricts(): List<DistrictEntity>
+    suspend fun listDistricts(): List<DistrictEntity>
 
     @Query("SELECT * FROM district_table WHERE region_id = :regionId")
-    fun listDistrictsByRegionId(regionId: String): List<DistrictEntity>
+    suspend fun listDistrictsByRegionId(regionId: String): List<DistrictEntity>
 
     @Query("SELECT * FROM region_table INNER JOIN district_table ON region_table.region_id = district_table.region_id WHERE district_table.district_id = :districtId")
-    fun getRegionByDistrictId(districtId: String): RegionEntity
+    suspend fun getRegionByDistrictId(districtId: String): RegionEntity
 
 }

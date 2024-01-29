@@ -1,5 +1,7 @@
 package dev.goblingroup.uzworks.vm
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,10 +10,6 @@ import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.repository.JobRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,106 +23,100 @@ class JobsViewModel @Inject constructor(
         getAllJobs()
     }
 
-    private val jobByIdStateFlow = MutableStateFlow<ApiStatus<JobResponse>>(ApiStatus.Loading())
+    private val jobByIdLiveData = MutableLiveData<ApiStatus<JobResponse>>(ApiStatus.Loading())
 
-    private val _jobsStateFlow = MutableStateFlow<ApiStatus<List<JobEntity>>>(ApiStatus.Loading())
-    val jobsStateFlow get() = _jobsStateFlow
+    private val _jobsLiveData = MutableLiveData<ApiStatus<List<JobEntity>>>(ApiStatus.Loading())
+    val jobsLiveData get() = _jobsLiveData
 
-    private val countStateFlow = MutableStateFlow<ApiStatus<Int>>(ApiStatus.Loading())
+    private val countLiveData = MutableLiveData<ApiStatus<Int>>(ApiStatus.Loading())
 
-    private val jobsByIdStateFlow =
-        MutableStateFlow<ApiStatus<List<JobResponse>>>(ApiStatus.Loading())
+    private val jobsByIdLiveData =
+        MutableLiveData<ApiStatus<List<JobResponse>>>(ApiStatus.Loading())
 
-    fun getJobById(jobId: String): StateFlow<ApiStatus<JobResponse>> {
+    fun getJobById(jobId: String): LiveData<ApiStatus<JobResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                jobRepository.getJobById(jobId)
-                    .catch {
-                        jobByIdStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .collect {
-                        jobByIdStateFlow.emit(ApiStatus.Success(it))
-                    }
+                val response = jobRepository.getJobById(jobId)
+                if (response.isSuccessful) {
+                    jobByIdLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    jobByIdLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             } else {
-                jobByIdStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+                jobByIdLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
-        return jobByIdStateFlow
+        return jobByIdLiveData
     }
 
     private fun getAllJobs() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                jobRepository.getAllJobs()
-                    .catch {
-                        _jobsStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .flatMapConcat {
-                        jobRepository.addJobs(it)
-                    }
-                    .collect {
-                        _jobsStateFlow.emit(ApiStatus.Success(jobRepository.listDatabaseJobs()))
-                    }
+                val response = jobRepository.getAllJobs()
+                if (response.isSuccessful) {
+                    jobRepository.addJobs(response.body()!!)
+                    _jobsLiveData.postValue(ApiStatus.Success(jobRepository.listDatabaseJobs()))
+                } else {
+                    _jobsLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             } else {
                 if (jobRepository.countDatabaseJobs() > 0) {
-                    _jobsStateFlow.emit(ApiStatus.Success(jobRepository.listDatabaseJobs()))
+                    _jobsLiveData.postValue(ApiStatus.Success(jobRepository.listDatabaseJobs()))
                 } else {
-                    _jobsStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+                    _jobsLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
                 }
             }
         }
     }
 
-    fun countJobs(): StateFlow<ApiStatus<Int>> {
+    fun countJobs(): LiveData<ApiStatus<Int>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                jobRepository.countJobs()
-                    .catch {
-                        countStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .collect {
-                        countStateFlow.emit(ApiStatus.Success(it))
-                    }
+                val response = jobRepository.countJobs()
+                if (response.isSuccessful) {
+                    countLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    countLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             } else {
-                countStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+                countLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
-        return countStateFlow
+        return countLiveData
     }
 
-    fun getJobsByUserId(userId: String): StateFlow<ApiStatus<List<JobResponse>>> {
+    fun getJobsByUserId(userId: String): LiveData<ApiStatus<List<JobResponse>>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                jobRepository.getJobByUserId(userId)
-                    .catch {
-                        jobsByIdStateFlow.emit(ApiStatus.Error(it))
-                    }
-                    .collect {
-                        jobsByIdStateFlow.emit(ApiStatus.Success(it))
-                    }
+                val response = jobRepository.getJobByUserId(userId)
+                if (response.isSuccessful) {
+                    jobsByIdLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    jobsByIdLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             } else {
-                jobsByIdStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+                jobsByIdLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
             }
         }
-        return jobsByIdStateFlow
+        return jobsByIdLiveData
     }
 
-    fun addJob(jobEntity: JobEntity) = jobRepository.addJob(jobEntity)
+    suspend fun addJob(jobEntity: JobEntity) = jobRepository.addJob(jobEntity)
 
     fun saveJob(jobId: String) = jobRepository.saveJob(jobId)
 
-    fun unSaveJob(jobId: String) = jobRepository.unSaveJob(jobId)
+    suspend fun unSaveJob(jobId: String) = jobRepository.unSaveJob(jobId)
 
-    fun isJobSaved(jobId: String) = jobRepository.isJobSaved(jobId)
+    suspend fun isJobSaved(jobId: String) = jobRepository.isJobSaved(jobId)
 
-    fun getJob(jobId: String) = jobRepository.getJob(jobId)
+    suspend fun getJob(jobId: String) = jobRepository.getJob(jobId)
 
-    fun listDatabaseJobs() = jobRepository.listDatabaseJobs()
+    suspend fun listDatabaseJobs() = jobRepository.listDatabaseJobs()
 
     fun listSavedJobs() = jobRepository.listSavedJobs()
 
-    fun countDatabaseJobs() = jobRepository.countDatabaseJobs()
+    suspend fun countDatabaseJobs() = jobRepository.countDatabaseJobs()
 
-    fun countSavedJobs() = jobRepository.countSavedJobs()
+    suspend fun countSavedJobs() = jobRepository.countSavedJobs()
 
 }

@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.workers
+package dev.goblingroup.uzworks.fragments.jobs
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,8 +17,6 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.view_pager_adapters.JobsViewPagerAdapter
 import dev.goblingroup.uzworks.databinding.FragmentJobsBinding
 import dev.goblingroup.uzworks.databinding.SavedJobsPropertiesBinding
-import dev.goblingroup.uzworks.fragments.jobs.AllJobsFragment
-import dev.goblingroup.uzworks.fragments.jobs.SavedJobsFragment
 import dev.goblingroup.uzworks.utils.getNavOptions
 
 @AndroidEntryPoint

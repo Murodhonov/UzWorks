@@ -10,14 +10,14 @@ import dev.goblingroup.uzworks.database.entity.RegionEntity
 interface RegionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addRegion(regionEntity: RegionEntity)
+    suspend fun addRegion(regionEntity: RegionEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addRegions(regionList: List<RegionEntity>)
+    suspend fun addRegions(regionList: List<RegionEntity>)
 
     @Query("SELECT * FROM region_table WHERE region_id = :regionId")
-    fun findRegion(regionId: String): RegionEntity
+    suspend fun findRegion(regionId: String): RegionEntity
 
     @Query("SELECT * FROM region_table")
-    fun listRegions(): List<RegionEntity>
+    suspend fun listRegions(): List<RegionEntity>
 }

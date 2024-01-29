@@ -4,7 +4,7 @@ import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.models.response.SignUpResponse
-import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -13,11 +13,11 @@ interface AuthService {
     @POST("Auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
-    ): Flow<LoginResponse>
+    ): Response<LoginResponse>
 
     @POST("Auth/signup")
     suspend fun signup(
         @Body signUpRequest: SignUpRequest
-    ): Flow<SignUpResponse>
+    ): Response<SignUpResponse>
 
 }

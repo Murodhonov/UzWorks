@@ -3,7 +3,6 @@ package dev.goblingroup.uzworks.repository
 import dev.goblingroup.uzworks.database.dao.JobCategoryDao
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.networking.JobCategoryService
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class JobCategoryRepository @Inject constructor(
@@ -15,14 +14,13 @@ class JobCategoryRepository @Inject constructor(
 
     suspend fun getAllJobCategories() = jobCategoryService.getAllJobCategories()
 
-    fun addJobCategory(jobCategoryEntity: JobCategoryEntity) =
+    suspend fun addJobCategory(jobCategoryEntity: JobCategoryEntity) =
         jobCategoryDao.addJobCategory(jobCategoryEntity)
 
-    fun addJobCategories(categoryList: List<JobCategoryEntity>) =
-        flow { emit(jobCategoryDao.addJobCategories(categoryList)) }
+    suspend fun addJobCategories(categoryList: List<JobCategoryEntity>) = jobCategoryDao.addJobCategories(categoryList)
 
-    fun findJobCategory(categoryId: String) = jobCategoryDao.findJobCategory(categoryId)
+    suspend fun findJobCategory(categoryId: String) = jobCategoryDao.findJobCategory(categoryId)
 
-    fun listCategories() = jobCategoryDao.listJobCategories()
+    suspend fun listCategories() = jobCategoryDao.listJobCategories()
 
 }

@@ -5,21 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.databinding.FragmentJobCategoryControlBinding
-import dev.goblingroup.uzworks.vm.SecuredJobCategoryViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class JobCategoryControlFragment : Fragment(), CoroutineScope {
+class JobCategoryControlFragment : Fragment() {
 
     private var _binding: FragmentJobCategoryControlBinding? = null
     private val binding get() = _binding!!
-
-    private val jobCategoryViewModel: SecuredJobCategoryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,9 +28,6 @@ class JobCategoryControlFragment : Fragment(), CoroutineScope {
         }
     }
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -48,8 +38,7 @@ class JobCategoryControlFragment : Fragment(), CoroutineScope {
         fun newInstance() =
             JobCategoryControlFragment().apply {
                 arguments = Bundle().apply {
-//                    putString("ARG_PARAM1", param1)
-//                    putString("ARG_PARAM2", param2)
+
                 }
             }
     }

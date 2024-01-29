@@ -5,7 +5,6 @@ import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.networking.JobService
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class JobRepository @Inject constructor(
@@ -21,10 +20,14 @@ class JobRepository @Inject constructor(
 
     suspend fun getJobByUserId(userId: String) = jobService.getJobsByUserId(userId = userId)
 
-    fun addJob(jobEntity: JobEntity) = jobDao.addJob(jobEntity)
+    suspend fun addJob(jobEntity: JobEntity) = jobDao.addJob(jobEntity)
 
-    fun addJobs(jobList: List<JobResponse>) = flow {
-        val existingJobs = jobDao.listAllJobs()
+    suspend fun addJobs(jobList: List<JobResponse>) {
+        val existingJobs = try {
+            jobDao.listAllJobs()
+        } catch (e: Exception) {
+            ArrayList()
+        }
         val newJobs = mutableListOf<JobEntity>()
 
         jobList.forEach { apiJob ->
@@ -41,23 +44,25 @@ class JobRepository @Inject constructor(
                 newJobs.add(apiJob.mapToEntity(false))
             }
         }
-        emit(jobDao.addJobs(newJobs))
     }
 
     fun saveJob(jobId: String) = jobDao.saveJob(jobId)
 
-    fun unSaveJob(jobId: String) = jobDao.unSaveJob(jobId)
+    suspend fun unSaveJob(jobId: String): Boolean {
+        jobDao.unSaveJob(jobId)
+        return jobDao.countSavedJobs() != 0
+    }
 
-    fun isJobSaved(jobId: String) = jobDao.isJobSaved(jobId)
+    suspend fun isJobSaved(jobId: String) = jobDao.isJobSaved(jobId)
 
-    fun getJob(jobId: String) = jobDao.getJob(jobId)
+    suspend fun getJob(jobId: String) = jobDao.getJob(jobId)
 
-    fun listDatabaseJobs() = jobDao.listAllJobs()
+    suspend fun listDatabaseJobs() = jobDao.listAllJobs()
 
     fun listSavedJobs() = jobDao.listSavedJobs()
 
-    fun countDatabaseJobs() = jobDao.countJobs()
+    suspend fun countDatabaseJobs() = jobDao.countJobs()
 
-    fun countSavedJobs() = jobDao.countSavedJobs()
+    suspend fun countSavedJobs() = jobDao.countSavedJobs()
 
 }

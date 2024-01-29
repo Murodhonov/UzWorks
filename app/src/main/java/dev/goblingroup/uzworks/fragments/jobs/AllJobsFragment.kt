@@ -8,19 +8,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapters.rv_adapters.JobAdapter
 import dev.goblingroup.uzworks.databinding.FragmentAllJobsBinding
+import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.JobsViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class AllJobsFragment : Fragment(), CoroutineScope {
+class AllJobsFragment : Fragment() {
 
     private val TAG = "JobListFragment"
 
@@ -51,39 +52,57 @@ class AllJobsFragment : Fragment(), CoroutineScope {
     }
 
     private fun loadJobs() {
-        launch {
-            jobsViewModel.jobsStateFlow
-                .collect {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(requireContext(), "some error", Toast.LENGTH_SHORT)
-                                .show()
-                            Log.e(TAG, "loadJobs: ${it.error}")
-                            Log.e(TAG, "loadJobs: ${it.error.printStackTrace()}")
-                            Log.e(TAG, "loadJobs: ${it.error.stackTrace}")
-                            Log.e(TAG, "loadJobs: ${it.error.message}")
-                        }
+        lifecycleScope.launch {
+            jobsViewModel.jobsLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(requireContext(), "some error", Toast.LENGTH_SHORT)
+                            .show()
+                        Log.e(TAG, "loadJobs: ${it.error}")
+                        Log.e(TAG, "loadJobs: ${it.error.printStackTrace()}")
+                        Log.e(TAG, "loadJobs: ${it.error.stackTrace}")
+                        Log.e(TAG, "loadJobs: ${it.error.message}")
+                    }
 
-                        is ApiStatus.Loading -> {
-                            binding.progress.visibility = View.GONE
-                        }
+                    is ApiStatus.Loading -> {
+                        binding.progress.visibility = View.GONE
+                    }
 
-                        is ApiStatus.Success -> {
-                            Log.d(TAG, "loadJobs: ${it.response}")
-                            success()
-                        }
+                    is ApiStatus.Success -> {
+                        Log.d(TAG, "loadJobs: ${it.response}")
+                        success()
                     }
                 }
+            }
         }
     }
 
     private fun success() {
         if (_binding != null) {
-            binding.apply {
-                jobAdapter = JobAdapter(jobsViewModel, jobCategoryViewModel) { clickedJobId ->
-                    jobClickListener?.onAllJobClick(clickedJobId)
+            lifecycleScope.launch {
+                binding.apply {
+                    jobAdapter = JobAdapter(
+                        jobsViewModel.listDatabaseJobs(),
+                        jobCategoryViewModel.listJobCategories(),
+                        { jobId ->
+                            jobClickListener?.onAllJobClick(jobId)
+                        },
+                        { state, jobId ->
+                            saveUnSave(state, jobId)
+                        }
+                    )
+                    recommendedWorkAnnouncementsRv.adapter = jobAdapter
                 }
-                recommendedWorkAnnouncementsRv.adapter = jobAdapter
+            }
+        }
+    }
+
+    private fun saveUnSave(state: Boolean, jobId: String) {
+        lifecycleScope.launch {
+            if (state) {
+                jobsViewModel.saveJob(jobId)
+            } else {
+                jobsViewModel.unSaveJob(jobId)
             }
         }
     }
@@ -113,9 +132,6 @@ class AllJobsFragment : Fragment(), CoroutineScope {
         Log.d(TAG, "onResume: lifecycle checking")
         loadJobs()
     }
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
 
     companion object {
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/_7sdp"
     android:background="@color/white_blue"
-    tools:context=".fragments.jobs and workers.JobsFragment">
+    tools:context=".fragments.jobs.JobsFragment">
 
     <FrameLayout
         android:id="@+id/custom_tab_layout"

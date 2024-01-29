@@ -8,6 +8,7 @@ class SignUpRepository @Inject constructor(
     private val authService: AuthService
 ) {
 
-    suspend fun signup(signUpRequest: SignUpRequest) = authService.signup(signUpRequest = signUpRequest)
+    suspend fun signup(signUpRequest: SignUpRequest) =
+        authService.signup(signUpRequest = signUpRequest)
 
 }

@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.vm
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,9 +9,6 @@ import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.repository.RegionRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +18,8 @@ class RegionViewModel @Inject constructor(
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    private val _regionStateFlow = MutableStateFlow<ApiStatus<List<RegionEntity>>>(ApiStatus.Loading())
-    val regionStateFlow get() = _regionStateFlow
+    private val _regionLiveData = MutableLiveData<ApiStatus<List<RegionEntity>>>(ApiStatus.Loading())
+    val regionLiveData get() = _regionLiveData
 
     init {
         fetchRegions()
@@ -31,35 +29,32 @@ class RegionViewModel @Inject constructor(
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 if (regionRepository.listRegions().isNotEmpty()) {
-                    _regionStateFlow.emit(ApiStatus.Success(regionRepository.listRegions()))
+                    _regionLiveData.postValue(ApiStatus.Success(regionRepository.listRegions()))
                 } else {
-                    regionRepository.getAllRegions()
-                        .catch {
-                            _regionStateFlow.emit(ApiStatus.Error(it))
+                    val response = regionRepository.getAllRegions()
+                    if (response.isSuccessful) {
+                        val emptyRegionList = ArrayList<RegionEntity>()
+                        response.body()?.forEach { regionResponse ->
+                            emptyRegionList.add(regionResponse.mapToEntity())
                         }
-                        .flatMapConcat { regionList ->
-                            val emptyRegionList = ArrayList<RegionEntity>()
-                            regionList.forEach { regionResponse ->
-                                emptyRegionList.add(regionResponse.mapToEntity())
-                            }
-                            regionRepository.addRegions(emptyRegionList)
-                        }
-                        .collect {
-                            _regionStateFlow.emit(ApiStatus.Success(regionRepository.listRegions()))
-                        }
+                        regionRepository.addRegions(emptyRegionList)
+                        _regionLiveData.postValue(ApiStatus.Success(regionRepository.listRegions()))
+                    } else {
+                        _regionLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                    }
                 }
             } else {
                 if (regionRepository.listRegions().isNotEmpty()) {
-                    _regionStateFlow.emit(ApiStatus.Success(regionRepository.listRegions()))
+                    _regionLiveData.postValue(ApiStatus.Success(regionRepository.listRegions()))
                 } else {
-                    _regionStateFlow.emit(ApiStatus.Error(Throwable(NO_INTERNET)))
+                    _regionLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
                 }
             }
         }
     }
 
-    fun findRegionById(regionId: String) = regionRepository.findRegionById(regionId)
+    suspend fun findRegionById(regionId: String) = regionRepository.findRegionById(regionId)
 
-    fun listRegions() = regionRepository.listRegions()
+    suspend fun listRegions() = regionRepository.listRegions()
 
 }

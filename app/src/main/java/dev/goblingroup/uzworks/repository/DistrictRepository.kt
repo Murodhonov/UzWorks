@@ -2,10 +2,7 @@ package dev.goblingroup.uzworks.repository
 
 import dev.goblingroup.uzworks.database.dao.DistrictDao
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
-import dev.goblingroup.uzworks.models.response.DistrictResponse
 import dev.goblingroup.uzworks.networking.DistrictService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class DistrictRepository @Inject constructor(
@@ -13,24 +10,23 @@ class DistrictRepository @Inject constructor(
     private val districtDao: DistrictDao
 ) {
 
-    suspend fun getDistrictById(districtId: String): Flow<DistrictResponse> =
+    suspend fun getDistrictById(districtId: String) =
         districtService.getDistrictById(districtId = districtId)
 
     suspend fun getAllDistricts() = districtService.getAllDistricts()
 
     suspend fun getDistrictByRegionId(regionId: String) = districtService.getDistrictByRegionId(regionId = regionId)
 
-    fun addDistrict(districtEntity: DistrictEntity) = districtDao.addDistrict(districtEntity)
+    suspend fun addDistrict(districtEntity: DistrictEntity) = districtDao.addDistrict(districtEntity)
 
-    fun addDistricts(districtList: List<DistrictEntity>) =
-        flow { emit(districtDao.addDistricts(districtList)) }
+    suspend fun addDistricts(districtList: List<DistrictEntity>) = districtDao.addDistricts(districtList)
 
-    fun findDistrict(districtId: String) = districtDao.findDistrict(districtId)
+    suspend fun findDistrict(districtId: String) = districtDao.findDistrict(districtId)
 
-    fun listDistricts() = districtDao.listDistricts()
+    suspend fun listDistricts() = districtDao.listDistricts()
 
-    fun listDistrictsByRegionId(regionId: String) = districtDao.listDistrictsByRegionId(regionId)
+    suspend fun listDistrictsByRegionId(regionId: String) = districtDao.listDistrictsByRegionId(regionId)
 
-    fun getRegionByDistrictId(districtId: String) = districtDao.getRegionByDistrictId(districtId)
+    suspend fun getRegionByDistrictId(districtId: String) = districtDao.getRegionByDistrictId(districtId)
 
 }
