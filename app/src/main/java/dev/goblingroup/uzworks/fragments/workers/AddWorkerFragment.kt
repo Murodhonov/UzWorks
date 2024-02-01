@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -22,7 +23,7 @@ import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.FragmentAddWorkerBinding
-import dev.goblingroup.uzworks.models.request.WorkerRequest
+import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
@@ -306,7 +307,7 @@ class AddWorkerFragment : Fragment() {
         binding.apply {
             lifecycleScope.launch {
                 securedWorkerViewModel.createWorker(
-                    workerRequest = WorkerRequest(
+                    workerCreateRequest = WorkerCreateRequest(
                         birthDate = birthdayTv.stringDateToString(),
                         categoryId = selectedCategoryId,
                         deadline = deadlineTv.stringDateToString(),

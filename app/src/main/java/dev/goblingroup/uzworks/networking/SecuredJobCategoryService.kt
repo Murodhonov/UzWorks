@@ -1,8 +1,8 @@
 package dev.goblingroup.uzworks.networking
 
+import dev.goblingroup.uzworks.models.request.JobCategoryCreateRequest
 import dev.goblingroup.uzworks.models.request.JobCategoryEditRequest
-import dev.goblingroup.uzworks.models.request.JobCategoryRequest
-import dev.goblingroup.uzworks.models.response.JobCategoryResponse
+import dev.goblingroup.uzworks.models.response.JobCategoryCreateResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -14,8 +14,8 @@ interface SecuredJobCategoryService {
 
     @POST("api/JobCategory/Create")
     suspend fun createJobCategory(
-        @Body jobCategoryRequest: JobCategoryRequest,
-    ): Response<JobCategoryResponse>
+        @Body jobCategoryCreateRequest: JobCategoryCreateRequest,
+    ): Response<JobCategoryCreateResponse>
 
     @DELETE("api/JobCategory/Delete/{id}")
     suspend fun deleteJobCategory(

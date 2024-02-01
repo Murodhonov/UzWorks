@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.models.request.JobCategoryCreateRequest
 import dev.goblingroup.uzworks.models.request.JobCategoryEditRequest
-import dev.goblingroup.uzworks.models.request.JobCategoryRequest
-import dev.goblingroup.uzworks.models.response.JobCategoryResponse
+import dev.goblingroup.uzworks.models.response.JobCategoryCreateResponse
 import dev.goblingroup.uzworks.repository.secured.SecuredJobCategoryRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
@@ -23,7 +23,7 @@ class SecuredJobCategoryViewModel @Inject constructor(
     private val TAG = "SecuredDistrictViewMode"
 
     private val createLiveData =
-        MutableLiveData<ApiStatus<JobCategoryResponse>>(ApiStatus.Loading())
+        MutableLiveData<ApiStatus<JobCategoryCreateResponse>>(ApiStatus.Loading())
 
     private val deleteLiveData =
         MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
@@ -31,11 +31,11 @@ class SecuredJobCategoryViewModel @Inject constructor(
     private val editLiveData =
         MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createJobCategory(jobCategoryRequest: JobCategoryRequest): LiveData<ApiStatus<JobCategoryResponse>> {
+    fun createJobCategory(jobCategoryCreateRequest: JobCategoryCreateRequest): LiveData<ApiStatus<JobCategoryCreateResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 val response =
-                    securedJobCategoryRepository.createJobCategory(jobCategoryRequest)
+                    securedJobCategoryRepository.createJobCategory(jobCategoryCreateRequest)
                 if (response.isSuccessful) {
                     createLiveData.postValue(ApiStatus.Success(null))
                 } else {

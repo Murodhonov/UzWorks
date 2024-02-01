@@ -194,7 +194,7 @@ class LoginFragment : Fragment() {
     private fun loginSuccess(loginResponse: LoginResponse) {
         authDialog.dismiss()
         findNavController().navigate(
-            resId = if (loginResponse.access.contains(UserRole.SUPER_ADMIN.roleName)) R.id.adminPanelFragment else R.id.homeFragment,
+            resId = R.id.homeFragment,
             args = null,
             navOptions = getNavOptions()
         )

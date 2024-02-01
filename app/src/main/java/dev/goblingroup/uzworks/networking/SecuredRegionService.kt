@@ -1,7 +1,8 @@
 package dev.goblingroup.uzworks.networking
 
+import dev.goblingroup.uzworks.models.request.RegionCreateRequest
 import dev.goblingroup.uzworks.models.request.RegionEditRequest
-import dev.goblingroup.uzworks.models.response.RegionResponse
+import dev.goblingroup.uzworks.models.response.RegionCreateResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -13,8 +14,8 @@ interface SecuredRegionService {
 
     @POST("api/Region/Create")
     suspend fun createRegion(
-        @Body regionName: String
-    ): Response<RegionResponse>
+        @Body regionCreateRequest: RegionCreateRequest
+    ): Response<RegionCreateResponse>
 
     @DELETE("api/Region/Delete/{id}")
     suspend fun deleteRegion(

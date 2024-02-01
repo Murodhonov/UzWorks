@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSettingsBinding
@@ -17,6 +20,8 @@ import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
 import dev.goblingroup.uzworks.utils.turnSwitchOff
 import dev.goblingroup.uzworks.utils.turnSwitchOn
+import dev.goblingroup.uzworks.vm.SecurityViewModel
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -31,6 +36,8 @@ class SettingsFragment : Fragment() {
 
     private var themeState = true
     private var isThemeAnimating = false
+
+    private val securityViewModel: SecurityViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -128,7 +135,17 @@ class SettingsFragment : Fragment() {
     }
 
     private fun logout() {
-        findNavController().navigate(R.id.getStartedFragment)
+        lifecycleScope.launch {
+            if (securityViewModel.deleteUser()) {
+                findNavController().navigate(R.id.getStartedFragment)
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    "Couldn't logout",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     override fun onDestroyView() {

@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.vm
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.repository.JobRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,6 +56,7 @@ class JobsViewModel @Inject constructor(
             if (networkHelper.isNetworkConnected()) {
                 val response = jobRepository.getAllJobs()
                 if (response.isSuccessful) {
+                    Log.d(TAG, "getAllJobs: ${response.body()?.size} jobs got")
                     jobRepository.addJobs(response.body()!!)
                     _jobsLiveData.postValue(ApiStatus.Success(jobRepository.listDatabaseJobs()))
                 } else {

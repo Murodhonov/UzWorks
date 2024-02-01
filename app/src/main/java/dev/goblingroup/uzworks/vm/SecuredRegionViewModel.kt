@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.models.request.RegionCreateRequest
 import dev.goblingroup.uzworks.models.request.RegionEditRequest
 import dev.goblingroup.uzworks.repository.secured.SecuredRegionRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,10 +30,10 @@ class SecuredRegionViewModel @Inject constructor(
     private val editLiveData =
         MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createDistrict(regionName: String): LiveData<ApiStatus<Unit>> {
+    fun createDistrict(regionCreateRequest: RegionCreateRequest): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                val response = securedRegionRepository.createRegion(regionName)
+                val response = securedRegionRepository.createRegion(regionCreateRequest)
                 if (response.isSuccessful) {
                     createLiveData.postValue(ApiStatus.Success(null))
                 } else {

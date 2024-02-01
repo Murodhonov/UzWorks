@@ -27,12 +27,12 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/jobDetailsFragment"
-        android:name="dev.goblingroup.uzworks.fragments.jobs and workers.JobDetailsFragment"
+        android:name="dev.goblingroup.uzworks.fragments.jobs.JobDetailsFragment"
         android:label="fragment_job_details"
         tools:layout="@layout/fragment_job_details" />
     <fragment
         android:id="@+id/jobsFragment"
-        android:name="dev.goblingroup.uzworks.fragments.jobs and workers.JobsFragment"
+        android:name="dev.goblingroup.uzworks.fragments.jobs.JobsFragment"
         android:label="fragment_jobs"
         tools:layout="@layout/fragment_jobs" />
     <fragment
@@ -82,12 +82,22 @@
         tools:layout="@layout/fragment_admin_panel" />
     <fragment
         android:id="@+id/addWorkerFragment"
-        android:name="dev.goblingroup.uzworks.fragments.jobs and workers.AddWorkerFragment"
+        android:name="dev.goblingroup.uzworks.fragments.workers.AddWorkerFragment"
         android:label="fragment_add_worker"
         tools:layout="@layout/fragment_add_worker" />
     <fragment
         android:id="@+id/addJobFragment"
-        android:name="dev.goblingroup.uzworks.fragments.jobs and workers.AddJobFragment"
+        android:name="dev.goblingroup.uzworks.fragments.jobs.AddJobFragment"
         android:label="fragment_add_job"
         tools:layout="@layout/fragment_add_job" />
+    <fragment
+        android:id="@+id/workerDetailsFragment"
+        android:name="dev.goblingroup.uzworks.fragments.workers.WorkerDetailsFragment"
+        android:label="fragment_worker_details"
+        tools:layout="@layout/fragment_worker_details" />
+    <fragment
+        android:id="@+id/workersFragment"
+        android:name="dev.goblingroup.uzworks.fragments.workers.WorkersFragment"
+        android:label="fragment_workers"
+        tools:layout="@layout/fragment_workers" />
 </navigation>

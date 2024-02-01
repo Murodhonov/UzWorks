@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.fragments.jobs
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.adapters.rv_adapters.SavedJobsAdapter
+import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.databinding.FragmentSavedJobsBinding
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.JobsViewModel
@@ -31,18 +33,20 @@ class SavedJobsFragment : Fragment() {
     private val jobsViewModel: JobsViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
+    private lateinit var savedJobs: ArrayList<JobEntity>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "onCreateView: lifecycle checking")
+        Log.d(TAG, "onCreateView: lifecycle checking $TAG")
         _binding = FragmentSavedJobsBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            Log.d(TAG, "onViewCreated: lifecycle checking")
+            Log.d(TAG, "onViewCreated: lifecycle checking $TAG")
             loadSavedJobs()
             findJobBtn.setOnClickListener {
                 findJobClickListener?.onFindJobClick()
@@ -53,11 +57,11 @@ class SavedJobsFragment : Fragment() {
     private fun loadSavedJobs() {
         lifecycleScope.launch {
             binding.apply {
-                val savedJobList = jobsViewModel.listSavedJobs()
-                if (savedJobList.isNotEmpty()) {
+                savedJobs = ArrayList(jobsViewModel.listSavedJobs())
+                if (savedJobs.isNotEmpty()) {
                     emptyLayout.visibility = View.GONE
                     savedJobsAdapter = SavedJobsAdapter(
-                        jobsViewModel.listSavedJobs(),
+                        savedJobs,
                         jobCategoryViewModel.listJobCategories(),
                         { clickedJobId ->
                             jobClickListener?.onSavedJobClick(clickedJobId)
@@ -77,13 +81,13 @@ class SavedJobsFragment : Fragment() {
     private fun unSave(jobId: String, position: Int) {
         lifecycleScope.launch {
             binding.apply {
-                if (jobsViewModel.unSaveJob(jobId)) {
-                    savedJobsAdapter.notifyItemRemoved(position)
-                    savedJobsAdapter.notifyItemRangeChanged(
-                        position,
-                        jobsViewModel.countSavedJobs() - position
-                    )
-                } else {
+                savedJobs.removeAt(position)
+                savedJobsAdapter.notifyItemRemoved(position)
+                savedJobsAdapter.notifyItemRangeChanged(
+                    position,
+                    jobsViewModel.countSavedJobs() - position
+                )
+                if (!jobsViewModel.unSaveJob(jobId)) {
                     emptyLayout.visibility = View.VISIBLE
                 }
             }
@@ -108,20 +112,50 @@ class SavedJobsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(TAG, "onDestroyView: lifecycle checking")
+        Log.d(TAG, "onDestroyView: lifecycle checking $TAG")
         _binding = null
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(TAG, "onPause: lifecycle checking")
+        Log.d(TAG, "onPause: lifecycle checking $TAG")
         loadSavedJobs()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume: lifecycle checking")
+        Log.d(TAG, "onResume: lifecycle checking $TAG")
         loadSavedJobs()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(TAG, "onAttach: lifecycle checking $TAG")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "onDetach: lifecycle checking $TAG")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy: lifecycle checking $TAG")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate: ")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: lifecycle checking $TAG")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop: lifecycle checking $TAG")
     }
 
     companion object {

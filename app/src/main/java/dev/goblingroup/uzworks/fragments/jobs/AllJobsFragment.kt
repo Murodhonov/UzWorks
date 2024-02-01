@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.fragments.jobs
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +25,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AllJobsFragment : Fragment() {
 
-    private val TAG = "JobListFragment"
+    private val TAG = "AllJobsFragment"
 
     private var _binding: FragmentAllJobsBinding? = null
     private val binding get() = _binding!!
@@ -39,14 +41,14 @@ class AllJobsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "onCreateView: lifecycle checking")
+        Log.d(TAG, "onCreateView: lifecycle checking $TAG")
         _binding = FragmentAllJobsBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            Log.d(TAG, "onViewCreated: lifecycle checking")
+            Log.d(TAG, "onViewCreated: lifecycle checking $TAG")
             loadJobs()
         }
     }
@@ -117,20 +119,50 @@ class AllJobsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(TAG, "onDestroyView: lifecycle checking")
+        Log.d(TAG, "onDestroyView: lifecycle checking $TAG")
         _binding = null
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(TAG, "onPause: lifecycle checking")
+        Log.d(TAG, "onPause: lifecycle checking $TAG")
         loadJobs()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume: lifecycle checking")
+        Log.d(TAG, "onResume: lifecycle checking $TAG")
         loadJobs()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(TAG, "onAttach: lifecycle checking $TAG")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "onDetach: lifecycle checking $TAG")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy: lifecycle checking $TAG")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate: ")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: lifecycle checking $TAG")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop: lifecycle checking $TAG")
     }
 
     companion object {
@@ -139,7 +171,7 @@ class AllJobsFragment : Fragment() {
         fun newInstance() =
             AllJobsFragment().apply {
                 arguments = Bundle().apply {
-//                    putString("title", title)
+
                 }
             }
     }

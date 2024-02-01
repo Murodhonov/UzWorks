@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -15,21 +17,18 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.adapters.DistrictAdapter
-import dev.goblingroup.uzworks.adapters.JobCategoryAdapter
-import dev.goblingroup.uzworks.adapters.RegionAdapter
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
-import dev.goblingroup.uzworks.models.request.JobRequest
-import dev.goblingroup.uzworks.models.response.JobResponse
-import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.utils.ConstValues
+import dev.goblingroup.uzworks.models.request.JobCreateRequest
+import dev.goblingroup.uzworks.models.response.JobCreateResponse
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.stringDateToString
 import dev.goblingroup.uzworks.utils.stringToDate
+import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.DistrictViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.RegionViewModel
@@ -210,28 +209,30 @@ class AddJobFragment : Fragment() {
     private fun createJob() {
         binding.apply {
             lifecycleScope.launch {
-                securedJobViewModel.createJob(jobRequest = JobRequest(
-                    benefit = benefitEt.editText?.text.toString(),
-                    categoryId = selectedCategoryId,
-                    deadline = deadlineTv.stringDateToString(),
-                    districtId = selectedDistrictId,
-                    gender = selectedGender,
-                    instagramLink = instagramUsernameEt.editText?.text.toString(),
-                    latitude = 41.3409,
-                    longitude = 69.2867,
-                    maxAge = maxAgeEt.editText?.text.toString().toInt(),
-                    minAge = minAgeEt.editText?.text.toString().toInt(),
-                    phoneNumber = phoneNumberEt.editText?.text.toString(),
-                    requirement = requirementEt.editText?.text.toString(),
-                    salary = salaryEt.editText?.text.toString()
-                        .substring(0, salaryEt.editText?.text.toString().length - 5)
-                        .toInt(),
-                    telegramLink = "link of post on telegram channel",
-                    tgUserName = tgUserNameEt.editText?.text.toString(),
-                    title = titleEt.editText?.text.toString(),
-                    workingSchedule = workingScheduleEt.editText?.text.toString(),
-                    workingTime = workingTimeEt.editText?.text.toString()
-                )).observe(viewLifecycleOwner) {
+                securedJobViewModel.createJob(
+                    jobCreateRequest = JobCreateRequest(
+                        benefit = benefitEt.editText?.text.toString(),
+                        categoryId = selectedCategoryId,
+                        deadline = deadlineTv.stringDateToString(),
+                        districtId = selectedDistrictId,
+                        gender = selectedGender,
+                        instagramLink = instagramUsernameEt.editText?.text.toString(),
+                        latitude = 41.3409,
+                        longitude = 69.2867,
+                        maxAge = maxAgeEt.editText?.text.toString().toInt(),
+                        minAge = minAgeEt.editText?.text.toString().toInt(),
+                        phoneNumber = phoneNumberEt.editText?.text.toString(),
+                        requirement = requirementEt.editText?.text.toString(),
+                        salary = salaryEt.editText?.text.toString()
+                            .substring(0, salaryEt.editText?.text.toString().length - 5)
+                            .toInt(),
+                        telegramLink = "link of post on telegram channel",
+                        tgUserName = tgUserNameEt.editText?.text.toString(),
+                        title = titleEt.editText?.text.toString(),
+                        workingSchedule = workingScheduleEt.editText?.text.toString(),
+                        workingTime = workingTimeEt.editText?.text.toString()
+                    )
+                ).observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
                             Toast.makeText(
@@ -239,12 +240,12 @@ class AddJobFragment : Fragment() {
                                 "some error on creating job",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            Log.e(ConstValues.TAG, "createWorker: ${it.error}")
+                            Log.e(TAG, "createWorker: ${it.error}")
                             Log.e(
-                                ConstValues.TAG,
+                                TAG,
                                 "createJob: ${it.error.stackTrace.joinToString()}"
                             )
-                            Log.e(ConstValues.TAG, "createJob: ${it.error.message}")
+                            Log.e(TAG, "createJob: ${it.error.message}")
                         }
 
                         is ApiStatus.Loading -> {
@@ -259,8 +260,8 @@ class AddJobFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             Log.d(
-                                ConstValues.TAG,
-                                "createJob: ${it.response as JobResponse}"
+                                TAG,
+                                "createJob: ${it.response as JobCreateResponse}"
                             )
                         }
                     }
@@ -336,10 +337,10 @@ class AddJobFragment : Fragment() {
                             "some error while loading regions",
                             Toast.LENGTH_SHORT
                         ).show()
-                        Log.e(ConstValues.TAG, "loadRegions: ${it.error}")
-                        Log.e(ConstValues.TAG, "loadRegions: ${it.error.message}")
-                        Log.e(ConstValues.TAG, "loadRegions: ${it.error.printStackTrace()}")
-                        Log.e(ConstValues.TAG, "loadRegions: ${it.error.stackTrace}")
+                        Log.e(TAG, "loadRegions: ${it.error}")
+                        Log.e(TAG, "loadRegions: ${it.error.message}")
+                        Log.e(TAG, "loadRegions: ${it.error.printStackTrace()}")
+                        Log.e(TAG, "loadRegions: ${it.error.stackTrace}")
                     }
 
                     is ApiStatus.Loading -> {
@@ -347,6 +348,7 @@ class AddJobFragment : Fragment() {
                     }
 
                     is ApiStatus.Success -> {
+                        Log.d(TAG, "loadRegions: ${it.response?.size} regions got")
                         setRegions(it.response as List<RegionEntity>)
                     }
                 }
@@ -356,18 +358,17 @@ class AddJobFragment : Fragment() {
 
     private fun setRegions(regionList: List<RegionEntity>) {
         binding.apply {
-            val regionAdapter = RegionAdapter(
+            val regionAdapter = ArrayAdapter(
                 requireContext(),
-                R.layout.drop_down_item,
-                regionList
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                regionList.map { it.name }
             )
-            regionChoice.threshold = 1
             regionChoice.setAdapter(regionAdapter)
 
             regionChoice.setOnItemClickListener { parent, view, position, id ->
                 districtChoice.text.clear()
                 districtChoice.hint = "Select district"
-                setDistricts(regionAdapter.getItem(position)?.id.toString())
+                setDistricts(regionList[position].id)
             }
         }
     }
@@ -375,15 +376,15 @@ class AddJobFragment : Fragment() {
     private fun setDistricts(regionId: String) {
         binding.apply {
             lifecycleScope.launch {
-                val districtAdapter = DistrictAdapter(
+                val districtList = districtViewModel.listDistrictsByRegionId(regionId)
+                val districtAdapter = ArrayAdapter(
                     requireContext(),
-                    R.layout.drop_down_item,
-                    districtViewModel.listDistrictsByRegionId(regionId)
+                    androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                    districtList.map { it.name }
                 )
-                districtChoice.threshold = 1
                 districtChoice.setAdapter(districtAdapter)
                 districtChoice.setOnItemClickListener { parent, view, position, id ->
-                    selectedDistrictId = districtAdapter.getItem(position).id
+                    selectedDistrictId = districtList[position].id
                 }
             }
         }
@@ -399,10 +400,10 @@ class AddJobFragment : Fragment() {
                             "some error while loading districts",
                             Toast.LENGTH_SHORT
                         ).show()
-                        Log.e(ConstValues.TAG, "loadDistricts: ${it.error}")
-                        Log.e(ConstValues.TAG, "loadDistricts: ${it.error.message}")
-                        Log.e(ConstValues.TAG, "loadDistricts: ${it.error.printStackTrace()}")
-                        Log.e(ConstValues.TAG, "loadDistricts: ${it.error.stackTrace}")
+                        Log.e(TAG, "loadDistricts: ${it.error}")
+                        Log.e(TAG, "loadDistricts: ${it.error.message}")
+                        Log.e(TAG, "loadDistricts: ${it.error.printStackTrace()}")
+                        Log.e(TAG, "loadDistricts: ${it.error.stackTrace}")
                     }
 
                     is ApiStatus.Loading -> {
@@ -411,7 +412,7 @@ class AddJobFragment : Fragment() {
 
                     is ApiStatus.Success -> {
                         (it.response as List<DistrictEntity>).forEach {
-                            Log.d(ConstValues.TAG, "loadDistricts: succeeded $it")
+                            Log.d(TAG, "loadDistricts: succeeded $it")
                         }
                     }
                 }
@@ -429,10 +430,10 @@ class AddJobFragment : Fragment() {
                             "Some error on loading job categories",
                             Toast.LENGTH_SHORT
                         ).show()
-                        Log.e(ConstValues.TAG, "loadCategories: ${it.error}")
-                        Log.e(ConstValues.TAG, "loadCategories: ${it.error.message}")
-                        Log.e(ConstValues.TAG, "loadCategories: ${it.error.printStackTrace()}")
-                        Log.e(ConstValues.TAG, "loadCategories: ${it.error.stackTrace}")
+                        Log.e(TAG, "loadCategories: ${it.error}")
+                        Log.e(TAG, "loadCategories: ${it.error.message}")
+                        Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
+                        Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
                     }
 
                     is ApiStatus.Loading -> {
@@ -449,12 +450,14 @@ class AddJobFragment : Fragment() {
 
     private fun setJobCategories(jobCategoryList: List<JobCategoryEntity>) {
         binding.apply {
-            val jobCategoryAdapter =
-                JobCategoryAdapter(requireContext(), R.layout.drop_down_item, jobCategoryList)
-            jobCategoryChoice.threshold = 1
+            val jobCategoryAdapter = ArrayAdapter(
+                requireContext(),
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                jobCategoryList.map { it.title }
+            )
             jobCategoryChoice.setAdapter(jobCategoryAdapter)
             jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
-                selectedCategoryId = jobCategoryAdapter.getItem(position)?.id.toString()
+                selectedCategoryId = jobCategoryList[position].id
             }
         }
     }

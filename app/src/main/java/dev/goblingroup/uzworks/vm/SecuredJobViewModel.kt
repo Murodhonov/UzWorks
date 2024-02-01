@@ -6,13 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.request.JobEditRequest
-import dev.goblingroup.uzworks.models.request.JobRequest
-import dev.goblingroup.uzworks.models.response.JobResponse
+import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.repository.secured.SecuredJobRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,7 +24,7 @@ class SecuredJobViewModel @Inject constructor(
     private val TAG = "SecuredDistrictViewMode"
 
     private val createLiveData =
-        MutableLiveData<ApiStatus<JobResponse>>(ApiStatus.Loading())
+        MutableLiveData<ApiStatus<JobCreateResponse>>(ApiStatus.Loading())
 
     private val deleteLiveData =
         MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
@@ -33,14 +32,14 @@ class SecuredJobViewModel @Inject constructor(
     private val editLiveData =
         MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createJob(jobRequest: JobRequest): LiveData<ApiStatus<JobResponse>> {
+    fun createJob(jobCreateRequest: JobCreateRequest): LiveData<ApiStatus<JobCreateResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 Log.d(
                     TAG,
-                    "createJob: creating job for $jobRequest object ${this@SecuredJobViewModel::class.java.simpleName}"
+                    "createJob: creating job for $jobCreateRequest object ${this@SecuredJobViewModel::class.java.simpleName}"
                 )
-                val response = securedJobRepository.createJob(jobRequest)
+                val response = securedJobRepository.createJob(jobCreateRequest)
                 if (response.isSuccessful) {
                     createLiveData.postValue(ApiStatus.Success(response.body()))
                 } else {

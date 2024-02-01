@@ -1,8 +1,8 @@
 package dev.goblingroup.uzworks.networking
 
+import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.request.JobEditRequest
-import dev.goblingroup.uzworks.models.request.JobRequest
-import dev.goblingroup.uzworks.models.response.JobResponse
+import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -14,8 +14,8 @@ interface SecuredJobService {
 
     @POST("api/Job/Create")
     suspend fun createJob(
-        @Body jobRequest: JobRequest,
-    ): Response<JobResponse>
+        @Body jobCreateRequest: JobCreateRequest,
+    ): Response<JobCreateResponse>
 
     @DELETE("api/Job/Delete/{id}")
     suspend fun deleteJob(

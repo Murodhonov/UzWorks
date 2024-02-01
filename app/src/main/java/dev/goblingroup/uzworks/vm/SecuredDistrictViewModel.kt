@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.models.request.DistrictCreateRequest
 import dev.goblingroup.uzworks.models.request.DistrictEditRequest
-import dev.goblingroup.uzworks.models.request.DistrictRequest
-import dev.goblingroup.uzworks.models.response.DistrictResponse
+import dev.goblingroup.uzworks.models.response.DistrictCreateResponse
 import dev.goblingroup.uzworks.repository.secured.SecuredDistrictRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
@@ -23,7 +23,7 @@ class SecuredDistrictViewModel @Inject constructor(
     private val TAG = "SecuredDistrictViewMode"
 
     private val createLiveData =
-        MutableLiveData<ApiStatus<DistrictResponse>>(ApiStatus.Loading())
+        MutableLiveData<ApiStatus<DistrictCreateResponse>>(ApiStatus.Loading())
 
     private val deleteLiveData =
         MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
@@ -31,10 +31,10 @@ class SecuredDistrictViewModel @Inject constructor(
     private val editLiveData =
         MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createDistrict(districtRequest: DistrictRequest): LiveData<ApiStatus<DistrictResponse>> {
+    fun createDistrict(districtCreateRequest: DistrictCreateRequest): LiveData<ApiStatus<DistrictCreateResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                val response = securedDistrictRepository.createDistrict(districtRequest)
+                val response = securedDistrictRepository.createDistrict(districtCreateRequest)
                 if (response.isSuccessful) {
                     createLiveData.postValue(ApiStatus.Success(response.body()))
                 } else {

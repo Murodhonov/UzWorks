@@ -1,18 +1,14 @@
 package dev.goblingroup.uzworks.models.request
 
-data class JobRequest(
-    var benefit: String,
+data class WorkerCreateRequest(
+    var birthDate: String,
     var categoryId: String,
     var deadline: String,
     var districtId: String,
     var gender: String,
     var instagramLink: String,
-    var latitude: Double,
-    var longitude: Double,
-    var maxAge: Int,
-    var minAge: Int,
+    var location: String,
     var phoneNumber: String,
-    var requirement: String,
     var salary: Int,
     var telegramLink: String,
     var tgUserName: String,

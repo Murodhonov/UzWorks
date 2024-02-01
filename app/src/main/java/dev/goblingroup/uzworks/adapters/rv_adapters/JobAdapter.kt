@@ -21,7 +21,7 @@ class JobAdapter(
         fun onBind(position: Int) {
             workBinding.apply {
                 val job = jobList[position]
-                titleTv.text = job.tgUserName
+                titleTv.text = job.title
                 costTv.text = "${job.salary} so'm"
                 genderTv.text = job.gender
                 categoryTv.text = getJobCategory(position)
@@ -34,15 +34,9 @@ class JobAdapter(
 
                 saveIv.setOnClickListener {
                     if (jobList[position].isSaved) {
-                        /**
-                         * should unSave
-                         */
                         saveIv.setImageResource(R.drawable.ic_unsaved)
                         onSaveClick.invoke(false, jobList[position].id)
                     } else {
-                        /**
-                         * should save
-                         */
                         saveIv.setImageResource(R.drawable.ic_saved)
                         onSaveClick.invoke(true, jobList[position].id)
                     }

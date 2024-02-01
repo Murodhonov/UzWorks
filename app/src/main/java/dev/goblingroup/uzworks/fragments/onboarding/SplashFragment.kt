@@ -84,7 +84,7 @@ class SplashFragment : Fragment() {
 
                     is ApiStatus.Success -> {
                         findNavController().navigate(
-                            resId = if ((it.response as LoginResponse).access.contains(UserRole.SUPER_ADMIN.roleName)) R.id.adminPanelFragment else R.id.homeFragment,
+                            resId = R.id.homeFragment,
                             args = null
                         )
                     }

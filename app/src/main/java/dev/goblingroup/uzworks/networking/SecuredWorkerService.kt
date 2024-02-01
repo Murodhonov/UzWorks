@@ -1,7 +1,7 @@
 package dev.goblingroup.uzworks.networking
 
+import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
-import dev.goblingroup.uzworks.models.request.WorkerRequest
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -14,7 +14,7 @@ interface SecuredWorkerService {
 
     @POST("api/Worker/Create")
     suspend fun createWorker(
-        @Body workerRequest: WorkerRequest
+        @Body workerCreateRequest: WorkerCreateRequest
     ): Response<WorkerResponse>
 
     @DELETE("api/Worker/Delete/{id}")

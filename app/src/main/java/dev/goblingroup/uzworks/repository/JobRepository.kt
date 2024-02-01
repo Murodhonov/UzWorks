@@ -1,10 +1,13 @@
 package dev.goblingroup.uzworks.repository
 
+import android.util.Log
 import dev.goblingroup.uzworks.database.dao.JobDao
 import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
+import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.networking.JobService
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import javax.inject.Inject
 
 class JobRepository @Inject constructor(
@@ -28,7 +31,9 @@ class JobRepository @Inject constructor(
         } catch (e: Exception) {
             ArrayList()
         }
+        Log.d(TAG, "addJobs: existingJobs -> $existingJobs")
         val newJobs = mutableListOf<JobEntity>()
+
 
         jobList.forEach { apiJob ->
             val existingJob = existingJobs.find { it.id == apiJob.id }
@@ -44,6 +49,7 @@ class JobRepository @Inject constructor(
                 newJobs.add(apiJob.mapToEntity(false))
             }
         }
+        jobDao.addJobs(newJobs)
     }
 
     fun saveJob(jobId: String) = jobDao.saveJob(jobId)

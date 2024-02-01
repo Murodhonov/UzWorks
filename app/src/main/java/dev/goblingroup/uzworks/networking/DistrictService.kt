@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.networking
 
+import dev.goblingroup.uzworks.models.response.DistrictCreateResponse
 import dev.goblingroup.uzworks.models.response.DistrictResponse
 import retrofit2.Response
 import retrofit2.http.GET

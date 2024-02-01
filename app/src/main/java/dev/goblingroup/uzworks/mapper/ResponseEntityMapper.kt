@@ -6,10 +6,14 @@ import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.database.entity.UserEntity
 import dev.goblingroup.uzworks.models.request.LoginRequest
+import dev.goblingroup.uzworks.models.response.DistrictCreateResponse
 import dev.goblingroup.uzworks.models.response.DistrictResponse
+import dev.goblingroup.uzworks.models.response.JobCategoryCreateResponse
 import dev.goblingroup.uzworks.models.response.JobCategoryResponse
+import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.LoginResponse
+import dev.goblingroup.uzworks.models.response.RegionCreateResponse
 import dev.goblingroup.uzworks.models.response.RegionResponse
 
 fun LoginResponse.mapToEntity(loginRequest: LoginRequest): UserEntity {
@@ -27,7 +31,7 @@ fun LoginResponse.mapToEntity(loginRequest: LoginRequest): UserEntity {
 
 fun JobResponse.mapToEntity(isSaved: Boolean): JobEntity {
     return JobEntity(
-        id.toString(),
+        id,
         benefit,
         categoryId,
         deadline,

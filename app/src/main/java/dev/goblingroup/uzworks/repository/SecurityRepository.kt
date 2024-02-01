@@ -32,9 +32,7 @@ class SecurityRepository @Inject constructor(
 
     suspend fun deleteUser(): Boolean {
         userDao.deleteUser()
-        val tokenDeleted = deleteToken()
-        val userRolesDeleted = deleteUserRoles()
-        return tokenDeleted && userRolesDeleted
+        return sharedPreferences.edit().clear().commit()
     }
 
     private fun listToJson(list: List<String>): String {

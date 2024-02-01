@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
+import dev.goblingroup.uzworks.models.response.DistrictCreateResponse
 import dev.goblingroup.uzworks.models.response.DistrictResponse
 import dev.goblingroup.uzworks.repository.DistrictRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
@@ -28,7 +29,7 @@ class DistrictViewModel @Inject constructor(
         MutableLiveData<ApiStatus<DistrictResponse>>(ApiStatus.Loading())
 
     private val districtByRegionIdLiveData =
-        MutableLiveData<ApiStatus<List<DistrictResponse>>>(ApiStatus.Loading())
+        MutableLiveData<ApiStatus<List<DistrictCreateResponse>>>(ApiStatus.Loading())
 
     init {
         fetchDistricts()
@@ -43,8 +44,8 @@ class DistrictViewModel @Inject constructor(
                     val response = districtRepository.getAllDistricts()
                     if (response.isSuccessful) {
                         val emptyDistrictList = ArrayList<DistrictEntity>()
-                        response.body()?.forEach { districtResponse ->
-                            emptyDistrictList.add(districtResponse.mapToEntity())
+                        response.body()?.forEach { districtCreateResponse ->
+                            emptyDistrictList.add(districtCreateResponse.mapToEntity())
                         }
                         districtRepository.addDistricts(emptyDistrictList)
                         _districtLiveData.postValue(ApiStatus.Success(districtRepository.listDistricts()))
@@ -78,7 +79,7 @@ class DistrictViewModel @Inject constructor(
         return districtByIdLiveData
     }
 
-    fun getDistrictByRegionId(regionId: String): LiveData<ApiStatus<List<DistrictResponse>>> {
+    fun getDistrictByRegionId(regionId: String): LiveData<ApiStatus<List<DistrictCreateResponse>>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 val response = districtRepository.getDistrictByRegionId(regionId)

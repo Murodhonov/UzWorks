@@ -31,6 +31,7 @@ class DatabaseModule {
             "uz_works_database"
         )
             .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
             .build()
     }
 

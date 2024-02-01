@@ -6,13 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
-import dev.goblingroup.uzworks.models.request.WorkerRequest
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.repository.secured.SecuredWorkerRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,14 +32,14 @@ class SecuredWorkerViewModel @Inject constructor(
     private val editLiveData =
         MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    fun createWorker(workerRequest: WorkerRequest): LiveData<ApiStatus<WorkerResponse>> {
+    fun createWorker(workerCreateRequest: WorkerCreateRequest): LiveData<ApiStatus<WorkerResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 Log.d(
                     TAG,
-                    "createWorker: starting create worker $workerRequest in view model"
+                    "createWorker: starting create worker $workerCreateRequest in view model"
                 )
-                val response = securedWorkerRepository.createWorker(workerRequest)
+                val response = securedWorkerRepository.createWorker(workerCreateRequest)
                 if (response.isSuccessful) {
                     createLiveData.postValue(ApiStatus.Success(response.body()))
                 } else {
