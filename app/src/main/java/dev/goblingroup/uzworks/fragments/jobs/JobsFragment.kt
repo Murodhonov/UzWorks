@@ -14,7 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.adapters.view_pager_adapters.JobsViewPagerAdapter
+import dev.goblingroup.uzworks.adapters.view_pager_adapters.JobsPagerAdapter
 import dev.goblingroup.uzworks.databinding.FragmentJobsBinding
 import dev.goblingroup.uzworks.databinding.SavedJobsPropertiesBinding
 import dev.goblingroup.uzworks.utils.getNavOptions
@@ -37,7 +37,7 @@ class JobsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            val adapter = JobsViewPagerAdapter(
+            val adapter = JobsPagerAdapter(
                 fragment = this@JobsFragment,
                 object : AllJobsFragment.OnAllJobClickListener {
                     override fun onAllJobClick(jobId: String) {

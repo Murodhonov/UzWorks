@@ -15,30 +15,4 @@
     <string name="code_uz_kirill">Ўз</string>
     <string name="code_en">En</string>
     <string name="code_ru">Ru</string>
-
-    <string name="uz_latin">O\'zbekcha</string>
-    <string name="uz_kirill">Ўзбекча</string>
-    <string name="en">English</string>
-    <string name="ru">Русский</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!--
-    <string name="welcome">Xush kelibsiz</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</string>
-    <string name="email">Email</string>
-    <string name="password">Parol</string>
-    <string name="forgot_password">Parolni unutdingizmi ?</string>
-    <string name="login">Tizimga kirish</string>
-    <string name="sign_up">Ro\'yxatdan o\'tish</string>
-    <string name="not_have_account">Hali akkauntingiz yo\'qmi ?</string>
-
-    <string name="create_account">Akkaunt yaratish</string>
-    <string name="first_name">Ism</string>
-    <string name="last_name">Familiya</string>
-    <string name="confirm_password">Parolni tasdiqlang</string>
-    <string name="sign_in_with_google">Google bilan tizimga kirish</string>
-    <string name="sign_up_with_google">Google bilan ro\'yxatdan o'tish</string>
-    <string name="back_login">Tizimga kirishga qaytish</string>
-    -->
-
 </resources>

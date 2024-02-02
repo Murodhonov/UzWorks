@@ -16,9 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.adapters.DistrictAdapter
-import dev.goblingroup.uzworks.adapters.JobCategoryAdapter
-import dev.goblingroup.uzworks.adapters.RegionAdapter
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
@@ -387,10 +384,10 @@ class AddWorkerFragment : Fragment() {
 
     private fun setRegions(regionList: List<RegionEntity>) {
         binding.apply {
-            val regionAdapter = RegionAdapter(
+            val regionAdapter = ArrayAdapter(
                 requireContext(),
-                R.layout.drop_down_item,
-                regionList
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                regionList.map { it.name }
             )
             regionChoice.threshold = 1
             regionChoice.setAdapter(regionAdapter)
@@ -398,7 +395,7 @@ class AddWorkerFragment : Fragment() {
             regionChoice.setOnItemClickListener { parent, view, position, id ->
                 districtChoice.text.clear()
                 districtChoice.hint = "Select district"
-                setDistricts(regionAdapter.getItem(position)?.id.toString())
+                setDistricts(regionList[position].id)
             }
         }
     }
@@ -406,15 +403,16 @@ class AddWorkerFragment : Fragment() {
     private fun setDistricts(regionId: String) {
         binding.apply {
             lifecycleScope.launch {
-                val districtAdapter = DistrictAdapter(
+                val districtList = districtViewModel.listDistrictsByRegionId(regionId)
+                val districtAdapter = ArrayAdapter(
                     requireContext(),
-                    R.layout.drop_down_item,
-                    districtViewModel.listDistrictsByRegionId(regionId)
+                    androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                    districtList.map { it.name }
                 )
                 districtChoice.threshold = 1
                 districtChoice.setAdapter(districtAdapter)
                 districtChoice.setOnItemClickListener { parent, view, position, id ->
-                    selectedDistrictId = districtAdapter.getItem(position).id
+                    selectedDistrictId = districtList[position].id
                 }
             }
         }
@@ -481,11 +479,15 @@ class AddWorkerFragment : Fragment() {
     private fun setJobCategories(jobCategoryList: List<JobCategoryEntity>) {
         binding.apply {
             val jobCategoryAdapter =
-                JobCategoryAdapter(requireContext(), R.layout.drop_down_item, jobCategoryList)
+                ArrayAdapter(
+                    requireContext(),
+                    androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                    jobCategoryList.map { it.title }
+                )
             jobCategoryChoice.threshold = 1
             jobCategoryChoice.setAdapter(jobCategoryAdapter)
             jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
-                selectedCategoryId = jobCategoryAdapter.getItem(position)?.id.toString()
+                selectedCategoryId = jobCategoryList[position].id
             }
         }
     }

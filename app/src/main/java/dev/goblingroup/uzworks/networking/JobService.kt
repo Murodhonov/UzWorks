@@ -24,7 +24,7 @@ interface JobService {
         @Query("minSalary") minSalary: Int? = null,
         @Query("gender") gender: String? = null,
         @Query("regionId") regionId: String? = null,
-        @Query("districtId") districtId: String? = null,
+        @Query("districtId") districtId: String? = null
     ): Response<List<JobResponse>>
 
     @GET("api/Job/GetCount")

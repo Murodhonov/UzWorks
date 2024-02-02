@@ -266,7 +266,7 @@
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/work_announcements_layout" />
+        tools:listitem="@layout/job_announcements_layout" />
 
     <TextView
         android:id="@+id/no_works_tv"

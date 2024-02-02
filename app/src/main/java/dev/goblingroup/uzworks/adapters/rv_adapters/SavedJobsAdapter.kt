@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.JobEntity
-import dev.goblingroup.uzworks.databinding.WorkAnnouncementsLayoutBinding
+import dev.goblingroup.uzworks.databinding.JobAnnouncementsLayoutBinding
 
 class SavedJobsAdapter(
     private val jobList: List<JobEntity>,
@@ -16,7 +16,7 @@ class SavedJobsAdapter(
     private val unSaveJob: (String, Int) -> Unit
 ) : RecyclerView.Adapter<SavedJobsAdapter.JobViewHolder>() {
 
-    inner class JobViewHolder(val workBinding: WorkAnnouncementsLayoutBinding) :
+    inner class JobViewHolder(private val workBinding: JobAnnouncementsLayoutBinding) :
         ViewHolder(workBinding.root) {
         fun onBind(position: Int) {
             workBinding.apply {
@@ -47,7 +47,7 @@ class SavedJobsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         return JobViewHolder(
-            WorkAnnouncementsLayoutBinding.inflate(
+            JobAnnouncementsLayoutBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

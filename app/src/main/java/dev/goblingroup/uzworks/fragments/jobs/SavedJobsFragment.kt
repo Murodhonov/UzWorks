@@ -128,36 +128,6 @@ class SavedJobsFragment : Fragment() {
         loadSavedJobs()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d(TAG, "onAttach: lifecycle checking $TAG")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.d(TAG, "onDetach: lifecycle checking $TAG")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy: lifecycle checking $TAG")
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate: ")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart: lifecycle checking $TAG")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop: lifecycle checking $TAG")
-    }
-
     companion object {
         @JvmStatic
         fun newInstance() =

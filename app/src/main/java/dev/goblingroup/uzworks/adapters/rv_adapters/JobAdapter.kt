@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.JobEntity
-import dev.goblingroup.uzworks.databinding.WorkAnnouncementsLayoutBinding
+import dev.goblingroup.uzworks.databinding.JobAnnouncementsLayoutBinding
 
 class JobAdapter(
     private val jobList: List<JobEntity>,
@@ -16,10 +16,10 @@ class JobAdapter(
     private val onSaveClick: (Boolean, String) -> Unit
 ) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
 
-    inner class JobViewHolder(val workBinding: WorkAnnouncementsLayoutBinding) :
-        ViewHolder(workBinding.root) {
+    inner class JobViewHolder(private val jobBinding: JobAnnouncementsLayoutBinding) :
+        ViewHolder(jobBinding.root) {
         fun onBind(position: Int) {
-            workBinding.apply {
+            jobBinding.apply {
                 val job = jobList[position]
                 titleTv.text = job.title
                 costTv.text = "${job.salary} so'm"
@@ -57,7 +57,7 @@ class JobAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         return JobViewHolder(
-            WorkAnnouncementsLayoutBinding.inflate(
+            JobAnnouncementsLayoutBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

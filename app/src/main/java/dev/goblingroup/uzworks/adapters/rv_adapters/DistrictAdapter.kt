@@ -7,6 +7,8 @@ import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.databinding.DistrictItemBinding
+import dev.goblingroup.uzworks.vm.DistrictViewModel
+import javax.inject.Inject
 
 class DistrictAdapter(
     private var districtList: List<DistrictEntity>,

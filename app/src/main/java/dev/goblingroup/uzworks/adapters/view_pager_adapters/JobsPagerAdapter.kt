@@ -5,7 +5,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import dev.goblingroup.uzworks.fragments.jobs.AllJobsFragment
 import dev.goblingroup.uzworks.fragments.jobs.SavedJobsFragment
 
-class JobsViewPagerAdapter(
+class JobsPagerAdapter(
     fragment: Fragment,
     private val allJobsClickListener: AllJobsFragment.OnAllJobClickListener,
     private val savedJobsClickListener: SavedJobsFragment.OnSavedJobClickListener,
