@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.adapters.rv_adapters
+package dev.goblingroup.uzworks.adapter.rv_adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,42 +9,32 @@ import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.databinding.JobAnnouncementsLayoutBinding
 
-class JobAdapter(
+class SavedJobsAdapter(
     private val jobList: List<JobEntity>,
     private val jobCategoryList: List<JobCategoryEntity>,
     private val onItemClick: (String) -> Unit,
-    private val onSaveClick: (Boolean, String) -> Unit
-) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
+    private val unSaveJob: (String, Int) -> Unit
+) : RecyclerView.Adapter<SavedJobsAdapter.JobViewHolder>() {
 
-    inner class JobViewHolder(private val jobBinding: JobAnnouncementsLayoutBinding) :
-        ViewHolder(jobBinding.root) {
+    inner class JobViewHolder(private val workBinding: JobAnnouncementsLayoutBinding) :
+        ViewHolder(workBinding.root) {
         fun onBind(position: Int) {
-            jobBinding.apply {
+            workBinding.apply {
                 val job = jobList[position]
-                titleTv.text = job.title
+
+                titleTv.text = job.tgUserName
                 costTv.text = "${job.salary} so'm"
                 genderTv.text = job.gender
                 categoryTv.text = getJobCategory(position)
-
-                if (jobList[position].isSaved) {
-                    saveIv.setImageResource(R.drawable.ic_saved)
-                } else {
-                    saveIv.setImageResource(R.drawable.ic_unsaved)
-                }
+                saveIv.setImageResource(R.drawable.ic_saved)
 
                 saveIv.setOnClickListener {
-                    if (jobList[position].isSaved) {
-                        saveIv.setImageResource(R.drawable.ic_unsaved)
-                        onSaveClick.invoke(false, jobList[position].id)
-                    } else {
-                        saveIv.setImageResource(R.drawable.ic_saved)
-                        onSaveClick.invoke(true, jobList[position].id)
-                    }
+                    unSaveJob.invoke(jobList[position].id, position)
                 }
 
 
                 root.setOnClickListener {
-                    onItemClick.invoke(jobList[position].id)
+                    onItemClick.invoke(job.id)
                 }
             }
         }

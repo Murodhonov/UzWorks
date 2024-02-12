@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import dev.goblingroup.uzworks.adapters.rv_adapters.SavedWorkersAdapter
+import dev.goblingroup.uzworks.adapter.rv_adapters.SavedWorkersAdapter
 import dev.goblingroup.uzworks.database.entity.WorkerEntity
 import dev.goblingroup.uzworks.databinding.FragmentSavedWorkersBinding
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel

@@ -84,172 +84,16 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--<TextView
-        android:id="@+id/username_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_19sdp"
-        android:layout_marginTop="@dimen/_49sdp"
-        android:fontFamily="@font/dmsans_bold"
-        android:text="Username"
-        android:textColor="@color/black_blue"
-        android:textSize="@dimen/_12ssp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/under_greeting_tv" />
-
-    <EditText
-        android:id="@+id/username_et"
-        style="@style/CustomEditTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_30sdp"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_7sdp"
-        android:importantForAutofill="no"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:elevation="@dimen/_2sdp"
-        android:hint="username"
-        android:imeOptions="actionNext"
-        android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@id/username_tv" />
-
-    <LinearLayout
-        android:id="@+id/username_error_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:background="@drawable/error_background"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/_1sdp"
-        android:paddingBottom="@dimen/_1sdp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/username_et">
-
-        <ImageView
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_10sdp"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:src="@drawable/ic_error" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:fontFamily="@font/dmsans_bold"
-            android:text="Username should enter"
-            android:textColor="@color/red"
-            android:textSize="@dimen/_10ssp" />
-
-    </LinearLayout>-->
-
-    <!--<TextView
-        android:id="@+id/password_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_4sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:fontFamily="@font/dmsans_bold"
-        android:text="Password"
-        android:textColor="@color/black_blue"
-        app:layout_constraintLeft_toLeftOf="@id/username_et"
-        app:layout_constraintTop_toBottomOf="@id/username_et" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/password_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_30sdp"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:background="@drawable/edit_text_background"
-        android:elevation="@dimen/_2sdp"
-        app:layout_constraintTop_toBottomOf="@id/password_tv">
-
-        <EditText
-            android:id="@+id/password_et"
-            style="@style/CustomEditTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="password"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:inputType="textPassword"
-            android:textColor="@color/black_blue_60" />
-
-        <ImageView
-            android:id="@+id/eye_iv"
-            android:layout_width="@dimen/_18sdp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/_4sdp"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:layout_marginEnd="@dimen/_6sdp"
-            android:layout_marginBottom="@dimen/_6sdp"
-            android:padding="@dimen/_3sdp"
-            android:src="@drawable/ic_closed_eye"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:id="@+id/password_error_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:background="@drawable/error_background"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/_1sdp"
-        android:paddingBottom="@dimen/_1sdp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/password_layout">
-
-        <ImageView
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_10sdp"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:src="@drawable/ic_error" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:fontFamily="@font/dmsans_bold"
-            android:text="Password should enter"
-            android:textColor="@color/red"
-            android:textSize="@dimen/_10ssp" />
-
-    </LinearLayout>-->
-
-    <TextView
-        android:id="@+id/forgot_password_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="@dimen/_7sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:fontFamily="@font/dmsans_regular"
-        android:text="Forgot password ?"
-        android:textColor="@color/black_blue"
-        android:visibility="invisible"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password_et" />
-
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/login_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_34sdp"
         android:layout_marginStart="@dimen/_30sdp"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginEnd="@dimen/_30sdp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/forgot_password_tv">
+        app:layout_constraintTop_toBottomOf="@id/password_et">
 
         <TextView
             android:id="@+id/login_tv"
@@ -261,31 +105,9 @@
             android:textAllCaps="true"
             android:textColor="@color/white" />
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="@dimen/_34sdp"
-        android:layout_height="@dimen/_34sdp"
-        android:layout_marginBottom="@dimen/_7sdp"
-        android:indeterminateTint="@color/black_blue"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/sign_in_with_google_btn"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <ImageView
-        android:id="@+id/done"
-        android:layout_width="@dimen/_34sdp"
-        android:layout_height="@dimen/_34sdp"
-        android:layout_marginBottom="@dimen/_7sdp"
-        android:src="@drawable/ic_done"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/sign_in_with_google_btn"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/sign_in_with_google_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_34sdp"
@@ -293,7 +115,6 @@
         android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_30sdp"
         android:backgroundTint="@color/white_blue"
-        app:cardCornerRadius="@dimen/_5sdp"
         app:layout_constraintTop_toBottomOf="@id/login_btn">
 
         <LinearLayout
@@ -321,7 +142,7 @@
 
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import dev.goblingroup.uzworks.adapters.rv_adapters.DistrictAdapter
+import dev.goblingroup.uzworks.adapter.rv_adapters.DistrictAdapter
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.databinding.FragmentDistrictControlBinding
 import dev.goblingroup.uzworks.vm.ApiStatus

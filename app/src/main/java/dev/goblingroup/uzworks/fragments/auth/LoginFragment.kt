@@ -81,14 +81,6 @@ class LoginFragment : Fragment() {
                 }
             }
 
-            signInWithGoogleBtn.setOnClickListener {
-                Toast.makeText(
-                    requireContext(),
-                    "In this stage should be google sign in",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
             languageBtn.setOnClickListener {
                 chooseLanguage()
             }

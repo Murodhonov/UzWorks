@@ -347,6 +347,7 @@ class AddWorkerFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             Log.d(TAG, "createWorker: ${it.response as WorkerResponse}")
+                            findNavController().popBackStack()
                         }
                     }
                 }

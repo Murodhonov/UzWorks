@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import dev.goblingroup.uzworks.adapters.rv_adapters.WorkerAdapter
+import dev.goblingroup.uzworks.adapter.rv_adapters.WorkerAdapter
 import dev.goblingroup.uzworks.databinding.FragmentAllWorkersBinding
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel

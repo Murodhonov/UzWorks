@@ -240,7 +240,7 @@ class AddJobFragment : Fragment() {
                                 "some error on creating job",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            Log.e(TAG, "createWorker: ${it.error}")
+                            Log.e(TAG, "createJob: ${it.error}")
                             Log.e(
                                 TAG,
                                 "createJob: ${it.error.stackTrace.joinToString()}"
@@ -256,13 +256,14 @@ class AddJobFragment : Fragment() {
                         is ApiStatus.Success -> {
                             Toast.makeText(
                                 requireContext(),
-                                "successfully created worker",
+                                "successfully created job",
                                 Toast.LENGTH_SHORT
                             ).show()
                             Log.d(
                                 TAG,
                                 "createJob: ${it.response as JobCreateResponse}"
                             )
+                            findNavController().popBackStack()
                         }
                     }
                 }

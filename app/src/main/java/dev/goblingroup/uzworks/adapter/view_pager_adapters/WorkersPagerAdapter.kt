@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.adapters.view_pager_adapters
+package dev.goblingroup.uzworks.adapter.view_pager_adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

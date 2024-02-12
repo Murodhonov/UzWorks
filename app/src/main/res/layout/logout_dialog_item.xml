@@ -26,7 +26,7 @@
         android:textColor="@color/text_color"
         android:textSize="@dimen/_10ssp" />
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/yes_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
@@ -45,9 +45,9 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_11ssp" />
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/cancel_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
@@ -67,6 +67,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_11ssp" />
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

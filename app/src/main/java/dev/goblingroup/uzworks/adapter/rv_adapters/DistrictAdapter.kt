@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.adapters.rv_adapters
+package dev.goblingroup.uzworks.adapter.rv_adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,8 +7,6 @@ import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.databinding.DistrictItemBinding
-import dev.goblingroup.uzworks.vm.DistrictViewModel
-import javax.inject.Inject
 
 class DistrictAdapter(
     private var districtList: List<DistrictEntity>,

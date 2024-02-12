@@ -4,7 +4,7 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:textViewStyle">@style/TextViewStyle</item>
-        <item name="materialCardViewStyle">@style/CardViewStyle</item>
+        <item name="cardViewStyle">@style/CardViewStyle</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="editTextStyle">@style/CustomEditTextStyle</item>
     </style>
@@ -37,14 +37,13 @@
             CardView style
     -->
 
-    <style name="CardViewStyle" parent="Widget.MaterialComponents.CardView">
+    <style name="CardViewStyle" parent="CardView">
         <item name="android:backgroundTint">@color/enabled</item>
-        <item name="cornerRadius">@dimen/_7sdp</item>
+        <item name="cardCornerRadius">@dimen/_7sdp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:foreground">?selectableItemBackgroundBorderless</item>
         <item name="cardElevation">@dimen/_3sdp</item>
-        <item name="strokeWidth">0dp</item>
     </style>
 
     <!--

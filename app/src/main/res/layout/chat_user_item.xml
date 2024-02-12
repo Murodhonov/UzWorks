@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="end">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/delete_btn"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_50sdp"
@@ -31,7 +31,7 @@
                 android:maxHeight="@dimen/_34sdp"
                 android:src="@drawable/ic_delete_red" />
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
     </FrameLayout>
 
@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/chat_item"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
@@ -141,7 +141,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
     </FrameLayout>
 

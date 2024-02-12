@@ -186,7 +186,7 @@ Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi."
 
     </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/sign_up_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_34sdp"
@@ -204,9 +204,9 @@ Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi."
             android:textAllCaps="true"
             android:textColor="@color/white" />
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/back_login_btn"
         android:layout_height="@dimen/_34sdp"
         android:layout_width="match_parent"
@@ -228,6 +228,6 @@ Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi."
             android:textAllCaps="true"
             android:textColor="@color/text_color" />
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

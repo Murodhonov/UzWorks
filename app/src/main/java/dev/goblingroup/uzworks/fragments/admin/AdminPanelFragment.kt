@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import dev.goblingroup.uzworks.adapters.view_pager_adapters.AdminPanelAdapter
+import dev.goblingroup.uzworks.adapter.view_pager_adapters.AdminPanelAdapter
 import dev.goblingroup.uzworks.databinding.FragmentAdminPanelBinding
 import dev.goblingroup.uzworks.utils.AdminTabsEnum
 

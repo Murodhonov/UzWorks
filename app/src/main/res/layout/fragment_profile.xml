@@ -58,7 +58,7 @@
         app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
         app:layout_constraintTop_toBottomOf="@id/user_name_tv" />
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/change_image_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,24 +68,16 @@
         app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
         app:layout_constraintTop_toBottomOf="@id/address_tv">
 
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/_7sdp"
-            android:paddingTop="@dimen/_3sdp"
-            android:paddingEnd="@dimen/_7sdp"
-            android:paddingBottom="@dimen/_3sdp">
+            android:layout_marginHorizontal="@dimen/_7sdp"
+            android:layout_marginVertical="@dimen/_3sdp"
+            android:text="Change image"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Change image"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_10ssp" />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/stretcher"
@@ -111,7 +103,7 @@
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/profile_layout">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/personal_info_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -175,9 +167,9 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/about_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -241,9 +233,9 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/fields_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -307,9 +299,9 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/experience_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -373,9 +365,9 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/announcement_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -439,7 +431,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
         <View
             android:layout_width="match_parent"

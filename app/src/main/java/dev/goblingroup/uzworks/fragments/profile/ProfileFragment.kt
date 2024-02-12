@@ -18,7 +18,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.adapters.rv_adapters.ExperienceAdapter
+import dev.goblingroup.uzworks.adapter.rv_adapters.ExperienceAdapter
 import dev.goblingroup.uzworks.databinding.AboutDialogItemBinding
 import dev.goblingroup.uzworks.databinding.ExperienceDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FieldsDialogItemBinding
@@ -47,6 +47,10 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
+            announcementTv.text = if (securityViewModel.getUserRoles()
+                    .contains(UserRole.EMPLOYEE.roleName)
+            ) "Ishchi e'lon qilish" else "Ish e'lon qilish"
+
             settings.setOnClickListener {
                 findNavController().navigate(
                     resId = R.id.settingsFragment,

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.adapters.rv_adapters.ChatUsersAdapter
+import dev.goblingroup.uzworks.adapter.rv_adapters.ChatUsersAdapter
 import dev.goblingroup.uzworks.databinding.FragmentChatsListBinding
 import dev.goblingroup.uzworks.utils.getNavOptions
 

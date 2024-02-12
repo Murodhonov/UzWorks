@@ -1,6 +1,5 @@
 package dev.goblingroup.uzworks.fragments.jobs
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import dev.goblingroup.uzworks.adapters.rv_adapters.SavedJobsAdapter
+import dev.goblingroup.uzworks.adapter.rv_adapters.SavedJobsAdapter
 import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.databinding.FragmentSavedJobsBinding
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
