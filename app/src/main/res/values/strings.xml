@@ -15,4 +15,6 @@
     <string name="code_uz_kirill">Ўз</string>
     <string name="code_en">En</string>
     <string name="code_ru">Ru</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

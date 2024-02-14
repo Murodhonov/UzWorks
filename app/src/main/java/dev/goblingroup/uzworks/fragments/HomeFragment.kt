@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementAdapter
 import dev.goblingroup.uzworks.adapter.rv_adapters.JobAdapter
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
 import dev.goblingroup.uzworks.utils.getNavOptions
@@ -111,7 +112,7 @@ class HomeFragment : Fragment() {
             if (_binding != null) {
                 binding.apply {
                     binding.progress.visibility = View.GONE
-                    val adapter = JobAdapter(
+                    val adapter = AnnouncementAdapter(
                         jobsViewModel.listDatabaseJobs(),
                         jobCategoryViewModel.listJobCategories(),
                         { jobId ->

@@ -139,7 +139,6 @@
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_8ssp" />
 
-
         </LinearLayout>
 
         <LinearLayout

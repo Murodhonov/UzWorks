@@ -67,15 +67,11 @@ class ProfileFragment : Fragment() {
                 aboutDialog(requireContext(), layoutInflater)
             }
 
-            fieldsBtn.setOnClickListener {
-                fieldsDialog(requireContext(), layoutInflater, resources)
-            }
-
             experienceBtn.setOnClickListener {
                 experienceDialog(requireContext(), layoutInflater)
             }
 
-            announcementBtn.setOnClickListener {
+            announcementsBtn.setOnClickListener {
                 navigateAnnouncement()
             }
         }
