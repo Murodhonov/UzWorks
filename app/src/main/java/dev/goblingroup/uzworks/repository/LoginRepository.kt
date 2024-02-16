@@ -15,8 +15,8 @@ class LoginRepository @Inject constructor(
 
     suspend fun login(loginRequest: LoginRequest) = authService.login(loginRequest = loginRequest)
 
-    suspend fun addUser(userEntity: UserEntity) = userDao.addUser(userEntity)
+    fun addUser(userEntity: UserEntity) = userDao.addUser(userEntity)
 
-    suspend fun getUser() = userDao.getUser()
+    fun getUser() = userDao.getUser()
 
 }

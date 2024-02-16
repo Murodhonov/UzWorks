@@ -10,10 +10,7 @@ import dev.goblingroup.uzworks.database.entity.JobEntity
 interface JobDao {
 
     @Insert(entity = JobEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addJob(jobEntity: JobEntity)
-
-    @Insert(entity = JobEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addJobs(jobList: List<JobEntity>)
+    fun addJobs(jobList: List<JobEntity>)
 
     @Query("UPDATE jobs_table SET is_saved = 1 WHERE job_id = :jobId")
     fun saveJob(jobId: String)
@@ -22,21 +19,23 @@ interface JobDao {
     fun unSaveJob(jobId: String)
 
     @Query("SELECT is_saved FROM jobs_table WHERE job_id = :jobId")
-    suspend fun isJobSaved(jobId: String): Boolean
+    fun isJobSaved(jobId: String): Boolean
 
     @Query("SELECT * FROM jobs_table WHERE job_id = :jobId")
-    suspend fun getJob(jobId: String): JobEntity
+    fun getJob(jobId: String): JobEntity
 
     @Query("SELECT * FROM jobs_table")
-    suspend fun listAllJobs(): List<JobEntity>
+    fun listAllJobs(): List<JobEntity>
 
     @Query("SELECT * FROM jobs_table WHERE is_saved = 1")
     fun listSavedJobs(): List<JobEntity>
 
     @Query("SELECT COUNT(*) FROM jobs_table")
-    suspend fun countJobs(): Int
+    fun countJobs(): Int
 
     @Query("SELECT COUNT(*) FROM jobs_table WHERE is_saved = 1")
-    suspend fun countSavedJobs(): Int
+    fun countSavedJobs(): Int
 
+    @Query("DELETE FROM jobs_table")
+    fun deleteJobs()
 }

@@ -3,14 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white_blue"
+    android:paddingBottom="@dimen/_7sdp"
     android:layout_height="match_parent"
     tools:context=".fragments.announcement.AnnouncementsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/announcement_rv"
+    <FrameLayout
+        android:id="@+id/custom_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem=""
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:layout_height="@dimen/_30sdp"
+        android:layout_margin="@dimen/_7sdp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/corner_dash_stroke_rectangle"
+            app:tabGravity="fill"
+            app:tabIndicator="@null"
+            app:tabIndicatorColor="@null"
+            app:tabMode="fixed"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextColor="@color/black_blue"
+            app:tabTextColor="@color/text_color" />
+
+        <View
+            android:id="@+id/indicator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/selected_tab_indicator_background" />
+
+    </FrameLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_7sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/custom_tab_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

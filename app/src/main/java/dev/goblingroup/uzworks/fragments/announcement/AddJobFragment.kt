@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.fragments.workers
+package dev.goblingroup.uzworks.fragments.announcement
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -19,9 +19,9 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
-import dev.goblingroup.uzworks.databinding.FragmentAddWorkerBinding
-import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
-import dev.goblingroup.uzworks.models.response.WorkerResponse
+import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
+import dev.goblingroup.uzworks.models.request.JobCreateRequest
+import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
@@ -31,22 +31,22 @@ import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.DistrictViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.RegionViewModel
-import dev.goblingroup.uzworks.vm.SecuredWorkerViewModel
+import dev.goblingroup.uzworks.vm.SecuredJobViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 @AndroidEntryPoint
-class AddWorkerFragment : Fragment() {
+class AddJobFragment : Fragment() {
 
-    private var _binding: FragmentAddWorkerBinding? = null
+    private var _binding: FragmentAddJobBinding? = null
     private val binding get() = _binding!!
 
     private val regionViewModel: RegionViewModel by viewModels()
     private val districtViewModel: DistrictViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
-    private val securedWorkerViewModel: SecuredWorkerViewModel by viewModels()
+    private val securedJobViewModel: SecuredJobViewModel by viewModels()
 
     private var selectedDistrictId = ""
     private var selectedCategoryId = ""
@@ -56,14 +56,13 @@ class AddWorkerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAddWorkerBinding.inflate(layoutInflater)
+        _binding = FragmentAddJobBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             topTv.isSelected = true
-
             loadRegions()
             loadDistricts()
             loadCategories()
@@ -99,38 +98,6 @@ class AddWorkerFragment : Fragment() {
                     deadlineTv.stringToDate(DateEnum.YEAR.dateLabel),
                     deadlineTv.stringToDate(DateEnum.MONTH.dateLabel),
                     deadlineTv.stringToDate(DateEnum.DATE.dateLabel)
-                )
-
-                datePickerDialog.show()
-            }
-
-            birthdayBtn.setOnClickListener {
-                val datePickerDialog = DatePickerDialog(
-                    requireContext(),
-                    { _, year, month, dayOfMonth ->
-                        val selectedCalendar = Calendar.getInstance().apply {
-                            set(year, month, dayOfMonth)
-                        }
-
-                        val currentCalendar = Calendar.getInstance()
-
-                        if (selectedCalendar.after(currentCalendar)) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Cannot select date after current date",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            birthdayBtn.strokeColor = resources.getColor(R.color.black_blue)
-                            birthdayTv.text = formatter.format(selectedCalendar.time)
-                        }
-                    },
-                    birthdayTv.stringToDate(DateEnum.YEAR.dateLabel),
-                    birthdayTv.stringToDate(DateEnum.MONTH.dateLabel),
-                    birthdayTv.stringToDate(DateEnum.DATE.dateLabel)
                 )
 
                 datePickerDialog.show()
@@ -185,7 +152,7 @@ class AddWorkerFragment : Fragment() {
 
             saveBtn.setOnClickListener {
                 if (isFormValid()) {
-                    createWorker()
+                    createJob()
                 } else {
                     Toast.makeText(requireContext(), "fill forms", Toast.LENGTH_SHORT).show()
                 }
@@ -238,17 +205,77 @@ class AddWorkerFragment : Fragment() {
         }
     }
 
+    private fun createJob() {
+        binding.apply {
+            lifecycleScope.launch {
+                securedJobViewModel.createJob(
+                    jobCreateRequest = JobCreateRequest(
+                        benefit = benefitEt.editText?.text.toString(),
+                        categoryId = selectedCategoryId,
+                        deadline = deadlineTv.stringDateToString(),
+                        districtId = selectedDistrictId,
+                        gender = selectedGender,
+                        instagramLink = instagramUsernameEt.editText?.text.toString(),
+                        latitude = 41.3409,
+                        longitude = 69.2867,
+                        maxAge = maxAgeEt.editText?.text.toString().toInt(),
+                        minAge = minAgeEt.editText?.text.toString().toInt(),
+                        phoneNumber = phoneNumberEt.editText?.text.toString(),
+                        requirement = requirementEt.editText?.text.toString(),
+                        salary = salaryEt.editText?.text.toString()
+                            .substring(0, salaryEt.editText?.text.toString().length - 5)
+                            .toInt(),
+                        telegramLink = "link of post on telegram channel",
+                        tgUserName = tgUserNameEt.editText?.text.toString(),
+                        title = titleEt.editText?.text.toString(),
+                        workingSchedule = workingScheduleEt.editText?.text.toString(),
+                        workingTime = workingTimeEt.editText?.text.toString()
+                    )
+                ).observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "some error on creating job",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e(TAG, "createJob: ${it.error}")
+                            Log.e(
+                                TAG,
+                                "createJob: ${it.error.stackTrace.joinToString()}"
+                            )
+                            Log.e(TAG, "createJob: ${it.error.message}")
+                        }
+
+                        is ApiStatus.Loading -> {
+                            Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                        is ApiStatus.Success -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "successfully created job",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d(
+                                TAG,
+                                "createJob: ${it.response as JobCreateResponse}"
+                            )
+                            findNavController().popBackStack()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun isFormValid(): Boolean {
         binding.apply {
             var isValid = true
             if (deadlineTv.text == "Deadline") {
                 deadlineBtn.strokeColor = resources.getColor(R.color.red)
                 deadlineTv.text = "Select deadline"
-                isValid = false
-            }
-            if (birthdayTv.text == "Birthday") {
-                birthdayBtn.strokeColor = resources.getColor(R.color.red)
-                birthdayTv.text = "Select your birthday"
                 isValid = false
             }
             if (titleEt.editText?.text.toString().isEmpty()) {
@@ -300,61 +327,6 @@ class AddWorkerFragment : Fragment() {
         }
     }
 
-    private fun createWorker() {
-        binding.apply {
-            lifecycleScope.launch {
-                securedWorkerViewModel.createWorker(
-                    workerCreateRequest = WorkerCreateRequest(
-                        birthDate = birthdayTv.stringDateToString(),
-                        categoryId = selectedCategoryId,
-                        deadline = deadlineTv.stringDateToString(),
-                        districtId = selectedDistrictId,
-                        gender = selectedGender,
-                        instagramLink = instagramUsernameEt.editText?.text.toString(),
-                        location = orientationEt.editText?.text.toString(),
-                        phoneNumber = phoneNumberEt.editText?.text.toString(),
-                        salary = salaryEt.editText?.text.toString()
-                            .substring(0, salaryEt.editText?.text.toString().length - 5)
-                            .toInt(),
-                        telegramLink = "link to post on tg channel",
-                        tgUserName = tgUserNameEt.editText?.text.toString(),
-                        title = titleEt.editText?.text.toString(),
-                        workingSchedule = "some working schedule",
-                        workingTime = workingTimeEt.editText?.text.toString()
-                    )
-                ).observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "some error on creating worker",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.e(TAG, "createWorker: ${it.error}")
-                            Log.e(TAG, "createWorker: ${it.error.stackTrace.joinToString()}")
-                            Log.e(TAG, "createWorker: ${it.error.message}")
-                        }
-
-                        is ApiStatus.Loading -> {
-                            Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-
-                        is ApiStatus.Success -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "successfully created worker",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.d(TAG, "createWorker: ${it.response as WorkerResponse}")
-                            findNavController().popBackStack()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private fun loadRegions() {
         lifecycleScope.launch {
             regionViewModel.regionLiveData.observe(viewLifecycleOwner) {
@@ -376,6 +348,7 @@ class AddWorkerFragment : Fragment() {
                     }
 
                     is ApiStatus.Success -> {
+                        Log.d(TAG, "loadRegions: ${it.response?.size} regions got")
                         setRegions(it.response as List<RegionEntity>)
                     }
                 }
@@ -390,7 +363,6 @@ class AddWorkerFragment : Fragment() {
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 regionList.map { it.name }
             )
-            regionChoice.threshold = 1
             regionChoice.setAdapter(regionAdapter)
 
             regionChoice.setOnItemClickListener { parent, view, position, id ->
@@ -410,7 +382,6 @@ class AddWorkerFragment : Fragment() {
                     androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                     districtList.map { it.name }
                 )
-                districtChoice.threshold = 1
                 districtChoice.setAdapter(districtAdapter)
                 districtChoice.setOnItemClickListener { parent, view, position, id ->
                     selectedDistrictId = districtList[position].id
@@ -479,13 +450,11 @@ class AddWorkerFragment : Fragment() {
 
     private fun setJobCategories(jobCategoryList: List<JobCategoryEntity>) {
         binding.apply {
-            val jobCategoryAdapter =
-                ArrayAdapter(
-                    requireContext(),
-                    androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                    jobCategoryList.map { it.title }
-                )
-            jobCategoryChoice.threshold = 1
+            val jobCategoryAdapter = ArrayAdapter(
+                requireContext(),
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                jobCategoryList.map { it.title }
+            )
             jobCategoryChoice.setAdapter(jobCategoryAdapter)
             jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
                 selectedCategoryId = jobCategoryList[position].id

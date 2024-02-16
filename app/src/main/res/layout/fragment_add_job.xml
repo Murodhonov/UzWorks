@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     android:scrollbars="none"
-    tools:context=".fragments.jobs.AddJobFragment">
+    tools:context=".fragments.announcement.AddJobFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:ellipsize="marquee"
-            android:fontFamily="@font/dmsans_medium"
+            android:fontFamily="@font/dm_sans_medium"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:text="Create announcement for job"
@@ -263,7 +263,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_bold"
+                android:fontFamily="@font/dm_sans_bold"
                 android:text="Set age limit"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_12ssp" />
@@ -322,7 +322,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_bold"
+                android:fontFamily="@font/dm_sans_bold"
                 android:text="Choose location"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_12ssp" />
@@ -347,7 +347,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/dmsans_bold"
+                        android:fontFamily="@font/dm_sans_bold"
                         android:text="Current location"
                         android:textColor="@color/black_blue" />
 
@@ -367,7 +367,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/dmsans_bold"
+                        android:fontFamily="@font/dm_sans_bold"
                         android:text="Select on map"
                         android:textColor="@color/black_blue" />
 
@@ -399,7 +399,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_12ssp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_medium"
+                android:fontFamily="@font/dm_sans_medium"
                 android:text="Address" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -461,7 +461,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_12ssp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_medium"
+                android:fontFamily="@font/dm_sans_medium"
                 android:text="Category" />
 
             <com.google.android.material.textfield.TextInputLayout

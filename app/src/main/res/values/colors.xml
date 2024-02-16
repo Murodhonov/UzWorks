@@ -3,7 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!--    app's base colors   -->
     <color name="black_blue">#130160</color>
     <color name="black_blue_60">#99130160</color>
     <color name="white_blue">#EAF1FF</color>

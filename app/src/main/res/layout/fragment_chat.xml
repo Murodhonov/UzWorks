@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_7sdp"
             android:layout_marginTop="@dimen/_7sdp"
-            android:fontFamily="@font/dmsans_medium"
+            android:fontFamily="@font/dm_sans_medium"
             android:text="Orlando Diggs"
             android:textColor="@color/black_blue"
             android:textSize="@dimen/_13ssp"
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_3sdp"
-                android:fontFamily="@font/dmsans_regular"
+                android:fontFamily="@font/dm_sans_regular"
                 android:text="Online"
                 android:textSize="@dimen/_11ssp"
                 android:textColor="@color/text_color" />

@@ -18,24 +18,8 @@
         app:layout_constraintBottom_toBottomOf="@id/stretcher"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--<androidx.cardview.widget.CardView
-        android:id="@+id/avatar_iv"
-        android:layout_width="@dimen/_44sdp"
-        android:layout_height="@dimen/_44sdp"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_15sdp"
-        app:cardCornerRadius="@dimen/_100sdp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/default_profile_image" />
-
-    </androidx.cardview.widget.CardView>-->
-
     <ImageView
+        android:contentDescription="@string/content_description"
         android:id="@+id/avatar_iv"
         android:layout_width="@dimen/_44sdp"
         android:layout_height="@dimen/_44sdp"
@@ -50,8 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_7sdp"
-        android:fontFamily="@font/dmsans_medium"
-        android:text="Nabijnov Abdulaziz"
+        android:fontFamily="@font/dm_sans_medium"
         android:textColor="@color/white"
         android:textSize="@dimen/_11ssp"
         app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
@@ -61,8 +44,7 @@
         android:id="@+id/address_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/dmsans_regular"
-        android:text="Address unknown"
+        android:fontFamily="@font/dm_sans_regular"
         android:textColor="@color/white"
         android:textSize="@dimen/_10ssp"
         app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
@@ -76,6 +58,7 @@
         app:layout_constraintTop_toBottomOf="@id/address_tv" />
 
     <ImageView
+        android:contentDescription="@string/content_description"
         android:id="@+id/settings"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="@dimen/_20sdp"
@@ -108,6 +91,7 @@
                 android:padding="@dimen/_7sdp">
 
                 <ImageView
+                    android:contentDescription="@string/content_description"
                     android:id="@+id/personal_info_iv"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
@@ -121,9 +105,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_7sdp"
-                    android:fontFamily="@font/dmsans_bold"
+                    android:fontFamily="@font/dm_sans_bold"
                     android:textSize="@dimen/_12ssp"
-                    android:text="Shaxsiy ma’lumotlar"
+                    android:text="@string/personal_information"
                     android:textColor="@color/black_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/personal_info_iv"
@@ -174,6 +158,7 @@
                 android:padding="@dimen/_7sdp">
 
                 <ImageView
+                    android:contentDescription="@string/content_description"
                     android:id="@+id/about_iv"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
@@ -187,8 +172,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_7sdp"
-                    android:fontFamily="@font/dmsans_bold"
-                    android:text="Men  haqimda"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="@string/about_me"
                     android:textSize="@dimen/_12ssp"
                     android:textColor="@color/black_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -240,6 +225,7 @@
                 android:padding="@dimen/_7sdp">
 
                 <ImageView
+                    android:contentDescription="@string/content_description"
                     android:id="@+id/experience_iv"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
@@ -253,8 +239,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_7sdp"
-                    android:fontFamily="@font/dmsans_bold"
-                    android:text="Ish tajribam"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="@string/experience"
                     android:textColor="@color/black_blue"
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -306,6 +292,7 @@
                 android:padding="@dimen/_7sdp">
 
                 <ImageView
+                    android:contentDescription="@string/content_description"
                     android:id="@+id/announcement_iv"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
@@ -319,8 +306,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_7sdp"
-                    android:fontFamily="@font/dmsans_bold"
-                    android:text="E’lon berish"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="@string/add_job_announcement"
                     android:textColor="@color/black_blue"
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toBottomOf="parent"

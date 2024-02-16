@@ -5,25 +5,25 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_blue"
-    tools:context=".fragments.workers.SavedWorkersFragment">
+    tools:context=".fragments.announcement.SavedAnnouncementsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recommended_work_announcements_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_3sdp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/job_announcements_layout" />
+        tools:listitem="@layout/announcement_item" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/empty_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_15sdp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -31,8 +31,8 @@
             android:id="@+id/empty_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/dmsans_bold"
-            android:text="No savings"
+            android:fontFamily="@font/dm_sans_bold"
+            android:text="@string/no_savings"
             android:textColor="@color/black_blue"
             android:textSize="@dimen/_15ssp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -46,8 +46,8 @@
             android:layout_marginStart="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_7sdp"
             android:layout_marginEnd="@dimen/_38sdp"
-            android:fontFamily="@font/dmsans_regular"
-            android:text="You don't have any jobs saved, please find it in search to save jobs"
+            android:fontFamily="@font/dm_sans_regular"
+            android:text="@string/saved_announcements_not_found"
             android:textAlignment="center"
             android:textColor="@color/text_color"
             android:textSize="@dimen/_12ssp"
@@ -56,18 +56,19 @@
             app:layout_constraintTop_toBottomOf="@id/empty_title_tv" />
 
         <ImageView
+            android:contentDescription="@string/content_description"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/_38sdp"
             android:src="@drawable/ic_no_saved"
-            app:layout_constraintBottom_toTopOf="@id/find_worker_btn"
+            app:layout_constraintBottom_toTopOf="@id/find_announcement_btn"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/empty_describe_tv" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/find_worker_btn"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/find_announcement_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp"
             android:layout_marginStart="@dimen/_46sdp"
@@ -78,14 +79,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/dmsans_bold"
+                android:fontFamily="@font/dm_sans_bold"
                 android:gravity="center"
-                android:text="Find a job"
+                android:text="@string/find_announcement"
                 android:textAllCaps="true"
                 android:textSize="@dimen/_10ssp"
                 android:textColor="@color/white" />
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

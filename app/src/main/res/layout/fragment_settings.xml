@@ -10,6 +10,7 @@
     tools:context=".fragments.profile.SettingsFragment">
 
     <ImageView
+        android:contentDescription="@string/content_description"
         android:id="@+id/back"
         android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_20sdp"
@@ -24,8 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15sdp"
-        android:fontFamily="@font/dmsans_medium"
-        android:text="Settings"
+        android:fontFamily="@font/dm_sans_medium"
+        android:text="@string/settings"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintLeft_toLeftOf="@id/back"
@@ -48,6 +49,7 @@
             android:padding="@dimen/_7sdp">
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:id="@+id/notification_iv"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
@@ -60,8 +62,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
-                android:fontFamily="@font/dmsans_regular"
-                android:text="Notification"
+                android:fontFamily="@font/dm_sans_regular"
+                android:text="@string/notifications"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_10ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -111,6 +113,7 @@
             android:padding="@dimen/_7sdp">
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:id="@+id/theme_iv"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
@@ -124,8 +127,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
-                android:fontFamily="@font/dmsans_regular"
-                android:text="Dark mode"
+                android:fontFamily="@font/dm_sans_regular"
+                android:text="@string/dark_mode"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_10ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -175,6 +178,7 @@
             android:padding="@dimen/_7sdp">
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:id="@+id/language_iv"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
@@ -188,8 +192,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
-                android:fontFamily="@font/dmsans_regular"
-                android:text="Language"
+                android:fontFamily="@font/dm_sans_regular"
+                android:text="@string/language"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_10ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -197,6 +201,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:id="@+id/language_arrow"
                 android:layout_width="@dimen/_10sdp"
                 android:layout_height="@dimen/_10sdp"
@@ -226,6 +231,7 @@
             android:padding="@dimen/_7sdp">
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:id="@+id/password_iv"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
@@ -239,8 +245,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
-                android:fontFamily="@font/dmsans_regular"
-                android:text="Password"
+                android:fontFamily="@font/dm_sans_regular"
+                android:text="@string/password"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_10ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -248,6 +254,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:id="@+id/password_arrow"
                 android:layout_width="@dimen/_10sdp"
                 android:layout_height="@dimen/_10sdp"
@@ -277,6 +284,7 @@
             android:padding="@dimen/_7sdp">
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:id="@+id/logout_iv"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
@@ -289,8 +297,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
-                android:fontFamily="@font/dmsans_regular"
-                android:text="Logout"
+                android:fontFamily="@font/dm_sans_regular"
+                android:text="@string/logout"
                 android:textColor="@color/red"
                 android:textSize="@dimen/_10ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -298,6 +306,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:layout_width="@dimen/_10sdp"
                 android:layout_height="@dimen/_10sdp"
                 android:src="@drawable/ic_right_red"
@@ -323,9 +332,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/dmsans_bold"
+            android:fontFamily="@font/dm_sans_bold"
             android:gravity="center"
-            android:text="Save"
+            android:text="@string/save"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/_10ssp" />

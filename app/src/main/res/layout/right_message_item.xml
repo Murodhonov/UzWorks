@@ -29,7 +29,6 @@
                 android:id="@+id/message_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Salom"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -52,10 +51,10 @@
             android:layout_marginEnd="@dimen/_3sdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="11:00 AM"
             android:textSize="@dimen/_8ssp" />
 
         <ImageView
+            android:contentDescription="@string/content_description"
             android:id="@+id/read_unread_sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

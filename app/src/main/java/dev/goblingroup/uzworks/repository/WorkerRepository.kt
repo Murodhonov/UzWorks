@@ -9,22 +9,14 @@ import dev.goblingroup.uzworks.networking.WorkerService
 import dev.goblingroup.uzworks.utils.ConstValues
 import javax.inject.Inject
 
-class WorkersRepository @Inject constructor(
+class WorkerRepository @Inject constructor(
     private val workerService: WorkerService,
     private val workerDao: WorkerDao
 ) {
 
-    suspend fun getWorkerById(workerId: String) = workerService.getById(workerId)
-
     suspend fun getAllWorkers() = workerService.getAll()
 
-    suspend fun countWorkers() = workerService.count()
-
-    suspend fun getWorkerByUserId(userId: String) = workerService.getWorkersByUserId(userId = userId)
-
-    suspend fun addWorker(workerEntity: WorkerEntity) = workerDao.addWorker(workerEntity)
-
-    suspend fun addWorkers(workerList: List<WorkerResponse>) {
+    fun addWorkers(workerList: List<WorkerResponse>) {
         val existingWorkers = try {
             workerDao.listAllWorkers()
         } catch (e: Exception) {
@@ -53,21 +45,17 @@ class WorkersRepository @Inject constructor(
 
     fun saveWorker(workerId: String) = workerDao.saveWorker(workerId)
 
-    suspend fun unSaveWorker(workerId: String): Boolean {
+    fun unSaveWorker(workerId: String): Boolean {
         workerDao.unSaveWorker(workerId)
         return workerDao.countSavedWorkers() != 0
     }
 
-    suspend fun isWorkerSaved(workerId: String) = workerDao.isWorkerSaved(workerId)
-
-    suspend fun getWorker(workerId: String) = workerDao.getWorker(workerId)
-
-    suspend fun listDatabaseWorkers() = workerDao.listAllWorkers()
+    fun listDatabaseWorkers() = workerDao.listAllWorkers()
 
     fun listSavedWorkers() = workerDao.listSavedWorkers()
 
-    suspend fun countDatabaseWorkers() = workerDao.countWorkers()
+    fun countDatabaseWorkers() = workerDao.countWorkers()
 
-    suspend fun countSavedWorkers() = workerDao.countSavedWorkers()
+    fun countSavedWorkers() = workerDao.countSavedWorkers()
 
 }

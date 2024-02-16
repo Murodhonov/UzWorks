@@ -10,18 +10,12 @@ class RegionRepository @Inject constructor(
     private val regionDao: RegionDao
 ) {
 
-    suspend fun getRegionById(regionId: String) = regionService.getById(regionId)
-
     suspend fun getAllRegions() = regionService.getAll()
 
-    suspend fun getRegionByDistrictId(districtId: String) = regionService.getRegionByDistrictId(districtId)
+    fun addRegions(regionList: List<RegionEntity>) = regionDao.addRegions(regionList)
 
-    suspend fun addRegion(regionEntity: RegionEntity) = regionDao.addRegion(regionEntity)
+    fun findRegionById(regionId: String) = regionDao.findRegion(regionId)
 
-    suspend fun addRegions(regionList: List<RegionEntity>) = regionDao.addRegions(regionList)
-
-    suspend fun findRegionById(regionId: String) = regionDao.findRegion(regionId)
-
-    suspend fun listRegions() = regionDao.listRegions()
+    fun listRegions() = regionDao.listRegions()
 
 }

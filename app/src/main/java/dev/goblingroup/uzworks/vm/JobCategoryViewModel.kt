@@ -56,9 +56,9 @@ class JobCategoryViewModel @Inject constructor(
         }
     }
 
-    suspend fun findJobCategory(jobCategoryId: String) =
+    fun findJobCategory(jobCategoryId: String) =
         jobCategoryRepository.findJobCategory(jobCategoryId)
 
-    suspend fun listJobCategories() = jobCategoryRepository.listCategories()
+    fun listJobCategories() = jobCategoryRepository.listCategories()
 
 }

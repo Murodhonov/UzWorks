@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bottom_dialog_background"
     android:gravity="center"
     android:orientation="vertical"
@@ -12,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_23sdp"
-        android:fontFamily="@font/dmsans_bold"
-        android:text="Log out"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="@string/logout"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_13ssp" />
 
@@ -21,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_7sdp"
-        android:fontFamily="@font/dmsans_regular"
-        android:text="Are you sure you want to leave?"
+        android:fontFamily="@font/dm_sans_regular"
+        android:text="@string/confirm_logout"
         android:textColor="@color/text_color"
         android:textSize="@dimen/_10ssp" />
 
@@ -38,9 +37,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/dmsans_bold"
+            android:fontFamily="@font/dm_sans_bold"
             android:gravity="center"
-            android:text="Yes"
+            android:text="@string/yes"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/_11ssp" />
@@ -60,9 +59,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/dmsans_bold"
+            android:fontFamily="@font/dm_sans_bold"
             android:gravity="center"
-            android:text="Cancel"
+            android:text="@string/no"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/_11ssp" />

@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             navController.addOnDestinationChangedListener { controller, destination, arguments ->
                 when (destination.id) {
                     R.id.homeFragment,
-                    R.id.jobsFragment,
+                    R.id.announcementsFragment,
                     R.id.chatsListFragment -> {
 //                        showToolbarAndBottom()
                         showToolbar()
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
     private fun showBottomBar() {
         binding.apply {
             if (lastId == R.id.homeFragment ||
-                lastId == R.id.jobsFragment ||
+                lastId == R.id.announcementsFragment ||
                 lastId == R.id.chatsListFragment ||
                 lastId == R.id.profileFragment
             ) return
@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
     private fun showToolbar() {
         binding.apply {
             if (lastId == R.id.homeFragment ||
-                lastId == R.id.jobsFragment ||
+                lastId == R.id.announcementsFragment ||
                 lastId == R.id.chatsListFragment ||
                 lastId == R.id.profileFragment
             ) return
@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity() {
     private fun hideBottomBar() {
         binding.apply {
             if (lastId != R.id.homeFragment &&
-                lastId != R.id.jobsFragment &&
+                lastId != R.id.announcementsFragment &&
                 lastId != R.id.chatsListFragment &&
                 lastId != R.id.profileFragment
             ) return
@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
     private fun hideToolBar() {
         binding.apply {
             if (lastId != R.id.homeFragment &&
-                lastId != R.id.jobsFragment &&
+                lastId != R.id.announcementsFragment &&
                 lastId != R.id.chatsListFragment &&
                 lastId != R.id.profileFragment
             ) return
@@ -227,7 +227,7 @@ class MainActivity : AppCompatActivity() {
     private fun showToolbarAndBottom() {
         binding.apply {
             if (lastId == R.id.homeFragment ||
-                lastId == R.id.jobsFragment ||
+                lastId == R.id.announcementsFragment ||
                 lastId == R.id.chatsListFragment ||
                 lastId == R.id.profileFragment
             ) return
@@ -272,7 +272,7 @@ class MainActivity : AppCompatActivity() {
     private fun hideToolbarAndBottom() {
         binding.apply {
             if (lastId != R.id.homeFragment &&
-                lastId != R.id.jobsFragment &&
+                lastId != R.id.announcementsFragment &&
                 lastId != R.id.chatsListFragment &&
                 lastId != R.id.profileFragment
             ) return
@@ -322,7 +322,7 @@ class MainActivity : AppCompatActivity() {
             finishAffinity()
         } else {
             when (navController.currentDestination?.id) {
-                R.id.jobsFragment,
+                R.id.announcementsFragment,
                 R.id.chatsListFragment,
                 R.id.profileFragment -> {
                     navController.navigate(R.id.homeFragment)

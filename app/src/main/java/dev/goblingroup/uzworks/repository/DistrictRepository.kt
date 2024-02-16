@@ -17,16 +17,14 @@ class DistrictRepository @Inject constructor(
 
     suspend fun getDistrictByRegionId(regionId: String) = districtService.getDistrictByRegionId(regionId = regionId)
 
-    suspend fun addDistrict(districtEntity: DistrictEntity) = districtDao.addDistrict(districtEntity)
+    fun addDistricts(districtList: List<DistrictEntity>) = districtDao.addDistricts(districtList)
 
-    suspend fun addDistricts(districtList: List<DistrictEntity>) = districtDao.addDistricts(districtList)
+    fun findDistrict(districtId: String) = districtDao.findDistrict(districtId)
 
-    suspend fun findDistrict(districtId: String) = districtDao.findDistrict(districtId)
+    fun listDistricts() = districtDao.listDistricts()
 
-    suspend fun listDistricts() = districtDao.listDistricts()
+    fun listDistrictsByRegionId(regionId: String) = districtDao.listDistrictsByRegionId(regionId)
 
-    suspend fun listDistrictsByRegionId(regionId: String) = districtDao.listDistrictsByRegionId(regionId)
-
-    suspend fun getRegionByDistrictId(districtId: String) = districtDao.getRegionByDistrictId(districtId)
+    fun getRegionByDistrictId(districtId: String) = districtDao.getRegionByDistrictId(districtId)
 
 }

@@ -14,13 +14,10 @@ class JobCategoryRepository @Inject constructor(
 
     suspend fun getAllJobCategories() = jobCategoryService.getAllJobCategories()
 
-    suspend fun addJobCategory(jobCategoryEntity: JobCategoryEntity) =
-        jobCategoryDao.addJobCategory(jobCategoryEntity)
+    fun addJobCategories(categoryList: List<JobCategoryEntity>) = jobCategoryDao.addJobCategories(categoryList)
 
-    suspend fun addJobCategories(categoryList: List<JobCategoryEntity>) = jobCategoryDao.addJobCategories(categoryList)
+    fun findJobCategory(categoryId: String) = jobCategoryDao.findJobCategory(categoryId)
 
-    suspend fun findJobCategory(categoryId: String) = jobCategoryDao.findJobCategory(categoryId)
-
-    suspend fun listCategories() = jobCategoryDao.listJobCategories()
+    fun listCategories() = jobCategoryDao.listJobCategories()
 
 }

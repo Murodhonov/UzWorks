@@ -8,6 +8,7 @@
     tools:context=".fragments.onboarding.SplashFragment">
 
     <ImageView
+        android:contentDescription="@string/content_description"
         android:id="@+id/logo"
         android:layout_width="@dimen/_170sdp"
         android:layout_height="@dimen/_170sdp"

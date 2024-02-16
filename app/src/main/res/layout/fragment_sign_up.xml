@@ -17,6 +17,7 @@
         app:layoutDescription="@xml/fragment_sign_up_scene">
 
         <ImageView
+            android:contentDescription="@string/content_description"
             android:layout_marginTop="@dimen/_40sdp"
             app:layout_constraintLeft_toLeftOf="parent"
             android:id="@+id/back"
@@ -36,8 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
-            android:fontFamily="@font/dmsans_bold"
-            android:text="Create an account"
+            android:fontFamily="@font/dm_sans_bold"
+            android:text="@string/create_account"
             android:textColor="@color/black_blue"
             app:layout_constraintTop_toBottomOf="@id/back" />
 
@@ -49,7 +50,7 @@
             android:layout_marginStart="@dimen/_15sdp"
             app:layout_constraintTop_toBottomOf="@id/tv_1"
             android:layout_marginEnd="@dimen/_15sdp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+            android:text="@string/lorem_ipsum"
             android:textAlignment="center" />
 
         <LinearLayout
@@ -66,7 +67,7 @@
                 style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Full name"
+                android:hint="@string/full_name"
                 app:errorEnabled="false"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
@@ -89,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:hint="Username"
+                android:hint="@string/username"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 app:errorEnabled="false"
@@ -115,7 +116,7 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
-                android:hint="Password"
+                android:hint="@string/password"
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/black_blue"
                 app:errorEnabled="false"
@@ -140,7 +141,7 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
-                android:hint="Confirm password"
+                android:hint="@string/confirm_password"
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/black_blue"
                 app:errorEnabled="false"
@@ -168,9 +169,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/dmsans_bold"
+                    android:fontFamily="@font/dm_sans_bold"
                     android:gravity="center"
-                    android:text="Continue"
+                    android:text="@string/continue_sign_up"
                     android:textAllCaps="true"
                     android:textColor="@color/white" />
 
@@ -193,17 +194,14 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="@dimen/_15sdp"
-                        android:layout_height="@dimen/_15sdp"
-                        android:src="@drawable/ic_google" />
-
                     <TextView
+                        app:drawableLeftCompat="@drawable/ic_google"
+                        android:drawablePadding="@dimen/_10sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_3sdp"
-                        android:fontFamily="@font/dmsans_bold"
-                        android:text="Sign up with Google"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="@string/sign_up_google"
                         android:textAlignment="center"
                         android:textAllCaps="true"
                         android:textColor="@color/text_color" />
@@ -222,8 +220,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/dmsans_regular"
-                    android:text="You have already an account?"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:text="@string/have_account"
                     android:textColor="@color/text_color" />
 
                 <TextView
@@ -231,8 +229,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_3sdp"
-                    android:fontFamily="@font/dmsans_regular"
-                    android:text="Sign in"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:text="@string/login"
                     android:textColor="@color/yellow" />
 
             </LinearLayout>

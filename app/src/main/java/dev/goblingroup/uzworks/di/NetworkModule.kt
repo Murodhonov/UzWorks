@@ -41,7 +41,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBaseUrl(): String = "http://172.16.12.221:28/"
+    fun provideBaseUrl(): String = "http://172.16.13.197:28/"
 
     @Provides
     @Singleton

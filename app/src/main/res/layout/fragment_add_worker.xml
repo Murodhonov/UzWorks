@@ -6,7 +6,7 @@
     android:fillViewport="true"
     android:layout_height="match_parent"
     android:scrollbars="none"
-    tools:context=".fragments.workers.AddWorkerFragment">
+    tools:context=".fragments.announcement.AddWorkerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:ellipsize="marquee"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            android:fontFamily="@font/dmsans_medium"
+            android:fontFamily="@font/dm_sans_medium"
             android:textSize="@dimen/_14ssp"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
@@ -258,7 +258,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_12ssp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_medium"
+                android:fontFamily="@font/dm_sans_medium"
                 android:text="Address" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -320,7 +320,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_12ssp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/dmsans_medium"
+                android:fontFamily="@font/dm_sans_medium"
                 android:text="Category" />
 
             <com.google.android.material.textfield.TextInputLayout

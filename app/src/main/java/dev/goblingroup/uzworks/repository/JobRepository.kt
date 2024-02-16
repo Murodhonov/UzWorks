@@ -15,17 +15,9 @@ class JobRepository @Inject constructor(
     private val jobService: JobService
 ) {
 
-    suspend fun getJobById(jobId: String) = jobService.getJobById(jobId)
-
     suspend fun getAllJobs() = jobService.getAllJobs()
 
-    suspend fun countJobs() = jobService.countJobs()
-
-    suspend fun getJobByUserId(userId: String) = jobService.getJobsByUserId(userId = userId)
-
-    suspend fun addJob(jobEntity: JobEntity) = jobDao.addJob(jobEntity)
-
-    suspend fun addJobs(jobList: List<JobResponse>) {
+    fun addJobs(jobList: List<JobResponse>) {
         val existingJobs = try {
             jobDao.listAllJobs()
         } catch (e: Exception) {
@@ -54,21 +46,17 @@ class JobRepository @Inject constructor(
 
     fun saveJob(jobId: String) = jobDao.saveJob(jobId)
 
-    suspend fun unSaveJob(jobId: String): Boolean {
+    fun unSaveJob(jobId: String): Boolean {
         jobDao.unSaveJob(jobId)
         return jobDao.countSavedJobs() != 0
     }
 
-    suspend fun isJobSaved(jobId: String) = jobDao.isJobSaved(jobId)
-
-    suspend fun getJob(jobId: String) = jobDao.getJob(jobId)
-
-    suspend fun listDatabaseJobs() = jobDao.listAllJobs()
+    fun listDatabaseJobs() = jobDao.listAllJobs()
 
     fun listSavedJobs() = jobDao.listSavedJobs()
 
-    suspend fun countDatabaseJobs() = jobDao.countJobs()
+    fun countDatabaseJobs() = jobDao.countJobs()
 
-    suspend fun countSavedJobs() = jobDao.countSavedJobs()
+    fun countSavedJobs() = jobDao.countSavedJobs()
 
 }

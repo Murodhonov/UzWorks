@@ -6,9 +6,10 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/_11sdp"
     android:background="@color/white"
-    tools:context=".fragments.jobs.JobDetailsFragment">
+    tools:context=".fragments.announcement.JobDetailsFragment">
 
     <ImageView
+        android:contentDescription="@string/content_description"
         android:id="@+id/back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,11 +19,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/date_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_11sdp"
         android:textSize="@dimen/_11ssp"
-        android:text="1 day ago"
         app:layout_constraintBottom_toBottomOf="@id/back_btn"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/back_btn" />
@@ -46,6 +47,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/_7sdp"
@@ -54,11 +56,10 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/announcement_tv"
+            android:id="@+id/announcement_title_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/dmsans_bold"
-            android:text="CALL-MARKAZGA AYOL-QIZ OPERATORLAR KERAK"
+            android:fontFamily="@font/dm_sans_bold"
             android:textAlignment="center"
             android:textColor="@color/black_blue"
             android:textSize="@dimen/_15ssp"
@@ -71,15 +72,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Ish turi"
+            android:text="@string/job_category"
             android:textAlignment="center"
             android:textColor="@color/black_blue"
             android:textSize="@dimen/_13ssp"
             app:layout_constraintLeft_toLeftOf="@id/work_type_btn"
             app:layout_constraintRight_toRightOf="@id/work_type_btn"
-            app:layout_constraintTop_toBottomOf="@+id/announcement_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/announcement_title_tv" />
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/work_type_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,10 +99,10 @@
                 android:layout_marginTop="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/_7sdp"
                 android:layout_marginBottom="@dimen/_4sdp"
-                android:text="Sotuvchilik"
+                android:text="@string/job_category"
                 android:textSize="@dimen/_10ssp" />
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
         <View
             android:layout_width="@dimen/_2sdp"
@@ -119,15 +120,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Jins"
+            android:text="@string/gender"
             android:textAlignment="center"
             android:textColor="@color/black_blue"
             android:textSize="@dimen/_13ssp"
             app:layout_constraintLeft_toLeftOf="@id/work_gender_btn"
             app:layout_constraintRight_toRightOf="@id/work_gender_btn"
-            app:layout_constraintTop_toBottomOf="@+id/announcement_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/announcement_title_tv" />
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/work_gender_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -147,10 +148,10 @@
                 android:layout_marginTop="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/_7sdp"
                 android:layout_marginBottom="@dimen/_4sdp"
-                android:text="Ayol"
+                android:text="@string/male"
                 android:textSize="@dimen/_10ssp" />
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -175,8 +176,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Ish Haqida To’liq Ma’lumotlar"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/about_job"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_18ssp" />
 
@@ -185,8 +186,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="@dimen/_7sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Manzil"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/address"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_11ssp" />
 
@@ -194,7 +195,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:text="Andijon viloyati, Baliqchi tumani, mo’ljal 6-maktab"
                 android:textSize="@dimen/_10ssp" />
 
             <View
@@ -208,8 +208,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Maosh"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/salary"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_11ssp" />
 
@@ -222,15 +222,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/dmsans_bold"
-                    android:text="2 500 000 so’m"
+                    android:fontFamily="@font/dm_sans_bold"
                     android:textColor="@color/black_blue"
                     android:textSize="@dimen/_10ssp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="/Oy"
                     android:textColor="@color/yellow"
                     android:textSize="@dimen/_10ssp" />
 
@@ -247,8 +245,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Ko’proq ma’lumotlar"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/more_information"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_11ssp" />
 
@@ -256,10 +254,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto ..."
                 android:textSize="@dimen/_10ssp" />
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -274,11 +271,11 @@
                     android:layout_marginTop="@dimen/_3sdp"
                     android:layout_marginEnd="@dimen/_6sdp"
                     android:layout_marginBottom="@dimen/_3sdp"
-                    android:text="Read more"
+                    android:text="@string/more"
                     android:textColor="@color/black_blue"
                     android:textSize="@dimen/_8ssp" />
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
             <View
                 android:layout_width="match_parent"
@@ -291,8 +288,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Ish vaqti"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/working_time"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_11ssp" />
 
@@ -300,7 +297,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:text="Andijon viloyati, Baliqchi tumani, mo’ljal 6-maktab"
                 android:textSize="@dimen/_10ssp" />
 
             <View
@@ -314,8 +310,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Ish grafik"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/working_schedule"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_11ssp" />
 
@@ -323,7 +319,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:text="6/1 (dam olish kunlari Yakshkanba)"
                 android:textSize="@dimen/_10ssp" />
 
             <View
@@ -337,55 +332,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Sharoitlar"
-                android:textColor="@color/black_blue"
-                android:textSize="@dimen/_11ssp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:lineSpacingExtra="@dimen/_3sdp"
-                android:text="- Zamonaviy ofisda ishlash \n- Qulay joylashuv(metrodan 5 daqiqali yo'l) \n- Doimiy oylik maosh (3 mln oklad) "
-                android:textSize="@dimen/_10ssp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:layout_marginTop="@dimen/_7sdp"
-                android:background="#C7C5CF" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_7sdp"
-                android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Yosh uchun talab"
-                android:textColor="@color/black_blue"
-                android:textSize="@dimen/_11ssp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:text="30 dan 35 gacha"
-                android:textSize="@dimen/_10ssp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:layout_marginTop="@dimen/_7sdp"
-                android:background="#C7C5CF" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_7sdp"
-                android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Talablarimiz"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/benefit"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_11ssp" />
 
@@ -394,7 +342,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:lineSpacingExtra="@dimen/_3sdp"
-                android:text="- Xushmuomila va yoqimli ovozga ega bo'lishi\n- O'zbek tilida nutqi ravon va mukammal bo'lishi \n- Kirishimli va pozitiv bo'lishi \n- Ishga vaqtida kelishi va ma'suliyatli bo'lishi "
                 android:textSize="@dimen/_10ssp" />
 
             <View
@@ -408,18 +355,65 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Ishtimoiy tarmoqlardan ko’rish:"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/age_limit"
+                android:textColor="@color/black_blue"
+                android:textSize="@dimen/_11ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:textSize="@dimen/_10ssp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:background="#C7C5CF" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_7sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/requirements"
+                android:textColor="@color/black_blue"
+                android:textSize="@dimen/_11ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:lineSpacingExtra="@dimen/_3sdp"
+                android:textSize="@dimen/_10ssp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:background="#C7C5CF" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_7sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/social"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_11ssp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:contentDescription="@string/content_description"
                     android:id="@+id/tg_iv"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
@@ -430,7 +424,7 @@
                     android:layout_width="wrap_content"
                     android:layout_marginStart="@dimen/_7sdp"
                     android:gravity="center_vertical"
-                    android:text="Telegram"
+                    android:text="@string/telegram"
                     android:textColor="@color/blue"
                     android:textSize="@dimen/_10ssp" />
 
@@ -438,11 +432,13 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
+                android:gravity="center_vertical"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:contentDescription="@string/content_description"
                     android:id="@+id/ig_iv"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
@@ -453,7 +449,7 @@
                     android:layout_height="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_7sdp"
                     android:gravity="center_vertical"
-                    android:text="Instagram"
+                    android:text="@string/instagram"
                     android:textColor="@color/yellow"
                     android:textSize="@dimen/_10ssp" />
 
@@ -464,12 +460,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Xaritada ko’rsatilgan manzil"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/map_address"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_11ssp" />
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
@@ -480,8 +477,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/_7sdp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="Aloqaga chiqish"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="@string/contact"
                 android:textAlignment="center"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_15ssp" />
@@ -510,6 +507,7 @@
                     android:paddingBottom="@dimen/_5sdp">
 
                     <ImageView
+                        android:contentDescription="@string/content_description"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_contact_by_chat" />
@@ -518,8 +516,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_7sdp"
-                        android:fontFamily="@font/dmsans_bold"
-                        android:text="By Chat"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="@string/contact_chat"
                         android:textColor="@color/black_blue"
                         android:textSize="@dimen/_13ssp" />
 
@@ -551,17 +549,13 @@
                     android:paddingEnd="@dimen/_3sdp"
                     android:paddingBottom="@dimen/_5sdp">
 
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/ic_telegram" />
-
                     <TextView
                         android:layout_width="wrap_content"
+                        app:drawableLeftCompat="@drawable/ic_telegram"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_7sdp"
-                        android:fontFamily="@font/dmsans_bold"
-                        android:text="By Telegram"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="@string/contact_telegram"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/_13ssp" />
 
@@ -592,17 +586,14 @@
                     android:paddingEnd="@dimen/_3sdp"
                     android:paddingBottom="@dimen/_5sdp">
 
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/ic_contact_call" />
-
                     <TextView
+                        app:drawableLeftCompat="@drawable/ic_contact_call"
                         android:layout_width="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_7sdp"
-                        android:fontFamily="@font/dmsans_bold"
-                        android:text="By Phone"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="@string/contact_phone"
                         android:textColor="@color/green"
                         android:textSize="@dimen/_13ssp" />
 

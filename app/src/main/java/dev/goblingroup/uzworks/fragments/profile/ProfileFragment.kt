@@ -153,7 +153,7 @@ class ProfileFragment : Fragment() {
             chip.setChipBackgroundColorResource(R.color.middle_green)
             chip.setChipStrokeColorResource(R.color.middle_green)
             chip.setTextColor(resources.getColor(R.color.text_color))
-            chip.typeface = ResourcesCompat.getFont(context, R.font.dmsans_regular)
+            chip.typeface = ResourcesCompat.getFont(context, R.font.dm_sans_regular)
             chip.chipCornerRadius = 5f.dpToPx()
             chip.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             chipGroup.addView(chip)

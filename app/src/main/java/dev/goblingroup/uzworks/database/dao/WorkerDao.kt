@@ -13,12 +13,6 @@ interface WorkerDao {
         entity = WorkerEntity::class,
         onConflict = OnConflictStrategy.REPLACE
     )
-    fun addWorker(workerEntity: WorkerEntity)
-
-    @Insert(
-        entity = WorkerEntity::class,
-        onConflict = OnConflictStrategy.REPLACE
-    )
     fun addWorkers(workerList: List<WorkerEntity>)
 
     @Query("UPDATE workers_table SET is_saved = 1 WHERE worker_id = :workerId")
@@ -28,21 +22,24 @@ interface WorkerDao {
     fun unSaveWorker(workerId: String)
 
     @Query("SELECT is_saved FROM workers_table WHERE worker_id = :workerId")
-    suspend fun isWorkerSaved(workerId: String): Boolean
+    fun isWorkerSaved(workerId: String): Boolean
 
     @Query("SELECT * FROM workers_table WHERE worker_id = :workerId")
-    suspend fun getWorker(workerId: String): WorkerEntity
+    fun getWorker(workerId: String): WorkerEntity
 
     @Query("SELECT * FROM workers_table")
-    suspend fun listAllWorkers(): List<WorkerEntity>
+    fun listAllWorkers(): List<WorkerEntity>
 
     @Query("SELECT * FROM workers_table WHERE is_saved = 1")
     fun listSavedWorkers(): List<WorkerEntity>
 
     @Query("SELECT COUNT(*) FROM workers_table")
-    suspend fun countWorkers(): Int
+    fun countWorkers(): Int
 
     @Query("SELECT COUNT(*) FROM workers_table WHERE is_saved = 1")
-    suspend fun countSavedWorkers(): Int
+    fun countSavedWorkers(): Int
+
+    @Query("DELETE FROM workers_table")
+    fun deleteWorkers()
 
 }

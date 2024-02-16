@@ -9,17 +9,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
-import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementAdapter
-import dev.goblingroup.uzworks.adapter.rv_adapters.JobAdapter
+import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
-import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
-import dev.goblingroup.uzworks.vm.JobsViewModel
 import dev.goblingroup.uzworks.vm.LoginViewModel
 import kotlinx.coroutines.launch
 
@@ -31,11 +27,12 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val jobsViewModel: JobsViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
     private lateinit var linearSnapHelper: LinearSnapHelper
+
+    private val announcementViewModel: AnnouncementViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +49,6 @@ class HomeFragment : Fragment() {
                 val user = loginViewModel.getUser()
                 greetingTv.text = "Assalomu alaykum\n${user?.firstname} ${user?.lastName}"
             }
-
             loadCategories()
         }
     }
@@ -84,7 +80,7 @@ class HomeFragment : Fragment() {
 
     private fun loadJobs() {
         lifecycleScope.launch {
-            jobsViewModel.jobsLiveData.observe(viewLifecycleOwner) {
+            announcementViewModel.combinedLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
                         Toast.makeText(requireContext(), "some error", Toast.LENGTH_SHORT)
@@ -96,7 +92,7 @@ class HomeFragment : Fragment() {
                     }
 
                     is ApiStatus.Loading -> {
-
+                        binding.progress.visibility = View.VISIBLE
                     }
 
                     is ApiStatus.Success -> {
@@ -112,18 +108,21 @@ class HomeFragment : Fragment() {
             if (_binding != null) {
                 binding.apply {
                     binding.progress.visibility = View.GONE
-                    val adapter = AnnouncementAdapter(
-                        jobsViewModel.listDatabaseJobs(),
+                    Log.d(
+                        TAG,
+                        "success: jobs ${announcementViewModel.listDatabaseAnnouncements().jobs?.size}"
+                    )
+                    Log.d(
+                        TAG,
+                        "success: workers ${announcementViewModel.listDatabaseAnnouncements().workers?.size}"
+                    )
+                    val adapter = AnnouncementsAdapter(
+                        announcementViewModel.listDatabaseAnnouncements(),
                         jobCategoryViewModel.listJobCategories(),
-                        { jobId ->
-                            findNavController().navigate(
-                                resId = R.id.jobDetailsFragment,
-                                args = null,
-                                navOptions = getNavOptions()
-                            )
-                        },
-                        { state, jobId ->
-                            saveUnSave(state, jobId)
+                        { announcementId ->
+
+                        }, { state, announcementId, position ->
+                            saveUnSave(state, announcementId)
                         }
                     )
                     linearSnapHelper.attachToRecyclerView(recommendedWorkAnnouncementsRv)
@@ -133,12 +132,12 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun saveUnSave(state: Boolean, jobId: String) {
+    private fun saveUnSave(state: Boolean, announcementId: String) {
         lifecycleScope.launch {
             if (state) {
-                jobsViewModel.saveJob(jobId)
+                announcementViewModel.saveAnnouncement(announcementId)
             } else {
-                jobsViewModel.unSaveJob(jobId)
+                announcementViewModel.unSaveAnnouncement(announcementId)
             }
         }
     }

@@ -2,7 +2,10 @@ package dev.goblingroup.uzworks.repository
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import dev.goblingroup.uzworks.database.dao.JobDao
 import dev.goblingroup.uzworks.database.dao.UserDao
+import dev.goblingroup.uzworks.database.dao.WorkerDao
+import dev.goblingroup.uzworks.utils.UserRole
 import java.lang.reflect.Type
 import javax.inject.Inject
 
@@ -10,7 +13,9 @@ class SecurityRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson,
     private val type: Type,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val jobDao: JobDao,
+    private val workerDao: WorkerDao
 ) {
 
     fun getUserRoles(): List<String> {
@@ -30,9 +35,19 @@ class SecurityRepository @Inject constructor(
         return sharedPreferences.edit().putString("user_id", userId).commit()
     }
 
-    suspend fun deleteUser(): Boolean {
+    fun deleteUser(): Boolean {
         userDao.deleteUser()
+        jobDao.deleteJobs()
+        workerDao.deleteWorkers()
         return sharedPreferences.edit().clear().commit()
+    }
+
+    fun isEmployee(): Boolean {
+        return getUserRoles().contains(UserRole.EMPLOYEE.roleName)
+    }
+
+    fun isEmployer(): Boolean {
+        return getUserRoles().contains(UserRole.EMPLOYER.roleName)
     }
 
     private fun listToJson(list: List<String>): String {
@@ -43,11 +58,4 @@ class SecurityRepository @Inject constructor(
         return gson.fromJson(jsonString, type)
     }
 
-    private fun deleteToken(): Boolean {
-        return sharedPreferences.edit().putString("token", null).commit()
-    }
-
-    private fun deleteUserRoles(): Boolean {
-        return sharedPreferences.edit().putString("user_roles", listToJson(emptyList())).commit()
-    }
 }

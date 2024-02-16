@@ -9,7 +9,7 @@
         android:id="@+id/position_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/dmsans_bold"
+        android:fontFamily="@font/dm_sans_bold"
         android:text="Manager"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_13ssp"

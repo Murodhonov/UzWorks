@@ -14,18 +14,12 @@ interface UserDao {
         entity = UserEntity::class,
         onConflict = OnConflictStrategy.REPLACE
     )
-    suspend fun addUser(userEntity: UserEntity)
+    fun addUser(userEntity: UserEntity)
 
     @Query("SELECT * FROM users_table LIMIT 1")
-    suspend fun getUser(): UserEntity?
-
-    @Update(
-        entity = UserEntity::class,
-        onConflict = OnConflictStrategy.REPLACE
-    )
-    suspend fun updateUser(userEntity: UserEntity)
+    fun getUser(): UserEntity?
 
     @Query("DELETE FROM users_table")
-    suspend fun deleteUser()
+    fun deleteUser()
 
 }
