@@ -30,13 +30,13 @@ class SplashViewModel @Inject constructor(
 
     private fun login() {
         viewModelScope.launch {
-            try {
-                val user = splashRepository.getUser()
+            val user = splashRepository.getUser()
+            if (user != null) {
                 if (networkHelper.isNetworkConnected()) {
                     val response = splashRepository.login(
                         LoginRequest(
-                            user?.username.toString(),
-                            user?.password.toString()
+                            user.username,
+                            user.password
                         )
                     )
                     if (response.isSuccessful) {
@@ -51,9 +51,8 @@ class SplashViewModel @Inject constructor(
                 } else {
                     _loginLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
                 }
-            } catch (e: Exception) {
-                _loginLiveData.postValue(ApiStatus.Error(Throwable("Caught on catch block")))
-                Log.e(TAG, "login: $e")
+            } else {
+                _loginLiveData.postValue(ApiStatus.Error(Throwable("User not found")))
             }
         }
     }

@@ -1,6 +1,8 @@
 package dev.goblingroup.uzworks.fragments.auth
 
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -61,50 +63,8 @@ class SignUpFragment : Fragment() {
                 }
             }
             continueBtn.setOnClickListener {
-                if (
-                    fullNameEt.editText?.text.toString().isNotEmpty() &&
-                    usernameEt.editText?.text.toString().isNotEmpty() &&
-                    passwordEt.editText?.text.toString().isNotEmpty() &&
-                    confirmPasswordEt.editText?.text.toString().isNotEmpty()
-                ) {
-                    if (confirmPasswordEt.editText?.text.toString() != passwordEt.editText?.text.toString()) {
-                        confirmPasswordEt.error = resources.getString(R.string.confirm_password)
-                        confirmPasswordEt.isErrorEnabled = true
-                    } else {
-                        val (firstName, lastName) = fullNameEt.splitFullName()
-                        if (firstName.isEmpty() || lastName.isEmpty()) {
-                            fullNameEt.error = resources.getString(R.string.enter_fullname)
-                            fullNameEt.isErrorEnabled = true
-                        } else {
-                            if (passwordEt.editText?.text.toString().isStrongPassword()) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "sign up be requested",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-//                                signUp(firstName, lastName)
-                            } else {
-                                passwordEt.error = getString(R.string.password_requirements)
-                            }
-                        }
-                    }
-                } else {
-                    if (fullNameEt.editText?.text.toString().isEmpty()) {
-                        fullNameEt.isErrorEnabled = true
-                        fullNameEt.error = resources.getString(R.string.enter_fullname)
-                    }
-                    if (usernameEt.editText?.text.toString().isEmpty()) {
-                        usernameEt.isErrorEnabled = true
-                        usernameEt.error = resources.getString(R.string.enter_username)
-                    }
-                    if (passwordEt.editText?.text.toString().isEmpty()) {
-                        passwordEt.isErrorEnabled = true
-                        passwordEt.error = resources.getString(R.string.enter_password)
-                    }
-                    if (confirmPasswordEt.editText?.text.toString().isEmpty()) {
-                        confirmPasswordEt.isErrorEnabled = true
-                        confirmPasswordEt.error = resources.getString(R.string.confirm_password)
-                    }
+                if (isFormValid()) {
+                    signUp()
                 }
             }
 
@@ -150,7 +110,6 @@ class SignUpFragment : Fragment() {
                         .isNotEmpty()
                 ) {
                     confirmPasswordEt.isErrorEnabled = false
-                    confirmPasswordEt.error = "Confirm password"
                 }
             }
 
@@ -165,16 +124,53 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun signUp(firstName: String, lastName: String) {
+    private fun isFormValid(): Boolean {
+        binding.apply {
+            var validation = true
+            val (firstName, lastName) = fullNameEt.splitFullName()
+            if (firstName == null && lastName == null) {
+                fullNameEt.isErrorEnabled = true
+                fullNameEt.error = resources.getString(R.string.enter_fullname)
+                validation = false
+            }
+            if (usernameEt.editText?.text.toString().isEmpty()) {
+                usernameEt.isErrorEnabled = true
+                usernameEt.error = resources.getString(R.string.enter_username)
+                validation = false
+            }
+            if (passwordEt.editText?.text.toString().isEmpty()) {
+                passwordEt.isErrorEnabled = true
+                passwordEt.error = resources.getString(R.string.enter_password)
+                validation = false
+            } else {
+                if (!passwordEt.editText?.text.toString().isStrongPassword()) {
+                    passwordEt.isErrorEnabled = true
+                    passwordEt.error = resources.getString(R.string.password_requirements)
+                    validation = false
+                }
+            }
+            if (confirmPasswordEt.editText?.text.toString().isEmpty() ||
+                confirmPasswordEt.editText?.text.toString() != passwordEt.editText?.text.toString()
+            ) {
+                confirmPasswordEt.isErrorEnabled = true
+                confirmPasswordEt.error = resources.getString(R.string.confirm_password)
+                validation = false
+            }
+            return validation
+        }
+    }
+
+    private fun signUp() {
         binding.apply {
             lifecycleScope.launch {
+                val (firstName, lastName) = fullNameEt.splitFullName()
                 signupViewModel.signup(
                     signupRequest = SignUpRequest(
                         username = usernameEt.editText?.text.toString(),
                         password = passwordEt.editText?.text.toString(),
                         confirmPassword = confirmPasswordEt.editText?.text.toString(),
-                        firstName = firstName,
-                        lastName = lastName,
+                        firstName = firstName.toString(),
+                        lastName = lastName.toString(),
                         role = userRole
                     )
                 ).observe(viewLifecycleOwner) {
@@ -192,21 +188,6 @@ class SignUpFragment : Fragment() {
                         }
                     }
                 }
-                    /*.collect {
-                        when (it) {
-                            is ApiStatus.Error -> {
-                                signupError(it.error)
-                            }
-
-                            is ApiStatus.Loading -> {
-                                signupLoading()
-                            }
-
-                            is ApiStatus.Success -> {
-                                signupSuccess()
-                            }
-                        }
-                    }*/
             }
         }
     }
@@ -217,7 +198,7 @@ class SignUpFragment : Fragment() {
             Log.e(TAG, "signupError: ${signUpError.stackTrace}")
             Log.e(TAG, "signupError: ${signUpError.printStackTrace()}")
             errorIv.visibility = View.VISIBLE
-            dialogTv.text = "some error while signing up"
+            dialogTv.text = "Error ${signUpError.message.toString()}"
             closeDialog.visibility = View.VISIBLE
             closeDialog.setOnClickListener {
                 authDialog.dismiss()
@@ -229,6 +210,7 @@ class SignUpFragment : Fragment() {
         authDialog = AlertDialog.Builder(requireContext()).create()
         authDialogBinding = AuthDialogItemBinding.inflate(layoutInflater)
         authDialog.setView(authDialogBinding.root)
+        authDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         authDialog.setCancelable(false)
         authDialog.show()
     }
@@ -261,26 +243,6 @@ class SignUpFragment : Fragment() {
                         }
                     }
                 }
-                    /*.collect {
-                        when (it) {
-                            is ApiStatus.Error -> {
-
-                            }
-
-                            is ApiStatus.Loading -> {
-
-                            }
-
-                            is ApiStatus.Success -> {
-                                authDialog.dismiss()
-                                findNavController().navigate(
-                                    resId = R.id.succeedFragment,
-                                    args = null,
-                                    navOptions = getNavOptions()
-                                )
-                            }
-                        }
-                    }*/
             }
         }
     }

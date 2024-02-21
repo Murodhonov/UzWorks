@@ -11,12 +11,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
+import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
+import dev.goblingroup.uzworks.vm.HomeViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
-import dev.goblingroup.uzworks.vm.LoginViewModel
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,7 +28,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val loginViewModel: LoginViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
     private lateinit var linearSnapHelper: LinearSnapHelper
@@ -46,8 +47,38 @@ class HomeFragment : Fragment() {
         binding.apply {
             linearSnapHelper = LinearSnapHelper()
             lifecycleScope.launch {
-                val user = loginViewModel.getUser()
-                greetingTv.text = "Assalomu alaykum\n${user?.firstname} ${user?.lastName}"
+                greetingTv.text = "${resources.getString(R.string.greeting)}\n${homeViewModel.getFullName()}"
+
+                homeViewModel.workerLivedata.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+
+                        }
+
+                        is ApiStatus.Loading -> {
+
+                        }
+
+                        is ApiStatus.Success -> {
+                            workersCount.text = it.response.toString()
+                        }
+                    }
+                }
+                homeViewModel.jobLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+
+                        }
+
+                        is ApiStatus.Loading -> {
+
+                        }
+
+                        is ApiStatus.Success -> {
+                            jobsCount.text = it.response.toString()
+                        }
+                    }
+                }
             }
             loadCategories()
         }

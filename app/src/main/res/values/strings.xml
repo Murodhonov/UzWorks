@@ -132,4 +132,7 @@ Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi.</str
     <string name="select_map">Xaritadan tanlash</string>
     <string name="loading">Yuklanmoqda</string>
     <string name="incorrect_username_password">Foydalanuvchi nomi yoki parol xato</string>
+    <string name="sign_up_error">Something went wrong while sign up</string>
+    <string name="greeting">Assalomu alaykum</string>
+    <string name="subscribers_count">Obunachilar soni</string>
 </resources>
