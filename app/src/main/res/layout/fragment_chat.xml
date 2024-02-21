@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:contentDescription="@string/content_description"
             android:id="@+id/back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,23 +28,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.cardview.widget.CardView
+        <ImageView
+            android:contentDescription="@string/content_description"
             android:id="@+id/profile_picture"
             android:layout_width="@dimen/_44sdp"
             android:layout_height="@dimen/_44sdp"
             android:layout_marginStart="@dimen/_7sdp"
-            app:cardCornerRadius="@dimen/_100sdp"
-            app:cardElevation="0dp"
+            android:src="@drawable/ic_male"
             app:layout_constraintBottom_toBottomOf="@id/back_btn"
             app:layout_constraintLeft_toRightOf="@id/back_btn"
-            app:layout_constraintTop_toTopOf="@id/back_btn">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/default_profile_image" />
-
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toTopOf="@id/back_btn" />
 
         <TextView
             android:id="@+id/user_name_tv"
@@ -52,10 +46,9 @@
             android:layout_marginStart="@dimen/_7sdp"
             android:layout_marginTop="@dimen/_7sdp"
             android:fontFamily="@font/dm_sans_medium"
-            android:text="Orlando Diggs"
             android:textColor="@color/black_blue"
             android:textSize="@dimen/_13ssp"
-            app:layout_constraintRight_toLeftOf="@id/call_iv"
+            app:layout_constraintRight_toLeftOf="@id/more_iv"
             android:layout_marginEnd="@dimen/_7sdp"
             app:layout_constraintLeft_toRightOf="@id/profile_picture"
             app:layout_constraintTop_toTopOf="@+id/profile_picture" />
@@ -81,33 +74,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_3sdp"
                 android:fontFamily="@font/dm_sans_regular"
-                android:text="Online"
+                android:text="@string/online"
                 android:textSize="@dimen/_11ssp"
                 android:textColor="@color/text_color" />
 
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/call_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_4sdp"
-            android:src="@drawable/ic_call"
-            app:layout_constraintBottom_toBottomOf="@id/more_iv"
-            app:layout_constraintRight_toLeftOf="@id/search_iv"
-            app:layout_constraintTop_toTopOf="@id/more_iv" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/search_iv"
-            android:layout_marginEnd="@dimen/_4sdp"
-            android:src="@drawable/ic_search"
-            app:layout_constraintBottom_toBottomOf="@id/more_iv"
-            app:layout_constraintRight_toLeftOf="@id/more_iv"
-            app:layout_constraintTop_toTopOf="@id/more_iv" />
-
-        <ImageView
+            android:contentDescription="@string/content_description"
             android:id="@+id/more_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -159,6 +133,7 @@
                 android:layout_height="@dimen/_30sdp">
 
                 <ImageView
+                    android:contentDescription="@string/content_description"
                     android:id="@+id/attachment"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
@@ -169,6 +144,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
+                    android:autofillHints="name"
                     android:id="@+id/message_et"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -177,11 +153,12 @@
                     android:layout_marginEnd="@dimen/_7sdp"
                     android:layout_marginBottom="@dimen/_4sdp"
                     android:background="@null"
-                    android:hint="Write your massage"
+                    android:hint="@string/send_message"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/attachment"
                     app:layout_constraintRight_toRightOf="parent"
+                    android:inputType="text"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -199,6 +176,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:contentDescription="@string/content_description"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
                 android:layout_gravity="center"

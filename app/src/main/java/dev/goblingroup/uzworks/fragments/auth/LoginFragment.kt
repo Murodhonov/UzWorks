@@ -8,11 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,16 +19,12 @@ import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
-import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
+import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.LoginViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -71,11 +65,11 @@ class LoginFragment : Fragment() {
                     login()
                 } else {
                     if (usernameEt.editText?.text.toString().isEmpty()) {
-                        usernameEt.error = "Username should be entered"
+                        usernameEt.error = resources.getString(R.string.enter_username)
                         usernameEt.isErrorEnabled = true
                     }
                     if (passwordEt.editText?.text.toString().isEmpty()) {
-                        passwordEt.error = "Password should be entered"
+                        passwordEt.error = resources.getString(R.string.enter_password)
                         passwordEt.isErrorEnabled = true
                     }
                 }
@@ -128,22 +122,6 @@ class LoginFragment : Fragment() {
                             }
                         }
                     }
-
-                /*.collect {
-                            when (it) {
-                                is ApiStatus.Error -> {
-                                    loginError(it.error)
-                                }
-
-                                is ApiStatus.Loading -> {
-                                    loginLoading()
-                                }
-
-                                is ApiStatus.Success -> {
-                                    loginSuccess(it.response as LoginResponse)
-                                }
-                            }
-                        }*/
             }
         }
     }
@@ -153,7 +131,7 @@ class LoginFragment : Fragment() {
             authDialogBinding.apply {
                 progressBar.visibility = View.INVISIBLE
                 errorIv.visibility = View.VISIBLE
-                dialogTv.text = "Incorrect username or password"
+                dialogTv.text = resources.getString(R.string.incorrect_username_password)
                 closeDialog.visibility = View.VISIBLE
                 closeDialog.setOnClickListener {
                     authDialog.dismiss()
@@ -176,7 +154,6 @@ class LoginFragment : Fragment() {
             authDialogBinding.apply {
                 progressBar.visibility = View.VISIBLE
                 errorIv.visibility = View.INVISIBLE
-                dialogTv.text = "Loading"
                 closeDialog.visibility = View.INVISIBLE
             }
             authDialog.show()

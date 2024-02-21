@@ -15,6 +15,7 @@
         android:padding="@dimen/_10sdp">
 
         <ImageView
+            android:contentDescription="@string/content_description"
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +35,7 @@
             android:fontFamily="@font/dm_sans_medium"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
-            android:text="Create announcement for job"
+            android:text="@string/add_job_announcement"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintLeft_toLeftOf="@id/back"
             app:layout_constraintRight_toRightOf="parent"
@@ -71,11 +72,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:text="Deadline"
+                    android:text="@string/deadline"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_10ssp" />
 
                 <ImageView
+                    android:contentDescription="@string/content_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|end"
@@ -95,8 +97,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:hint="Title"
-                    android:imeOptions="actionNext"
+                    android:hint="@string/title"
+                    android:imeOptions="normal"
                     android:inputType="text"
                     android:textSize="@dimen/_10ssp" />
 
@@ -114,7 +116,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:digits="1234567890"
-                    android:hint="Salary"
+                    android:hint="@string/salary"
                     android:imeOptions="actionNext"
                     android:inputType="numberDecimal"
                     android:textSize="@dimen/_10ssp" />
@@ -134,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:hint="Working time"
+                android:hint="@string/working_time"
                 app:endIconTint="@color/black_blue"
                 app:errorEnabled="false">
 
@@ -153,7 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:hint="Working schedule"
+                android:hint="@string/working_schedule"
                 app:endIconTint="@color/black_blue"
                 app:errorEnabled="false">
 
@@ -177,7 +179,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:hint="Telegram username"
+                    android:hint="@string/telegram_username"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:textSize="@dimen/_10ssp" />
@@ -195,7 +197,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:hint="Instagram profile"
+                    android:hint="@string/instagram_username"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:textSize="@dimen/_10ssp" />
@@ -208,15 +210,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="false"
-                app:helperText="Enter your phone number with +998"
-                app:helperTextEnabled="true"
-                app:helperTextTextColor="@color/yellow">
+                app:errorEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:hint="Phone number"
+                    android:hint="@string/phone_number"
                     android:imeOptions="actionNext"
                     android:inputType="phone"
                     android:textSize="@dimen/_10ssp" />
@@ -234,7 +233,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:hint="Benefit"
+                    android:hint="@string/benefit"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:textSize="@dimen/_10ssp" />
@@ -252,7 +251,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:hint="Requirement"
+                    android:hint="@string/requirements"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:textSize="@dimen/_10ssp" />
@@ -264,7 +263,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dm_sans_bold"
-                android:text="Set age limit"
+                android:text="@string/age_limit"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_12ssp" />
 
@@ -286,7 +285,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_35sdp"
                         android:digits="1234567890"
-                        android:hint="Min age"
+                        android:hint="@string/min"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
                         android:minWidth="@dimen/_70sdp"
@@ -307,7 +306,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_35sdp"
                         android:digits="1234567890"
-                        android:hint="Max age"
+                        android:hint="@string/max"
                         android:minWidth="@dimen/_100sdp"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
@@ -323,7 +322,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dm_sans_bold"
-                android:text="Choose location"
+                android:text="@string/select_location"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_12ssp" />
 
@@ -348,7 +347,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/dm_sans_bold"
-                        android:text="Current location"
+                        android:text="@string/current_location"
                         android:textColor="@color/black_blue" />
 
                 </com.google.android.material.card.MaterialCardView>
@@ -368,7 +367,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/dm_sans_bold"
-                        android:text="Select on map"
+                        android:text="@string/select_map"
                         android:textColor="@color/black_blue" />
 
                 </com.google.android.material.card.MaterialCardView>
@@ -386,7 +385,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:hint="Orientation"
+                    android:hint="@string/orientation"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:textSize="@dimen/_10ssp" />
@@ -400,7 +399,7 @@
                 android:textSize="@dimen/_12ssp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dm_sans_medium"
-                android:text="Address" />
+                android:text="@string/address" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
@@ -419,7 +418,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/create_worker_edit_text_background"
                     android:ellipsize="end"
-                    android:hint="Select region"
+                    android:hint="@string/select_region"
                     android:inputType="none"
                     android:maxLines="1"
                     android:textColor="@color/black_blue"
@@ -446,7 +445,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/create_worker_edit_text_background"
                     android:ellipsize="end"
-                    android:hint="Select region first"
+                    android:hint="@string/select_region_first"
                     android:inputType="none"
                     android:maxLines="1"
                     android:textColor="@color/black_blue"
@@ -462,7 +461,7 @@
                 android:textSize="@dimen/_12ssp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/dm_sans_medium"
-                android:text="Category" />
+                android:text="@string/job_category" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
@@ -482,7 +481,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/create_worker_edit_text_background"
                     android:ellipsize="end"
-                    android:hint="Select job category"
+                    android:hint="@string/select_job_category"
                     android:inputType="none"
                     android:textColorHint="@color/text_color"
                     android:maxLines="1"
@@ -513,7 +512,7 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginEnd="@dimen/_7sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
-                        android:text="Save"
+                        android:text="@string/save"
                         android:textSize="@dimen/_14ssp"
                         android:textColor="@color/white" />
 
@@ -537,7 +536,7 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginEnd="@dimen/_7sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
-                        android:text="Cancel"
+                        android:text="@string/cancel"
                         android:textSize="@dimen/_14ssp"
                         android:textColor="@color/white" />
 

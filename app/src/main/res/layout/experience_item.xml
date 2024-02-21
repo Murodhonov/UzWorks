@@ -10,13 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/dm_sans_bold"
-        android:text="Manager"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:contentDescription="@string/content_description"
         android:id="@+id/edit_experience_btn"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="@dimen/_20sdp"
@@ -25,10 +25,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/address_tv"
+        android:id="@+id/company_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Amazon Inc"
         android:textSize="@dimen/_11ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/position_tv" />
@@ -37,10 +36,9 @@
         android:id="@+id/duration_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Jan 2015 - Feb 2022 - 5 Years"
         android:textSize="@dimen/_11ssp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/address_tv" />
+        app:layout_constraintTop_toBottomOf="@id/company_name_tv" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

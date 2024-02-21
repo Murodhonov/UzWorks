@@ -272,3 +272,10 @@ fun TextView.stringDateToString(): String {
         "Invalid date format. Please provide date in dd.MM.yyyy format."
     }
 }
+
+fun String.isStrongPassword(): Boolean {
+    if (this.length < 8) return false
+    if (!this.any { it.isLowerCase() }) return false
+    if (!this.any { it.isDigit() }) return false
+    return true
+}

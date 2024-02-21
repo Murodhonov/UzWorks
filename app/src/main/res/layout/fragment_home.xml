@@ -16,7 +16,6 @@
         android:layout_marginTop="@dimen/_3sdp"
         android:layout_marginEnd="@dimen/_7sdp"
         android:fontFamily="@font/dm_sans_bold"
-        android:text="Assalomu Alaykum\nNabijonov Abdulaziz"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_16ssp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -43,43 +42,46 @@
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_30sdp"
-        android:text="50% off\nReklama uchun\nkatta chegirma yutib\noling"
+        android:text="@string/ad_title"
         android:textColor="@color/white"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintLeft_toLeftOf="@id/ad_card"
         app:layout_constraintTop_toTopOf="@id/ad_card" />
 
     <ImageView
+        android:contentDescription="@string/content_description"
         android:layout_width="@dimen/_150sdp"
         android:layout_height="@dimen/_150sdp"
-        android:layout_gravity="bottom|right"
         android:src="@drawable/ic_ad_face"
         app:layout_constraintBottom_toBottomOf="@id/ad_card"
         app:layout_constraintRight_toRightOf="@id/ad_card" />
 
     <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/yellow"
+        android:layout_marginStart="-10dp"
+        app:cardElevation="0dp"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="-10dp"
+        android:layout_marginBottom="-5dp"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="@id/join_tv"
+        app:layout_constraintLeft_toLeftOf="@id/join_tv"
+        app:layout_constraintRight_toRightOf="@id/join_tv"
+        app:layout_constraintTop_toTopOf="@id/join_tv" />
+
+    <TextView
+        android:id="@+id/join_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/yellow"
-        app:cardCornerRadius="@dimen/_3sdp"
-        app:cardElevation="0dp"
+        android:text="@string/join"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_11ssp"
         app:layout_constraintBottom_toBottomOf="@id/ad_card"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ad_title_tv">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_11sdp"
-            android:layout_marginTop="@dimen/_3sdp"
-            android:layout_marginEnd="@dimen/_11sdp"
-            android:layout_marginBottom="@dimen/_3sdp"
-            android:text="Join now"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_11ssp" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toBottomOf="@id/ad_title_tv" />
 
     <TextView
         android:id="@+id/statistics_tv"
@@ -89,9 +91,9 @@
         android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_7sdp"
         android:fontFamily="@font/dm_sans_bold"
-        android:text="Statistikalar"
+        android:text="@string/statistics"
         android:textColor="@color/black_blue"
-        android:textSize="@dimen/_10ssp"
+        android:textSize="@dimen/_12ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ad_card" />
 
@@ -116,6 +118,7 @@
         app:layout_constraintTop_toBottomOf="@id/statistics_tv" />
 
     <ImageView
+        android:contentDescription="@string/content_description"
         android:id="@+id/users_iv"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -126,7 +129,7 @@
         app:layout_constraintRight_toRightOf="@id/users_btn"
         app:layout_constraintTop_toTopOf="@id/users_btn"
         app:layout_constraintVertical_bias="0.8"
-        app:layout_constraintWidth_percent="0.12" />
+        app:layout_constraintWidth_percent="0.1" />
 
     <TextView
         android:id="@+id/users_count"
@@ -134,7 +137,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:fontFamily="@font/dm_sans_bold"
-        android:text="44.5k"
         android:textAlignment="center"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_10ssp"
@@ -147,7 +149,6 @@
         android:id="@+id/users_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Obunachilar Soni"
         android:textAlignment="center"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_9ssp"
@@ -177,7 +178,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:fontFamily="@font/dm_sans_bold"
-        android:text="66.8k"
         android:textAlignment="center"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_10ssp"
@@ -190,7 +190,7 @@
         android:id="@+id/jobs_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ishlar"
+        android:text="@string/jobs"
         android:textAlignment="center"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_9ssp"
@@ -221,7 +221,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:fontFamily="@font/dm_sans_bold"
-        android:text="38.9k"
         android:textAlignment="center"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_10ssp"
@@ -234,7 +233,7 @@
         android:id="@+id/workers_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ishchilar"
+        android:text="@string/workers"
         android:textAlignment="center"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_9ssp"
@@ -251,9 +250,9 @@
         android:layout_marginStart="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_7sdp"
         android:fontFamily="@font/dm_sans_bold"
-        android:text="Taklif qilingan ishlar"
+        android:text="@string/recommended_announcements"
         android:textColor="@color/black_blue"
-        android:textSize="@dimen/_10ssp"
+        android:textSize="@dimen/_12ssp"
         app:layout_constraintBottom_toTopOf="@id/recommended_work_announcements_rv"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -268,12 +267,12 @@
         tools:listitem="@layout/announcement_item" />
 
     <TextView
-        android:id="@+id/no_works_tv"
+        android:id="@+id/no_announcements_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_7sdp"
-        android:text="Hozircha taklif qilingan ishlar mavjud emas"
+        android:text="@string/no_recommended_announcements"
         android:textAlignment="center"
         android:textColor="@color/black_blue"
         android:visibility="gone"

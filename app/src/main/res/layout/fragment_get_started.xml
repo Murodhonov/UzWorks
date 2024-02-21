@@ -21,13 +21,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:contentDescription="@string/content_description"
         android:id="@+id/get_started_iv"
-        android:layout_width="@dimen/_230sdp"
-        android:layout_height="@dimen/_230sdp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/_38sdp"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginHorizontal="@dimen/_20sdp"
         app:layout_constraintRight_toRightOf="parent"
         android:src="@drawable/ic_get_started"
+        app:layout_constraintBottom_toTopOf="@id/get_started_title_tv"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toBottomOf="@id/get_started_top_tv" />
 
     <TextView
@@ -44,7 +48,8 @@
     <TextView
         android:id="@+id/get_started_bottom_tv"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="0"
         android:textSize="@dimen/_11ssp"
         android:layout_marginTop="@dimen/_7sdp"
         app:layout_constraintBottom_toTopOf="@id/next_btn"
@@ -54,16 +59,18 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/language_btn"
         android:backgroundTint="@color/white_blue"
-        android:layout_width="@dimen/_34sdp"
-        android:layout_height="@dimen/_34sdp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/next_btn"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="0dp"
-        android:background="@drawable/corner_rectangle_background"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
+        app:layout_constraintTop_toTopOf="@id/next_btn">
 
         <ImageView
+            android:contentDescription="@string/content_description"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
@@ -87,8 +94,11 @@
 
     <ImageView
         android:id="@+id/next_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/content_description"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintWidth_percent="0.1"
         android:src="@drawable/ic_next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

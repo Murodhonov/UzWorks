@@ -20,14 +20,12 @@ import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.utils.isStrongPassword
 import dev.goblingroup.uzworks.utils.splitFullName
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.LoginViewModel
 import dev.goblingroup.uzworks.vm.SignUpViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
@@ -55,7 +53,13 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             userRole = arguments?.getString("user role")!!
-
+            fullNameEt.editText?.setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus) {
+                    motionLayout.setTransitionDuration(500)
+                    motionLayout.transitionToEnd()
+                    motionLayout.setTransitionDuration(1000)
+                }
+            }
             continueBtn.setOnClickListener {
                 if (
                     fullNameEt.editText?.text.toString().isNotEmpty() &&
@@ -63,38 +67,43 @@ class SignUpFragment : Fragment() {
                     passwordEt.editText?.text.toString().isNotEmpty() &&
                     confirmPasswordEt.editText?.text.toString().isNotEmpty()
                 ) {
-                    /**
-                     * check if password and confirm passwords are equal
-                     * check full name format
-                     */
                     if (confirmPasswordEt.editText?.text.toString() != passwordEt.editText?.text.toString()) {
-                        confirmPasswordEt.error = "Please confirm the password"
+                        confirmPasswordEt.error = resources.getString(R.string.confirm_password)
                         confirmPasswordEt.isErrorEnabled = true
                     } else {
                         val (firstName, lastName) = fullNameEt.splitFullName()
                         if (firstName.isEmpty() || lastName.isEmpty()) {
-                            fullNameEt.error = "Please enter your firstname and lastname"
+                            fullNameEt.error = resources.getString(R.string.enter_fullname)
                             fullNameEt.isErrorEnabled = true
                         } else {
-                            signUp(firstName, lastName)
+                            if (passwordEt.editText?.text.toString().isStrongPassword()) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "sign up be requested",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+//                                signUp(firstName, lastName)
+                            } else {
+                                passwordEt.error = getString(R.string.password_requirements)
+                            }
                         }
                     }
                 } else {
                     if (fullNameEt.editText?.text.toString().isEmpty()) {
                         fullNameEt.isErrorEnabled = true
-                        fullNameEt.error = "Enter full name"
+                        fullNameEt.error = resources.getString(R.string.enter_fullname)
                     }
                     if (usernameEt.editText?.text.toString().isEmpty()) {
                         usernameEt.isErrorEnabled = true
-                        usernameEt.error = "Enter username"
+                        usernameEt.error = resources.getString(R.string.enter_username)
                     }
                     if (passwordEt.editText?.text.toString().isEmpty()) {
                         passwordEt.isErrorEnabled = true
-                        passwordEt.error = "Enter password"
+                        passwordEt.error = resources.getString(R.string.enter_password)
                     }
                     if (confirmPasswordEt.editText?.text.toString().isEmpty()) {
                         confirmPasswordEt.isErrorEnabled = true
-                        confirmPasswordEt.error = "Confirm password"
+                        confirmPasswordEt.error = resources.getString(R.string.confirm_password)
                     }
                 }
             }
@@ -102,13 +111,16 @@ class SignUpFragment : Fragment() {
             signUpWithGoogleBtn.setOnClickListener {
                 Toast.makeText(
                     requireContext(),
-                    "In this stage should be google sign in",
+                    "Coming soon",
                     Toast.LENGTH_SHORT
                 ).show()
             }
 
             signInTv.setOnClickListener {
-                findNavController().popBackStack()
+                findNavController().popBackStack(
+                    R.id.loginFragment,
+                    false
+                )
             }
 
             back.setOnClickListener {

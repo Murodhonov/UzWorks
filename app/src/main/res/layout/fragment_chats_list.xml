@@ -8,81 +8,63 @@
     android:paddingBottom="@dimen/_7sdp"
     tools:context=".fragments.chat.ChatsListFragment">
 
-    <LinearLayout
-        android:id="@+id/non_empty_layout"
-        android:visibility="visible"
+    <EditText
+        android:id="@+id/search_et"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:autofillHints="name"
+        android:hint="@string/search_messages"
+        android:imeOptions="actionSearch"
+        android:inputType="textPersonName"
+        android:textSize="@dimen/_11ssp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/more_iv"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/more_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:contentDescription="@string/content_description"
+        android:src="@drawable/ic_more_options"
+        app:layout_constraintBottom_toBottomOf="@id/search_et"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/search_et" />
+
+    <TextView
+        android:id="@+id/messages_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="@string/messages"
+        android:textColor="@color/black_blue"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_et" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:contentDescription="@string/content_description"
+        android:src="@drawable/ic_edit_messages"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_et" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_users_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/search_et"
-                android:textSize="@dimen/_11ssp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_width="0dp"
-                app:layout_constraintRight_toLeftOf="@id/more_iv"
-                android:layout_marginStart="@dimen/_7sdp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="@dimen/_7sdp"
-                android:hint="Search messages"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:imeOptions="actionSearch"
-                android:inputType="textPersonName" />
-
-            <ImageView
-                android:id="@+id/more_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_7sdp"
-                android:src="@drawable/ic_more_options"
-                app:layout_constraintBottom_toBottomOf="@id/search_et"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/search_et" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:fontFamily="@font/dm_sans_bold"
-                android:text="Messages"
-                android:textColor="@color/black_blue"
-                android:textSize="@dimen/_15ssp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_7sdp"
-                android:src="@drawable/ic_edit_messages"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chat_users_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_7sdp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/chat_user_item" />
-
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_7sdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/messages_tv"
+        tools:listitem="@layout/chat_user_item" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/empty_layout"
@@ -96,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dm_sans_bold"
-            android:text="No messages"
+            android:text="@string/no_messages"
             android:textColor="@color/black_blue"
             android:textSize="@dimen/_15ssp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -110,7 +92,7 @@
             android:layout_marginStart="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_7sdp"
             android:layout_marginEnd="@dimen/_38sdp"
-            android:text="You currently have no incoming messages thank you"
+            android:text="@string/messages_not_found"
             android:textAlignment="center"
             android:textSize="@dimen/_16ssp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -118,6 +100,7 @@
             app:layout_constraintTop_toBottomOf="@id/empty_title_tv" />
 
         <ImageView
+            android:contentDescription="@string/content_description"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/_38sdp"
@@ -128,7 +111,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/empty_describe_tv" />
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/return_home_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp"
@@ -142,12 +125,12 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/dm_sans_bold"
                 android:gravity="center"
-                android:text="Return to home"
+                android:text="@string/return_home"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

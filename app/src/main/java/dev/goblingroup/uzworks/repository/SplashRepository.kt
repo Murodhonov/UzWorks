@@ -12,6 +12,6 @@ class SplashRepository @Inject constructor(
 
     suspend fun login(loginRequest: LoginRequest) = authService.login(loginRequest = loginRequest)
 
-    suspend fun getUser() = userDao.getUser()
+    fun getUser() = userDao.getUser()
 
 }

@@ -30,12 +30,6 @@ class SignUpViewModel @Inject constructor(
                 } else {
                     signUpLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
                 }
-                /*.catch {
-                    signupStateFlow.emit(ApiStatus.Error(it))
-                }
-                .collect {
-                    signupStateFlow.emit(ApiStatus.Success(it))
-                }*/
             } else {
                 signUpLiveData.postValue(ApiStatus.Error(Throwable("No internet connection")))
             }

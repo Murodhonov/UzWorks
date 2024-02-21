@@ -19,6 +19,7 @@
         android:paddingBottom="@dimen/_7sdp">
 
         <ImageView
+            android:contentDescription="@string/content_description"
             android:id="@+id/iv"
             android:layout_width="@dimen/_34sdp"
             android:layout_height="@dimen/_34sdp"
@@ -33,7 +34,6 @@
             android:layout_marginStart="@dimen/_7sdp"
             android:layout_marginTop="@dimen/_2sdp"
             android:fontFamily="@font/dm_sans_bold"
-            android:text="Menenjer Kerak"
             android:textColor="@color/black_blue"
             android:textSize="@dimen/_10ssp"
             app:layout_constraintBottom_toTopOf="@id/address_tv"
@@ -47,7 +47,6 @@
             android:layout_marginStart="@dimen/_7sdp"
             android:layout_marginBottom="@dimen/_2sdp"
             android:fontFamily="@font/dm_sans_regular"
-            android:text="Baliqchi, Andijon"
             android:textColor="@color/text_color"
             android:textSize="@dimen/_8ssp"
             app:layout_constraintBottom_toBottomOf="@+id/iv"
@@ -55,6 +54,7 @@
             app:layout_constraintTop_toBottomOf="@id/title_tv" />
 
         <ImageView
+            android:contentDescription="@string/content_description"
             android:id="@+id/save_iv"
             android:layout_width="@dimen/_35sdp"
             android:padding="@dimen/_5sdp"
@@ -78,7 +78,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans_bold"
-                android:text="2 500 000 so'm"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_10ssp" />
 
@@ -87,7 +86,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans_bold"
-                android:text="/Oy"
                 android:textColor="@color/yellow"
                 android:textSize="@dimen/_10ssp" />
 
@@ -111,7 +109,6 @@
                 android:id="@+id/gender_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Erkak"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_8ssp" />
 
@@ -135,7 +132,6 @@
                 android:id="@+id/category_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ish turi"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_8ssp" />
 
@@ -160,7 +156,7 @@
                 android:id="@+id/open_work_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ko'rish"
+                android:text="@string/view"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_8ssp" />
 
