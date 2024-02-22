@@ -10,12 +10,7 @@ class DistrictRepository @Inject constructor(
     private val districtDao: DistrictDao
 ) {
 
-    suspend fun getDistrictById(districtId: String) =
-        districtService.getDistrictById(districtId = districtId)
-
     suspend fun getAllDistricts() = districtService.getAllDistricts()
-
-    suspend fun getDistrictByRegionId(regionId: String) = districtService.getDistrictByRegionId(regionId = regionId)
 
     fun addDistricts(districtList: List<DistrictEntity>) = districtDao.addDistricts(districtList)
 

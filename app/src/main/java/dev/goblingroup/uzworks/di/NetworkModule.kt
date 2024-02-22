@@ -12,14 +12,10 @@ import dev.goblingroup.uzworks.networking.DistrictService
 import dev.goblingroup.uzworks.networking.JobCategoryService
 import dev.goblingroup.uzworks.networking.JobService
 import dev.goblingroup.uzworks.networking.RegionService
-import dev.goblingroup.uzworks.networking.SecuredDistrictService
-import dev.goblingroup.uzworks.networking.SecuredJobCategoryService
 import dev.goblingroup.uzworks.networking.SecuredJobService
-import dev.goblingroup.uzworks.networking.SecuredRegionService
 import dev.goblingroup.uzworks.networking.SecuredWorkerService
 import dev.goblingroup.uzworks.networking.WorkerService
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import me.sianaki.flowretrofitadapter.FlowCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -41,7 +37,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBaseUrl(): String = "https://dassie-first-secretly.ngrok-free.app/"
+    fun provideBaseUrl(): String = "https://accepted-first-pug.ngrok-free.app/"
 
     @Provides
     @Singleton
@@ -160,34 +156,10 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideSecuredDistrictService(
-        @Named(value = "secured_retrofit") retrofit: Retrofit
-    ): SecuredDistrictService {
-        return retrofit.create(SecuredDistrictService::class.java)
-    }
-
-    @Provides
-    @Singleton
     fun provideSecuredJobService(
         @Named(value = "secured_retrofit") retrofit: Retrofit
     ): SecuredJobService {
         return retrofit.create(SecuredJobService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideSecuredJobCategoryService(
-        @Named(value = "secured_retrofit") retrofit: Retrofit
-    ): SecuredJobCategoryService {
-        return retrofit.create(SecuredJobCategoryService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideSecuredRegionService(
-        @Named(value = "secured_retrofit") retrofit: Retrofit
-    ): SecuredRegionService {
-        return retrofit.create(SecuredRegionService::class.java)
     }
 
     @Provides
@@ -198,5 +170,10 @@ class NetworkModule {
         return retrofit.create(SecuredWorkerService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideUserService(
+
+    )
 
 }

@@ -30,9 +30,4 @@ interface WorkerService {
     @GET("api/Worker/GetCount")
     suspend fun countWorkers(): Response<Int>
 
-    @GET("api/Worker/GetWorkersByUserId/{id}")
-    suspend fun getWorkersByUserId(
-        @Path("id") userId: String
-    ): Response<List<WorkerResponse>>
-
 }
