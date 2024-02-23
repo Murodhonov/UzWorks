@@ -12,7 +12,7 @@
         android:layout_marginEnd="@dimen/_7sdp"
         android:layout_weight="1"
         android:backgroundTint="@color/white"
-        app:strokeColor="@color/black_blue"
+        app:strokeColor="@color/text_color"
         app:strokeWidth="@dimen/_1sdp"
         app:cardCornerRadius="@dimen/_7sdp"
         app:cardElevation="0dp">
@@ -26,7 +26,7 @@
                 android:layout_width="@dimen/_12sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:layout_marginStart="@dimen/_7sdp"
-                android:background="@drawable/gender_stroke_selected"
+                android:background="@drawable/gender_stroke_unselected"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -35,6 +35,7 @@
                     android:id="@+id/male_circle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:layout_margin="@dimen/_3sdp"
                     android:background="@drawable/circle_background"
                     android:backgroundTint="@color/black_blue" />
@@ -48,7 +49,7 @@
                 android:layout_marginStart="@dimen/_7sdp"
                 android:fontFamily="@font/dm_sans_regular"
                 android:text="@string/male"
-                android:textColor="@color/black_blue"
+                android:textColor="@color/text_color"
                 android:textSize="@dimen/_10ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/male_stroke"

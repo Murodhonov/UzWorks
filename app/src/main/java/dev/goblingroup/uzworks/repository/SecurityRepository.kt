@@ -35,6 +35,12 @@ class SecurityRepository @Inject constructor(
         return sharedPreferences.edit().putString("user_id", userId).commit()
     }
 
+    fun getUserId(): String {
+        return sharedPreferences.getString("user_id", null).toString()
+    }
+
+    fun getUsername(): String = userDao.getUser()?.username.toString()
+
     fun deleteUser(): Boolean {
         userDao.deleteUser()
         jobDao.deleteJobs()

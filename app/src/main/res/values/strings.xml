@@ -135,4 +135,8 @@ Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi.</str
     <string name="sign_up_error">Something went wrong while sign up</string>
     <string name="greeting">Assalomu alaykum</string>
     <string name="subscribers_count">Obunachilar soni</string>
+    <string name="enter_firstname">Ismingizni kiriting</string>
+    <string name="enter_lastname">Familiyangizni kiriting</string>
+    <string name="confirm_gender">Jinsingizni tasdiqlang</string>
+    <string name="enter_valid_email">Yaroqli email kiriting</string>
 </resources>

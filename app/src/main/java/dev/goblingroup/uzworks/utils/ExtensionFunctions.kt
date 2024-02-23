@@ -19,7 +19,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.navigation.NavOptions
 import com.google.android.material.textfield.TextInputLayout
 import dev.goblingroup.uzworks.R
 import java.text.ParseException
@@ -273,9 +272,110 @@ fun TextView.stringDateToString(): String {
     }
 }
 
+fun String.isoStringToDate(): String {
+    return try {
+        // Parse input string to Date object
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        val inputDateObject = inputDateFormat.parse(this)
+
+        // Format Date object to the desired string format
+        val outputDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+        outputDateFormat.format(inputDateObject!!)
+    } catch (e: Exception) {
+        "Invalid date format. Please provide date in yyyy-MM-dd'T'HH:mm:ss.SSS'Z' format."
+    }
+}
+
 fun String.isStrongPassword(): Boolean {
     if (this.length < 8) return false
     if (!this.any { it.isLowerCase() }) return false
     if (!this.any { it.isDigit() }) return false
     return true
+}
+
+fun String.convertPhoneNumber(): String? {
+    if (this.length != 13) return null
+    val prefix = this.substring(0, 4)
+    val code = this.substring(4, 6)
+    val start = this.substring(6, 9)
+    val middle = this.substring(9, 11)
+    val end = this.substring(11)
+    return "$prefix $code $start $middle $end"
+}
+
+fun String.formatPhoneNumber(backSpacePressed: Boolean): String {
+    return when (this.length) {
+        0, 2, 3, 4 -> {
+            "+998 "
+        }
+
+        1 -> {
+            "+998 $this"
+        }
+
+        5 -> {
+            "${this.substring(0, 4)} ${this.last()}"
+        }
+
+        6 -> {
+            "${this.substring(0, 4)} ${this.substring(4)}${controlEnd(backSpacePressed)}"
+        }
+
+        7, 8 -> {
+            "${this.substring(0, 4)} ${this.substring(4, 6)} ${this.substring(6)}"
+        }
+
+        9 -> {
+            "${this.substring(0, 4)} ${
+                this.substring(
+                    4,
+                    6
+                )
+            } ${this.substring(6)}${controlEnd(backSpacePressed)}"
+        }
+
+        10 -> {
+            "${this.substring(0, 4)} ${this.substring(4, 6)} ${this.substring(6, 9)} ${this.last()}"
+        }
+
+        11 -> {
+            "${this.substring(0, 4)} ${this.substring(4, 6)} ${
+                this.substring(
+                    6,
+                    9
+                )
+            } ${this.substring(9)}${controlEnd(backSpacePressed)}"
+        }
+
+        12 -> {
+            "${this.substring(0, 4)} ${this.substring(4, 6)} ${
+                this.substring(
+                    6,
+                    9
+                )
+            } ${this.substring(9, 11)} ${this.last()}"
+        }
+
+        13 -> {
+            "${this.substring(0, 4)} ${this.substring(4, 6)} ${
+                this.substring(
+                    6,
+                    9
+                )
+            } ${this.substring(9, 11)} ${this.substring(11)}"
+        }
+
+        else -> {
+            "${this.substring(0, 4)} ${this.substring(4, 6)} ${
+                this.substring(
+                    6,
+                    9
+                )
+            } ${this.substring(9, 11)} ${this.substring(11, 13)}"
+        }
+    }
+}
+
+private fun controlEnd(backSpacePressed: Boolean): String {
+    return if (backSpacePressed) " " else ""
 }

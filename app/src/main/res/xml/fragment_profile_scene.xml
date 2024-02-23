@@ -41,18 +41,11 @@
             app:layout_constraintTop_toBottomOf="@id/avatar_iv" />
 
         <Constraint
-            android:id="@+id/address_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
-            app:layout_constraintTop_toBottomOf="@id/user_name_tv" />
-
-        <Constraint
             android:id="@+id/stretcher"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:layout_marginTop="@dimen/_20sdp"
-            app:layout_constraintTop_toBottomOf="@id/address_tv" />
+            app:layout_constraintTop_toBottomOf="@id/user_name_tv" />
 
     </ConstraintSet>
 
@@ -83,14 +76,6 @@
             app:layout_constraintBottom_toBottomOf="@id/avatar_iv"
             app:layout_constraintLeft_toRightOf="@id/avatar_iv"
             app:layout_constraintTop_toTopOf="@id/avatar_iv" />
-
-        <Constraint
-            android:id="@+id/address_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="@id/user_name_tv"
-            app:layout_constraintTop_toTopOf="@id/user_name_tv"
-            android:visibility="gone" />
 
         <Constraint
             android:id="@+id/stretcher"

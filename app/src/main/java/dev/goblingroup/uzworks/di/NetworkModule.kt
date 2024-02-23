@@ -13,7 +13,9 @@ import dev.goblingroup.uzworks.networking.JobCategoryService
 import dev.goblingroup.uzworks.networking.JobService
 import dev.goblingroup.uzworks.networking.RegionService
 import dev.goblingroup.uzworks.networking.SecuredJobService
+import dev.goblingroup.uzworks.networking.SecuredUserService
 import dev.goblingroup.uzworks.networking.SecuredWorkerService
+import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.networking.WorkerService
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import okhttp3.Interceptor
@@ -173,7 +175,17 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideUserService(
+        @Named(value = "retrofit") retrofit: Retrofit
+    ): UserService {
+        return retrofit.create(UserService::class.java)
+    }
 
-    )
+    @Provides
+    @Singleton
+    fun provideSecuredUserService(
+        @Named(value = "secured_retrofit") retrofit: Retrofit
+    ): SecuredUserService {
+        return retrofit.create(SecuredUserService::class.java)
+    }
 
 }
