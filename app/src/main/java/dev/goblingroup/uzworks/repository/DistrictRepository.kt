@@ -1,7 +1,5 @@
 package dev.goblingroup.uzworks.repository
 
-import dev.goblingroup.uzworks.database.dao.DistrictDao
-import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.networking.DistrictService
 import javax.inject.Inject
 

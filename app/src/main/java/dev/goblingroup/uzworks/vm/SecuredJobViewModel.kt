@@ -34,7 +34,7 @@ class SecuredJobViewModel @Inject constructor(
 
     fun createJob(jobCreateRequest: JobCreateRequest): LiveData<ApiStatus<JobCreateResponse>> {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 Log.d(
                     TAG,
                     "createJob: creating job for $jobCreateRequest object ${this@SecuredJobViewModel::class.java.simpleName}"
@@ -54,7 +54,7 @@ class SecuredJobViewModel @Inject constructor(
 
     fun deleteJob(jobId: String): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val response = securedJobRepository.deleteJob(jobId)
                 if (response.isSuccessful) {
                     deleteLiveData.postValue(ApiStatus.Success(null))
@@ -70,7 +70,7 @@ class SecuredJobViewModel @Inject constructor(
 
     fun editJob(jobEditRequest: JobEditRequest): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val response = securedJobRepository.editJob(jobEditRequest)
                 if (response.isSuccessful) {
                     editLiveData.postValue(ApiStatus.Success(null))

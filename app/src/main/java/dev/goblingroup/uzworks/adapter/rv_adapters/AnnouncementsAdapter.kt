@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.database.entity.WorkerEntity
 import dev.goblingroup.uzworks.databinding.AnnouncementItemBinding

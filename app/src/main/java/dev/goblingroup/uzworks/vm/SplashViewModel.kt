@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.repository.SplashRepository
+import dev.goblingroup.uzworks.repository.AuthRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val splashRepository: SplashRepository,
+    private val authRepository: AuthRepository,
+    private val userDao: UserDao,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -30,13 +31,12 @@ class SplashViewModel @Inject constructor(
 
     private fun login() {
         viewModelScope.launch {
-            val user = splashRepository.getUser()
-            if (user != null) {
-                if (networkHelper.isNetworkConnected()) {
-                    val response = splashRepository.login(
+            if (userDao.getUser() != null) {
+                if (networkHelper.isConnected()) {
+                    val response = authRepository.login(
                         LoginRequest(
-                            user.username,
-                            user.password
+                            userDao.getUser()?.username.toString(),
+                            userDao.getUser()?.password.toString()
                         )
                     )
                     if (response.isSuccessful) {

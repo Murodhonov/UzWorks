@@ -14,7 +14,11 @@ class WorkerRepository @Inject constructor(
     private val workerDao: WorkerDao
 ) {
 
+    suspend fun getWorkerById(workerId: String) = workerService.getById(workerId)
+
     suspend fun getAllWorkers() = workerService.getAll()
+
+    suspend fun countWorkers() = workerService.countWorkers()
 
     fun addWorkers(workerList: List<WorkerResponse>) {
         val existingWorkers = try {

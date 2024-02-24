@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.repository.JobCategoryRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
@@ -30,7 +29,7 @@ class JobCategoryViewModel @Inject constructor(
 
     private fun fetchJobCategories() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val response = jobCategoryRepository.getAllJobCategories()
                 if (response.isSuccessful) {
                     val emptyList = ArrayList<JobCategoryEntity>()

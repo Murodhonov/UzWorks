@@ -10,11 +10,15 @@ import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import javax.inject.Inject
 
 class JobRepository @Inject constructor(
-    private val jobDao: JobDao,
-    private val jobService: JobService
+    private val jobService: JobService,
+    private val jobDao: JobDao
 ) {
 
+    suspend fun getJobById(jobId: String) = jobService.getJobById(jobId)
+
     suspend fun getAllJobs() = jobService.getAllJobs()
+
+    suspend fun countJobs() = jobService.countJobs()
 
     fun addJobs(jobList: List<JobResponse>) {
         val existingJobs = try {

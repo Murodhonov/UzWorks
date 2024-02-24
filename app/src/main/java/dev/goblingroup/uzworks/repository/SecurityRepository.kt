@@ -1,11 +1,14 @@
 package dev.goblingroup.uzworks.repository
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
 import dev.goblingroup.uzworks.database.dao.JobDao
-import dev.goblingroup.uzworks.database.dao.UserDao
 import dev.goblingroup.uzworks.database.dao.WorkerDao
+import dev.goblingroup.uzworks.models.response.LoginResponse
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.UserRole
+import java.lang.Exception
 import java.lang.reflect.Type
 import javax.inject.Inject
 
@@ -13,10 +16,24 @@ class SecurityRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson,
     private val type: Type,
-    private val userDao: UserDao,
     private val jobDao: JobDao,
     private val workerDao: WorkerDao
 ) {
+
+    fun saveUserData(loginResponse: LoginResponse): Boolean {
+        val userDataJson = gson.toJson(loginResponse)
+        return sharedPreferences.edit().putString("user_data", userDataJson).commit()
+    }
+
+    fun getUserData(): LoginResponse? {
+        val userDataJson = sharedPreferences.getString("user_data", null)
+        return try {
+            gson.fromJson(userDataJson, LoginResponse::class.java)
+        } catch (e: Exception) {
+            Log.e(TAG, "getUserData: ${e.message} error in ${this::class.java.simpleName}")
+            null
+        }
+    }
 
     fun getUserRoles(): List<String> {
         val userRolesJson = sharedPreferences.getString("user_roles", null)
@@ -39,10 +56,7 @@ class SecurityRepository @Inject constructor(
         return sharedPreferences.getString("user_id", null).toString()
     }
 
-    fun getUsername(): String = userDao.getUser()?.username.toString()
-
     fun deleteUser(): Boolean {
-        userDao.deleteUser()
         jobDao.deleteJobs()
         workerDao.deleteWorkers()
         return sharedPreferences.edit().clear().commit()

@@ -3,9 +3,6 @@ package dev.goblingroup.uzworks.adapter.rv_adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import dev.goblingroup.uzworks.database.entity.DistrictEntity
-import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
-import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.MyAnnouncementItemBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 

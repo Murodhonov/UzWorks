@@ -13,9 +13,9 @@ interface RegionService {
     ): Response<RegionResponse>
 
     @GET("api/Region/GetAll")
-    suspend fun getAll(): Response<List<RegionResponse>>
+    suspend fun getAllRegions(): Response<List<RegionResponse>>
 
-    @GET("api/Region/GetByRegionByDistrictId/{id}")
+    @GET("api/Region/GetRegionByDistrictId/{id}")
     suspend fun getRegionByDistrictId(
         @Path("id") districtId: String
     ): Response<RegionResponse>

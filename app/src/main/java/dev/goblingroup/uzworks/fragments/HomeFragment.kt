@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
             lifecycleScope.launch {
                 greetingTv.text = "${resources.getString(R.string.greeting)}\n${homeViewModel.getFullName()}"
 
-                homeViewModel.workerLivedata.observe(viewLifecycleOwner) {
+                homeViewModel.workerCountLivedata.observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
 
@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-                homeViewModel.jobLiveData.observe(viewLifecycleOwner) {
+                homeViewModel.jobCountLiveData.observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
 

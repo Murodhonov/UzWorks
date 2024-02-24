@@ -7,14 +7,14 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.SignUpResponse
-import dev.goblingroup.uzworks.repository.SignUpRepository
+import dev.goblingroup.uzworks.repository.AuthRepository
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUpRepository: SignUpRepository,
+    private val authRepository: AuthRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -23,8 +23,8 @@ class SignUpViewModel @Inject constructor(
 
     fun signup(signupRequest: SignUpRequest): LiveData<ApiStatus<SignUpResponse>> {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
-                val response = signUpRepository.signup(signupRequest)
+            if (networkHelper.isConnected()) {
+                val response = authRepository.signup(signupRequest)
                 if (response.isSuccessful) {
                     signUpLiveData.postValue(ApiStatus.Success(response.body()))
                 } else {

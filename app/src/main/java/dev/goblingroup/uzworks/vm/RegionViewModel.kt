@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.repository.RegionRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
@@ -27,7 +26,7 @@ class RegionViewModel @Inject constructor(
 
     private fun fetchRegions() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 if (regionRepository.listRegions().isNotEmpty()) {
                     _regionLiveData.postValue(ApiStatus.Success(regionRepository.listRegions()))
                 } else {
@@ -37,7 +36,6 @@ class RegionViewModel @Inject constructor(
                         response.body()?.forEach { regionResponse ->
                             emptyRegionList.add(regionResponse.mapToEntity())
                         }
-                        regionRepository.addRegions(emptyRegionList)
                         _regionLiveData.postValue(ApiStatus.Success(regionRepository.listRegions()))
                     } else {
                         _regionLiveData.postValue(ApiStatus.Error(Throwable(response.message())))

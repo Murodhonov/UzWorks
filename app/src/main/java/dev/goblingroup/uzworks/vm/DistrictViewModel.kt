@@ -1,11 +1,9 @@
 package dev.goblingroup.uzworks.vm
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.models.response.DistrictCreateResponse
 import dev.goblingroup.uzworks.models.response.DistrictResponse
@@ -37,7 +35,7 @@ class DistrictViewModel @Inject constructor(
 
     private fun fetchDistricts() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 if (districtRepository.listDistricts().isNotEmpty()) {
                     _districtLiveData.postValue(ApiStatus.Success(districtRepository.listDistricts()))
                 } else {
