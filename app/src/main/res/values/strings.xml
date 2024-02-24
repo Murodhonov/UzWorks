@@ -139,4 +139,7 @@ Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi.</str
     <string name="enter_lastname">Familiyangizni kiriting</string>
     <string name="confirm_gender">Jinsingizni tasdiqlang</string>
     <string name="enter_valid_email">Yaroqli email kiriting</string>
+    <string name="my_announcements">Mening e\'lonlarim</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
