@@ -100,4 +100,9 @@
         android:name="dev.goblingroup.uzworks.fragments.profile.PersonalInfoFragment"
         android:label="fragment_personal_info"
         tools:layout="@layout/fragment_personal_info" />
+    <fragment
+        android:id="@+id/myAnnouncementsFragment"
+        android:name="dev.goblingroup.uzworks.fragments.announcement.MyAnnouncementsFragment"
+        android:label="fragment_my_announcements"
+        tools:layout="@layout/fragment_my_announcements" />
 </navigation>

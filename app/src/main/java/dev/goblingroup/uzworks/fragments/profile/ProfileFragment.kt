@@ -48,7 +48,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            announcementTv.text =
+            addAnnouncementTv.text =
                 if (profileViewModel.isEmployee()) resources.getString(R.string.add_worker_announcement) else resources.getString(
                     R.string.add_job_announcement
                 )
@@ -101,10 +101,16 @@ class ProfileFragment : Fragment() {
                 }
             }
 
-            announcementsBtn.setOnClickListener {
-                if (userResponse != null) {
-                    navigateAnnouncement()
-                }
+            myAnnouncementsBtn.setOnClickListener {
+                findNavController().navigate(
+                    resId = R.id.myAnnouncementsFragment,
+                    args = null,
+                    navOptions = getNavOptions()
+                )
+            }
+
+            addAnnouncementBtn.setOnClickListener {
+                addAnnouncement()
             }
         }
     }
@@ -147,7 +153,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun navigateAnnouncement() {
+    private fun addAnnouncement() {
         val direction = if (securityViewModel.getUserRoles()
                 .contains(UserRole.EMPLOYEE.roleName)
         ) {

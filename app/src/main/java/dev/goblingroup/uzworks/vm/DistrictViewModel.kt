@@ -71,4 +71,6 @@ class DistrictViewModel @Inject constructor(
     fun getRegionByDistrictId(districtId: String) =
         districtRepository.getRegionByDistrictId(districtId)
 
+    fun listDistricts() = districtRepository.listDistricts()
+
 }

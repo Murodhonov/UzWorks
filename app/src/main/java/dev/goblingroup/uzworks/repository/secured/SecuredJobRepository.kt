@@ -17,4 +17,6 @@ class SecuredJobRepository @Inject constructor(
     suspend fun editJob(jobEditRequest: JobEditRequest) =
         securedJobService.editJob(jobEditRequest = jobEditRequest)
 
+    suspend fun getJobsByUserId(userId: String) = securedJobService.getJobsByUserId(userId)
+
 }

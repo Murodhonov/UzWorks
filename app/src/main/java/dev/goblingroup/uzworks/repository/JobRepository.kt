@@ -4,7 +4,6 @@ import android.util.Log
 import dev.goblingroup.uzworks.database.dao.JobDao
 import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
-import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.networking.JobService
 import dev.goblingroup.uzworks.utils.ConstValues.TAG

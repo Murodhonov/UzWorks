@@ -17,4 +17,7 @@ interface RegionDao {
 
     @Query("SELECT * FROM region_table")
     fun listRegions(): List<RegionEntity>
+
+    @Query("DELETE FROM region_table")
+    fun deleteRegions()
 }

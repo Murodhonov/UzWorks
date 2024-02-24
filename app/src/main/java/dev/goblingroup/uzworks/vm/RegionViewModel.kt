@@ -53,8 +53,8 @@ class RegionViewModel @Inject constructor(
         }
     }
 
-    suspend fun findRegionById(regionId: String) = regionRepository.findRegionById(regionId)
+    fun findRegionById(regionId: String) = regionRepository.findRegionById(regionId)
 
-    suspend fun listRegions() = regionRepository.listRegions()
+    fun listRegions() = regionRepository.listRegions()
 
 }

@@ -30,9 +30,4 @@ interface JobService {
     @GET("api/Job/GetCount")
     suspend fun countJobs(): Response<Int>
 
-    @GET("api/Job/GetJobsByUserId/{id}")
-    suspend fun getJobsByUserId(
-        @Path("id") userId: String
-    ): Response<List<JobResponse>>
-
 }

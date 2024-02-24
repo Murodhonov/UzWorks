@@ -12,7 +12,10 @@ class RegionRepository @Inject constructor(
 
     suspend fun getAllRegions() = regionService.getAll()
 
-    fun addRegions(regionList: List<RegionEntity>) = regionDao.addRegions(regionList)
+    fun addRegions(regionList: List<RegionEntity>) {
+        regionDao.deleteRegions()
+        regionDao.addRegions(regionList)
+    }
 
     fun findRegionById(regionId: String) = regionDao.findRegion(regionId)
 
