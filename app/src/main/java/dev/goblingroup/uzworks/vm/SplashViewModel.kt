@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.repository.AuthRepository
+import dev.goblingroup.uzworks.repository.SplashRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val userDao: UserDao,
+    private val splashRepository: SplashRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -31,16 +30,23 @@ class SplashViewModel @Inject constructor(
 
     private fun login() {
         viewModelScope.launch {
-            if (userDao.getUser() != null) {
-                if (networkHelper.isConnected()) {
-                    val response = authRepository.login(
+            val user = splashRepository.getUser()
+            if (user != null) {
+                if (networkHelper.isNetworkConnected()) {
+                    val response = splashRepository.login(
                         LoginRequest(
-                            userDao.getUser()?.username.toString(),
-                            userDao.getUser()?.password.toString()
+                            user.username,
+                            user.password
                         )
                     )
                     if (response.isSuccessful) {
-                        _loginLiveData.postValue(ApiStatus.Success(response.body()))
+                        if (saveAuth(loginResponse = response.body()!!)) {
+                            loginRepository.addUser(
+                                response.body()!!
+                                    .mapToEntity(LoginRequest(user.username, user.password))
+                            )
+                            _loginLiveData.postValue(ApiStatus.Success(response.body()))
+                        }
                     } else {
                         _loginLiveData.postValue(ApiStatus.Error(Throwable("Some error on ${this@SplashViewModel::class.java.simpleName}")))
                         Log.e(TAG, "login: $response")
@@ -55,6 +61,13 @@ class SplashViewModel @Inject constructor(
                 _loginLiveData.postValue(ApiStatus.Error(Throwable("User not found")))
             }
         }
+    }
+
+    private fun saveAuth(loginResponse: LoginResponse): Boolean {
+        val rolesSaved = securityRepository.setUserRoles(loginResponse.access)
+        val tokenSaved = securityRepository.setToken(loginResponse.token)
+        val userIdSaved = securityRepository.setUserId(loginResponse.userId)
+        return tokenSaved && userIdSaved && rolesSaved
     }
 
 }

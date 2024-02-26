@@ -102,14 +102,41 @@ class HomeFragment : Fragment() {
                     }
 
                     is ApiStatus.Success -> {
-                        loadJobs()
+                        loadAddresses()
+                    }
+
+                    else -> {
+
                     }
                 }
             }
         }
     }
 
-    private fun loadJobs() {
+    private fun loadAddresses() {
+        lifecycleScope.launch {
+            addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "some error while loading regions or districts",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.progress.visibility = View.GONE
+                    }
+                    is ApiStatus.Loading -> {
+
+                    }
+                    is ApiStatus.Success -> {
+                        loadAnnouncements()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadAnnouncements() {
         lifecycleScope.launch {
             announcementViewModel.combinedLiveData.observe(viewLifecycleOwner) {
                 when (it) {
@@ -150,6 +177,7 @@ class HomeFragment : Fragment() {
                     val adapter = AnnouncementsAdapter(
                         announcementViewModel.listDatabaseAnnouncements(),
                         jobCategoryViewModel.listJobCategories(),
+                        addressViewModel = addressViewModel,
                         { announcementId ->
 
                         }, { state, announcementId, position ->

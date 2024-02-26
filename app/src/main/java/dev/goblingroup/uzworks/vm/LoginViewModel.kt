@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.repository.AuthRepository
+import dev.goblingroup.uzworks.repository.LoginRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
@@ -21,7 +21,6 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val securityRepository: SecurityRepository,
-    private val userDao: UserDao,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -34,7 +33,7 @@ class LoginViewModel @Inject constructor(
                 val response = authRepository.login(loginRequest)
                 if (response.isSuccessful) {
                     if (saveAuth(response.body()!!)) {
-                        userDao.addUser(response.body()!!.mapToEntity(loginRequest))
+                        loginRepository.addUser(response.body()!!.mapToEntity(loginRequest))
                         loginLiveData.postValue(
                             ApiStatus.Success(
                                 response = response.body()
@@ -61,7 +60,4 @@ class LoginViewModel @Inject constructor(
         val userIdSaved = securityRepository.setUserId(loginResponse.userId)
         return tokenSaved && userIdSaved && rolesSaved
     }
-
-    suspend fun getUser() = userDao.getUser()
-
 }
