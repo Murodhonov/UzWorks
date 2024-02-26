@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
+import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.HomeViewModel
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
     private lateinit var linearSnapHelper: LinearSnapHelper
 
     private val announcementViewModel: AnnouncementViewModel by viewModels()
+    private val addressViewModel: AddressViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,8 +64,13 @@ class HomeFragment : Fragment() {
                         is ApiStatus.Success -> {
                             workersCount.text = it.response.toString()
                         }
+
+                        else -> {
+
+                        }
                     }
                 }
+
                 homeViewModel.jobLiveData.observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
@@ -76,6 +83,10 @@ class HomeFragment : Fragment() {
 
                         is ApiStatus.Success -> {
                             jobsCount.text = it.response.toString()
+                        }
+
+                        else -> {
+
                         }
                     }
                 }
@@ -95,6 +106,7 @@ class HomeFragment : Fragment() {
                         Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
                         Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
                         Log.e(TAG, "loadCategories: ${it.error.message}")
+                        binding.progress.visibility = View.GONE
                     }
 
                     is ApiStatus.Loading -> {
@@ -102,14 +114,41 @@ class HomeFragment : Fragment() {
                     }
 
                     is ApiStatus.Success -> {
-                        loadJobs()
+                        loadAddresses()
+                    }
+
+                    else -> {
+
                     }
                 }
             }
         }
     }
 
-    private fun loadJobs() {
+    private fun loadAddresses() {
+        lifecycleScope.launch {
+            addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "some error while loading regions or districts",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.progress.visibility = View.GONE
+                    }
+                    is ApiStatus.Loading -> {
+
+                    }
+                    is ApiStatus.Success -> {
+                        loadAnnouncements()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadAnnouncements() {
         lifecycleScope.launch {
             announcementViewModel.combinedLiveData.observe(viewLifecycleOwner) {
                 when (it) {
@@ -128,6 +167,10 @@ class HomeFragment : Fragment() {
 
                     is ApiStatus.Success -> {
                         success()
+                    }
+
+                    else -> {
+
                     }
                 }
             }
@@ -150,6 +193,7 @@ class HomeFragment : Fragment() {
                     val adapter = AnnouncementsAdapter(
                         announcementViewModel.listDatabaseAnnouncements(),
                         jobCategoryViewModel.listJobCategories(),
+                        addressViewModel = addressViewModel,
                         { announcementId ->
 
                         }, { state, announcementId, position ->

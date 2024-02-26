@@ -36,7 +36,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun fetchUserData() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val userResponse = profileRepository.getUserById(securityRepository.getUserId())
                 if (userResponse.isSuccessful) {
                     _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
@@ -54,7 +54,7 @@ class ProfileViewModel @Inject constructor(
 
     fun updateUser(userUpdateRequest: UserUpdateRequest): LiveData<ApiStatus<UserUpdateResponse>> {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 Log.d(TAG, "updateUser: updating user $userUpdateRequest")
                 val updateUserResponse = profileRepository.updateUser(userUpdateRequest)
                 if (updateUserResponse.isSuccessful) {

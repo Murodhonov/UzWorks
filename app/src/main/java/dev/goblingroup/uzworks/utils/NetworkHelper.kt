@@ -7,7 +7,7 @@ import android.os.Build
 
 class NetworkHelper constructor(private val context: Context) {
 
-    fun isNetworkConnected(): Boolean {
+    fun isConnected(): Boolean {
         var result = false
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

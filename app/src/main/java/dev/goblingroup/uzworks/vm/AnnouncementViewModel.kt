@@ -42,7 +42,7 @@ class AnnouncementViewModel @Inject constructor(
 
     private fun loadJobs() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val response = jobRepository.getAllJobs()
                 if (response.isSuccessful) {
                     Log.d(ConstValues.TAG, "loadJobs: ${response.body()?.size} jobs got")
@@ -65,7 +65,7 @@ class AnnouncementViewModel @Inject constructor(
 
     private fun loadWorkers() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val response = workerRepository.getAllWorkers()
                 if (response.isSuccessful) {
                     Log.d(ConstValues.TAG, "loadWorkers: ${response.body()?.size} workers got")

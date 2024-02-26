@@ -23,7 +23,7 @@ class SignUpViewModel @Inject constructor(
 
     fun signup(signupRequest: SignUpRequest): LiveData<ApiStatus<SignUpResponse>> {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val response = signUpRepository.signup(signupRequest)
                 if (response.isSuccessful) {
                     signUpLiveData.postValue(ApiStatus.Success(response.body()))

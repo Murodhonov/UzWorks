@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor(
 
     fun login(loginRequest: LoginRequest): LiveData<ApiStatus<LoginResponse>> {
         viewModelScope.launch(Dispatchers.IO) {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 Log.d(TAG, "login: loginRequest -> $loginRequest")
                 val response = loginRepository.login(loginRequest)
                 if (response.isSuccessful) {
@@ -60,7 +60,4 @@ class LoginViewModel @Inject constructor(
         val userIdSaved = securityRepository.setUserId(loginResponse.userId)
         return tokenSaved && userIdSaved && rolesSaved
     }
-
-    suspend fun getUser() = loginRepository.getUser()
-
 }

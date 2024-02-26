@@ -44,7 +44,7 @@ class MyAnnouncementsViewModel @Inject constructor(
 
     private fun loadJobs() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val jobsByUserId = securedJobRepository.getJobsByUserId(securityRepository.getUserId())
                 if (jobsByUserId.isSuccessful) {
                     _jobLiveData.postValue(ApiStatus.Success(jobsByUserId.body()))
@@ -62,7 +62,7 @@ class MyAnnouncementsViewModel @Inject constructor(
 
     private fun loadWorkers() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val workersByUserId =
                     securedWorkerRepository.getWorkersByUserId(securityRepository.getUserId())
                 if (workersByUserId.isSuccessful) {

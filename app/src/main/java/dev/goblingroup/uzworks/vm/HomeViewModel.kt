@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
 
     private fun countJobs() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val countJobsResponse = homeRepository.countJobs()
                 if (countJobsResponse.isSuccessful) {
                     _jobLiveData.postValue(ApiStatus.Success(countJobsResponse.body()))
@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
 
     private fun countWorkers() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val countWorkersResponse = homeRepository.countWorkers()
                 if (countWorkersResponse.isSuccessful) {
                     _workerLivedata.postValue(ApiStatus.Success(countWorkersResponse.body()))

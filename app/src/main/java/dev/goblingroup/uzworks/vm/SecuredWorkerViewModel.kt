@@ -34,7 +34,7 @@ class SecuredWorkerViewModel @Inject constructor(
 
     fun createWorker(workerCreateRequest: WorkerCreateRequest): LiveData<ApiStatus<WorkerResponse>> {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 Log.d(
                     TAG,
                     "createWorker: starting create worker $workerCreateRequest in view model"
@@ -54,7 +54,7 @@ class SecuredWorkerViewModel @Inject constructor(
 
     fun deleteWorker(workerId: String): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val response = securedWorkerRepository.deleteWorker(workerId)
                 if (response.isSuccessful) {
                     deleteLiveData.postValue(ApiStatus.Success(null))
@@ -70,7 +70,7 @@ class SecuredWorkerViewModel @Inject constructor(
 
     fun editWorker(workerEditRequest: WorkerEditRequest): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val response = securedWorkerRepository.editWorker(workerEditRequest)
                 if (response.isSuccessful) {
                     editLiveData.postValue(ApiStatus.Success(null))

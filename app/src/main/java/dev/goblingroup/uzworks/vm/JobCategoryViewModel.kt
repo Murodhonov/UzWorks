@@ -30,7 +30,7 @@ class JobCategoryViewModel @Inject constructor(
 
     private fun fetchJobCategories() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isConnected()) {
                 val response = jobCategoryRepository.getAllJobCategories()
                 if (response.isSuccessful) {
                     val emptyList = ArrayList<JobCategoryEntity>()

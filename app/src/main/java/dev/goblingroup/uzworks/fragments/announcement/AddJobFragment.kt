@@ -27,10 +27,9 @@ import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.stringDateToString
 import dev.goblingroup.uzworks.utils.stringToDate
+import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.DistrictViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
-import dev.goblingroup.uzworks.vm.RegionViewModel
 import dev.goblingroup.uzworks.vm.SecuredJobViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -43,8 +42,7 @@ class AddJobFragment : Fragment() {
     private var _binding: FragmentAddJobBinding? = null
     private val binding get() = _binding!!
 
-    private val regionViewModel: RegionViewModel by viewModels()
-    private val districtViewModel: DistrictViewModel by viewModels()
+    private val addressViewModel: AddressViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
     private val securedJobViewModel: SecuredJobViewModel by viewModels()
 
@@ -329,7 +327,7 @@ class AddJobFragment : Fragment() {
 
     private fun loadRegions() {
         lifecycleScope.launch {
-            regionViewModel.regionLiveData.observe(viewLifecycleOwner) {
+            addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
                         Toast.makeText(
@@ -376,7 +374,7 @@ class AddJobFragment : Fragment() {
     private fun setDistricts(regionId: String) {
         binding.apply {
             lifecycleScope.launch {
-                val districtList = districtViewModel.listDistrictsByRegionId(regionId)
+                val districtList = addressViewModel.listDistrictsByRegionId(regionId)
                 val districtAdapter = ArrayAdapter(
                     requireContext(),
                     androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
@@ -392,7 +390,7 @@ class AddJobFragment : Fragment() {
 
     private fun loadDistricts() {
         lifecycleScope.launch {
-            districtViewModel.districtLiveData.observe(viewLifecycleOwner) {
+            addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
                         Toast.makeText(

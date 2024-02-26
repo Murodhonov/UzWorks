@@ -71,7 +71,7 @@ fun RegionResponse.mapToEntity(): RegionEntity {
     )
 }
 
-fun DistrictResponse.mapToEntity(): DistrictEntity {
+fun DistrictResponse.mapToEntity(regionId: String): DistrictEntity {
     return DistrictEntity(
         id = id,
         name = name,
