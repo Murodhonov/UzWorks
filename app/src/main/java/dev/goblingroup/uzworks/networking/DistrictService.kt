@@ -16,7 +16,7 @@ interface DistrictService {
     suspend fun getAllDistricts(): Response<List<DistrictResponse>>
 
     @GET("api/District/GetByRegionId/{id}")
-    suspend fun districtsByRegionId(
+    suspend fun getDistrictsByRegionId(
         @Path("id") regionId: String
     ): Response<List<DistrictResponse>>
 

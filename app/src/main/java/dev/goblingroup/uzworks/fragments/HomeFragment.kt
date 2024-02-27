@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
+import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.HomeViewModel
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
     private lateinit var linearSnapHelper: LinearSnapHelper
 
     private val announcementViewModel: AnnouncementViewModel by viewModels()
+    private val addressViewModel: AddressViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -155,6 +157,10 @@ class HomeFragment : Fragment() {
 
                     is ApiStatus.Success -> {
                         success()
+                    }
+
+                    else -> {
+
                     }
                 }
             }
