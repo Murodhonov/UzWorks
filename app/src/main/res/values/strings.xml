@@ -1,24 +1,21 @@
 <resources>
-    <string name="app_name">UzWorks</string>
-
+    <string name="app_name" translatable="false">UzWorks</string>
     <string name="home">Uy</string>
     <string name="announcements">E\'lonlar</string>
     <string name="chat">Chat</string>
     <string name="profile">Profil</string>
-
     <string name="get_started_title">
     <![CDATA[Orzuyingizdagi <font color="#FF9228">Ish</font> va <font color="#FF9228">Ishchilar</font> Shu Yerda!]]>
 </string>
-    <string name="get_started_bottom">O’zingiz uchun qiziq bo’lgan va kerak bo’lgan barcha yo’nalishlarda ish va ishchilarni biz bilan toping.</string>
-
+    <string name="get_started_bottom">O\'zingiz uchun qiziq bo\'lgan va kerak bo\'lgan barcha yo\'nalishlarda ish va ishchilarni biz bilan toping</string>
     <string name="code_uz_latin">O\'z</string>
     <string name="code_uz_kirill">Ўз</string>
     <string name="code_en">En</string>
     <string name="code_ru">Ru</string>
-    <string name="uz_latin">O’zbekcha</string>
+    <string name="uz_latin">O\'zbekcha</string>
     <string name="uz_kirill">Ўзбекча</string>
     <string name="en">English</string>
-    <string name="ru">Russian</string>
+    <string name="ru">Русский</string>
     <string name="view">Ko\'rish</string>
     <string name="job_category">Ish turi</string>
     <string name="gender">Jins</string>
@@ -27,6 +24,7 @@
     <string name="send_message">Xabar yozish</string>
     <string name="share">Ulashish</string>
     <string name="see_more">Batafsil ko\'rish</string>
+    <string name="hide">Yashirish</string>
     <string name="delete">O\'chirish</string>
     <string name="content_description">ImageView content description</string>
     <string name="personal_information">Shaxsiy ma\'lumotlar</string>
@@ -41,13 +39,12 @@
     <string name="yes">Ha</string>
     <string name="no">Yo\'q</string>
     <string name="save">Saqlash</string>
-    <string name="cancel">Qaytish</string>
-    <string name="old_password">Eski parol</string>
+    <string name="cancel">Bekor qilish</string>
+    <string name="current_password">Joriy parol</string>
     <string name="new_password">Yangi parol</string>
     <string name="confirm_new_password">Yangi parolni tasdiqlang</string>
     <string name="update_password">Parolni yangilash</string>
     <string name="registration_succeeded">Ro\'yxatdan o\'tish muvaffaqiyatli tugatildi</string>
-    <string name="registration_succeeded_message">Your password has been updated, please change your password regularly to avoid this happening</string>
     <string name="open_app">Davom etish</string>
     <string name="create_account">Hisob ochish</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</string>
@@ -68,7 +65,7 @@
     <string name="language">Til</string>
     <string name="select_role">Rol tanlang</string>
     <string name="select_role_subtitle">Siz kim ekanligingizni aniq tanlashingiz kerak.
-Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi.</string>
+Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string>
     <string name="employer">Ish beruvchi</string>
     <string name="employee">Ishchi</string>
     <string name="sign_up">Ro\'yxatdan o\'tish</string>
@@ -112,7 +109,7 @@ Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi.</str
     <string name="return_home">Bosh sahifaga qaytish</string>
     <string name="online">Online</string>
     <string name="enter_username">Foydalanuvchi nomini kiriting</string>
-    <string name="enter_fullname">Ism familiyangizni kiriting</string>
+    <string name="enter_full_name">Ism familiyangizni kiriting</string>
     <string name="enter_password">Parolni kiriting</string>
     <string name="password_requirements">Parol kamida 8 belgidan iborat bo\'lishi, raqam va kichik harflarni o\'z ichiga olishi shart</string>
     <string name="enter_old_password">Joriy parolni kiriting</string>
@@ -132,7 +129,6 @@ Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi.</str
     <string name="select_map">Xaritadan tanlash</string>
     <string name="loading">Yuklanmoqda</string>
     <string name="incorrect_username_password">Foydalanuvchi nomi yoki parol xato</string>
-    <string name="sign_up_error">Something went wrong while sign up</string>
     <string name="greeting">Assalomu alaykum</string>
     <string name="subscribers_count">Obunachilar soni</string>
     <string name="enter_firstname">Ismingizni kiriting</string>
@@ -140,6 +136,4 @@ Sizga ko’rsatiladigan ma’lumotlar tanlagan rolingizga qarab aniqlanadi.</str
     <string name="confirm_gender">Jinsingizni tasdiqlang</string>
     <string name="enter_valid_email">Yaroqli email kiriting</string>
     <string name="my_announcements">Mening e\'lonlarim</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

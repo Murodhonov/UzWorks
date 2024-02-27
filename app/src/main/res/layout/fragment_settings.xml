@@ -59,6 +59,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/notification_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
@@ -123,6 +124,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/theme_mode_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
@@ -294,6 +296,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/logout_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
@@ -330,6 +333,7 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <TextView
+            android:id="@+id/save_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/dm_sans_bold"

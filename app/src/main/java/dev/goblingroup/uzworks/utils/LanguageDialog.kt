@@ -12,48 +12,73 @@ import dev.goblingroup.uzworks.databinding.LanguageDialogItemBinding
 import java.util.concurrent.atomic.AtomicReference
 
 fun languageDialog(
+    currentLanguageCode: String?,
     context: Context,
     layoutInflater: LayoutInflater,
     listener: LanguageSelectionListener
 ) {
     AtomicReference<String?>()
-    var selectedLanguage: String? = "Ўзбекча"
+    var selectedLanguageCode: String? = currentLanguageCode
+    var selectedLanguageName: String? = when (currentLanguageCode) {
+        LanguageEnum.ENGLISH.code -> {
+            LanguageEnum.ENGLISH.languageName
+        }
 
+        LanguageEnum.RUSSIAN.code -> {
+            LanguageEnum.RUSSIAN.languageName
+        }
+
+        LanguageEnum.KIRILL_UZB.code -> {
+            LanguageEnum.KIRILL_UZB.languageName
+        }
+
+        LanguageEnum.LATIN_UZB.code -> {
+            LanguageEnum.LATIN_UZB.languageName
+        }
+
+        else -> {
+            null
+        }
+    }
     val builder = AlertDialog.Builder(context)
     val alertDialog = builder.create()
     val binding = LanguageDialogItemBinding.inflate(layoutInflater)
     binding.apply {
         alertDialog.setView(root)
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        updateSelection(binding, null, LanguageEnum.KIRILL_UZB.language)
+        updateSelection(binding, null, currentLanguageCode)
 
         kirillUzbBtn.setOnClickListener {
-            updateSelection(binding, selectedLanguage, LanguageEnum.KIRILL_UZB.language)
-            selectedLanguage = LanguageEnum.KIRILL_UZB.language
+            updateSelection(binding, selectedLanguageCode, LanguageEnum.KIRILL_UZB.code)
+            selectedLanguageCode = LanguageEnum.KIRILL_UZB.code
+            selectedLanguageName = LanguageEnum.KIRILL_UZB.languageName
         }
 
         latinUzbBtn.setOnClickListener {
-            updateSelection(binding, selectedLanguage, LanguageEnum.LATIN_UZB.language)
-            selectedLanguage = LanguageEnum.LATIN_UZB.language
+            updateSelection(binding, selectedLanguageCode, LanguageEnum.LATIN_UZB.code)
+            selectedLanguageCode = LanguageEnum.LATIN_UZB.code
+            selectedLanguageName = LanguageEnum.LATIN_UZB.languageName
         }
 
         ruBtn.setOnClickListener {
-            updateSelection(binding, selectedLanguage, LanguageEnum.RU.language)
-            selectedLanguage = LanguageEnum.RU.language
+            updateSelection(binding, selectedLanguageCode, LanguageEnum.RUSSIAN.code)
+            selectedLanguageCode = LanguageEnum.RUSSIAN.code
+            selectedLanguageName = LanguageEnum.RUSSIAN.languageName
         }
 
         enBtn.setOnClickListener {
-            updateSelection(binding, selectedLanguage, LanguageEnum.EN.language)
-            selectedLanguage = LanguageEnum.EN.language
+            updateSelection(binding, selectedLanguageCode, LanguageEnum.ENGLISH.code)
+            selectedLanguageCode = LanguageEnum.ENGLISH.code
+            selectedLanguageName = LanguageEnum.ENGLISH.languageName
         }
 
         saveBtn.setOnClickListener {
-            listener.onLanguageSelected(selectedLanguage)
+            listener.onLanguageSelected(selectedLanguageCode, selectedLanguageName)
             alertDialog.dismiss()
         }
 
         cancelBtn.setOnClickListener {
-            listener.onLanguageSelected(null)
+            listener.onLanguageSelected(null, null)
             alertDialog.dismiss()
         }
 
@@ -68,7 +93,7 @@ private fun updateSelection(
 ) {
     binding.apply {
         when (languageFrom) {
-            LanguageEnum.KIRILL_UZB.language -> {
+            LanguageEnum.KIRILL_UZB.code -> {
                 kirillUzbLayout.background = null
                 val marginLayoutParams = kirillUzbFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(0, 0, 0, 0)
@@ -76,14 +101,15 @@ private fun updateSelection(
                 kirillUzbSelect.visibility = View.GONE
             }
 
-            LanguageEnum.LATIN_UZB.language -> {
+            LanguageEnum.LATIN_UZB.code -> {
                 latinUzbLayout.background = null
                 val marginLayoutParams = latinUzbFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(0, 0, 0, 0)
                 latinUzbFlag.layoutParams = marginLayoutParams
                 latinUzbSelect.visibility = View.GONE
             }
-            LanguageEnum.RU.language -> {
+
+            LanguageEnum.RUSSIAN.code -> {
                 ruLayout.background = null
                 val marginLayoutParams = ruFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(0, 0, 0, 0)
@@ -91,7 +117,7 @@ private fun updateSelection(
                 ruSelect.visibility = View.GONE
             }
 
-            LanguageEnum.EN.language -> {
+            LanguageEnum.ENGLISH.code -> {
                 enLayout.background = null
                 val marginLayoutParams = enFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(0, 0, 0, 0)
@@ -100,7 +126,7 @@ private fun updateSelection(
             }
         }
         when (languageTo) {
-            LanguageEnum.KIRILL_UZB.language -> {
+            LanguageEnum.KIRILL_UZB.code -> {
                 kirillUzbLayout.setBackgroundResource(R.drawable.corner_dash_stroke_rectangle)
                 val marginLayoutParams = kirillUzbFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(10, 0, 0, 0)
@@ -108,21 +134,23 @@ private fun updateSelection(
                 kirillUzbSelect.visibility = View.VISIBLE
             }
 
-            LanguageEnum.LATIN_UZB.language -> {
+            LanguageEnum.LATIN_UZB.code -> {
                 latinUzbLayout.setBackgroundResource(R.drawable.corner_dash_stroke_rectangle)
                 val marginLayoutParams = latinUzbFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(10, 0, 0, 0)
                 latinUzbFlag.layoutParams = marginLayoutParams
                 latinUzbSelect.visibility = View.VISIBLE
             }
-            LanguageEnum.RU.language -> {
+
+            LanguageEnum.RUSSIAN.code -> {
                 ruLayout.setBackgroundResource(R.drawable.corner_dash_stroke_rectangle)
                 val marginLayoutParams = ruFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(10, 0, 0, 0)
                 ruFlag.layoutParams = marginLayoutParams
                 ruSelect.visibility = View.VISIBLE
             }
-            LanguageEnum.EN.language -> {
+
+            LanguageEnum.ENGLISH.code -> {
                 enLayout.setBackgroundResource(R.drawable.corner_dash_stroke_rectangle)
                 val marginLayoutParams = enFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(10, 0, 0, 0)
