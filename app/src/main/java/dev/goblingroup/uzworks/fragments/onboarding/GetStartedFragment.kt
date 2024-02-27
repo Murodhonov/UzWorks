@@ -2,7 +2,6 @@ package dev.goblingroup.uzworks.fragments.onboarding
 
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +11,13 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentGetStartedBinding
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.LanguageEnum
 import dev.goblingroup.uzworks.utils.LanguageManager
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
 import dev.goblingroup.uzworks.vm.GetStartedViewModel
+import me.ibrahimsn.lib.SmoothBottomBar
 
 @AndroidEntryPoint
 class GetStartedFragment : Fragment() {
@@ -92,9 +91,13 @@ class GetStartedFragment : Fragment() {
             object : LanguageSelectionListener {
                 override fun onLanguageSelected(languageCode: String?, languageName: String?) {
                     binding.languageTv.text = languageName
-                    getStartedViewModel.setLanguageCode(languageCode.toString())
+                    getStartedViewModel.setLanguageCode(languageCode)
                     LanguageManager.setLanguage(languageCode.toString(), requireContext())
                     updateTexts()
+                }
+
+                override fun onCanceled() {
+
                 }
             })
     }

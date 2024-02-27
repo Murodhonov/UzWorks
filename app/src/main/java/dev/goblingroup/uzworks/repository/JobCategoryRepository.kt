@@ -1,5 +1,7 @@
 package dev.goblingroup.uzworks.repository
 
+import dev.goblingroup.uzworks.database.dao.JobCategoryDao
+import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.networking.JobCategoryService
 import javax.inject.Inject
 

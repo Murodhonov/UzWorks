@@ -338,12 +338,6 @@ class PersonalInfoFragment : Fragment() {
                     resources.getString(R.string.confirm_gender),
                     Toast.LENGTH_SHORT
                 ).show()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "selected gender -> <$selectedGender>",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
             if (emailEt.editText?.text.toString()
                     .isNotEmpty() && !isEmailValid(emailEt.editText?.text.toString())

@@ -20,21 +20,6 @@ class SecurityRepository @Inject constructor(
     private val workerDao: WorkerDao
 ) {
 
-    fun saveUserData(loginResponse: LoginResponse): Boolean {
-        val userDataJson = gson.toJson(loginResponse)
-        return sharedPreferences.edit().putString("user_data", userDataJson).commit()
-    }
-
-    fun getUserData(): LoginResponse? {
-        val userDataJson = sharedPreferences.getString("user_data", null)
-        return try {
-            gson.fromJson(userDataJson, LoginResponse::class.java)
-        } catch (e: Exception) {
-            Log.e(TAG, "getUserData: ${e.message} error in ${this::class.java.simpleName}")
-            null
-        }
-    }
-
     fun getUserRoles(): List<String> {
         val userRolesJson = sharedPreferences.getString("user_roles", null)
         return if (userRolesJson?.isEmpty() == true) ArrayList() else jsonToList(userRolesJson.toString())

@@ -8,7 +8,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.goblingroup.uzworks.database.AppDatabase
+import dev.goblingroup.uzworks.database.dao.DistrictDao
+import dev.goblingroup.uzworks.database.dao.JobCategoryDao
 import dev.goblingroup.uzworks.database.dao.JobDao
+import dev.goblingroup.uzworks.database.dao.RegionDao
+import dev.goblingroup.uzworks.database.dao.UserDao
 import dev.goblingroup.uzworks.database.dao.WorkerDao
 import javax.inject.Singleton
 
@@ -45,6 +49,38 @@ class DatabaseModule {
         appDatabase: AppDatabase
     ): WorkerDao {
         return appDatabase.workerDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDao(
+        appDatabase: AppDatabase
+    ): UserDao {
+        return appDatabase.userDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRegionDao(
+        appDatabase: AppDatabase
+    ): RegionDao {
+        return appDatabase.regionDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideJobCategoryDao(
+        appDatabase: AppDatabase
+    ): JobCategoryDao {
+        return appDatabase.jobCategoryDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDistrictDao(
+        appDatabase: AppDatabase
+    ): DistrictDao {
+        return appDatabase.districtDao()
     }
 
 }

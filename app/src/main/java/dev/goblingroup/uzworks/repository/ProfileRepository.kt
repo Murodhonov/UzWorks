@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.repository
 
+import dev.goblingroup.uzworks.database.dao.UserDao
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.networking.SecuredUserService
 import dev.goblingroup.uzworks.networking.UserService

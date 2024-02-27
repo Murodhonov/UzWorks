@@ -25,6 +25,9 @@ class GetStartedViewModel @Inject constructor(
 
     fun getLanguageCode() = securityRepository.getLanguageCode()
 
-    fun setLanguageCode(languageCode: String) = securityRepository.setLanguageCode(languageCode)
+    fun setLanguageCode(languageCode: String?) {
+        if (languageCode == null) securityRepository.setLanguageCode(LanguageEnum.KIRILL_UZB.code)
+        else securityRepository.setLanguageCode(languageCode)
+    }
 
 }

@@ -73,12 +73,13 @@ fun languageDialog(
         }
 
         saveBtn.setOnClickListener {
+            if (selectedLanguageCode == LanguageEnum.KIRILL_UZB.code) selectedLanguageCode = null
             listener.onLanguageSelected(selectedLanguageCode, selectedLanguageName)
             alertDialog.dismiss()
         }
 
         cancelBtn.setOnClickListener {
-            listener.onLanguageSelected(null, null)
+            listener.onCanceled()
             alertDialog.dismiss()
         }
 

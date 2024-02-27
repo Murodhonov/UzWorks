@@ -92,6 +92,11 @@ class AllAnnouncementsFragment : Fragment() {
                     }
                 )
                 recommendedWorkAnnouncementsRv.adapter = announcementsAdapter
+                if (announcementsAdapter.itemCount == 0) {
+                    noAnnouncementsTv.visibility = View.VISIBLE
+                } else {
+                    noAnnouncementsTv.visibility = View.GONE
+                }
             }
         }
     }
