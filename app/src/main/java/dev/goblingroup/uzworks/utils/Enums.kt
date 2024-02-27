@@ -19,17 +19,9 @@ enum class DateEnum(val dateLabel: String) {
     YEAR("Year")
 }
 
-enum class LanguageEnum(val language: String) {
-    KIRILL_UZB("Ўзбекча"),
-    LATIN_UZB("O’zbekcha"),
-    RU("Русский"),
-    EN("English")
-}
-
-enum class AdminTabsEnum(val tabTitle: String) {
-    DISTRICT("District"),
-    JOB("Job"),
-    JOB_CATEGORY("Job category"),
-    REGION("Region"),
-    WORKER("Worker")
+enum class LanguageEnum(val code: String, val languageName: String) {
+    KIRILL_UZB("cyr", "Ўзбекча"),
+    LATIN_UZB("uz", "O'zbekcha"),
+    RUSSIAN("ru", "Русский"),
+    ENGLISH("en", "English"),
 }

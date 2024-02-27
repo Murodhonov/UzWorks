@@ -56,6 +56,14 @@ class SecurityRepository @Inject constructor(
         return getUserRoles().contains(UserRole.EMPLOYER.roleName)
     }
 
+    fun setLanguageCode(languageCode: String): Boolean {
+        return sharedPreferences.edit().putString("language_code", languageCode).commit()
+    }
+
+    fun getLanguageCode(): String? {
+        return sharedPreferences.getString("language_code", null)
+    }
+
     private fun listToJson(list: List<String>): String {
         return gson.toJson(list)
     }

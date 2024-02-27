@@ -60,4 +60,8 @@ class LoginViewModel @Inject constructor(
         val userIdSaved = securityRepository.setUserId(loginResponse.userId)
         return tokenSaved && userIdSaved && rolesSaved
     }
+
+    fun getLanguageCode() = securityRepository.getLanguageCode()
+
+    fun setLanguageCode(languageCode: String) = securityRepository.setLanguageCode(languageCode)
 }
