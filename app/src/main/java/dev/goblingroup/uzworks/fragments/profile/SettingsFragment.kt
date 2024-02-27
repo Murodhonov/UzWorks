@@ -1,7 +1,6 @@
 package dev.goblingroup.uzworks.fragments.profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSettingsBinding
 import dev.goblingroup.uzworks.databinding.LogoutDialogItemBinding
+import dev.goblingroup.uzworks.utils.LanguageManager
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
@@ -85,11 +85,17 @@ class SettingsFragment : Fragment() {
 
             languageBtn.setOnClickListener {
                 languageDialog(
+                    securityViewModel.getLanguageCode(),
                     requireContext(),
                     layoutInflater,
                     object : LanguageSelectionListener {
-                        override fun onLanguageSelected(language: String?) {
-                            Log.d(TAG, "onLanguageSelected: language $language")
+                        override fun onLanguageSelected(
+                            languageCode: String?,
+                            languageName: String?
+                        ) {
+                            securityViewModel.setLanguageCode(languageCode.toString())
+                            LanguageManager.setLanguage(languageCode.toString(), requireContext())
+                            updateTexts()
                         }
                     })
             }
@@ -113,6 +119,18 @@ class SettingsFragment : Fragment() {
             saveBtn.setOnClickListener {
                 findNavController().popBackStack()
             }
+        }
+    }
+
+    private fun updateTexts() {
+        binding.apply {
+            settingsTv.text = resources.getString(R.string.settings)
+            notificationTv.text = resources.getString(R.string.notifications)
+            themeModeTv.text = resources.getString(R.string.dark_mode)
+            languageTv.text = resources.getString(R.string.language)
+            passwordTv.text = resources.getString(R.string.password)
+            logoutTv.text = resources.getString(R.string.logout)
+            saveTv.text = resources.getString(R.string.save)
         }
     }
 

@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.databinding.MyAnnouncementItemBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
+import dev.goblingroup.uzworks.vm.AddressViewModel
 
 class MyJobsAdapter(
     private val jobList: List<JobResponse>,
     private val jobCategoryList: List<JobCategoryEntity>,
-    private val districtList: List<DistrictEntity>,
-    private val regionList: List<RegionEntity>,
+    private val addressViewModel: AddressViewModel,
     private val onItemClick: (String) -> Unit,
     private val onItemLongClick: (String) -> Unit
 ) : RecyclerView.Adapter<MyJobsAdapter.MyJobViewHolder>() {
@@ -38,9 +38,7 @@ class MyJobsAdapter(
         }
 
         private fun getAddress(districtId: String): String {
-            val district = districtList.find { it.id == districtId }
-            val region = regionList.find { it.id == district?.regionId }
-            return "${district?.name}, ${region?.name}"
+            return "${addressViewModel.findDistrict(districtId)}, ${addressViewModel.findRegionByDistrictId(districtId)}"
         }
 
         private fun getJobCategory(categoryId: String): String {

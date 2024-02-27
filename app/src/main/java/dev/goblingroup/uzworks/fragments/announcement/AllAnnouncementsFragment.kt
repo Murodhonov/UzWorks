@@ -14,6 +14,7 @@ import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentAllAnnouncementsBinding
 import dev.goblingroup.uzworks.models.CombinedData
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -31,6 +32,7 @@ class AllAnnouncementsFragment : Fragment() {
 
     private val announcementViewModel: AnnouncementViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
+    private val addressViewModel: AddressViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +84,7 @@ class AllAnnouncementsFragment : Fragment() {
                 announcementsAdapter = AnnouncementsAdapter(
                     combinedData,
                     jobCategoryViewModel.listJobCategories(),
+                    addressViewModel = addressViewModel,
                     { announcementId ->
                         announcementClickListener?.onAllAnnouncementClick(announcementId)
                     }, { state, announcementId, _ ->

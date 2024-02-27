@@ -1,5 +1,5 @@
 package dev.goblingroup.uzworks.utils
 
 interface LanguageSelectionListener {
-    fun onLanguageSelected(language: String?)
+    fun onLanguageSelected(languageCode: String?, languageName: String?)
 }

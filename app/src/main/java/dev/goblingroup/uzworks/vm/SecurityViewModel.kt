@@ -14,4 +14,8 @@ class SecurityViewModel @Inject constructor(
 
     fun deleteUser() = securityRepository.deleteUser()
 
+    fun getLanguageCode() = securityRepository.getLanguageCode()
+
+    fun setLanguageCode(languageCode: String) = securityRepository.setLanguageCode(languageCode)
+
 }

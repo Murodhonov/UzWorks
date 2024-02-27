@@ -17,11 +17,10 @@ import dev.goblingroup.uzworks.databinding.FragmentMyAnnouncementsBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.DistrictViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.MyAnnouncementsViewModel
-import dev.goblingroup.uzworks.vm.RegionViewModel
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -32,8 +31,7 @@ class MyAnnouncementsFragment : Fragment() {
 
     private val myAnnouncementsViewModel: MyAnnouncementsViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
-    private val regionViewModel: RegionViewModel by viewModels()
-    private val districtViewModel: DistrictViewModel by viewModels()
+    private val addressViewModel: AddressViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,8 +83,7 @@ class MyAnnouncementsFragment : Fragment() {
             val myJobsAdapter = MyJobsAdapter(
                 jobList = jobList,
                 jobCategoryList = jobCategoryViewModel.listJobCategories(),
-                districtList = districtViewModel.listDistricts(),
-                regionList = regionViewModel.listRegions(),
+                addressViewModel = addressViewModel,
                 { jobId ->
                     val bundle = Bundle()
                     bundle.putString("job_id", jobId)

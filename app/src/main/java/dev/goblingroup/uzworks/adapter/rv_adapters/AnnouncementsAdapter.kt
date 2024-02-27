@@ -8,10 +8,12 @@ import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.database.entity.WorkerEntity
 import dev.goblingroup.uzworks.databinding.AnnouncementItemBinding
 import dev.goblingroup.uzworks.models.CombinedData
+import dev.goblingroup.uzworks.vm.AddressViewModel
 
 class AnnouncementsAdapter(
     private val combinedData: CombinedData,
     private val jobCategoryList: List<JobCategoryEntity>,
+    private val addressViewModel: AddressViewModel,
     private val onItemClick: (String) -> Unit,
     private val onSaveClick: (Boolean, String, Int) -> Unit
 ) : RecyclerView.Adapter<AnnouncementsAdapter.AnnouncementsViewHolder>() {
@@ -24,6 +26,7 @@ class AnnouncementsAdapter(
                 costTv.text = "${announcement.salary} so'm"
                 genderTv.text = announcement.gender
                 categoryTv.text = getJobCategory(announcement.categoryId.toString())
+                addressTv.text = getAddress(announcement.districtId.toString())
 
                 if (announcement.isSaved) {
                     saveIv.setImageResource(R.drawable.ic_saved)
@@ -45,6 +48,10 @@ class AnnouncementsAdapter(
                     onItemClick.invoke(announcement.id)
                 }
             }
+        }
+
+        private fun getAddress(districtId: String): String {
+            return "${addressViewModel.findDistrict(districtId)}, ${addressViewModel.findRegionByDistrictId(districtId)}"
         }
 
         fun bindWorker(announcement: WorkerEntity, position: Int) {

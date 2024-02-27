@@ -130,7 +130,7 @@ class SignUpFragment : Fragment() {
             val (firstName, lastName) = fullNameEt.splitFullName()
             if (firstName == null && lastName == null) {
                 fullNameEt.isErrorEnabled = true
-                fullNameEt.error = resources.getString(R.string.enter_fullname)
+                fullNameEt.error = resources.getString(R.string.enter_full_name)
                 validation = false
             }
             if (usernameEt.editText?.text.toString().isEmpty()) {

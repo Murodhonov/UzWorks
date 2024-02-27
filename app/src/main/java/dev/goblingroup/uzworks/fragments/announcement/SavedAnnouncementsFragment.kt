@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentSavedAnnouncementsBinding
 import dev.goblingroup.uzworks.models.CombinedData
+import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ class SavedAnnouncementsFragment : Fragment() {
 
     private val announcementViewModel: AnnouncementViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
+    private val addressViewModel: AddressViewModel by viewModels()
 
     private lateinit var savedAnnouncements: CombinedData
 
@@ -59,6 +61,7 @@ class SavedAnnouncementsFragment : Fragment() {
                     announcementsAdapter = AnnouncementsAdapter(
                         savedAnnouncements,
                         jobCategoryViewModel.listJobCategories(),
+                        addressViewModel = addressViewModel,
                         { announcementId ->
                             savedAnnouncementClickListener?.onSavedAnnouncementClick(announcementId)
                         }, { _, announcementId, position ->

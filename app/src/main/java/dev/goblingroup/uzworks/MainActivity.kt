@@ -9,6 +9,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.view.menu.MenuBuilder
@@ -156,9 +157,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideBottomBar() {
         binding.apply {
-            if (lastId != R.id.homeFragment &&
-                lastId != R.id.announcementsFragment &&
-                lastId != R.id.chatsListFragment
+            if (lastId == R.id.homeFragment ||
+                lastId == R.id.announcementsFragment ||
+                lastId == R.id.chatsListFragment
             ) return
             // Animation to hide the bottom navigation
             val hideBottomBarAnimation = TranslateAnimation(

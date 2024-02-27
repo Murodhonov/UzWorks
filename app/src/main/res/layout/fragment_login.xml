@@ -125,6 +125,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/sign_in_google_tv"
                 android:drawablePadding="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:fontFamily="@font/dm_sans_bold"
@@ -152,6 +153,7 @@
         app:layout_constraintTop_toBottomOf="@id/sign_in_with_google_btn">
 
         <TextView
+            android:id="@+id/do_not_have_account_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dm_sans_regular"
@@ -202,7 +204,6 @@
             android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/_7sdp"
             android:fontFamily="@font/dm_sans_bold"
-            android:text="@string/code_uz_latin"
             android:textColor="@color/black_blue"
             android:textSize="@dimen/_11ssp"
             app:layout_constraintBottom_toBottomOf="@id/language_btn"

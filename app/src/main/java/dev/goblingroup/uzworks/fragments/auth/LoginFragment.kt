@@ -19,6 +19,8 @@ import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
+import dev.goblingroup.uzworks.utils.LanguageEnum
+import dev.goblingroup.uzworks.utils.LanguageManager
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
@@ -92,6 +94,28 @@ class LoginFragment : Fragment() {
             passwordEt.editText?.addTextChangedListener {
                 if (passwordEt.isErrorEnabled && it.toString().isNotEmpty()) {
                     passwordEt.isErrorEnabled = false
+                }
+            }
+
+            languageTv.text = when (loginViewModel.getLanguageCode()) {
+                LanguageEnum.LATIN_UZB.code -> {
+                    LanguageEnum.LATIN_UZB.languageName
+                }
+
+                LanguageEnum.KIRILL_UZB.code -> {
+                    LanguageEnum.KIRILL_UZB.languageName
+                }
+
+                LanguageEnum.RUSSIAN.code -> {
+                    LanguageEnum.RUSSIAN.languageName
+                }
+
+                LanguageEnum.ENGLISH.code -> {
+                    LanguageEnum.ENGLISH.languageName
+                }
+
+                else -> {
+                    ""
                 }
             }
         }
@@ -171,11 +195,31 @@ class LoginFragment : Fragment() {
     }
 
     private fun chooseLanguage() {
-        languageDialog(requireContext(), layoutInflater, object : LanguageSelectionListener {
-            override fun onLanguageSelected(language: String?) {
-                binding.languageTv.text = language
-            }
-        })
+        languageDialog(
+            loginViewModel.getLanguageCode(),
+            requireContext(),
+            layoutInflater,
+            object : LanguageSelectionListener {
+                override fun onLanguageSelected(languageCode: String?, languageName: String?) {
+                    binding.languageTv.text = languageName
+                    loginViewModel.setLanguageCode(languageCode.toString())
+                    LanguageManager.setLanguage(languageCode.toString(), requireContext())
+                    updateTexts()
+                }
+            })
+    }
+
+    private fun updateTexts() {
+        binding.apply {
+            greetingTv.text = resources.getString(R.string.welcome)
+            underGreetingTv.text = resources.getString(R.string.lorem_ipsum)
+            usernameEt.hint = resources.getString(R.string.username)
+            passwordEt.hint = resources.getString(R.string.password)
+            loginTv.text = resources.getString(R.string.login)
+            signInGoogleTv.text = resources.getString(R.string.sign_in_google)
+            doNotHaveAccountTv.text = resources.getString(R.string.do_not_have_account)
+            signUpTv.text = resources.getString(R.string.create_account)
+        }
     }
 
     override fun onDestroyView() {
