@@ -10,6 +10,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.view.menu.MenuBuilder
@@ -17,8 +18,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.databinding.ActivityMainBinding
+import dev.goblingroup.uzworks.utils.LanguageManager
 import dev.goblingroup.uzworks.utils.dpToPx
 import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.vm.SecurityViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -33,11 +36,16 @@ class MainActivity : AppCompatActivity() {
 
     private var lastId: Int? = null
 
+    private val securityViewModel: SecurityViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         binding.apply {
+            if (securityViewModel.getLanguageCode() != null) {
+                LanguageManager.setLanguage(securityViewModel.getLanguageCode().toString(), this@MainActivity)
+            }
             setContentView(root)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 window.statusBarColor = getColor(R.color.black_blue)
@@ -81,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("RestrictedApi")
-    private fun setupWithNavController() {
+    fun setupWithNavController() {
         binding.apply {
             val inflater = MenuInflater(this@MainActivity)
             bottomMenu = MenuBuilder(this@MainActivity)

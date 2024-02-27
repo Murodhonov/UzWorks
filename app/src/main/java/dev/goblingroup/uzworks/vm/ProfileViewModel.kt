@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.database.dao.UserDao
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.models.response.UserUpdateResponse
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val securityRepository: SecurityRepository,
+    private val userDao: UserDao,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -73,7 +75,9 @@ class ProfileViewModel @Inject constructor(
 
     fun getUserId() = securityRepository.getUserId()
 
-    fun getUsername() = securityRepository.getUsername()
+    fun getUsername(): String {
+        return userDao.getUser()?.username.toString()
+    }
 
     fun isEmployee() = securityRepository.isEmployee()
 

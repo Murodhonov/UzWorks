@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.database.dao.UserDao
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.repository.JobRepository
@@ -21,6 +22,7 @@ class HomeViewModel @Inject constructor(
     private val securityRepository: SecurityRepository,
     private val jobRepository: JobRepository,
     private val workerRepository: WorkerRepository,
+    private val userDao: UserDao,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -117,7 +119,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getFullName(): String {
-        val userData = securityRepository.getUserData()
+        val userData = userDao.getUser()
         return "${userData?.firstname} ${userData?.lastName}"
     }
 

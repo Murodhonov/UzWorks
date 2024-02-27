@@ -2,8 +2,10 @@ package dev.goblingroup.uzworks.fragments.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import dev.goblingroup.uzworks.MainActivity
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSettingsBinding
 import dev.goblingroup.uzworks.databinding.LogoutDialogItemBinding
@@ -22,6 +25,7 @@ import dev.goblingroup.uzworks.utils.turnSwitchOff
 import dev.goblingroup.uzworks.utils.turnSwitchOn
 import dev.goblingroup.uzworks.vm.SecurityViewModel
 import kotlinx.coroutines.launch
+import me.ibrahimsn.lib.SmoothBottomBar
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -93,9 +97,13 @@ class SettingsFragment : Fragment() {
                             languageCode: String?,
                             languageName: String?
                         ) {
-                            securityViewModel.setLanguageCode(languageCode.toString())
+                            securityViewModel.setLanguageCode(languageCode)
                             LanguageManager.setLanguage(languageCode.toString(), requireContext())
                             updateTexts()
+                        }
+
+                        override fun onCanceled() {
+
                         }
                     })
             }
@@ -131,6 +139,8 @@ class SettingsFragment : Fragment() {
             passwordTv.text = resources.getString(R.string.password)
             logoutTv.text = resources.getString(R.string.logout)
             saveTv.text = resources.getString(R.string.save)
+            val mainActivity = activity as MainActivity
+            mainActivity.setupWithNavController()
         }
     }
 

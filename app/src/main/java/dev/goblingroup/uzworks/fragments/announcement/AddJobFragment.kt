@@ -16,6 +16,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.database.entity.DistrictEntity
+import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
+import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse

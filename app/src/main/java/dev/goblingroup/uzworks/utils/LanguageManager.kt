@@ -1,18 +1,16 @@
 package dev.goblingroup.uzworks.utils
 
 import android.content.Context
-import android.content.res.Configuration
-import android.widget.Toast
 import java.util.Locale
 
 object LanguageManager {
 
-    fun setLanguage(language: String, context: Context) {
-        updateResources(language, context)
+    fun setLanguage(languageCode: String, context: Context) {
+        updateResources(languageCode, context)
     }
 
-    private fun updateResources(language: String, context: Context) {
-        val locale = Locale(language)
+    private fun updateResources(languageCode: String, context: Context) {
+        val locale = Locale(languageCode)
         Locale.setDefault(locale)
         val resources = context.resources
         val configuration = resources.configuration

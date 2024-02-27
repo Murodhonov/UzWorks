@@ -5,10 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.database.dao.UserDao
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.repository.LoginRepository
+import dev.goblingroup.uzworks.repository.AuthRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
@@ -17,8 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val loginRepository: LoginRepository,
+    private val authRepository: AuthRepository,
     private val securityRepository: SecurityRepository,
+    private val userDao: UserDao,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -33,13 +35,13 @@ class SplashViewModel @Inject constructor(
 
     private fun login() {
         viewModelScope.launch {
-            val user = loginRepository.getUser()
+            val user = userDao.getUser()
             if (user != null) {
                 if (networkHelper.isConnected()) {
-                    val response = loginRepository.login(LoginRequest(user.username, user.password))
+                    val response = authRepository.login(LoginRequest(user.username, user.password))
                     if (response.isSuccessful) {
                         if (saveAuth(loginResponse = response.body()!!)) {
-                            loginRepository.addUser(
+                            userDao.addUser(
                                 response.body()!!
                                     .mapToEntity(LoginRequest(user.username, user.password))
                             )

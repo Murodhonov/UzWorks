@@ -101,6 +101,7 @@ class HomeFragment : Fragment() {
 
                     is ApiStatus.Loading -> {
                         binding.progress.visibility = View.VISIBLE
+                        binding.noAnnouncementsTv.visibility = View.GONE
                     }
 
                     is ApiStatus.Success -> {
@@ -152,7 +153,7 @@ class HomeFragment : Fragment() {
                     }
 
                     is ApiStatus.Loading -> {
-                        binding.progress.visibility = View.VISIBLE
+
                     }
 
                     is ApiStatus.Success -> {
@@ -192,6 +193,13 @@ class HomeFragment : Fragment() {
                     )
                     linearSnapHelper.attachToRecyclerView(recommendedWorkAnnouncementsRv)
                     recommendedWorkAnnouncementsRv.adapter = adapter
+                    if (adapter.itemCount == 0) {
+                        recommendedWorkAnnouncementsRv.visibility = View.INVISIBLE
+                        noAnnouncementsTv.visibility = View.VISIBLE
+                    } else {
+                        recommendedWorkAnnouncementsRv.visibility = View.VISIBLE
+                        noAnnouncementsTv.visibility = View.GONE
+                    }
                 }
             }
         }

@@ -17,7 +17,7 @@ class AddressRepository @Inject constructor(
     private val districtDao: DistrictDao
 ) {
 
-    suspend fun getAllRegions() = regionService.getAll()
+    suspend fun getAllRegions() = regionService.getAllRegions()
 
     fun addRegions(regionList: List<RegionEntity>): Boolean {
         regionDao.deleteRegions()

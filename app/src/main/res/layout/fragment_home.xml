@@ -201,7 +201,6 @@
         app:layout_constraintTop_toBottomOf="@id/jobs_count"
         app:layout_constraintVertical_bias="0.1" />
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/workers_btn"
         android:layout_width="0dp"
@@ -260,8 +259,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recommended_work_announcements_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/_3sdp"
+        app:layout_constraintHeight_percent="0.17"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -275,18 +275,18 @@
         android:layout_marginEnd="@dimen/_7sdp"
         android:text="@string/no_recommended_announcements"
         android:textAlignment="center"
-        android:textColor="@color/black_blue"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recommended_works_tv" />
+        android:textColor="@color/black_blue"
+        app:layout_constraintBottom_toBottomOf="@id/recommended_work_announcements_rv"
+        app:layout_constraintTop_toTopOf="@id/recommended_work_announcements_rv"/>
 
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:indeterminateTint="@color/black_blue"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/recommended_work_announcements_rv"
+        app:layout_constraintTop_toTopOf="@id/recommended_work_announcements_rv"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 

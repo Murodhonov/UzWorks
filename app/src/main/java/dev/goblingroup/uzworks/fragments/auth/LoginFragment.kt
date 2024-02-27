@@ -202,9 +202,13 @@ class LoginFragment : Fragment() {
             object : LanguageSelectionListener {
                 override fun onLanguageSelected(languageCode: String?, languageName: String?) {
                     binding.languageTv.text = languageName
-                    loginViewModel.setLanguageCode(languageCode.toString())
+                    loginViewModel.setLanguageCode(languageCode)
                     LanguageManager.setLanguage(languageCode.toString(), requireContext())
                     updateTexts()
+                }
+
+                override fun onCanceled() {
+
                 }
             })
     }
