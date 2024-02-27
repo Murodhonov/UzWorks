@@ -139,8 +139,6 @@ class SettingsFragment : Fragment() {
             passwordTv.text = resources.getString(R.string.password)
             logoutTv.text = resources.getString(R.string.logout)
             saveTv.text = resources.getString(R.string.save)
-            val mainActivity = activity as MainActivity
-            mainActivity.setupWithNavController()
         }
     }
 

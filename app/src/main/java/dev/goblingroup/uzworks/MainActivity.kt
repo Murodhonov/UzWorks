@@ -3,13 +3,11 @@ package dev.goblingroup.uzworks
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -89,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("RestrictedApi")
-    fun setupWithNavController() {
+    private fun setupWithNavController() {
         binding.apply {
             val inflater = MenuInflater(this@MainActivity)
             bottomMenu = MenuBuilder(this@MainActivity)
