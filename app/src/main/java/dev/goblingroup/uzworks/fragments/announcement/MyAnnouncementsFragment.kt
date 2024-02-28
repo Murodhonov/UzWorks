@@ -15,6 +15,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.rv_adapters.MyJobsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentMyAnnouncementsBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
+import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.AddressViewModel
@@ -97,13 +98,37 @@ class MyAnnouncementsFragment : Fragment() {
                 }
             )
             myAnnouncementsRv.adapter = myJobsAdapter
+            if (myJobsAdapter.itemCount == 0) {
+                noAnnouncementsTv.visibility = View.VISIBLE
+            } else {
+                noAnnouncementsTv.visibility = View.GONE
+            }
         }
     }
 
     private fun loadWorkers() {
         lifecycleScope.launch {
-
+            myAnnouncementsViewModel.workerLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(requireContext(), "failed to fetch workers", Toast.LENGTH_SHORT).show()
+                        binding.progressBar.visibility = View.GONE
+                    }
+                    is ApiStatus.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is ApiStatus.Success -> {
+                        Log.d(TAG, "loadWorkers: succeeded ${it.response}")
+                        binding.progressBar.visibility = View.GONE
+                        setWorkers(it.response!!)
+                    }
+                }
+            }
         }
+    }
+
+    private fun setWorkers(workerList: List<WorkerResponse>) {
+
     }
 
     private fun showBottomDialog(announcementId: String) {

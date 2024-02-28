@@ -21,7 +21,6 @@ import dev.goblingroup.uzworks.databinding.FragmentProfileBinding
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.GenderEnum
-import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.ProfileViewModel
@@ -131,11 +130,11 @@ class ProfileFragment : Fragment() {
         layoutInflater: LayoutInflater
     ) {
         val alertDialog = AlertDialog.Builder(context).create()
-        alertDialog.show()
         val binding = AboutDialogItemBinding.inflate(layoutInflater)
         binding.apply {
             alertDialog.setView(root)
             alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.show()
         }
     }
 
@@ -144,19 +143,17 @@ class ProfileFragment : Fragment() {
         layoutInflater: LayoutInflater
     ) {
         val alertDialog = AlertDialog.Builder(context).create()
-        alertDialog.show()
         val binding = ExperienceDialogItemBinding.inflate(layoutInflater)
         binding.apply {
             alertDialog.setView(root)
             alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             experienceRv.adapter = ExperienceAdapter()
+            alertDialog.show()
         }
     }
 
     private fun addAnnouncement() {
-        val direction = if (securityViewModel.getUserRoles()
-                .contains(UserRole.EMPLOYEE.roleName)
-        ) {
+        val direction = if (profileViewModel.isEmployee()) {
             R.id.addWorkerFragment
         } else {
             R.id.addJobFragment

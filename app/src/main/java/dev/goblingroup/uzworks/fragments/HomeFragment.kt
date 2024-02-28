@@ -88,11 +88,13 @@ class HomeFragment : Fragment() {
 
     private fun loadCategories() {
         lifecycleScope.launch {
+            Log.d(TAG, "loadCategories: started")
             jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
                         Toast.makeText(requireContext(), "some error", Toast.LENGTH_SHORT)
                             .show()
+                        Log.d(TAG, "loadCategories: failed")
                         Log.e(TAG, "loadCategories: ${it.error}")
                         Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
                         Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
@@ -100,11 +102,13 @@ class HomeFragment : Fragment() {
                     }
 
                     is ApiStatus.Loading -> {
+                        Log.d(TAG, "loadCategories: loading")
                         binding.progress.visibility = View.VISIBLE
                         binding.noAnnouncementsTv.visibility = View.GONE
                     }
 
                     is ApiStatus.Success -> {
+                        Log.d(TAG, "loadCategories: succeeded <${it.response?.size}>")
                         loadAddresses()
                     }
 
@@ -118,6 +122,7 @@ class HomeFragment : Fragment() {
 
     private fun loadAddresses() {
         lifecycleScope.launch {
+            Log.d(TAG, "loadAddresses: started")
             addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
@@ -127,11 +132,13 @@ class HomeFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                         binding.progress.visibility = View.GONE
+                        Log.e(TAG, "loadAddresses: failed")
                     }
                     is ApiStatus.Loading -> {
-
+                        Log.d(TAG, "loadAddresses: loading")
                     }
                     is ApiStatus.Success -> {
+                        Log.d(TAG, "loadAddresses: succeeded <${it.response?.size}>")
                         loadAnnouncements()
                     }
                 }
@@ -141,22 +148,25 @@ class HomeFragment : Fragment() {
 
     private fun loadAnnouncements() {
         lifecycleScope.launch {
+            Log.d(TAG, "loadAnnouncements: started")
             announcementViewModel.combinedLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
                         Toast.makeText(requireContext(), "some error", Toast.LENGTH_SHORT)
                             .show()
-                        Log.e(TAG, "loadJobs: ${it.error}")
-                        Log.e(TAG, "loadJobs: ${it.error.printStackTrace()}")
-                        Log.e(TAG, "loadJobs: ${it.error.stackTrace}")
-                        Log.e(TAG, "loadJobs: ${it.error.message}")
+                        Log.d(TAG, "loadAnnouncements: failed")
+                        Log.e(TAG, "loadAnnouncements: ${it.error}")
+                        Log.e(TAG, "loadAnnouncements: ${it.error.printStackTrace()}")
+                        Log.e(TAG, "loadAnnouncements: ${it.error.stackTrace}")
+                        Log.e(TAG, "loadAnnouncements: ${it.error.message}")
                     }
 
                     is ApiStatus.Loading -> {
-
+                        Log.d(TAG, "loadAnnouncements: loading")
                     }
 
                     is ApiStatus.Success -> {
+                        Log.d(TAG, "loadAnnouncements: succeeded jobs <${it.response?.jobs?.size}>\tworkers <${it.response?.workers?.size}>")
                         success()
                     }
 
@@ -191,6 +201,7 @@ class HomeFragment : Fragment() {
                             saveUnSave(state, announcementId)
                         }
                     )
+                    Log.d(TAG, "success: called in ${this@HomeFragment::class.java.simpleName}")
                     linearSnapHelper.attachToRecyclerView(recommendedWorkAnnouncementsRv)
                     recommendedWorkAnnouncementsRv.adapter = adapter
                     if (adapter.itemCount == 0) {
