@@ -133,4 +133,5 @@
     <string name="enter_valid_email">Введите, пожалуйста, действительный адрес электронной почты</string>
     <string name="my_announcements">Мои объявления</string>
     <string name="you_have_no_announcement">У вас нет объявлений</string>
+    <string name="salary_per_time">/Месяц</string>
 </resources>

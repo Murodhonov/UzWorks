@@ -10,9 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementsAdapter
+import dev.goblingroup.uzworks.adapter.rv_adapters.AllAnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentAllAnnouncementsBinding
-import dev.goblingroup.uzworks.models.CombinedData
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
@@ -28,7 +27,7 @@ class AllAnnouncementsFragment : Fragment() {
 
     private var announcementClickListener: AllAnnouncementClickListener? = null
 
-    private lateinit var announcementsAdapter: AnnouncementsAdapter
+    private lateinit var allAnnouncementsAdapter: AllAnnouncementsAdapter
 
     private val announcementViewModel: AnnouncementViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
@@ -44,13 +43,82 @@ class AllAnnouncementsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            loadAnnouncements()
+            loadCategories()
+        }
+    }
+
+    private fun loadCategories() {
+        binding.apply {
+            lifecycleScope.launch {
+                Log.d(TAG, "loadCategories: started")
+                jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(requireContext(), "some error", Toast.LENGTH_SHORT)
+                                .show()
+                            Log.d(TAG, "loadCategories: failed")
+                            Log.e(TAG, "loadCategories: ${it.error}")
+                            Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
+                            Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
+                            Log.e(TAG, "loadCategories: ${it.error.message}")
+                            progress.visibility = View.GONE
+                            noAnnouncementsTv.visibility = View.VISIBLE
+                        }
+
+                        is ApiStatus.Loading -> {
+                            Log.d(TAG, "loadCategories: loading")
+                            progress.visibility = View.VISIBLE
+                            noAnnouncementsTv.visibility = View.GONE
+                        }
+
+                        is ApiStatus.Success -> {
+                            Log.d(TAG, "loadCategories: succeeded <${it.response?.size}>")
+                            loadAddresses()
+                        }
+
+                        else -> {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadAddresses() {
+        binding.apply {
+            lifecycleScope.launch {
+                Log.d(TAG, "loadAddresses: started")
+                addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "some error while loading regions or districts",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e(TAG, "loadAddresses: failed")
+                            noAnnouncementsTv.visibility = View.VISIBLE
+                            progress.visibility = View.GONE
+                        }
+                        is ApiStatus.Loading -> {
+                            Log.d(TAG, "loadAddresses: loading")
+                            progress.visibility = View.VISIBLE
+                            noAnnouncementsTv.visibility = View.GONE
+                        }
+                        is ApiStatus.Success -> {
+                            Log.d(TAG, "loadAddresses: succeeded <${it.response?.size}>")
+                            loadAnnouncements()
+                        }
+                    }
+                }
+            }
         }
     }
 
     private fun loadAnnouncements() {
         lifecycleScope.launch {
-            announcementViewModel.combinedLiveData.observe(viewLifecycleOwner) {
+            announcementViewModel.announcementLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
                         Toast.makeText(
@@ -70,33 +138,34 @@ class AllAnnouncementsFragment : Fragment() {
 
                     is ApiStatus.Success -> {
                         Log.d(TAG, "onViewCreated: succeeded ${it.response}")
-                        success(it.response!!)
+                        success()
                     }
                 }
             }
         }
     }
 
-    private fun success(combinedData: CombinedData) {
+    private fun success() {
         if (_binding != null) {
             binding.apply {
                 progress.visibility = View.GONE
-                announcementsAdapter = AnnouncementsAdapter(
-                    combinedData,
-                    jobCategoryViewModel.listJobCategories(),
-                    addressViewModel = addressViewModel,
+                allAnnouncementsAdapter = AllAnnouncementsAdapter(
+                    announcementViewModel,
+                    jobCategoryViewModel,
+                    addressViewModel,
+                    resources,
                     { announcementId ->
                         announcementClickListener?.onAllAnnouncementClick(announcementId)
-                    }, { state, announcementId, _ ->
-                        saveUnSave(state, announcementId)
+                    }, { state, announcementId ->
+                        notifySaveUnSave(state, announcementId)
                     }
                 )
                 Log.d(
                     TAG,
                     "success: called in ${this@AllAnnouncementsFragment::class.java.simpleName}"
                 )
-                recommendedWorkAnnouncementsRv.adapter = announcementsAdapter
-                if (announcementsAdapter.itemCount == 0) {
+                recommendedWorkAnnouncementsRv.adapter = allAnnouncementsAdapter
+                if (allAnnouncementsAdapter.itemCount == 0) {
                     noAnnouncementsTv.visibility = View.VISIBLE
                 } else {
                     noAnnouncementsTv.visibility = View.GONE
@@ -105,12 +174,8 @@ class AllAnnouncementsFragment : Fragment() {
         }
     }
 
-    private fun saveUnSave(state: Boolean, announcementId: String) {
-        if (state) {
-            announcementViewModel.saveAnnouncement(announcementId)
-        } else {
-            announcementViewModel.unSaveAnnouncement(announcementId)
-        }
+    private fun notifySaveUnSave(state: Boolean, announcementId: String) {
+
     }
 
     interface AllAnnouncementClickListener {

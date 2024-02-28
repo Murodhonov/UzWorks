@@ -77,15 +77,16 @@
                 android:id="@+id/cost_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/dm_sans_bold"
+                android:fontFamily="@font/dm_sans_regular"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
                 android:id="@+id/per_time_tv"
+                android:text="@string/salary_per_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/dm_sans_bold"
+                android:fontFamily="@font/dm_sans_regular"
                 android:textColor="@color/yellow"
                 android:textSize="@dimen/_10ssp" />
 

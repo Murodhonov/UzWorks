@@ -133,4 +133,5 @@
     <string name="enter_valid_email">Яроқли эмаил киритинг</string>
     <string name="my_announcements">Менинг эълонларим</string>
     <string name="you_have_no_announcement">Сизда эълонлар мавжуд эмас</string>
+    <string name="salary_per_time">/Ой</string>
 </resources>

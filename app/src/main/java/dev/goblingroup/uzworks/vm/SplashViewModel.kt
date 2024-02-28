@@ -20,7 +20,6 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val securityRepository: SecurityRepository,
-    private val userDao: UserDao,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -35,13 +34,13 @@ class SplashViewModel @Inject constructor(
 
     private fun login() {
         viewModelScope.launch {
-            val user = userDao.getUser()
+            val user = securityRepository.getUser()
             if (user != null) {
                 if (networkHelper.isConnected()) {
                     val response = authRepository.login(LoginRequest(user.username, user.password))
                     if (response.isSuccessful) {
                         if (saveAuth(loginResponse = response.body()!!)) {
-                            userDao.addUser(
+                            securityRepository.addUser(
                                 response.body()!!
                                     .mapToEntity(LoginRequest(user.username, user.password))
                             )

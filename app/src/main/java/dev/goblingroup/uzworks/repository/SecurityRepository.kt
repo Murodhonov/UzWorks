@@ -1,14 +1,11 @@
 package dev.goblingroup.uzworks.repository
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.google.gson.Gson
-import dev.goblingroup.uzworks.database.dao.JobDao
-import dev.goblingroup.uzworks.database.dao.WorkerDao
-import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.database.dao.AnnouncementDao
+import dev.goblingroup.uzworks.database.dao.UserDao
+import dev.goblingroup.uzworks.database.entity.UserEntity
 import dev.goblingroup.uzworks.utils.UserRole
-import java.lang.Exception
 import java.lang.reflect.Type
 import javax.inject.Inject
 
@@ -16,8 +13,8 @@ class SecurityRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson,
     private val type: Type,
-    private val jobDao: JobDao,
-    private val workerDao: WorkerDao
+    private val announcementDao: AnnouncementDao,
+    private val userDao: UserDao
 ) {
 
     fun getUserRoles(): List<String> {
@@ -42,8 +39,8 @@ class SecurityRepository @Inject constructor(
     }
 
     fun deleteUser(): Boolean {
-        jobDao.deleteJobs()
-        workerDao.deleteWorkers()
+        userDao.deleteUser()
+        announcementDao.deleteAnnouncements()
         return sharedPreferences.edit().clear().commit()
     }
 
@@ -70,5 +67,16 @@ class SecurityRepository @Inject constructor(
     private fun jsonToList(jsonString: String): List<String> {
         return gson.fromJson(jsonString, type)
     }
+
+    fun getUser() = userDao.getUser()
+
+    fun addUser(userEntity: UserEntity) {
+        userDao.deleteUser()
+        userDao.addUser(userEntity)
+    }
+
+    fun getFirstName() = userDao.getUser()?.firstname
+
+    fun getLastName() = userDao.getUser()?.lastName
 
 }

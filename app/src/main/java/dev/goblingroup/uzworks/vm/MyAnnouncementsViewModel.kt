@@ -7,9 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
-import dev.goblingroup.uzworks.repository.JobRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
-import dev.goblingroup.uzworks.repository.WorkerRepository
 import dev.goblingroup.uzworks.repository.secured.SecuredJobRepository
 import dev.goblingroup.uzworks.repository.secured.SecuredWorkerRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
@@ -20,9 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyAnnouncementsViewModel @Inject constructor(
-    private val jobRepository: JobRepository,
     private val securedJobRepository: SecuredJobRepository,
-    private val workerRepository: WorkerRepository,
     private val securedWorkerRepository: SecuredWorkerRepository,
     private val securityRepository: SecurityRepository,
     private val networkHelper: NetworkHelper
