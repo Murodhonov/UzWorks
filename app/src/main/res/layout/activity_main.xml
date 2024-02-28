@@ -106,4 +106,13 @@
         app:menu="@menu/bottom_menu"
         app:textColor="@color/black_blue" />
 
+    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemIconTint="@color/black_blue"
+        app:itemTextColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_menu" />-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

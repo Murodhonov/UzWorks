@@ -3,7 +3,6 @@ package dev.goblingroup.uzworks
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -77,6 +76,44 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+//            bottomBar.setOnItemSelectedListener {
+//                when (it) {
+//                    0 -> {
+//                        Toast.makeText(
+//                            this@MainActivity,
+//                            getString(R.string.home),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//
+//                    1 -> {
+//                        Toast.makeText(
+//                            this@MainActivity,
+//                            getString(R.string.announcements),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//
+//                    2 -> {
+//                        Toast.makeText(
+//                            this@MainActivity,
+//                            getString(R.string.chat),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//
+//                    3 -> {
+//                        Toast.makeText(
+//                            this@MainActivity,
+//                            getString(R.string.profile),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//
+//                    else -> {}
+//                }
+//            }
+
             profilePicture.setOnClickListener {
                 navController.navigate(
                     resId = R.id.profileFragment,
@@ -89,7 +126,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("RestrictedApi")
-    fun setupWithNavController() {
+    private fun setupWithNavController() {
         binding.apply {
             val inflater = MenuInflater(this@MainActivity)
             bottomMenu = MenuBuilder(this@MainActivity)

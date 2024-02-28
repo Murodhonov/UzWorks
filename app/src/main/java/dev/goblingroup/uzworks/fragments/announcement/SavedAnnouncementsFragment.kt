@@ -1,6 +1,7 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentSavedAnnouncementsBinding
 import dev.goblingroup.uzworks.models.CombinedData
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -67,6 +69,10 @@ class SavedAnnouncementsFragment : Fragment() {
                         }, { _, announcementId, position ->
                             unSave(announcementId, position)
                         }
+                    )
+                    Log.d(
+                        TAG,
+                        "loadSavedAnnouncements: called in ${this@SavedAnnouncementsFragment::class.java.simpleName}"
                     )
                     recommendedWorkAnnouncementsRv.adapter = announcementsAdapter
                 }

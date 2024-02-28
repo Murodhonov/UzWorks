@@ -132,4 +132,5 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="confirm_gender">Jinsingizni tasdiqlang</string>
     <string name="enter_valid_email">Yaroqli email kiriting</string>
     <string name="my_announcements">Mening e\'lonlarim</string>
+    <string name="you_have_no_announcement">Sizda e\'lonlar mavjud emas</string>
 </resources>

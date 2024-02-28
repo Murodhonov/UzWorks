@@ -91,6 +91,10 @@ class AllAnnouncementsFragment : Fragment() {
                         saveUnSave(state, announcementId)
                     }
                 )
+                Log.d(
+                    TAG,
+                    "success: called in ${this@AllAnnouncementsFragment::class.java.simpleName}"
+                )
                 recommendedWorkAnnouncementsRv.adapter = announcementsAdapter
                 if (announcementsAdapter.itemCount == 0) {
                     noAnnouncementsTv.visibility = View.VISIBLE

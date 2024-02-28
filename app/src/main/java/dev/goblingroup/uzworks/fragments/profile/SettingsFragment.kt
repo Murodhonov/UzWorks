@@ -140,7 +140,7 @@ class SettingsFragment : Fragment() {
             logoutTv.text = resources.getString(R.string.logout)
             saveTv.text = resources.getString(R.string.save)
             val mainActivity = activity as MainActivity
-            mainActivity.setupWithNavController()
+            mainActivity.recreate()
         }
     }
 
