@@ -22,7 +22,6 @@ class AddressRepository @Inject constructor(
     fun addRegions(regionList: List<RegionEntity>): Boolean {
         regionDao.deleteRegions()
         regionDao.addRegions(regionList)
-        Log.d(TAG, "addRegions: ${regionList.size} regions added $regionList")
         return regionDao.countRegions() == regionList.size
     }
 
@@ -35,7 +34,11 @@ class AddressRepository @Inject constructor(
     suspend fun getDistrictsByRegionId(regionId: String) =
         districtService.getDistrictsByRegionId(regionId)
 
-    fun addDistrict(districtEntity: DistrictEntity) = districtDao.addDistrict(districtEntity)
+    fun addDistricts(districtList: List<DistrictEntity>): Boolean {
+        districtDao.deleteDistricts()
+        districtDao.addDistricts(districtList)
+        return districtDao.countDistricts() == districtList.size
+    }
 
     fun findDistrict(districtId: String) = districtDao.findDistrict(districtId)
 

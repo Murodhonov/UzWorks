@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.textfield.TextInputLayout
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -378,4 +379,36 @@ fun String.formatPhoneNumber(backSpacePressed: Boolean): String {
 
 private fun controlEnd(backSpacePressed: Boolean): String {
     return if (backSpacePressed) " " else ""
+}
+
+fun AnnouncementEntity.getImage(): Int {
+    val images = mutableListOf(
+        R.drawable.ic_logo_1,
+        R.drawable.ic_logo_2,
+        R.drawable.ic_logo_3,
+        R.drawable.ic_logo_4,
+        R.drawable.ic_logo_5,
+        R.drawable.ic_logo_6,
+        R.drawable.ic_logo_7,
+        R.drawable.ic_logo_8,
+        R.drawable.ic_logo_9,
+        R.drawable.ic_logo_10,
+    )
+    return when (this.announcementType) {
+        AnnouncementEnum.JOB.announcementType -> {
+            images[(0 until 10).random()]
+        }
+
+        AnnouncementEnum.WORKER.announcementType -> {
+            when (this.gender) {
+                GenderEnum.FEMALE.label -> R.drawable.ic_female
+                GenderEnum.MALE.label -> R.drawable.ic_male
+                else -> {
+                    R.drawable.uz_works_logo
+                }
+            }
+        }
+
+        else -> 0
+    }
 }

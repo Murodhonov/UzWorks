@@ -284,6 +284,7 @@
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:indeterminateTint="@color/black_blue"
         app:layout_constraintBottom_toBottomOf="@id/recommended_work_announcements_rv"
         app:layout_constraintTop_toTopOf="@id/recommended_work_announcements_rv"

@@ -10,7 +10,7 @@ import dev.goblingroup.uzworks.database.entity.RegionEntity
 @Dao
 interface DistrictDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDistrict(districtEntity: DistrictEntity)
+    fun addDistricts(districtList: List<DistrictEntity>)
 
     @Query("SELECT * FROM district_table WHERE district_id = :districtId")
     fun findDistrict(districtId: String): DistrictEntity
@@ -26,5 +26,8 @@ interface DistrictDao {
 
     @Query("DELETE FROM district_table")
     fun deleteDistricts()
+
+    @Query("SELECT COUNT(*) FROM district_table")
+    fun countDistricts(): Int
 
 }

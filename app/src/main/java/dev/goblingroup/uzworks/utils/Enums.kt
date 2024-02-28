@@ -25,3 +25,8 @@ enum class LanguageEnum(val code: String, val languageName: String) {
     RUSSIAN("ru", "Русский"),
     ENGLISH("en", "English"),
 }
+
+enum class AnnouncementEnum(val announcementType: String) {
+    JOB("Job"),
+    WORKER("Worker")
+}

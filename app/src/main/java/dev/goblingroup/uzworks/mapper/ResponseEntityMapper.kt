@@ -1,22 +1,18 @@
 package dev.goblingroup.uzworks.mapper
 
+import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
-import dev.goblingroup.uzworks.database.entity.JobEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.database.entity.UserEntity
-import dev.goblingroup.uzworks.database.entity.WorkerEntity
 import dev.goblingroup.uzworks.models.request.LoginRequest
-import dev.goblingroup.uzworks.models.response.DistrictCreateResponse
 import dev.goblingroup.uzworks.models.response.DistrictResponse
-import dev.goblingroup.uzworks.models.response.JobCategoryCreateResponse
 import dev.goblingroup.uzworks.models.response.JobCategoryResponse
-import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.models.response.RegionCreateResponse
 import dev.goblingroup.uzworks.models.response.RegionResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
+import dev.goblingroup.uzworks.utils.AnnouncementEnum
 
 fun LoginResponse.mapToEntity(loginRequest: LoginRequest): UserEntity {
     return UserEntity(
@@ -31,28 +27,16 @@ fun LoginResponse.mapToEntity(loginRequest: LoginRequest): UserEntity {
     )
 }
 
-fun JobResponse.mapToEntity(isSaved: Boolean): JobEntity {
-    return JobEntity(
-        id,
-        benefit,
-        categoryId,
-        deadline,
-        districtId,
-        gender,
-        instagramLink,
-        latitude,
-        longitude,
-        maxAge,
-        minAge,
-        phoneNumber,
-        requirement,
-        salary,
-        telegramLink,
-        tgUserName,
-        title,
-        workingSchedule,
-        workingTime,
-        isSaved
+fun JobResponse.mapToEntity(isSaved: Boolean): AnnouncementEntity {
+    return AnnouncementEntity(
+        id = id,
+        categoryId = categoryId,
+        districtId = districtId,
+        gender = gender,
+        title = title,
+        announcementType = AnnouncementEnum.JOB.announcementType,
+        isSaved = isSaved,
+        salary = salary
     )
 }
 
@@ -79,27 +63,15 @@ fun DistrictResponse.mapToEntity(regionId: String): DistrictEntity {
     )
 }
 
-fun WorkerResponse.mapToEntity(isSaved: Boolean): WorkerEntity {
-    return WorkerEntity(
+fun WorkerResponse.mapToEntity(isSaved: Boolean): AnnouncementEntity {
+    return AnnouncementEntity(
         id = id,
-        birthDate = birthDate,
         categoryId = categoryId,
-        createDate = createDate,
-        createdBy = createdBy,
-        deadline = deadline,
         districtId = districtId,
-        fullName = fullName,
         gender = gender,
-        instagramLink = instagramLink,
-        location = location,
-        phoneNumber = phoneNumber,
-        salary = salary,
-        telegramLink = telegramLink,
-        tgUserName = tgUserName,
         title = title,
-        userName = userName,
-        workingSchedule = workingSchedule,
-        workingTime = workingTime,
-        isSaved = isSaved
+        announcementType = AnnouncementEnum.WORKER.announcementType,
+        isSaved = isSaved,
+        salary = salary
     )
 }

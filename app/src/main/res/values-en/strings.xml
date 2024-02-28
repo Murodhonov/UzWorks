@@ -133,4 +133,5 @@ The information displayed to you is determined by the role you choose</string>
     <string name="enter_valid_email">Please enter a valid email address</string>
     <string name="my_announcements">My announcements</string>
     <string name="you_have_no_announcement">You have no announcements</string>
+    <string name="salary_per_time">/Month</string>
 </resources>

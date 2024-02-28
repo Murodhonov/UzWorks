@@ -63,20 +63,30 @@ class AddressViewModel @Inject constructor(
     private fun fetchDistricts(regionIdList: List<String>) {
         viewModelScope.launch {
             if (networkHelper.isConnected()) {
+                val emptyDistrictList = ArrayList<DistrictEntity>()
+                var error = ""
                 regionIdList.forEach { regionId ->
+                    var index = 0
                     val districtsByRegionIdResponse =
                         addressRepository.getDistrictsByRegionId(regionId)
                     if (districtsByRegionIdResponse.isSuccessful) {
                         districtsByRegionIdResponse.body()?.forEach { districtResponse ->
-                            addressRepository.addDistrict(districtResponse.mapToEntity(regionId))
+                            index++
+                            emptyDistrictList.add(districtResponse.mapToEntity(regionId))
                         }
-                        _districtLiveData.postValue(ApiStatus.Success(addressRepository.listDistricts()))
+                        Log.d(TAG, "fetchDistricts: $index districts added by $regionId")
                     } else {
-                        _districtLiveData.postValue(ApiStatus.Error(Throwable(districtsByRegionIdResponse.message())))
+                        error = districtsByRegionIdResponse.message()
                         Log.e(TAG, "fetchDistricts: ${districtsByRegionIdResponse.code()}")
                         Log.e(TAG, "fetchDistricts: ${districtsByRegionIdResponse.message()}")
                         Log.e(TAG, "fetchDistricts: ${districtsByRegionIdResponse.errorBody()}")
                     }
+                }
+                Log.d(TAG, "fetchDistricts: error variable -> $error")
+                if (error.isEmpty() && addressRepository.addDistricts(emptyDistrictList)) {
+                    _districtLiveData.postValue(ApiStatus.Success(addressRepository.listDistricts()))
+                } else {
+                    _districtLiveData.postValue(ApiStatus.Error(Throwable(error)))
                 }
             } else {
                 _districtLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))

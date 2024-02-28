@@ -5,10 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.goblingroup.uzworks.models.CombinedData
-import dev.goblingroup.uzworks.repository.JobRepository
+import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
+import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
-import dev.goblingroup.uzworks.repository.WorkerRepository
 import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
@@ -18,14 +17,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AnnouncementViewModel @Inject constructor(
-    private val jobRepository: JobRepository,
-    private val workerRepository: WorkerRepository,
-    private val securityRepository: SecurityRepository,
+    private val announcementRepository: AnnouncementRepository,
+    securityRepository: SecurityRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    private val _combinedLiveData = MutableLiveData<ApiStatus<CombinedData>>(ApiStatus.Loading())
-    val combinedLiveData get() = _combinedLiveData
+    private val _announcementLiveData =
+        MutableLiveData<ApiStatus<List<AnnouncementEntity>>>(ApiStatus.Loading())
+    val announcementLiveData get() = _announcementLiveData
 
     init {
         if (securityRepository.isEmployee()) {
@@ -43,22 +42,16 @@ class AnnouncementViewModel @Inject constructor(
     private fun loadJobs() {
         viewModelScope.launch {
             if (networkHelper.isConnected()) {
-                val response = jobRepository.getAllJobs()
+                val response = announcementRepository.getAllJobs()
                 if (response.isSuccessful) {
-                    Log.d(ConstValues.TAG, "loadJobs: ${response.body()?.size} jobs got")
-                    jobRepository.addJobs(response.body()!!)
-                    _combinedLiveData.value =
-                        ApiStatus.Success(CombinedData(jobs = ArrayList(jobRepository.listDatabaseJobs())))
+                    Log.d(TAG, "loadJobs: ${response.body()?.size} jobs got")
+                    announcementRepository.addJobs(response.body()!!)
+                    _announcementLiveData.postValue(ApiStatus.Success(announcementRepository.listDatabaseAnnouncements()))
                 } else {
-                    _combinedLiveData.value = ApiStatus.Error(Throwable(response.message()))
+                    _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
                 }
             } else {
-                if (jobRepository.countDatabaseJobs() > 0) {
-                    _combinedLiveData.value =
-                        ApiStatus.Success(CombinedData(jobs = ArrayList(jobRepository.listDatabaseJobs())))
-                } else {
-                    _combinedLiveData.value = ApiStatus.Error(Throwable(ConstValues.NO_INTERNET))
-                }
+                _announcementLiveData.value = ApiStatus.Error(Throwable(ConstValues.NO_INTERNET))
             }
         }
     }
@@ -66,63 +59,32 @@ class AnnouncementViewModel @Inject constructor(
     private fun loadWorkers() {
         viewModelScope.launch {
             if (networkHelper.isConnected()) {
-                val response = workerRepository.getAllWorkers()
+                val response = announcementRepository.getAllWorkers()
                 if (response.isSuccessful) {
-                    Log.d(ConstValues.TAG, "loadWorkers: ${response.body()?.size} workers got")
-                    workerRepository.addWorkers(response.body()!!)
-                    _combinedLiveData.value =
-                        ApiStatus.Success(CombinedData(workers = ArrayList(workerRepository.listDatabaseWorkers())))
+                    Log.d(TAG, "loadWorkers: ${response.body()?.size} workers got")
+                    announcementRepository.addWorkers(response.body()!!)
+                    _announcementLiveData.postValue(ApiStatus.Success(announcementRepository.listDatabaseAnnouncements()))
                 } else {
-                    _combinedLiveData.value = ApiStatus.Error(Throwable(response.message()))
+                    _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
                 }
             } else {
-                if (workerRepository.countDatabaseWorkers() > 0) {
-                    _combinedLiveData.value =
-                        ApiStatus.Success(CombinedData(workers = ArrayList(workerRepository.listDatabaseWorkers())))
-                } else {
-                    _combinedLiveData.value = ApiStatus.Error(Throwable(ConstValues.NO_INTERNET))
-                }
+                _announcementLiveData.postValue(ApiStatus.Error(Throwable(ConstValues.NO_INTERNET)))
             }
         }
     }
 
-    fun saveAnnouncement(announcementId: String) {
-        if (securityRepository.isEmployee()) {
-            jobRepository.saveJob(announcementId)
-        } else if (securityRepository.isEmployer()) {
-            workerRepository.saveWorker(announcementId)
-        }
-    }
+    fun saveAnnouncement(announcementId: String) =
+        announcementRepository.saveAnnouncement(announcementId)
 
-    fun unSaveAnnouncement(announcementId: String): Boolean? {
-        return if (securityRepository.isEmployee()) {
-            jobRepository.unSaveJob(announcementId)
-        } else if (securityRepository.isEmployer()) {
-            workerRepository.unSaveWorker(announcementId)
-        } else null
-    }
+    fun unSaveAnnouncement(announcementId: String) =
+        announcementRepository.unSaveAnnouncement(announcementId)
 
-    fun listDatabaseAnnouncements(): CombinedData {
-        return if (securityRepository.isEmployee()) {
-            CombinedData(jobs = ArrayList(jobRepository.listDatabaseJobs()))
-        } else if (securityRepository.isEmployer()) {
-            CombinedData(workers = ArrayList(workerRepository.listDatabaseWorkers()))
-        } else CombinedData()
-    }
+    fun listAnnouncements() = announcementRepository.listDatabaseAnnouncements()
 
-    fun listSavedAnnouncements(): CombinedData? {
-        return if (securityRepository.isEmployee()) {
-            CombinedData(jobs = ArrayList(jobRepository.listSavedJobs()))
-        } else if (securityRepository.isEmployer()) {
-            CombinedData(workers = ArrayList(workerRepository.listSavedWorkers()))
-        } else null
-    }
+    fun listSavedAnnouncements() = announcementRepository.listSavedAnnouncements()
 
-    fun countSavedAnnouncements(): Int {
-        return if (securityRepository.isEmployee()) {
-            jobRepository.countSavedJobs()
-        } else if (securityRepository.isEmployer()) {
-            workerRepository.countSavedWorkers()
-        } else 0
-    }
+    fun isAnnouncementSaved(announcementId: String) =
+        announcementRepository.isAnnouncementSaved(announcementId)
+
+
 }

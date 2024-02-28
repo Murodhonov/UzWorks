@@ -5,16 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import dev.goblingroup.uzworks.adapter.rv_adapters.AnnouncementsAdapter
+import dev.goblingroup.uzworks.adapter.rv_adapters.SavedAnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentSavedAnnouncementsBinding
-import dev.goblingroup.uzworks.models.CombinedData
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
+import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import kotlinx.coroutines.launch
 
@@ -27,13 +28,11 @@ class SavedAnnouncementsFragment : Fragment() {
     private var savedAnnouncementClickListener: SavedAnnouncementClickListener? = null
     private var findAnnouncementClickListener: FindAnnouncementClickListener? = null
 
-    private lateinit var announcementsAdapter: AnnouncementsAdapter
+    private lateinit var savedAnnouncementsAdapter: SavedAnnouncementsAdapter
 
     private val announcementViewModel: AnnouncementViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
     private val addressViewModel: AddressViewModel by viewModels()
-
-    private lateinit var savedAnnouncements: CombinedData
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,9 +44,80 @@ class SavedAnnouncementsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            loadSavedAnnouncements()
+            loadCategories()
             findAnnouncementBtn.setOnClickListener {
                 findAnnouncementClickListener?.onFindAnnouncementClick()
+            }
+        }
+    }
+
+    private fun loadCategories() {
+        binding.apply {
+            lifecycleScope.launch {
+                Log.d(TAG, "loadCategories: started")
+                jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(requireContext(), "some error", Toast.LENGTH_SHORT)
+                                .show()
+                            Log.d(TAG, "loadCategories: failed")
+                            Log.e(TAG, "loadCategories: ${it.error}")
+                            Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
+                            Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
+                            Log.e(TAG, "loadCategories: ${it.error.message}")
+                            progress.visibility = View.GONE
+                            emptyLayout.visibility = View.VISIBLE
+                        }
+
+                        is ApiStatus.Loading -> {
+                            Log.d(TAG, "loadCategories: loading")
+                            progress.visibility = View.VISIBLE
+                            emptyLayout.visibility = View.GONE
+                        }
+
+                        is ApiStatus.Success -> {
+                            Log.d(TAG, "loadCategories: succeeded <${it.response?.size}>")
+                            loadAddresses()
+                        }
+
+                        else -> {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadAddresses() {
+        binding.apply {
+            lifecycleScope.launch {
+                Log.d(TAG, "loadAddresses: started")
+                addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "some error while loading regions or districts",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e(TAG, "loadAddresses: failed")
+                            emptyLayout.visibility = View.VISIBLE
+                            progress.visibility = View.GONE
+                        }
+
+                        is ApiStatus.Loading -> {
+                            Log.d(TAG, "loadAddresses: loading")
+                            progress.visibility = View.VISIBLE
+                            emptyLayout.visibility = View.GONE
+                        }
+
+                        is ApiStatus.Success -> {
+                            Log.d(TAG, "loadAddresses: succeeded <${it.response?.size}>")
+                            loadSavedAnnouncements()
+                        }
+                    }
+                }
             }
         }
     }
@@ -55,45 +125,30 @@ class SavedAnnouncementsFragment : Fragment() {
     private fun loadSavedAnnouncements() {
         lifecycleScope.launch {
             binding.apply {
-                savedAnnouncements = announcementViewModel.listSavedAnnouncements()!!
-                if (savedAnnouncements.workers.isNullOrEmpty() && savedAnnouncements.jobs.isNullOrEmpty()) {
+                if (announcementViewModel.listSavedAnnouncements().isEmpty()) {
                     emptyLayout.visibility = View.VISIBLE
                 } else {
                     emptyLayout.visibility = View.GONE
-                    announcementsAdapter = AnnouncementsAdapter(
-                        savedAnnouncements,
-                        jobCategoryViewModel.listJobCategories(),
-                        addressViewModel = addressViewModel,
-                        { announcementId ->
-                            savedAnnouncementClickListener?.onSavedAnnouncementClick(announcementId)
-                        }, { _, announcementId, position ->
-                            unSave(announcementId, position)
-                        }
-                    )
-                    Log.d(
-                        TAG,
-                        "loadSavedAnnouncements: called in ${this@SavedAnnouncementsFragment::class.java.simpleName}"
-                    )
-                    recommendedWorkAnnouncementsRv.adapter = announcementsAdapter
                 }
+                savedAnnouncementsAdapter = SavedAnnouncementsAdapter(
+                    announcementViewModel,
+                    jobCategoryViewModel,
+                    addressViewModel,
+                    resources,
+                    { announcementId ->
+                        savedAnnouncementClickListener?.onSavedAnnouncementClick(announcementId)
+                    }, {
+                        state, announcementId ->
+                        notifyUnSave(state, announcementId)
+                    }
+                )
+                recommendedWorkAnnouncementsRv.adapter = savedAnnouncementsAdapter
             }
         }
     }
 
-    private fun unSave(announcementId: String, position: Int) {
-        binding.apply {
-            if (!savedAnnouncements.workers.isNullOrEmpty()) {
-                savedAnnouncements.workers?.removeAt(position)
-                announcementsAdapter.notifyItemRemoved(position)
-                announcementsAdapter.notifyItemRangeChanged(
-                    position,
-                    announcementViewModel.countSavedAnnouncements() - position
-                )
-                if (!announcementViewModel.unSaveAnnouncement(announcementId)!!) {
-                    emptyLayout.visibility = View.VISIBLE
-                }
-            }
-        }
+    private fun notifyUnSave(state: Boolean, announcementId: String) {
+
     }
 
     interface SavedAnnouncementClickListener {

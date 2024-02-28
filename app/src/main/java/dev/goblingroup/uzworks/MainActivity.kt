@@ -76,44 +76,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-//            bottomBar.setOnItemSelectedListener {
-//                when (it) {
-//                    0 -> {
-//                        Toast.makeText(
-//                            this@MainActivity,
-//                            getString(R.string.home),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//
-//                    1 -> {
-//                        Toast.makeText(
-//                            this@MainActivity,
-//                            getString(R.string.announcements),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//
-//                    2 -> {
-//                        Toast.makeText(
-//                            this@MainActivity,
-//                            getString(R.string.chat),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//
-//                    3 -> {
-//                        Toast.makeText(
-//                            this@MainActivity,
-//                            getString(R.string.profile),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//
-//                    else -> {}
-//                }
-//            }
-
             profilePicture.setOnClickListener {
                 navController.navigate(
                     resId = R.id.profileFragment,
