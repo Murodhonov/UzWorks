@@ -65,13 +65,11 @@ class SavedAnnouncementsFragment : Fragment() {
                             Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
                             Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
                             Log.e(TAG, "loadCategories: ${it.error.message}")
-                            progress.visibility = View.GONE
                             emptyLayout.visibility = View.VISIBLE
                         }
 
                         is ApiStatus.Loading -> {
                             Log.d(TAG, "loadCategories: loading")
-                            progress.visibility = View.VISIBLE
                             emptyLayout.visibility = View.GONE
                         }
 
@@ -103,12 +101,10 @@ class SavedAnnouncementsFragment : Fragment() {
                             ).show()
                             Log.e(TAG, "loadAddresses: failed")
                             emptyLayout.visibility = View.VISIBLE
-                            progress.visibility = View.GONE
                         }
 
                         is ApiStatus.Loading -> {
                             Log.d(TAG, "loadAddresses: loading")
-                            progress.visibility = View.VISIBLE
                             emptyLayout.visibility = View.GONE
                         }
 
@@ -125,34 +121,35 @@ class SavedAnnouncementsFragment : Fragment() {
     private fun loadSavedAnnouncements() {
         lifecycleScope.launch {
             binding.apply {
-                if (announcementViewModel.listSavedAnnouncements().isEmpty()) {
-                    emptyLayout.visibility = View.VISIBLE
-                } else {
-                    emptyLayout.visibility = View.GONE
-                }
                 savedAnnouncementsAdapter = SavedAnnouncementsAdapter(
                     announcementViewModel,
                     jobCategoryViewModel,
                     addressViewModel,
                     resources,
-                    { announcementId ->
-                        savedAnnouncementClickListener?.onSavedAnnouncementClick(announcementId)
-                    }, {
-                        state, announcementId ->
-                        notifyUnSave(state, announcementId)
+                    { announcementId, announcementType ->
+                        savedAnnouncementClickListener?.onSavedAnnouncementClick(announcementId, announcementType)
+                    }, { isEmpty, announcementId ->
+                        notifyUnSave(isEmpty, announcementId)
                     }
                 )
                 recommendedWorkAnnouncementsRv.adapter = savedAnnouncementsAdapter
+                if (announcementViewModel.countSavedAnnouncements() == 0) {
+                    emptyLayout.visibility = View.VISIBLE
+                } else {
+                    emptyLayout.visibility = View.GONE
+                }
             }
         }
     }
 
-    private fun notifyUnSave(state: Boolean, announcementId: String) {
-
+    private fun notifyUnSave(isEmpty: Boolean, announcementId: String) {
+        binding.apply {
+            if (isEmpty) emptyLayout.visibility = View.VISIBLE
+        }
     }
 
     interface SavedAnnouncementClickListener {
-        fun onSavedAnnouncementClick(announcementId: String)
+        fun onSavedAnnouncementClick(announcementId: String, announcementType: String)
     }
 
     interface FindAnnouncementClickListener {
@@ -165,6 +162,11 @@ class SavedAnnouncementsFragment : Fragment() {
 
     fun setOnAnnouncementClickListener(listener: SavedAnnouncementClickListener) {
         savedAnnouncementClickListener = listener
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadSavedAnnouncements()
     }
 
     override fun onDestroyView() {

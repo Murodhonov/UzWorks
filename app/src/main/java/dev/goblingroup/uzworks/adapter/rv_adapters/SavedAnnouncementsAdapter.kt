@@ -8,6 +8,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.databinding.AnnouncementItemBinding
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.getImage
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -17,7 +18,7 @@ class SavedAnnouncementsAdapter(
     private val jobCategoryViewModel: JobCategoryViewModel,
     private val addressViewModel: AddressViewModel,
     private val resources: Resources,
-    private val onItemClick: (String) -> Unit,
+    private val onItemClick: (String, String) -> Unit,
     private val onSaveClick: (Boolean, String) -> Unit
     /**
      * boolean parameter:
@@ -36,6 +37,7 @@ class SavedAnnouncementsAdapter(
                 saveIv.setImageResource(R.drawable.ic_saved)
                 categoryTv.text = getJobCategory(announcement.categoryId.toString())
                 addressTv.text = getAddress(announcement.districtId.toString())
+                iv.setImageResource(announcement.getImage())
 
                 genderTv.text = when (announcement.gender) {
                     GenderEnum.MALE.label -> {
@@ -51,26 +53,15 @@ class SavedAnnouncementsAdapter(
                     }
                 }
 
-                if (announcement.isSaved) {
-
-                } else {
-                    saveIv.setImageResource(R.drawable.ic_unsaved)
-                }
-
                 saveIv.setOnClickListener {
-                    if (announcementViewModel.isAnnouncementSaved(announcement.id)) {
-                        announcementViewModel.unSaveAnnouncement(announcement.id)
-                        saveIv.setImageResource(R.drawable.ic_unsaved)
-                        onSaveClick.invoke(false, announcement.id)
-                    } else {
-                        announcementViewModel.saveAnnouncement(announcement.id)
-                        saveIv.setImageResource(R.drawable.ic_saved)
-                        onSaveClick.invoke(true, announcement.id)
-                    }
+                    announcementViewModel.unSaveAnnouncement(announcement.id)
+                    onSaveClick.invoke(announcementViewModel.countSavedAnnouncements() == 0, announcement.id)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, announcementViewModel.countSavedAnnouncements() - position)
                 }
 
                 root.setOnClickListener {
-                    onItemClick.invoke(announcement.id)
+                    onItemClick.invoke(announcement.id, announcement.announcementType)
                 }
             }
         }
@@ -94,7 +85,7 @@ class SavedAnnouncementsAdapter(
         )
     }
 
-    override fun getItemCount(): Int = announcementViewModel.listAnnouncements().size
+    override fun getItemCount(): Int = announcementViewModel.countSavedAnnouncements()
 
     override fun onBindViewHolder(holder: AnnouncementsViewHolder, position: Int) {
         holder.bindAnnouncement(announcementViewModel.listAnnouncements()[position], position)

@@ -1,13 +1,11 @@
 package dev.goblingroup.uzworks.repository
 
-import android.util.Log
 import dev.goblingroup.uzworks.database.dao.DistrictDao
 import dev.goblingroup.uzworks.database.dao.RegionDao
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.networking.DistrictService
 import dev.goblingroup.uzworks.networking.RegionService
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import javax.inject.Inject
 
 class AddressRepository @Inject constructor(
@@ -20,7 +18,6 @@ class AddressRepository @Inject constructor(
     suspend fun getAllRegions() = regionService.getAllRegions()
 
     fun addRegions(regionList: List<RegionEntity>): Boolean {
-        regionDao.deleteRegions()
         regionDao.addRegions(regionList)
         return regionDao.countRegions() == regionList.size
     }
@@ -35,7 +32,6 @@ class AddressRepository @Inject constructor(
         districtService.getDistrictsByRegionId(regionId)
 
     fun addDistricts(districtList: List<DistrictEntity>): Boolean {
-        districtDao.deleteDistricts()
         districtDao.addDistricts(districtList)
         return districtDao.countDistricts() == districtList.size
     }

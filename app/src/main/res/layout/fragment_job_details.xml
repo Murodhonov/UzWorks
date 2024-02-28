@@ -93,6 +93,7 @@
             app:layout_constraintTop_toBottomOf="@id/work_type_tv">
 
             <TextView
+                android:id="@+id/job_category_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
@@ -142,6 +143,7 @@
             app:layout_constraintTop_toBottomOf="@id/work_gender_tv">
 
             <TextView
+                android:id="@+id/gender_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
@@ -227,7 +229,7 @@
                 android:textSize="@dimen/_11ssp" />
 
             <TextView
-                android:id="@+id/salary_amount_tv"
+                android:id="@+id/salary_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans_bold"
@@ -241,13 +243,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/yellow"
+                android:text="@string/salary_per_time"
                 android:textSize="@dimen/_10ssp"
-                app:layout_constraintLeft_toRightOf="@id/salary_amount_tv"
-                app:layout_constraintTop_toTopOf="@id/salary_amount_tv" />
+                app:layout_constraintLeft_toRightOf="@id/salary_tv"
+                app:layout_constraintTop_toTopOf="@id/salary_tv" />
 
             <View
                 android:id="@+id/more_info_divider"
-                app:layout_constraintTop_toBottomOf="@id/salary_amount_tv"
+                app:layout_constraintTop_toBottomOf="@id/salary_tv"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginTop="@dimen/_7sdp"

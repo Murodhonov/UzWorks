@@ -86,5 +86,8 @@ class AnnouncementViewModel @Inject constructor(
     fun isAnnouncementSaved(announcementId: String) =
         announcementRepository.isAnnouncementSaved(announcementId)
 
+    fun countAnnouncements() = announcementRepository.countDatabaseAnnouncements()
+
+    fun countSavedAnnouncements() = announcementRepository.countSavedAnnouncements()
 
 }

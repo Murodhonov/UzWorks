@@ -9,6 +9,7 @@ import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.databinding.AnnouncementItemBinding
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.getImage
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -18,7 +19,7 @@ class HomeAdapter(
     private val jobCategoryViewModel: JobCategoryViewModel,
     private val addressViewModel: AddressViewModel,
     private val resources: Resources,
-    private val onItemClick: (String) -> Unit,
+    private val onItemClick: (String, String) -> Unit,
 ) : RecyclerView.Adapter<HomeAdapter.AnnouncementsViewHolder>() {
 
     inner class AnnouncementsViewHolder(private val announcementItemBinding: AnnouncementItemBinding) :
@@ -29,6 +30,7 @@ class HomeAdapter(
                 costTv.text = "${announcement.salary} so'm"
                 categoryTv.text = getJobCategory(announcement.categoryId.toString())
                 addressTv.text = getAddress(announcement.districtId.toString())
+                iv.setImageResource(announcement.getImage())
 
                 genderTv.text = when (announcement.gender) {
                     GenderEnum.MALE.label -> {
@@ -61,7 +63,7 @@ class HomeAdapter(
                 }
 
                 root.setOnClickListener {
-                    onItemClick.invoke(announcement.id)
+                    onItemClick.invoke(announcement.id, announcement.id)
                 }
             }
         }

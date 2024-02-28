@@ -25,6 +25,10 @@ class AnnouncementRepository @Inject constructor(
 
     suspend fun countWorkers() = workerService.countWorkers()
 
+    suspend fun getJobById(jobId: String) = jobService.getJobById(jobId)
+
+    suspend fun getWorkerById(workerId: String) = workerService.getById(workerId)
+
     fun addJobs(jobList: List<JobResponse>) {
         val existingJobs = try {
             announcementDao.listAllAnnouncements()

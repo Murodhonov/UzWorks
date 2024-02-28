@@ -2,10 +2,8 @@ package dev.goblingroup.uzworks.fragments.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,12 +23,9 @@ import dev.goblingroup.uzworks.utils.turnSwitchOff
 import dev.goblingroup.uzworks.utils.turnSwitchOn
 import dev.goblingroup.uzworks.vm.SecurityViewModel
 import kotlinx.coroutines.launch
-import me.ibrahimsn.lib.SmoothBottomBar
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
-
-    private val TAG = "SettingsFragment"
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!

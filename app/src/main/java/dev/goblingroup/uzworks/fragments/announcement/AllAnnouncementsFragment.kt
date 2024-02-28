@@ -154,8 +154,8 @@ class AllAnnouncementsFragment : Fragment() {
                     jobCategoryViewModel,
                     addressViewModel,
                     resources,
-                    { announcementId ->
-                        announcementClickListener?.onAllAnnouncementClick(announcementId)
+                    { announcementId, announcementType ->
+                        announcementClickListener?.onAllAnnouncementClick(announcementId, announcementType)
                     }, { state, announcementId ->
                         notifySaveUnSave(state, announcementId)
                     }
@@ -179,7 +179,7 @@ class AllAnnouncementsFragment : Fragment() {
     }
 
     interface AllAnnouncementClickListener {
-        fun onAllAnnouncementClick(announcementId: String)
+        fun onAllAnnouncementClick(announcementId: String, announcementType: String)
     }
 
     fun setOnAnnouncementClickListener(listener: AllAnnouncementClickListener) {

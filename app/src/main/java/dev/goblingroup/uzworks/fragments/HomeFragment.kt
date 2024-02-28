@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.rv_adapters.HomeAdapter
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
+import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
@@ -206,12 +207,13 @@ class HomeFragment : Fragment() {
                         jobCategoryViewModel,
                         addressViewModel,
                         resources
-                    ) { announcementId ->
+                    ) { announcementId, announcementType ->
                         val bundle = Bundle()
                         bundle.putString("announcement_id", announcementId)
-                        val directionId = if (homeViewModel.isEmployee()) {
-                            R.id.jobDetailsFragment
-                        } else R.id.workerDetailsFragment
+                        val directionId =
+                            if (announcementType == AnnouncementEnum.JOB.announcementType) {
+                                R.id.jobDetailsFragment
+                            } else R.id.workerDetailsFragment
                         findNavController().navigate(
                             resId = directionId,
                             args = bundle,

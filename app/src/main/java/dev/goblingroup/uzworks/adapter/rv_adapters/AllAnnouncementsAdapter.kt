@@ -19,7 +19,7 @@ class AllAnnouncementsAdapter(
     private val jobCategoryViewModel: JobCategoryViewModel,
     private val addressViewModel: AddressViewModel,
     private val resources: Resources,
-    private val onItemClick: (String) -> Unit,
+    private val onItemClick: (String, String) -> Unit,
     private val onSaveClick: (Boolean, String) -> Unit
     /**
      * boolean parameter:
@@ -72,7 +72,7 @@ class AllAnnouncementsAdapter(
                 }
 
                 root.setOnClickListener {
-                    onItemClick.invoke(announcement.id)
+                    onItemClick.invoke(announcement.id, announcement.announcementType)
                 }
             }
         }

@@ -17,6 +17,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.view_pager_adapters.AnnouncementPagerAdapter
 import dev.goblingroup.uzworks.databinding.FragmentAnnouncementsBinding
 import dev.goblingroup.uzworks.databinding.SavedAnnouncementBottomBinding
+import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.getNavOptions
 
 @AndroidEntryPoint
@@ -40,13 +41,19 @@ class AnnouncementsFragment : Fragment() {
             val adapter = AnnouncementPagerAdapter(
                 fragment = this@AnnouncementsFragment,
                 object : AllAnnouncementsFragment.AllAnnouncementClickListener {
-                    override fun onAllAnnouncementClick(announcementId: String) {
-                        openAnnouncementDetails(announcementId)
+                    override fun onAllAnnouncementClick(
+                        announcementId: String,
+                        announcementType: String
+                    ) {
+                        openAnnouncementDetails(announcementId, announcementType)
                     }
 
                 }, object : SavedAnnouncementsFragment.SavedAnnouncementClickListener {
-                    override fun onSavedAnnouncementClick(announcementId: String) {
-                        savedAnnouncementClicked(announcementId)
+                    override fun onSavedAnnouncementClick(
+                        announcementId: String,
+                        announcementType: String
+                    ) {
+                        savedAnnouncementClicked(announcementId, announcementType)
                     }
                 }, object : SavedAnnouncementsFragment.FindAnnouncementClickListener {
                     override fun onFindAnnouncementClick() {
@@ -85,7 +92,7 @@ class AnnouncementsFragment : Fragment() {
         }
     }
 
-    private fun savedAnnouncementClicked(announcementId: String) {
+    private fun savedAnnouncementClicked(announcementId: String, announcementType: String) {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val savedAnnouncementBottomBinding = SavedAnnouncementBottomBinding.inflate(layoutInflater)
         savedAnnouncementBottomBinding.apply {
@@ -107,7 +114,7 @@ class AnnouncementsFragment : Fragment() {
             }
             seeMoreBtn.setOnClickListener {
                 bottomSheetDialog.dismiss()
-                openAnnouncementDetails(announcementId)
+                openAnnouncementDetails(announcementId, announcementType)
             }
             deleteBtn.setOnClickListener {
                 Toast.makeText(
@@ -120,11 +127,13 @@ class AnnouncementsFragment : Fragment() {
         bottomSheetDialog.show()
     }
 
-    private fun openAnnouncementDetails(announcementId: String) {
+    private fun openAnnouncementDetails(announcementId: String, announcementType: String) {
+        val direction =
+            if (announcementType == AnnouncementEnum.JOB.announcementType) R.id.jobDetailsFragment else R.id.workerDetailsFragment
         val bundle = Bundle()
-        bundle.putString("clicked_announcement_id", announcementId)
+        bundle.putString("announcement_id", announcementId)
         findNavController().navigate(
-            resId = R.id.jobDetailsFragment,
+            resId = direction,
             args = bundle,
             navOptions = getNavOptions()
         )
