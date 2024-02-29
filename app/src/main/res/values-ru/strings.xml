@@ -134,4 +134,9 @@
     <string name="my_announcements">Мои объявления</string>
     <string name="you_have_no_announcement">У вас нет объявлений</string>
     <string name="salary_per_time">/Месяц</string>
+    <string name="from">от</string>
+    <string name="until">до</string>
+    <string name="telegram">Телеграм</string>
+    <string name="instagram">Инстаграм</string>
+    <string name="about_worker">Полная информация о сотруднике</string>
 </resources>

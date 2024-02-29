@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.response.JobCategoryResponse
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
+import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class JobDetailsViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository,
+    private val securityRepository: SecurityRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -36,5 +38,7 @@ class JobDetailsViewModel @Inject constructor(
         }
         return jobLiveData
     }
+
+    fun getLanguageCode() = securityRepository.getLanguageCode()
 
 }

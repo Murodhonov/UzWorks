@@ -1,5 +1,7 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentJobDetailsBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.LanguageEnum
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -68,25 +71,63 @@ class JobDetailsFragment : Fragment() {
             }
     }
 
-    private fun setJobDetails(response: JobResponse?) {
+    private fun setJobDetails(jobResponse: JobResponse?) {
         binding.apply {
-            announcementTitleTv.text = response?.title
+            titleTv.text = jobResponse?.title
             jobCategoryTv.text =
-                jobCategoryViewModel.findJobCategory(response?.categoryId.toString()).toString()
+                jobCategoryViewModel.findJobCategory(jobResponse?.categoryId.toString()).toString()
             genderTv.text =
-                if (response?.gender == GenderEnum.MALE.label) resources.getString(R.string.male) else resources.getString(
+                if (jobResponse?.gender == GenderEnum.MALE.label) resources.getString(R.string.male) else resources.getString(
                     R.string.female
                 )
             addressTv.text =
-                "${addressViewModel.findRegionByDistrictId(response?.districtId.toString())}, ${
-                    addressViewModel.findDistrict(response?.districtId.toString())
+                "${addressViewModel.findRegionByDistrictId(jobResponse?.districtId.toString())}, ${
+                    addressViewModel.findDistrict(jobResponse?.districtId.toString())
                 }"
-            salaryTv.text = response?.salary.toString()
-            titleTv.text = response?.benefit
-            workingTimeTv.text = response?.workingTime
-            workingScheduleTv.text = response?.workingSchedule
-            benefitTv.text = response?.benefit
+            salaryTv.text = jobResponse?.salary.toString()
+            workingTimeTv.text = jobResponse?.workingTime
+            workingScheduleTv.text = jobResponse?.workingSchedule
+            benefitTv.text = jobResponse?.benefit
+            ageLimitTv.text =
+                if (jobDetailsViewModel.getLanguageCode() == LanguageEnum.ENGLISH.code ||
+                    jobDetailsViewModel.getLanguageCode() == LanguageEnum.RUSSIAN.code
+                )
+                    "${resources.getString(R.string.from)} ${jobResponse?.minAge} ${
+                        resources.getString(
+                            R.string.until
+                        )
+                    } ${jobResponse?.maxAge}"
+                else "${jobResponse?.minAge} ${resources.getString(R.string.from)} ${jobResponse?.maxAge} ${
+                    resources.getString(
+                        R.string.until
+                    )
+                }"
+            requirementTv.text = jobResponse?.requirement
+            tgIv.setOnClickListener {
+                openLink(jobResponse?.telegramLink)
+            }
+
+            tgLinkTv.setOnClickListener {
+                openLink(jobResponse?.telegramLink)
+            }
+
+            igIv.setOnClickListener {
+                openLink(jobResponse?.instagramLink)
+            }
+
+            igLinkTv.setOnClickListener {
+                openLink(jobResponse?.instagramLink)
+            }
+
+            contactTgBtn.setOnClickListener {
+                openLink(jobResponse?.tgUserName)
+            }
         }
+    }
+
+    private fun openLink(link: String?) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

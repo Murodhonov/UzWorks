@@ -56,7 +56,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/announcement_title_tv"
+            android:id="@+id/title_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dm_sans_bold"
@@ -78,7 +78,7 @@
             android:textSize="@dimen/_13ssp"
             app:layout_constraintLeft_toLeftOf="@id/work_type_btn"
             app:layout_constraintRight_toRightOf="@id/work_type_btn"
-            app:layout_constraintTop_toBottomOf="@+id/announcement_title_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/title_tv" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/work_type_btn"
@@ -127,7 +127,7 @@
             android:textSize="@dimen/_13ssp"
             app:layout_constraintLeft_toLeftOf="@id/work_gender_btn"
             app:layout_constraintRight_toRightOf="@id/work_gender_btn"
-            app:layout_constraintTop_toBottomOf="@+id/announcement_title_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/title_tv" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/work_gender_btn"
@@ -249,63 +249,8 @@
                 app:layout_constraintTop_toTopOf="@id/salary_tv" />
 
             <View
-                android:id="@+id/more_info_divider"
-                app:layout_constraintTop_toBottomOf="@id/salary_tv"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:layout_marginTop="@dimen/_7sdp"
-                android:background="#C7C5CF" />
-
-            <TextView
-                android:id="@+id/more_info_title_tv"
-                android:text="@string/more_information"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_7sdp"
-                android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/dm_sans_bold"
-                app:layout_constraintTop_toBottomOf="@id/more_info_divider"
-                android:textColor="@color/black_blue"
-                android:textSize="@dimen/_11ssp" />
-
-            <TextView
-                android:id="@+id/title_tv"
-                android:textSize="@dimen/_10ssp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                app:layout_constraintTop_toBottomOf="@id/more_info_title_tv" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/more_hide_btn"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:backgroundTint="#FAE4CF"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardElevation="0dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:cardCornerRadius="@dimen/_5sdp"
-                app:layout_constraintTop_toBottomOf="@id/title_tv">
-
-                <TextView
-                    android:id="@+id/more_hide_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:layout_marginBottom="@dimen/_3sdp"
-                    android:text="@string/more"
-                    android:textColor="@color/black_blue"
-                    android:textSize="@dimen/_8ssp" />
-
-            </androidx.cardview.widget.CardView>
-
-            <View
                 android:id="@+id/working_time_divider"
-                app:layout_constraintTop_toBottomOf="@id/more_hide_btn"
+                app:layout_constraintTop_toBottomOf="@id/salary_unit_tv"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginTop="@dimen/_7sdp"
@@ -487,9 +432,10 @@
                 app:layout_constraintTop_toBottomOf="@id/socials_tv" />
 
             <TextView
-                android:id="@+id/tg_username_tv"
+                android:id="@+id/tg_link_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_15sdp"
+                android:text="@string/telegram"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:textColor="@color/blue"
@@ -509,10 +455,11 @@
                 app:layout_constraintTop_toBottomOf="@id/tg_iv" />
 
             <TextView
-                android:id="@+id/instagram_username_tv"
+                android:id="@+id/ig_link_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_15sdp"
                 android:layout_marginStart="@dimen/_7sdp"
+                android:text="@string/instagram"
                 android:gravity="center_vertical"
                 android:textColor="@color/yellow"
                 android:textSize="@dimen/_10ssp"

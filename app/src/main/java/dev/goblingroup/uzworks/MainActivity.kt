@@ -60,18 +60,24 @@ class MainActivity : AppCompatActivity() {
                     R.id.homeFragment,
                     R.id.announcementsFragment,
                     R.id.chatsListFragment -> {
-                        showToolbar()
-                        showBottomBar()
+//                        showToolbar()
+//                        showBottomBar()
+                        toolbar.visibility = View.VISIBLE
+                        bottomBar.visibility = View.VISIBLE
                     }
 
                     R.id.profileFragment -> {
-                        showBottomBar()
-                        hideToolBar()
+//                        showBottomBar()
+//                        hideToolBar()
+                        bottomBar.visibility = View.VISIBLE
+                        toolbar.visibility = View.GONE
                     }
 
                     else -> {
-                        hideToolBar()
-                        hideBottomBar()
+//                        hideToolBar()
+//                        hideBottomBar()
+                        bottomBar.visibility = View.GONE
+                        toolbar.visibility = View.GONE
                     }
                 }
             }

@@ -134,4 +134,9 @@
     <string name="my_announcements">Менинг эълонларим</string>
     <string name="you_have_no_announcement">Сизда эълонлар мавжуд эмас</string>
     <string name="salary_per_time">/Ой</string>
+    <string name="from">дан</string>
+    <string name="until">гача</string>
+    <string name="telegram">Телеграм</string>
+    <string name="instagram">Инстаграм</string>
+    <string name="about_worker">Ишчи ҳақида тўлиқ маълумотлар</string>
 </resources>

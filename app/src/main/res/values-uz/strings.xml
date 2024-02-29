@@ -134,4 +134,9 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="my_announcements">Mening e\'lonlarim</string>
     <string name="you_have_no_announcement">Sizda e\'lonlar mavjud emas</string>
     <string name="salary_per_time">/Oy</string>
+    <string name="from">dan</string>
+    <string name="until">gacha</string>
+    <string name="telegram">Telegram</string>
+    <string name="instagram">Instagram</string>
+    <string name="about_worker">Ishchi haqida to\'liq ma\'lumotlar</string>
 </resources>

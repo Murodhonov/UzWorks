@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
+import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ class WorkerDetailsViewModel @Inject constructor(
 
     private val workerLiveData = MutableLiveData<ApiStatus<WorkerResponse>>(ApiStatus.Loading())
 
-    fun fetchJob(workerId: String): LiveData<ApiStatus<WorkerResponse>> {
+    fun fetchWorker(workerId: String): LiveData<ApiStatus<WorkerResponse>> {
         viewModelScope.launch {
             if (networkHelper.isConnected()) {
                 val workerByIdResponse = announcementRepository.getWorkerById(workerId)
