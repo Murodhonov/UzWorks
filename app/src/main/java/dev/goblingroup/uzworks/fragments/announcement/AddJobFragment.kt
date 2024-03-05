@@ -200,6 +200,10 @@ class AddJobFragment : Fragment() {
                     orientationEt.isErrorEnabled = false
                 }
             }
+
+            selectAddressBtn.setOnClickListener {
+                findNavController().navigate(R.id.jobAddressFragment)
+            }
         }
     }
 

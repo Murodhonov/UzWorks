@@ -120,7 +120,7 @@
     <string name="select_job_category">Иш турини танланг</string>
     <string name="min">Мин</string>
     <string name="max">Мах</string>
-    <string name="select_location">Харитада учун манзил танланг</string>
+    <string name="select_location">Харита учун манзил танланг</string>
     <string name="current_location">Жорий манзил</string>
     <string name="select_map">Харитадан танлаш</string>
     <string name="loading">Юкланмоқда</string>
@@ -139,4 +139,6 @@
     <string name="telegram">Телеграм</string>
     <string name="instagram">Инстаграм</string>
     <string name="about_worker">Ишчи ҳақида тўлиқ маълумотлар</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

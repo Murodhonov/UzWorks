@@ -120,7 +120,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="select_job_category">Ish turini tanlang</string>
     <string name="min">Min</string>
     <string name="max">Max</string>
-    <string name="select_location">Xaritada uchun manzil tanlang</string>
+    <string name="select_location">Xarita uchun manzil tanlang</string>
     <string name="current_location">Joriy manzil</string>
     <string name="select_map">Xaritadan tanlash</string>
     <string name="loading">Yuklanmoqda</string>
