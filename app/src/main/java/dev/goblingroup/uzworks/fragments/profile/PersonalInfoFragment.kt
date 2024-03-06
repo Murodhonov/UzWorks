@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.fragments.profile
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -24,10 +26,10 @@ import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.convertPhoneNumber
+import dev.goblingroup.uzworks.utils.dmyToIso
+import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.formatPhoneNumber
-import dev.goblingroup.uzworks.utils.isoStringToDate
-import dev.goblingroup.uzworks.utils.stringDateToString
-import dev.goblingroup.uzworks.utils.stringToDate
+import dev.goblingroup.uzworks.utils.isoToDmy
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.ProfileViewModel
 import kotlinx.coroutines.launch
@@ -73,7 +75,7 @@ class PersonalInfoFragment : Fragment() {
                             progressBar.visibility = View.VISIBLE
                             firstNameEt.visibility = View.GONE
                             lastNameEt.visibility = View.GONE
-                            birthdayBtn.visibility = View.GONE
+                            birthdayEt.visibility = View.GONE
                             genderLayout.apply {
                                 root.visibility = View.GONE
                             }
@@ -111,13 +113,14 @@ class PersonalInfoFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setData() {
         binding.apply {
             selectedGender = userResponse?.gender ?: ""
             progressBar.visibility = View.GONE
             firstNameEt.visibility = View.VISIBLE
             lastNameEt.visibility = View.VISIBLE
-            birthdayBtn.visibility = View.VISIBLE
+            birthdayEt.visibility = View.VISIBLE
             genderLayout.apply {
                 root.visibility = View.VISIBLE
             }
@@ -128,11 +131,9 @@ class PersonalInfoFragment : Fragment() {
 
             firstNameEt.editText?.setText(userResponse?.firstName ?: "")
             lastNameEt.editText?.setText(userResponse?.lastName ?: "")
-            birthdayTv.text = if (userResponse?.birthDate?.isoStringToDate()
-                    ?.startsWith("Invalid") == true
-            ) resources.getString(R.string.birth_date) else {
-                userResponse?.birthDate?.isoStringToDate()
-            }
+            birthdayEt.editText?.setText(
+                if (userResponse?.birthDate?.isoToDmy() == null) resources.getString(R.string.birth_date) else userResponse?.birthDate?.isoToDmy()
+            )
             genderLayout.apply {
                 when (selectedGender) {
 
@@ -239,36 +240,41 @@ class PersonalInfoFragment : Fragment() {
                 }
             })
 
-            birthdayBtn.setOnClickListener {
-                val datePickerDialog = DatePickerDialog(
-                    requireContext(),
-                    { _, year, month, dayOfMonth ->
-                        val selectedCalendar = Calendar.getInstance().apply {
-                            set(year, month, dayOfMonth)
-                        }
+            birthdayEt.editText?.setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    val datePickerDialog = DatePickerDialog(
+                        requireContext(),
+                        { _, year, month, dayOfMonth ->
+                            val selectedCalendar = Calendar.getInstance().apply {
+                                set(year, month, dayOfMonth)
+                            }
 
-                        val currentCalendar = Calendar.getInstance()
+                            val currentCalendar = Calendar.getInstance()
 
-                        if (selectedCalendar.after(currentCalendar)) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Cannot select date after current date",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            birthdayBtn.strokeColor = resources.getColor(R.color.black_blue)
-                            birthdayTv.text = formatter.format(selectedCalendar.time)
-                        }
-                    },
-                    birthdayTv.stringToDate(DateEnum.YEAR.dateLabel),
-                    birthdayTv.stringToDate(DateEnum.MONTH.dateLabel),
-                    birthdayTv.stringToDate(DateEnum.DATE.dateLabel)
-                )
+                            if (selectedCalendar.after(currentCalendar)) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Cannot select date after current date",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                val formatter = SimpleDateFormat(
+                                    "dd.MM.yyyy", Locale.getDefault()
+                                )
+                                birthdayEt.editText?.setText(formatter.format(selectedCalendar.time))
+                            }
+                        },
+                        birthdayEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.YEAR.dateLabel),
+                        birthdayEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.MONTH.dateLabel),
+                        birthdayEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.DATE.dateLabel),
+                    )
 
-                datePickerDialog.show()
+                    datePickerDialog.show()
+                }
+                true
             }
 
             saveBtn.setOnClickListener {
@@ -276,7 +282,8 @@ class PersonalInfoFragment : Fragment() {
                     lifecycleScope.launch {
                         profileViewModel.updateUser(
                             UserUpdateRequest(
-                                birthDate = birthdayTv.stringDateToString(),
+                                birthDate = birthdayEt.editText?.text.toString().dmyToIso()
+                                    .toString(),
                                 email = emailEt.editText?.text.toString(),
                                 firstName = firstNameEt.editText?.text.toString(),
                                 gender = selectedGender,

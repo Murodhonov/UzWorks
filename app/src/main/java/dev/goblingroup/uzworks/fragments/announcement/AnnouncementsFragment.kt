@@ -2,6 +2,7 @@ package dev.goblingroup.uzworks.fragments.announcement
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import dev.goblingroup.uzworks.adapter.view_pager_adapters.AnnouncementPagerAdap
 import dev.goblingroup.uzworks.databinding.FragmentAnnouncementsBinding
 import dev.goblingroup.uzworks.databinding.SavedAnnouncementBottomBinding
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.getNavOptions
 
 @AndroidEntryPoint
@@ -132,6 +134,11 @@ class AnnouncementsFragment : Fragment() {
             if (announcementType == AnnouncementEnum.JOB.announcementType) R.id.jobDetailsFragment else R.id.workerDetailsFragment
         val bundle = Bundle()
         bundle.putString("announcement_id", announcementId)
+        Log.d(TAG, "openAnnouncementDetails: bundle $bundle announcementType -> $announcementType")
+        Log.d(
+            TAG,
+            "openAnnouncementDetails: navigating to ${if (announcementType == AnnouncementEnum.JOB.announcementType) "job details" else "worker details"}"
+        )
         findNavController().navigate(
             resId = direction,
             args = bundle,

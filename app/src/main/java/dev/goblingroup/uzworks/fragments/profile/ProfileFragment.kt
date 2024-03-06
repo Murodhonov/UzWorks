@@ -14,9 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.adapter.rv_adapters.ExperienceAdapter
 import dev.goblingroup.uzworks.databinding.AboutDialogItemBinding
-import dev.goblingroup.uzworks.databinding.ExperienceDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentProfileBinding
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -24,7 +22,6 @@ import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.ProfileViewModel
-import dev.goblingroup.uzworks.vm.SecurityViewModel
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -94,9 +91,11 @@ class ProfileFragment : Fragment() {
             }
 
             experienceBtn.setOnClickListener {
-                if (userResponse != null) {
-                    experienceDialog(requireContext(), layoutInflater)
-                }
+                findNavController().navigate(
+                    resId = R.id.experienceFragment,
+                    args = null,
+                    navOptions = getNavOptions()
+                )
             }
 
             myAnnouncementsBtn.setOnClickListener {
@@ -133,20 +132,6 @@ class ProfileFragment : Fragment() {
         binding.apply {
             alertDialog.setView(root)
             alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            alertDialog.show()
-        }
-    }
-
-    private fun experienceDialog(
-        context: Context,
-        layoutInflater: LayoutInflater
-    ) {
-        val alertDialog = AlertDialog.Builder(context).create()
-        val binding = ExperienceDialogItemBinding.inflate(layoutInflater)
-        binding.apply {
-            alertDialog.setView(root)
-            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            experienceRv.adapter = ExperienceAdapter()
             alertDialog.show()
         }
     }

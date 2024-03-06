@@ -5,27 +5,18 @@ import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.GradientDrawable
-import android.os.Build
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.textfield.TextInputLayout
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 fun turnSwitchOff(
@@ -176,32 +167,6 @@ fun turnSwitchOn(
     animatorSet.start()
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
-fun EditText.showHidePassword(
-    context: Context,
-    eyeIcon: ImageView
-) {
-    if (this.transformationMethod == PasswordTransformationMethod.getInstance()) {
-        /**
-         * from password mode to simple mode
-         * should open eyes
-         */
-        this.transformationMethod = HideReturnsTransformationMethod.getInstance()
-        this.setSelection(this.text.toString().length)
-        this.setTextColor(context.getColor(R.color.black_blue))
-        eyeIcon.setImageResource(R.drawable.ic_open_eye)
-    } else {
-        /**
-         * from simple mode to password mode
-         * should close eyes
-         */
-        this.transformationMethod = PasswordTransformationMethod.getInstance()
-        this.setSelection(this.text.toString().length)
-        this.setTextColor(context.getColor(R.color.black_blue_60))
-        eyeIcon.setImageResource(R.drawable.ic_closed_eye)
-    }
-}
-
 fun Float.dpToPx(): Float {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
@@ -224,66 +189,79 @@ fun TextInputLayout.splitFullName(): Pair<String?, String?> {
     }
 }
 
-fun dateToString(date: Date): String {
-    val formatter = SimpleDateFormat(
-        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-        Locale.getDefault()
-    )
-    return formatter.format(date.time)
-}
-
-fun TextView.stringToDate(dateType: String): Int {
-    val possibleDateFormats = arrayOf(
-        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-        "dd.MM.yyyy"
-    )
-
-    val date = possibleDateFormats.mapNotNull { format ->
-        try {
-            SimpleDateFormat(format, Locale.getDefault()).parse(this.text.toString())
-        } catch (e: ParseException) {
-            null
-        }
-    }.firstOrNull() ?: Date() // Use current date if parsing fails
-
-    val calendar = Calendar.getInstance()
-    calendar.time = date
-
-    return when (dateType) {
-        DateEnum.DATE.dateLabel -> calendar.get(Calendar.DAY_OF_MONTH)
-        DateEnum.MONTH.dateLabel -> calendar.get(Calendar.MONTH)
-        DateEnum.YEAR.dateLabel -> calendar.get(Calendar.YEAR)
-        else -> 0
-    }
-}
-
-fun TextView.stringDateToString(): String {
+fun String.dmyToIso(): String? {
     return try {
-        // Parse input string to Date object
         val inputDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-        val inputDateObject = inputDateFormat.parse(this.text.toString())
+        val inputDateObject = inputDateFormat.parse(this)
 
-        // Format Date object to the desired string format
         val outputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        val outputDate = outputDateFormat.format(inputDateObject!!)
-
-        outputDate
+        outputDateFormat.format(inputDateObject!!)
     } catch (e: Exception) {
-        "Invalid date format. Please provide date in dd.MM.yyyy format."
+        null
     }
 }
 
-fun String.isoStringToDate(): String {
+fun String.isoToDmy(): String? {
     return try {
-        // Parse input string to Date object
         val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         val inputDateObject = inputDateFormat.parse(this)
 
-        // Format Date object to the desired string format
         val outputDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         outputDateFormat.format(inputDateObject!!)
     } catch (e: Exception) {
-        "Invalid date format. Please provide date in yyyy-MM-dd'T'HH:mm:ss.SSS'Z' format."
+        null
+    }
+}
+
+fun String.extractDateValue(dateType: String): Int {
+    return try {
+        val inputDateFormat = SimpleDateFormat(
+            if (this.contains('-')) "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" else "dd.MM.yyyy",
+            Locale.getDefault()
+        )
+        val parsedDate = inputDateFormat.parse(this)
+
+        if (parsedDate != null) {
+            when (dateType) {
+                DateEnum.DATE.dateLabel -> {
+                    val calendar = Calendar.getInstance()
+                    calendar.time = parsedDate
+                    calendar.get(Calendar.DAY_OF_MONTH)
+                }
+
+                DateEnum.MONTH.dateLabel -> {
+                    val calendar = Calendar.getInstance()
+                    calendar.time = parsedDate
+                    calendar.get(Calendar.MONTH) + 1 // Month index starts from 0
+                }
+
+                DateEnum.YEAR.dateLabel -> {
+                    val calendar = Calendar.getInstance()
+                    calendar.time = parsedDate
+                    calendar.get(Calendar.YEAR)
+                }
+
+                else -> 0
+            }
+        } else {
+            // Return current date, month, or year if parsing fails
+            val calendar = Calendar.getInstance()
+            when (dateType) {
+                DateEnum.DATE.dateLabel -> calendar.get(Calendar.DAY_OF_MONTH)
+                DateEnum.MONTH.dateLabel -> calendar.get(Calendar.MONTH) + 1
+                DateEnum.YEAR.dateLabel -> calendar.get(Calendar.YEAR)
+                else -> 0
+            }
+        }
+    } catch (e: Exception) {
+        // Return current date, month, or year in case of exception
+        val calendar = Calendar.getInstance()
+        when (dateType) {
+            DateEnum.DATE.dateLabel -> calendar.get(Calendar.DAY_OF_MONTH)
+            DateEnum.MONTH.dateLabel -> calendar.get(Calendar.MONTH) + 1
+            DateEnum.YEAR.dateLabel -> calendar.get(Calendar.YEAR)
+            else -> 0
+        }
     }
 }
 
@@ -411,4 +389,10 @@ fun AnnouncementEntity.getImage(): Int {
 
         else -> 0
     }
+}
+
+fun TextInputLayout.clear() {
+    this.editText?.isFocusable = false
+    this.editText?.isClickable = true
+    this.editText?.setOnLongClickListener { true }
 }

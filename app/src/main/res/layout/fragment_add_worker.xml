@@ -57,65 +57,59 @@
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/stretcher">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/deadline_btn"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/deadline_et"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:backgroundTint="@color/white"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/black_blue"
-                app:strokeWidth="@dimen/_1sdp">
+                android:hint="@string/deadline"
+                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black_blue"
+                app:errorEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/gender_layout">
 
-                <TextView
-                    android:id="@+id/deadline_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:text="@string/deadline"
-                    android:textColor="@color/text_color"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:maxLines="1"
                     android:textSize="@dimen/_10ssp" />
 
-                <ImageView
-                    android:contentDescription="@string/content_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:src="@drawable/ic_calendar" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/birthday_btn"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/birthday_et"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:backgroundTint="@color/white"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/black_blue"
-                app:strokeWidth="@dimen/_1sdp">
+                android:hint="@string/birth_date"
+                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black_blue"
+                app:errorEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/gender_layout">
 
-                <TextView
-                    android:id="@+id/birthday_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:text="@string/birth_date"
-                    android:textColor="@color/text_color"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:maxLines="1"
                     android:textSize="@dimen/_10ssp" />
 
-                <ImageView
-                    android:contentDescription="@string/content_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:src="@drawable/ic_calendar" />
-
-            </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_et"
@@ -141,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="true">
+                app:errorEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -192,24 +186,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:hint="@string/telegram_username"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/instagram_username_et"
-                style="@style/TextInputEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:hint="@string/instagram_username"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:textSize="@dimen/_10ssp" />

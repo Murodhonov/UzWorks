@@ -143,4 +143,18 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="close">Yopish</string>
     <string name="location_saved">Manzil saqlandi</string>
     <string name="no_experience">Tajriba yo\'q</string>
+    <string name="position">Lavozim</string>
+    <string name="company_name">Kompaniya nomi</string>
+    <string name="start_date">Boshlanish vaqti</string>
+    <string name="end_date">Tugash vaqti</string>
+    <string name="deadline_error">Muddatni tanlang</string>
+    <string name="birthday_error">Tug\'ilgan kuningizni tanlang</string>
+    <string name="title_error">Sarlavhani kiriting</string>
+    <string name="salary_error">Ish haqini kiriting</string>
+    <string name="working_time_error">Ish vaqtini kiriting</string>
+    <string name="tg_username_error">Telegram foydalanuvchi nomingizni kiriting</string>
+    <string name="phone_number_error">Telefon raqamingizni kiriting</string>
+    <string name="orientation_error">Orientatsiyangizni kiriting</string>
+    <string name="district_error">Tumaningizni tanlang</string>
+    <string name="job_category_error">Ish turini tanlang</string>
 </resources>

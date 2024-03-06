@@ -143,4 +143,18 @@ The information displayed to you is determined by the role you choose</string>
     <string name="close">Close</string>
     <string name="location_saved">Location saved</string>
     <string name="no_experience">No experience</string>
+    <string name="position">Position</string>
+    <string name="company_name">Company name</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="deadline_error">Select deadline</string>
+    <string name="birthday_error">Select your birthday</string>
+    <string name="title_error">Enter title</string>
+    <string name="salary_error">Enter salary</string>
+    <string name="working_time_error">Enter working time</string>
+    <string name="tg_username_error">Enter your telegram username</string>
+    <string name="phone_number_error">Enter your phone number</string>
+    <string name="orientation_error">Enter your orientation</string>
+    <string name="district_error">Select your district</string>
+    <string name="job_category_error">Select your job category</string>
 </resources>

@@ -1,9 +1,11 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -25,8 +27,9 @@ import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
-import dev.goblingroup.uzworks.utils.stringDateToString
-import dev.goblingroup.uzworks.utils.stringToDate
+import dev.goblingroup.uzworks.utils.clear
+import dev.goblingroup.uzworks.utils.dmyToIso
+import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -58,6 +61,7 @@ class AddWorkerFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             topTv.isSelected = true
@@ -70,68 +74,83 @@ class AddWorkerFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
-            deadlineBtn.setOnClickListener {
-                val datePickerDialog = DatePickerDialog(
-                    requireContext(),
-                    { _, year, month, dayOfMonth ->
-                        val selectedCalendar = Calendar.getInstance().apply {
-                            set(year, month, dayOfMonth)
-                        }
+            deadlineEt.clear()
+            birthdayEt.clear()
 
-                        val currentCalendar = Calendar.getInstance()
+            deadlineEt.editText?.setOnTouchListener { v, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    val datePickerDialog = DatePickerDialog(
+                        requireContext(),
+                        { _, year, month, dayOfMonth ->
+                            val selectedCalendar = Calendar.getInstance().apply {
+                                set(year, month, dayOfMonth)
+                            }
 
-                        if (selectedCalendar.before(currentCalendar)) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Cannot select date before current date",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            deadlineBtn.strokeColor = resources.getColor(R.color.black_blue)
-                            deadlineTv.text = formatter.format(selectedCalendar.time)
-                        }
-                    },
-                    deadlineTv.stringToDate(DateEnum.YEAR.dateLabel),
-                    deadlineTv.stringToDate(DateEnum.MONTH.dateLabel),
-                    deadlineTv.stringToDate(DateEnum.DATE.dateLabel)
-                )
+                            val currentCalendar = Calendar.getInstance()
 
-                datePickerDialog.show()
+                            if (selectedCalendar.before(currentCalendar)) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Cannot select date before current date",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                val formatter = SimpleDateFormat(
+                                    "dd.MM.yyyy", Locale.getDefault()
+                                )
+                                deadlineEt.isErrorEnabled = false
+                                deadlineEt.editText?.setText(formatter.format(selectedCalendar.time))
+                            }
+                        },
+                        deadlineEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.YEAR.dateLabel),
+                        deadlineEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.MONTH.dateLabel),
+                        deadlineEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.DATE.dateLabel)
+                    )
+
+                    datePickerDialog.show()
+                }
+                true
             }
 
-            birthdayBtn.setOnClickListener {
-                val datePickerDialog = DatePickerDialog(
-                    requireContext(),
-                    { _, year, month, dayOfMonth ->
-                        val selectedCalendar = Calendar.getInstance().apply {
-                            set(year, month, dayOfMonth)
-                        }
+            birthdayEt.editText?.setOnTouchListener { v, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    val datePickerDialog = DatePickerDialog(
+                        requireContext(),
+                        { _, year, month, dayOfMonth ->
+                            val selectedCalendar = Calendar.getInstance().apply {
+                                set(year, month, dayOfMonth)
+                            }
 
-                        val currentCalendar = Calendar.getInstance()
+                            val currentCalendar = Calendar.getInstance()
 
-                        if (selectedCalendar.after(currentCalendar)) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Cannot select date after current date",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            birthdayBtn.strokeColor = resources.getColor(R.color.black_blue)
-                            birthdayTv.text = formatter.format(selectedCalendar.time)
-                        }
-                    },
-                    birthdayTv.stringToDate(DateEnum.YEAR.dateLabel),
-                    birthdayTv.stringToDate(DateEnum.MONTH.dateLabel),
-                    birthdayTv.stringToDate(DateEnum.DATE.dateLabel)
-                )
+                            if (selectedCalendar.after(currentCalendar)) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Cannot select date after current date",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                val formatter = SimpleDateFormat(
+                                    "dd.MM.yyyy", Locale.getDefault()
+                                )
+                                birthdayEt.isErrorEnabled = false
+                                birthdayEt.editText?.setText(formatter.format(selectedCalendar.time))
+                            }
+                        },
+                        birthdayEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.YEAR.dateLabel),
+                        birthdayEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.MONTH.dateLabel),
+                        birthdayEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.DATE.dateLabel)
+                    )
 
-                datePickerDialog.show()
+                    datePickerDialog.show()
+                }
+                true
             }
 
             salaryEt.editText?.setOnFocusChangeListener { v, hasFocus ->
@@ -216,12 +235,6 @@ class AddWorkerFragment : Fragment() {
                 }
             }
 
-            instagramUsernameEt.editText?.doAfterTextChanged {
-                if (instagramUsernameEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                    instagramUsernameEt.isErrorEnabled = false
-                }
-            }
-
             phoneNumberEt.editText?.doAfterTextChanged {
                 if (phoneNumberEt.isErrorEnabled && it.toString().isNotEmpty()) {
                     phoneNumberEt.isErrorEnabled = false
@@ -239,59 +252,55 @@ class AddWorkerFragment : Fragment() {
     private fun isFormValid(): Boolean {
         binding.apply {
             var isValid = true
-            if (deadlineTv.text == "Deadline") {
-                deadlineBtn.strokeColor = resources.getColor(R.color.red)
-                deadlineTv.text = "Select deadline"
+            if (deadlineEt.editText?.text.toString().isEmpty()) {
+                deadlineEt.isErrorEnabled = true
+                deadlineEt.error = resources.getString(R.string.deadline_error)
                 isValid = false
             }
-            if (birthdayTv.text == "Birthday") {
-                birthdayBtn.strokeColor = resources.getColor(R.color.red)
-                birthdayTv.text = "Select your birthday"
+            if (birthdayEt.editText?.text.toString().isEmpty()) {
+                birthdayEt.isErrorEnabled = true
+                birthdayEt.error = resources.getString(R.string.birthday_error)
                 isValid = false
             }
             if (titleEt.editText?.text.toString().isEmpty()) {
                 titleEt.isErrorEnabled = true
-                titleEt.error = "Enter title"
+                titleEt.error = resources.getString(R.string.title_error)
                 isValid = false
             }
             if (salaryEt.editText?.text.toString().isEmpty()) {
                 salaryEt.isErrorEnabled = true
-                salaryEt.error = "Enter salary"
+                salaryEt.error = resources.getString(R.string.salary_error)
                 isValid = false
             }
             if (workingTimeEt.editText?.text.toString().isEmpty()) {
                 workingTimeEt.isErrorEnabled = true
-                workingTimeEt.error = "Enter working time"
+                workingTimeEt.error = resources.getString(R.string.working_time_error)
                 isValid = false
             }
             if (tgUserNameEt.editText?.text.toString().isEmpty()) {
                 tgUserNameEt.isErrorEnabled = true
-                tgUserNameEt.error = "Enter your telegram username"
+                tgUserNameEt.error = resources.getString(R.string.tg_username_error)
                 isValid = false
             }
-            if (instagramUsernameEt.editText?.text.toString().isEmpty()) {
-                instagramUsernameEt.isErrorEnabled = true
-                instagramUsernameEt.error = "Enter your instagram username"
-                isValid = false
-            }
+
             if (phoneNumberEt.editText?.text.toString().isEmpty()) {
                 phoneNumberEt.isErrorEnabled = true
-                phoneNumberEt.error = "Enter your phone number"
+                phoneNumberEt.error = resources.getString(R.string.phone_number_error)
                 isValid = false
             }
             if (orientationEt.editText?.text.toString().isEmpty()) {
                 orientationEt.isErrorEnabled = true
-                orientationEt.error = "Enter orientation"
+                orientationEt.error = resources.getString(R.string.orientation_error)
                 isValid = false
             }
             if (selectedDistrictId == "") {
                 districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                districtChoice.error = "Select your district"
+                districtChoice.error = resources.getString(R.string.district_error)
                 isValid = false
             }
             if (selectedCategoryId == "") {
                 jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                jobCategoryChoice.error = "Select your job category"
+                jobCategoryChoice.error = resources.getString(R.string.job_category_error)
                 isValid = false
             }
             return isValid
@@ -303,12 +312,12 @@ class AddWorkerFragment : Fragment() {
             lifecycleScope.launch {
                 securedWorkerViewModel.createWorker(
                     workerCreateRequest = WorkerCreateRequest(
-                        birthDate = birthdayTv.stringDateToString(),
+                        birthDate = birthdayEt.editText?.text.toString().dmyToIso().toString(),
                         categoryId = selectedCategoryId,
-                        deadline = deadlineTv.stringDateToString(),
+                        deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
                         districtId = selectedDistrictId,
                         gender = selectedGender,
-                        instagramLink = instagramUsernameEt.editText?.text.toString(),
+                        instagramLink = "",
                         location = orientationEt.editText?.text.toString(),
                         phoneNumber = phoneNumberEt.editText?.text.toString(),
                         salary = salaryEt.editText?.text.toString()
