@@ -1,6 +1,9 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,9 +13,11 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
@@ -20,11 +25,13 @@ import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.stringDateToString
 import dev.goblingroup.uzworks.utils.stringToDate
 import dev.goblingroup.uzworks.vm.AddressViewModel
@@ -49,6 +56,10 @@ class AddJobFragment : Fragment() {
     private var selectedDistrictId = ""
     private var selectedCategoryId = ""
     private var selectedGender = GenderEnum.MALE.label
+
+    private var selectedLocation: LatLng? = null
+
+    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -202,7 +213,19 @@ class AddJobFragment : Fragment() {
             }
 
             selectAddressBtn.setOnClickListener {
-                findNavController().navigate(R.id.jobAddressFragment)
+                val bundle = Bundle()
+                bundle.putBoolean("job_creating", true)
+                findNavController().navigate(
+                    resId = R.id.jobAddressFragment,
+                    args = bundle,
+                    navOptions = getNavOptions()
+                )
+            }
+
+            setFragmentResultListener("lat_lng") { _, bundle ->
+                selectedLocation =
+                    LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"))
+                selectAddressTv.text = resources.getString(R.string.location_saved)
             }
         }
     }
@@ -236,40 +259,41 @@ class AddJobFragment : Fragment() {
                 ).observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "some error on creating job",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.e(TAG, "createJob: ${it.error}")
-                            Log.e(
-                                TAG,
-                                "createJob: ${it.error.stackTrace.joinToString()}"
-                            )
-                            Log.e(TAG, "createJob: ${it.error.message}")
+                            error(it.error)
                         }
 
                         is ApiStatus.Loading -> {
-                            Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT)
-                                .show()
+                            loading()
                         }
 
                         is ApiStatus.Success -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "successfully created job",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.d(
-                                TAG,
-                                "createJob: ${it.response as JobCreateResponse}"
-                            )
-                            findNavController().popBackStack()
+                            success(it.response)
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun error(error: Throwable) {
+        Toast.makeText(requireContext(), "failed to create job", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "error: $error")
+        Log.d(TAG, "error: ${error.message}")
+        Log.d(TAG, "error: ${error.stackTrace}")
+    }
+
+    private fun loading() {
+        loadingDialog = AlertDialog.Builder(requireContext()).create()
+        val loadingBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        loadingDialog.setView(loadingBinding.root)
+        loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        loadingDialog.setCancelable(false)
+    }
+
+    private fun success(jobCreateResponse: JobCreateResponse?) {
+        loadingDialog.dismiss()
+        Toast.makeText(requireContext(), "successfully created", Toast.LENGTH_SHORT).show()
+        findNavController().popBackStack()
     }
 
     private fun isFormValid(): Boolean {

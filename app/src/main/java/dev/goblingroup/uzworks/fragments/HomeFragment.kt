@@ -208,17 +208,7 @@ class HomeFragment : Fragment() {
                         addressViewModel,
                         resources
                     ) { announcementId, announcementType ->
-                        val bundle = Bundle()
-                        bundle.putString("announcement_id", announcementId)
-                        val directionId =
-                            if (announcementType == AnnouncementEnum.JOB.announcementType) {
-                                R.id.jobDetailsFragment
-                            } else R.id.workerDetailsFragment
-                        findNavController().navigate(
-                            resId = directionId,
-                            args = bundle,
-                            navOptions = getNavOptions()
-                        )
+                        announcementDetails(announcementId, announcementType)
                     }
                     Log.d(TAG, "success: called in ${this@HomeFragment::class.java.simpleName}")
                     linearSnapHelper.attachToRecyclerView(recommendedWorkAnnouncementsRv)
@@ -232,6 +222,27 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun announcementDetails(announcementId: String, announcementType: String) {
+        val bundle = Bundle()
+        bundle.putString("announcement_id", announcementId)
+        Log.d(TAG, "announcementDetails: bundle $bundle")
+        if (announcementType == AnnouncementEnum.JOB.announcementType) {
+            Log.d(TAG, "announcementDetails: navigating to job details")
+            findNavController().navigate(
+                resId = R.id.jobDetailsFragment,
+                args = bundle,
+                navOptions = getNavOptions()
+            )
+        } else {
+            Log.d(TAG, "announcementDetails: navigating to worker details")
+            findNavController().navigate(
+                resId = R.id.workerDetailsFragment,
+                args = bundle,
+                navOptions = getNavOptions()
+            )
         }
     }
 

@@ -139,4 +139,8 @@
     <string name="telegram">Телеграм</string>
     <string name="instagram">Инстаграм</string>
     <string name="about_worker">Полная информация о сотруднике</string>
+    <string name="job_address_dialog_message">Выберите расположение рабочего места на карте</string>
+    <string name="close">Закрывать</string>
+    <string name="location_saved">Местоположение сохранено</string>
+    <string name="no_experience">Нет опыта</string>
 </resources>

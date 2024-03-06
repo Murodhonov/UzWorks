@@ -139,4 +139,8 @@ The information displayed to you is determined by the role you choose</string>
     <string name="telegram">Telegram</string>
     <string name="instagram">Instagram</string>
     <string name="about_worker">Full details of worker</string>
+    <string name="job_address_dialog_message">Select the location of the job from the map</string>
+    <string name="close">Close</string>
+    <string name="location_saved">Location saved</string>
+    <string name="no_experience">No experience</string>
 </resources>

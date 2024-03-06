@@ -75,14 +75,14 @@ class JobDetailsFragment : Fragment() {
         binding.apply {
             titleTv.text = jobResponse?.title
             jobCategoryTv.text =
-                jobCategoryViewModel.findJobCategory(jobResponse?.categoryId.toString()).toString()
+                jobCategoryViewModel.findJobCategory(jobResponse?.categoryId.toString()).title
             genderTv.text =
                 if (jobResponse?.gender == GenderEnum.MALE.label) resources.getString(R.string.male) else resources.getString(
                     R.string.female
                 )
             addressTv.text =
-                "${addressViewModel.findRegionByDistrictId(jobResponse?.districtId.toString())}, ${
-                    addressViewModel.findDistrict(jobResponse?.districtId.toString())
+                "${addressViewModel.findRegion(addressViewModel.findDistrict(jobResponse?.districtId.toString()).regionId).name}, ${
+                    addressViewModel.findDistrict(jobResponse?.districtId.toString()).name
                 }"
             salaryTv.text = jobResponse?.salary.toString()
             workingTimeTv.text = jobResponse?.workingTime

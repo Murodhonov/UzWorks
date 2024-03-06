@@ -70,7 +70,7 @@
     <string name="saved_announcements_not_found">Сизда сақланган эълонлар йўқ, илтимос, эълонларни сақлаш учун уни қидирувдан топинг</string>
     <string name="find_announcement">Эълон қидириш</string>
     <string name="about_me">Мен ҳақимда</string>
-    <string name="experience">Таржиба</string>
+    <string name="experience">Тажриба</string>
     <string name="add_job_announcement">Иш учун эълон бериш</string>
     <string name="add_worker_announcement">Ишчи учун эълон бериш</string>
     <string name="welcome">Хуш келибсиз</string>
@@ -139,6 +139,8 @@
     <string name="telegram">Телеграм</string>
     <string name="instagram">Инстаграм</string>
     <string name="about_worker">Ишчи ҳақида тўлиқ маълумотлар</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="job_address_dialog_message">Иш жойи манзилини харитадан танланг</string>
+    <string name="close">Ёпиш</string>
+    <string name="location_saved">Манзил сақланди</string>
+    <string name="no_experience">Тажриба йўқ</string>
 </resources>

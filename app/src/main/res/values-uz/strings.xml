@@ -70,7 +70,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="saved_announcements_not_found">Sizda saqlangan e\'lonlar yo\'q, iltimos, e\'lonlarni saqlash uchun uni qidiruvdan toping</string>
     <string name="find_announcement">E\'lon qidirish</string>
     <string name="about_me">Men haqimda</string>
-    <string name="experience">Tarjiba</string>
+    <string name="experience">Tajriba</string>
     <string name="add_job_announcement">Ish uchun e\'lon berish</string>
     <string name="add_worker_announcement">Ishchi uchun e\'lon berish</string>
     <string name="welcome">Xush kelibsiz</string>
@@ -139,4 +139,8 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="telegram">Telegram</string>
     <string name="instagram">Instagram</string>
     <string name="about_worker">Ishchi haqida to\'liq ma\'lumotlar</string>
+    <string name="job_address_dialog_message">Ish joyi manzilini xaritadan tanlang</string>
+    <string name="close">Yopish</string>
+    <string name="location_saved">Manzil saqlandi</string>
+    <string name="no_experience">Tajriba yo\'q</string>
 </resources>

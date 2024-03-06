@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentWorkerDetailsBinding
 import dev.goblingroup.uzworks.models.response.WorkerResponse
@@ -17,6 +18,7 @@ import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.WorkerDetailsViewModel
 
+@AndroidEntryPoint
 class WorkerDetailsFragment : Fragment() {
 
     private var _binding: FragmentWorkerDetailsBinding? = null
@@ -70,7 +72,7 @@ class WorkerDetailsFragment : Fragment() {
         binding.apply {
             titleTv.text = workerResponse?.title
             jobCategoryTv.text =
-                jobCategoryViewModel.findJobCategory(workerResponse?.categoryId.toString()).toString()
+                jobCategoryViewModel.findJobCategory(workerResponse?.categoryId.toString()).title
             genderTv.text =
                 if (workerResponse?.gender == GenderEnum.MALE.label) resources.getString(R.string.male) else resources.getString(
                     R.string.female
@@ -78,8 +80,8 @@ class WorkerDetailsFragment : Fragment() {
             fullNameTv.text = workerResponse?.fullName
             birthdateTv.text = workerResponse?.birthDate
             addressTv.text =
-                "${addressViewModel.findRegionByDistrictId(workerResponse?.districtId.toString())}, ${
-                    addressViewModel.findDistrict(workerResponse?.districtId.toString())
+                "${addressViewModel.findRegion(addressViewModel.findDistrict(workerResponse?.districtId.toString()).regionId).name}, ${
+                    addressViewModel.findDistrict(workerResponse?.districtId.toString()).name
                 }"
             salaryTv.text = workerResponse?.salary.toString()
             workingTimeTv.text = workerResponse?.workingTime
