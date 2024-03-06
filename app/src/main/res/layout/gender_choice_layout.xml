@@ -14,7 +14,7 @@
         android:backgroundTint="@color/white"
         app:strokeColor="@color/text_color"
         app:strokeWidth="@dimen/_1sdp"
-        app:cardCornerRadius="@dimen/_7sdp"
+        app:cardCornerRadius="@dimen/_10sdp"
         app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -68,7 +68,7 @@
         android:backgroundTint="@color/white"
         app:strokeColor="@color/text_color"
         app:strokeWidth="@dimen/_1sdp"
-        app:cardCornerRadius="@dimen/_7sdp"
+        app:cardCornerRadius="@dimen/_10sdp"
         app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout

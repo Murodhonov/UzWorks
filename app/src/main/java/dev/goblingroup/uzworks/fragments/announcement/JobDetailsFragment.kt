@@ -3,6 +3,7 @@ package dev.goblingroup.uzworks.fragments.announcement
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentJobDetailsBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.LanguageEnum
 import dev.goblingroup.uzworks.vm.AddressViewModel
@@ -126,8 +128,14 @@ class JobDetailsFragment : Fragment() {
     }
 
     private fun openLink(link: String?) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-        startActivity(intent)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/Jasur_Alimov"))
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e(TAG, "openLink: $e")
+            Log.e(TAG, "openLink: ${e.message}")
+            Log.e(TAG, "openLink: ${e.printStackTrace()}")
+        }
     }
 
     override fun onDestroyView() {

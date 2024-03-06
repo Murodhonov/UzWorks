@@ -63,7 +63,7 @@ class HomeAdapter(
                 }
 
                 root.setOnClickListener {
-                    onItemClick.invoke(announcement.id, announcement.id)
+                    onItemClick.invoke(announcement.id, announcement.announcementType)
                 }
             }
         }

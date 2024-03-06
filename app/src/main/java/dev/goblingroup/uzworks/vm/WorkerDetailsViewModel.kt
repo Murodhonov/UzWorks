@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.vm
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,6 +31,9 @@ class WorkerDetailsViewModel @Inject constructor(
                     workerLiveData.postValue(ApiStatus.Success(workerByIdResponse.body()))
                 } else {
                     workerLiveData.postValue(ApiStatus.Error(Throwable(workerByIdResponse.message())))
+                    Log.e(TAG, "fetchWorker: ${workerByIdResponse.code()}")
+                    Log.e(TAG, "fetchWorker: ${workerByIdResponse.message()}")
+                    Log.e(TAG, "fetchWorker: ${workerByIdResponse.errorBody()}")
                 }
             } else {
                 workerLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))

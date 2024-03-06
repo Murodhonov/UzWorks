@@ -228,7 +228,7 @@ class HomeFragment : Fragment() {
     private fun announcementDetails(announcementId: String, announcementType: String) {
         val bundle = Bundle()
         bundle.putString("announcement_id", announcementId)
-        Log.d(TAG, "announcementDetails: bundle $bundle")
+        Log.d(TAG, "announcementDetails: bundle $bundle announcementType -> $announcementType")
         if (announcementType == AnnouncementEnum.JOB.announcementType) {
             Log.d(TAG, "announcementDetails: navigating to job details")
             findNavController().navigate(

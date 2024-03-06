@@ -110,4 +110,9 @@
         android:name="dev.goblingroup.uzworks.fragments.announcement.JobAddressFragment"
         android:label="fragment_job_address"
         tools:layout="@layout/fragment_job_address" />
+    <fragment
+        android:id="@+id/experienceFragment"
+        android:name="dev.goblingroup.uzworks.fragments.profile.ExperienceFragment"
+        android:label="fragment_experience"
+        tools:layout="@layout/fragment_experience" />
 </navigation>

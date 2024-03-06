@@ -33,6 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/add_experience_btn"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/circle_background"

@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.graphics.Color
@@ -7,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -28,12 +30,15 @@ import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse
+import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LATITUDE
+import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LONGITUDE
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.clear
+import dev.goblingroup.uzworks.utils.dmyToIso
+import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.getNavOptions
-import dev.goblingroup.uzworks.utils.stringDateToString
-import dev.goblingroup.uzworks.utils.stringToDate
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -69,6 +74,7 @@ class AddJobFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             topTv.isSelected = true
@@ -80,36 +86,44 @@ class AddJobFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
-            deadlineBtn.setOnClickListener {
-                val datePickerDialog = DatePickerDialog(
-                    requireContext(),
-                    { _, year, month, dayOfMonth ->
-                        val selectedCalendar = Calendar.getInstance().apply {
-                            set(year, month, dayOfMonth)
-                        }
+            deadlineEt.clear()
 
-                        val currentCalendar = Calendar.getInstance()
+            deadlineEt.editText?.setOnTouchListener { v, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    val datePickerDialog = DatePickerDialog(
+                        requireContext(),
+                        { _, year, month, dayOfMonth ->
+                            val selectedCalendar = Calendar.getInstance().apply {
+                                set(year, month, dayOfMonth)
+                            }
 
-                        if (selectedCalendar.before(currentCalendar)) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Cannot select date before current date",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            deadlineBtn.strokeColor = resources.getColor(R.color.black_blue)
-                            deadlineTv.text = formatter.format(selectedCalendar.time)
-                        }
-                    },
-                    deadlineTv.stringToDate(DateEnum.YEAR.dateLabel),
-                    deadlineTv.stringToDate(DateEnum.MONTH.dateLabel),
-                    deadlineTv.stringToDate(DateEnum.DATE.dateLabel)
-                )
+                            val currentCalendar = Calendar.getInstance()
 
-                datePickerDialog.show()
+                            if (selectedCalendar.before(currentCalendar)) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Cannot select date before current date",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                val formatter = SimpleDateFormat(
+                                    "dd.MM.yyyy", Locale.getDefault()
+                                )
+                                deadlineEt.isErrorEnabled = false
+                                deadlineEt.editText?.setText(formatter.format(selectedCalendar.time))
+                            }
+                        },
+                        deadlineEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.YEAR.dateLabel),
+                        deadlineEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.MONTH.dateLabel),
+                        deadlineEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.DATE.dateLabel)
+                    )
+
+                    datePickerDialog.show()
+                }
+                true
             }
 
             salaryEt.editText?.setOnFocusChangeListener { v, hasFocus ->
@@ -194,12 +208,6 @@ class AddJobFragment : Fragment() {
                 }
             }
 
-            instagramUsernameEt.editText?.doAfterTextChanged {
-                if (instagramUsernameEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                    instagramUsernameEt.isErrorEnabled = false
-                }
-            }
-
             phoneNumberEt.editText?.doAfterTextChanged {
                 if (phoneNumberEt.isErrorEnabled && it.toString().isNotEmpty()) {
                     phoneNumberEt.isErrorEnabled = false
@@ -214,7 +222,14 @@ class AddJobFragment : Fragment() {
 
             selectAddressBtn.setOnClickListener {
                 val bundle = Bundle()
-                bundle.putBoolean("job_creating", true)
+                bundle.putDouble("latitude", selectedLocation?.latitude ?: DEFAULT_LATITUDE)
+                bundle.putDouble("longitude", selectedLocation?.longitude ?: DEFAULT_LONGITUDE)
+                if (selectedLocation == null)
+                    bundle.putBoolean("job_creating", true)
+                Log.d(
+                    TAG,
+                    "onViewCreated: map testing $selectedLocation passed from ${this@AddJobFragment::class.java.simpleName}"
+                )
                 findNavController().navigate(
                     resId = R.id.jobAddressFragment,
                     args = bundle,
@@ -225,6 +240,10 @@ class AddJobFragment : Fragment() {
             setFragmentResultListener("lat_lng") { _, bundle ->
                 selectedLocation =
                     LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"))
+                Log.d(
+                    TAG,
+                    "onViewCreated: map testing $selectedLocation received in ${this@AddJobFragment::class.java.simpleName}"
+                )
                 selectAddressTv.text = resources.getString(R.string.location_saved)
             }
         }
@@ -237,12 +256,12 @@ class AddJobFragment : Fragment() {
                     jobCreateRequest = JobCreateRequest(
                         benefit = benefitEt.editText?.text.toString(),
                         categoryId = selectedCategoryId,
-                        deadline = deadlineTv.stringDateToString(),
+                        deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
                         districtId = selectedDistrictId,
                         gender = selectedGender,
-                        instagramLink = instagramUsernameEt.editText?.text.toString(),
-                        latitude = 41.3409,
-                        longitude = 69.2867,
+                        instagramLink = "",
+                        latitude = selectedLocation?.latitude ?: DEFAULT_LATITUDE,
+                        longitude = selectedLocation?.longitude ?: DEFAULT_LONGITUDE,
                         maxAge = maxAgeEt.editText?.text.toString().toInt(),
                         minAge = minAgeEt.editText?.text.toString().toInt(),
                         phoneNumber = phoneNumberEt.editText?.text.toString(),
@@ -299,54 +318,49 @@ class AddJobFragment : Fragment() {
     private fun isFormValid(): Boolean {
         binding.apply {
             var isValid = true
-            if (deadlineTv.text == "Deadline") {
-                deadlineBtn.strokeColor = resources.getColor(R.color.red)
-                deadlineTv.text = "Select deadline"
+            if (deadlineEt.editText?.text.toString().isEmpty()) {
+                deadlineEt.isErrorEnabled = true
+                deadlineEt.error = resources.getString(R.string.deadline_error)
                 isValid = false
             }
             if (titleEt.editText?.text.toString().isEmpty()) {
                 titleEt.isErrorEnabled = true
-                titleEt.error = "Enter title"
+                titleEt.error = resources.getString(R.string.title_error)
                 isValid = false
             }
             if (salaryEt.editText?.text.toString().isEmpty()) {
                 salaryEt.isErrorEnabled = true
-                salaryEt.error = "Enter salary"
+                salaryEt.error = resources.getString(R.string.salary_error)
                 isValid = false
             }
             if (workingTimeEt.editText?.text.toString().isEmpty()) {
                 workingTimeEt.isErrorEnabled = true
-                workingTimeEt.error = "Enter working time"
+                workingTimeEt.error = resources.getString(R.string.working_time_error)
                 isValid = false
             }
             if (tgUserNameEt.editText?.text.toString().isEmpty()) {
                 tgUserNameEt.isErrorEnabled = true
-                tgUserNameEt.error = "Enter your telegram username"
-                isValid = false
-            }
-            if (instagramUsernameEt.editText?.text.toString().isEmpty()) {
-                instagramUsernameEt.isErrorEnabled = true
-                instagramUsernameEt.error = "Enter your instagram username"
+                tgUserNameEt.error = resources.getString(R.string.tg_username_error)
                 isValid = false
             }
             if (phoneNumberEt.editText?.text.toString().isEmpty()) {
                 phoneNumberEt.isErrorEnabled = true
-                phoneNumberEt.error = "Enter your phone number"
+                phoneNumberEt.error = resources.getString(R.string.phone_number_error)
                 isValid = false
             }
             if (orientationEt.editText?.text.toString().isEmpty()) {
                 orientationEt.isErrorEnabled = true
-                orientationEt.error = "Enter orientation"
+                orientationEt.error = resources.getString(R.string.orientation_error)
                 isValid = false
             }
             if (selectedDistrictId == "") {
                 districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                districtChoice.error = "Select your district"
+                districtChoice.error = resources.getString(R.string.district_error)
                 isValid = false
             }
             if (selectedCategoryId == "") {
                 jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                jobCategoryChoice.error = "Select your job category"
+                jobCategoryChoice.error = resources.getString(R.string.job_category_error)
                 isValid = false
             }
             return isValid

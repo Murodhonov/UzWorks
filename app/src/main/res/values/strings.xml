@@ -143,4 +143,18 @@
     <string name="close">Ёпиш</string>
     <string name="location_saved">Манзил сақланди</string>
     <string name="no_experience">Тажриба йўқ</string>
+    <string name="position">Лавозим</string>
+    <string name="company_name">Компания номи</string>
+    <string name="start_date">Бошланиш вақти</string>
+    <string name="end_date">Тугаш вақти</string>
+    <string name="deadline_error">Муддатни танланг</string>
+    <string name="birthday_error">Туғилган кунингизни танланг</string>
+    <string name="title_error">Сарлавҳани киритинг</string>
+    <string name="salary_error">Иш ҳақини киритинг</string>
+    <string name="working_time_error">Иш вақтини киритинг</string>
+    <string name="tg_username_error">Телеграм фойдаланувчи номингизни киритинг</string>
+    <string name="phone_number_error">Телефон рақамингизни киритинг</string>
+    <string name="orientation_error">Ориентациянгизни киритинг</string>
+    <string name="district_error">Туманингизни танланг</string>
+    <string name="job_category_error">Иш турини танланг</string>
 </resources>
