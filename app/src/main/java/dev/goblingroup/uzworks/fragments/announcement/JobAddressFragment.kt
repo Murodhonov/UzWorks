@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
@@ -63,18 +64,34 @@ class JobAddressFragment : Fragment(), OnMapReadyCallback {
                 )
             }
 
-            setLocation.setOnClickListener {
-                val bundle = Bundle()
-                Log.d(
-                    TAG,
-                    "onViewCreated: map testing $selectedLocation passed from ${this@JobAddressFragment::class.java.simpleName}"
-                )
-                bundle.putDouble("latitude", selectedLocation?.latitude ?: 0.0)
-                bundle.putDouble("longitude", selectedLocation?.longitude ?: 0.0)
-                setFragmentResult("lat_lng", bundle)
-                findNavController().popBackStack()
+            setLocationBtn.setOnClickListener {
+                setLocation()
             }
+
+            backBtn.setOnClickListener {
+                setLocation()
+            }
+
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        setLocation()
+                    }
+                })
         }
+    }
+
+    private fun setLocation() {
+        val bundle = Bundle()
+        Log.d(
+            TAG,
+            "onViewCreated: map testing $selectedLocation passed from ${this@JobAddressFragment::class.java.simpleName}"
+        )
+        bundle.putDouble("latitude", selectedLocation?.latitude ?: 0.0)
+        bundle.putDouble("longitude", selectedLocation?.longitude ?: 0.0)
+        setFragmentResult("lat_lng", bundle)
+        findNavController().popBackStack()
     }
 
     private fun displayDialog() {
@@ -82,9 +99,6 @@ class JobAddressFragment : Fragment(), OnMapReadyCallback {
         val addressDialogBinding = JobAddressDialogBinding.inflate(layoutInflater)
         alertDialog.setView(addressDialogBinding.root)
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        addressDialogBinding.closeTv.setOnClickListener {
-            alertDialog.dismiss()
-        }
         alertDialog.show()
     }
 
@@ -107,7 +121,7 @@ class JobAddressFragment : Fragment(), OnMapReadyCallback {
 
         googleMap.setOnMapClickListener {
             if (state) {
-                binding.setLocation.visibility = View.VISIBLE
+                binding.setLocationBtn.visibility = View.VISIBLE
 
                 previousMarker?.remove()
 

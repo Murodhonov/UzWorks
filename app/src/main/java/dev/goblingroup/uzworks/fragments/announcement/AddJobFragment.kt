@@ -3,6 +3,7 @@ package dev.goblingroup.uzworks.fragments.announcement
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -39,6 +40,7 @@ import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.dmyToIso
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.vm.AddJobViewModel
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -57,10 +59,11 @@ class AddJobFragment : Fragment() {
     private val addressViewModel: AddressViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
     private val securedJobViewModel: SecuredJobViewModel by viewModels()
+    private val addJobViewModel by viewModels<AddJobViewModel>()
 
     private var selectedDistrictId = ""
     private var selectedCategoryId = ""
-    private var selectedGender = GenderEnum.MALE.label
+    private var selectedGender = ""
 
     private var selectedLocation: LatLng? = null
 
@@ -146,7 +149,7 @@ class AddJobFragment : Fragment() {
 
             genderLayout.apply {
                 maleBtn.setOnClickListener {
-                    if (selectedGender == GenderEnum.FEMALE.label) {
+                    if (selectedGender == GenderEnum.FEMALE.label || selectedGender.isEmpty()) {
                         selectedGender = GenderEnum.MALE.label
                         maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
                         femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
@@ -159,7 +162,7 @@ class AddJobFragment : Fragment() {
                     }
                 }
                 femaleBtn.setOnClickListener {
-                    if (selectedGender == GenderEnum.MALE.label) {
+                    if (selectedGender == GenderEnum.MALE.label || selectedGender.isEmpty()) {
                         selectedGender = GenderEnum.FEMALE.label
                         femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
                         maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
@@ -221,6 +224,7 @@ class AddJobFragment : Fragment() {
             }
 
             selectAddressBtn.setOnClickListener {
+                saveState()
                 val bundle = Bundle()
                 bundle.putDouble("latitude", selectedLocation?.latitude ?: DEFAULT_LATITUDE)
                 bundle.putDouble("longitude", selectedLocation?.longitude ?: DEFAULT_LONGITUDE)
@@ -246,6 +250,32 @@ class AddJobFragment : Fragment() {
                 )
                 selectAddressTv.text = resources.getString(R.string.location_saved)
             }
+        }
+    }
+
+    private fun saveState() {
+        binding.apply {
+            addJobViewModel.setBenefit(benefitEt.editText?.text.toString())
+            addJobViewModel.setCategoryId(selectedCategoryId)
+            addJobViewModel.setDeadline(deadlineEt.editText?.text.toString())
+            addJobViewModel.setDistrictId(selectedDistrictId)
+            addJobViewModel.setGender(selectedGender)
+            addJobViewModel.setInstagramLink("")
+            addJobViewModel.setMaxAge(if (maxAgeEt.editText?.text.toString().isNotEmpty()) maxAgeEt.editText?.text.toString().toInt() else 0)
+            addJobViewModel.setMinAge(if (minAgeEt.editText?.text.toString().isNotEmpty()) minAgeEt.editText?.text.toString().toInt() else 0)
+            addJobViewModel.setPhoneNumber(phoneNumberEt.editText?.text.toString())
+            addJobViewModel.setRequirement(requirementEt.editText?.text.toString())
+            addJobViewModel.setSalary(if (salaryEt.editText?.text.toString().isNotEmpty()) salaryEt.editText?.text.toString().toInt() else 0)
+            addJobViewModel.setTelegramLink("")
+            addJobViewModel.setTgUsername(tgUserNameEt.editText?.text.toString())
+            addJobViewModel.setTitle(titleEt.editText?.text.toString())
+            addJobViewModel.setWorkingSchedule(workingScheduleEt.editText?.text.toString())
+            addJobViewModel.setWorkingSchedule(workingTimeEt.editText?.text.toString())
+            findNavController().navigate(
+                resId = R.id.jobAddressFragment,
+                args = null,
+                navOptions = getNavOptions()
+            )
         }
     }
 
@@ -313,6 +343,17 @@ class AddJobFragment : Fragment() {
         loadingDialog.dismiss()
         Toast.makeText(requireContext(), "successfully created", Toast.LENGTH_SHORT).show()
         findNavController().popBackStack()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.apply {
+            addJobViewModel.benefit.observe(viewLifecycleOwner) {
+                Log.d(TAG, "onResume: checking lifecycle benefit: $it")
+            }
+
+        }
+
     }
 
     private fun isFormValid(): Boolean {

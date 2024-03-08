@@ -139,8 +139,7 @@
     <string name="telegram">Телеграм</string>
     <string name="instagram">Инстаграм</string>
     <string name="about_worker">Ишчи ҳақида тўлиқ маълумотлар</string>
-    <string name="job_address_dialog_message">Иш жойи манзилини харитадан танланг</string>
-    <string name="close">Ёпиш</string>
+    <string name="job_address_dialog_message">Иш жой манзилини белгиланг</string>
     <string name="location_saved">Манзил сақланди</string>
     <string name="no_experience">Тажриба йўқ</string>
     <string name="position">Лавозим</string>
@@ -157,4 +156,5 @@
     <string name="orientation_error">Ориентациянгизни киритинг</string>
     <string name="district_error">Туманингизни танланг</string>
     <string name="job_category_error">Иш турини танланг</string>
+    <string name="set_location">Тайёр</string>
 </resources>

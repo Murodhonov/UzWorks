@@ -139,8 +139,7 @@ The information displayed to you is determined by the role you choose</string>
     <string name="telegram">Telegram</string>
     <string name="instagram">Instagram</string>
     <string name="about_worker">Full details of worker</string>
-    <string name="job_address_dialog_message">Select the location of the job from the map</string>
-    <string name="close">Close</string>
+    <string name="job_address_dialog_message">Specify the address of the workplace</string>
     <string name="location_saved">Location saved</string>
     <string name="no_experience">No experience</string>
     <string name="position">Position</string>
@@ -157,4 +156,5 @@ The information displayed to you is determined by the role you choose</string>
     <string name="orientation_error">Enter your orientation</string>
     <string name="district_error">Select your district</string>
     <string name="job_category_error">Select your job category</string>
+    <string name="set_location">Ready</string>
 </resources>
