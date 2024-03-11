@@ -1,7 +1,10 @@
 package dev.goblingroup.uzworks.fragments.profile
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -17,9 +20,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentPersonalInfoBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -49,6 +54,8 @@ class PersonalInfoFragment : Fragment() {
 
     private val profileViewModel: ProfileViewModel by viewModels()
 
+    private lateinit var dialog: AlertDialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,21 +75,16 @@ class PersonalInfoFragment : Fragment() {
                 profileViewModel.userLiveData.observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
-
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load user data",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e(TAG, "onViewCreated: ${it.error.message}")
                         }
 
                         is ApiStatus.Loading -> {
-                            progressBar.visibility = View.VISIBLE
-                            firstNameEt.visibility = View.GONE
-                            lastNameEt.visibility = View.GONE
-                            birthdayEt.visibility = View.GONE
-                            genderLayout.apply {
-                                root.visibility = View.GONE
-                            }
-                            emailEt.visibility = View.GONE
-                            phoneNumberEt.visibility = View.GONE
-                            saveBtn.visibility = View.GONE
-                            cancelBtn.visibility = View.GONE
+                            loading()
                         }
 
                         is ApiStatus.Success -> {
@@ -113,11 +115,19 @@ class PersonalInfoFragment : Fragment() {
         }
     }
 
+    private fun loading() {
+        dialog = AlertDialog.Builder(requireContext()).create()
+        val itemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        dialog.setView(itemBinding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setCancelable(false)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setData() {
         binding.apply {
+            dialog.dismiss()
             selectedGender = userResponse?.gender ?: ""
-            progressBar.visibility = View.GONE
             firstNameEt.visibility = View.VISIBLE
             lastNameEt.visibility = View.VISIBLE
             birthdayEt.visibility = View.VISIBLE
@@ -305,11 +315,11 @@ class PersonalInfoFragment : Fragment() {
                                         "something went wrong while updating",
                                         Toast.LENGTH_SHORT
                                     ).show()
+
                                 }
 
                                 is ApiStatus.Loading -> {
-                                    Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT)
-                                        .show()
+                                    loading()
                                 }
 
                                 is ApiStatus.Success -> {
@@ -318,6 +328,7 @@ class PersonalInfoFragment : Fragment() {
                                         "successfully updated",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    findNavController().popBackStack()
                                 }
                             }
                         }
