@@ -3,7 +3,6 @@ package dev.goblingroup.uzworks.fragments.announcement
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -20,7 +19,6 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
@@ -31,8 +29,6 @@ import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse
-import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LATITUDE
-import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LONGITUDE
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
@@ -40,6 +36,8 @@ import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.dmyToIso
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.utils.selectFemale
+import dev.goblingroup.uzworks.utils.selectMale
 import dev.goblingroup.uzworks.vm.AddJobViewModel
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
@@ -61,11 +59,11 @@ class AddJobFragment : Fragment() {
     private val securedJobViewModel: SecuredJobViewModel by viewModels()
     private val addJobViewModel by viewModels<AddJobViewModel>()
 
-    private var selectedDistrictId = ""
+    /*private var selectedDistrictId = ""
     private var selectedCategoryId = ""
     private var selectedGender = ""
 
-    private var selectedLocation: LatLng? = null
+    private var selectedLocation: LatLng? = null*/
 
     private lateinit var loadingDialog: AlertDialog
 
@@ -148,30 +146,24 @@ class AddJobFragment : Fragment() {
             }
 
             genderLayout.apply {
+
+            }
+
+            genderLayout.apply {
                 maleBtn.setOnClickListener {
-                    if (selectedGender == GenderEnum.FEMALE.label || selectedGender.isEmpty()) {
-                        selectedGender = GenderEnum.MALE.label
-                        maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                        femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                        maleCircle.visibility = View.VISIBLE
-                        femaleCircle.visibility = View.GONE
-                        maleTv.setTextColor(resources.getColor(R.color.black_blue))
-                        femaleTv.setTextColor(resources.getColor(R.color.text_color))
-                        maleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                        femaleBtn.strokeColor = resources.getColor(R.color.text_color)
+                    addJobViewModel.gender.observe(viewLifecycleOwner) {
+                        if (it == GenderEnum.FEMALE.label || it.isEmpty()) {
+                            addJobViewModel.setGender(GenderEnum.MALE.label)
+                            selectMale(resources)
+                        }
                     }
                 }
                 femaleBtn.setOnClickListener {
-                    if (selectedGender == GenderEnum.MALE.label || selectedGender.isEmpty()) {
-                        selectedGender = GenderEnum.FEMALE.label
-                        femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                        maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                        femaleCircle.visibility = View.VISIBLE
-                        maleCircle.visibility = View.GONE
-                        femaleTv.setTextColor(resources.getColor(R.color.black_blue))
-                        maleTv.setTextColor(resources.getColor(R.color.text_color))
-                        femaleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                        maleBtn.strokeColor = resources.getColor(R.color.text_color)
+                    addJobViewModel.gender.observe(viewLifecycleOwner) {
+                        if (it == GenderEnum.MALE.label || it.isEmpty()) {
+                            addJobViewModel.setGender(GenderEnum.FEMALE.label)
+                            selectFemale(resources)
+                        }
                     }
                 }
             }
@@ -226,28 +218,22 @@ class AddJobFragment : Fragment() {
             selectAddressBtn.setOnClickListener {
                 saveState()
                 val bundle = Bundle()
-                bundle.putDouble("latitude", selectedLocation?.latitude ?: DEFAULT_LATITUDE)
-                bundle.putDouble("longitude", selectedLocation?.longitude ?: DEFAULT_LONGITUDE)
-                if (selectedLocation == null)
-                    bundle.putBoolean("job_creating", true)
-                Log.d(
-                    TAG,
-                    "onViewCreated: map testing $selectedLocation passed from ${this@AddJobFragment::class.java.simpleName}"
-                )
+                addJobViewModel.latitude.observe(viewLifecycleOwner) {
+                    bundle.putDouble("latitude", it)
+                }
+                addJobViewModel.longitude.observe(viewLifecycleOwner) {
+                    bundle.putDouble("longitude", it)
+                }
                 findNavController().navigate(
-                    resId = R.id.jobAddressFragment,
+                    resId = R.id.selectJobAddressFragment,
                     args = bundle,
                     navOptions = getNavOptions()
                 )
             }
 
             setFragmentResultListener("lat_lng") { _, bundle ->
-                selectedLocation =
-                    LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"))
-                Log.d(
-                    TAG,
-                    "onViewCreated: map testing $selectedLocation received in ${this@AddJobFragment::class.java.simpleName}"
-                )
+                addJobViewModel.setLatitude(bundle.getDouble("latitude"))
+                addJobViewModel.setLongitude(bundle.getDouble("longitude"))
                 selectAddressTv.text = resources.getString(R.string.location_saved)
             }
         }
@@ -256,10 +242,7 @@ class AddJobFragment : Fragment() {
     private fun saveState() {
         binding.apply {
             addJobViewModel.setBenefit(benefitEt.editText?.text.toString())
-            addJobViewModel.setCategoryId(selectedCategoryId)
             addJobViewModel.setDeadline(deadlineEt.editText?.text.toString())
-            addJobViewModel.setDistrictId(selectedDistrictId)
-            addJobViewModel.setGender(selectedGender)
             addJobViewModel.setInstagramLink("")
             addJobViewModel.setMaxAge(if (maxAgeEt.editText?.text.toString().isNotEmpty()) maxAgeEt.editText?.text.toString().toInt() else 0)
             addJobViewModel.setMinAge(if (minAgeEt.editText?.text.toString().isNotEmpty()) minAgeEt.editText?.text.toString().toInt() else 0)
@@ -272,7 +255,7 @@ class AddJobFragment : Fragment() {
             addJobViewModel.setWorkingSchedule(workingScheduleEt.editText?.text.toString())
             addJobViewModel.setWorkingSchedule(workingTimeEt.editText?.text.toString())
             findNavController().navigate(
-                resId = R.id.jobAddressFragment,
+                resId = R.id.selectJobAddressFragment,
                 args = null,
                 navOptions = getNavOptions()
             )
@@ -282,16 +265,36 @@ class AddJobFragment : Fragment() {
     private fun createJob() {
         binding.apply {
             lifecycleScope.launch {
+                var categoryId = ""
+                addJobViewModel.categoryId.observe(viewLifecycleOwner) {
+                    categoryId = it
+                }
+                var districtId = ""
+                addJobViewModel.districtId.observe(viewLifecycleOwner) {
+                    districtId = it
+                }
+                var gender = ""
+                addJobViewModel.gender.observe(viewLifecycleOwner) {
+                    gender = it
+                }
+                var latitude = 0.0
+                addJobViewModel.latitude.observe(viewLifecycleOwner) {
+                    latitude = it
+                }
+                var longitude = 0.0
+                addJobViewModel.longitude.observe(viewLifecycleOwner) {
+                    longitude = it
+                }
                 securedJobViewModel.createJob(
                     jobCreateRequest = JobCreateRequest(
                         benefit = benefitEt.editText?.text.toString(),
-                        categoryId = selectedCategoryId,
+                        categoryId = categoryId,
                         deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
-                        districtId = selectedDistrictId,
-                        gender = selectedGender,
+                        districtId = districtId,
+                        gender = gender,
                         instagramLink = "",
-                        latitude = selectedLocation?.latitude ?: DEFAULT_LATITUDE,
-                        longitude = selectedLocation?.longitude ?: DEFAULT_LONGITUDE,
+                        latitude = latitude,
+                        longitude = longitude,
                         maxAge = maxAgeEt.editText?.text.toString().toInt(),
                         minAge = minAgeEt.editText?.text.toString().toInt(),
                         phoneNumber = phoneNumberEt.editText?.text.toString(),
@@ -394,15 +397,19 @@ class AddJobFragment : Fragment() {
                 orientationEt.error = resources.getString(R.string.orientation_error)
                 isValid = false
             }
-            if (selectedDistrictId == "") {
-                districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                districtChoice.error = resources.getString(R.string.district_error)
-                isValid = false
+            addJobViewModel.districtId.observe(viewLifecycleOwner) {
+                if (it.isEmpty()) {
+                    districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                    districtChoice.error = resources.getString(R.string.district_error)
+                    isValid = false
+                }
             }
-            if (selectedCategoryId == "") {
-                jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                jobCategoryChoice.error = resources.getString(R.string.job_category_error)
-                isValid = false
+            addJobViewModel.categoryId.observe(viewLifecycleOwner) {
+                if (it.isEmpty()) {
+                    jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                    jobCategoryChoice.error = resources.getString(R.string.job_category_error)
+                    isValid = false
+                }
             }
             return isValid
         }
@@ -465,7 +472,7 @@ class AddJobFragment : Fragment() {
                 )
                 districtChoice.setAdapter(districtAdapter)
                 districtChoice.setOnItemClickListener { parent, view, position, id ->
-                    selectedDistrictId = districtList[position].id
+                    addJobViewModel.setDistrictId(districtList[position].id)
                 }
             }
         }
@@ -538,7 +545,7 @@ class AddJobFragment : Fragment() {
             )
             jobCategoryChoice.setAdapter(jobCategoryAdapter)
             jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
-                selectedCategoryId = jobCategoryList[position].id
+                addJobViewModel.setCategoryId(jobCategoryList[position].id)
             }
         }
     }

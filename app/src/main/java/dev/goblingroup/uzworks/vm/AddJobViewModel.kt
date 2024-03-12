@@ -15,6 +15,14 @@ class AddJobViewModel @Inject constructor() : ViewModel() {
     private val _categoryId = MutableLiveData("")
     val categoryId: LiveData<String> get() = _categoryId
 
+    private val _latitude = MutableLiveData(0.0)
+
+    val latitude: LiveData<Double> get() = _latitude
+
+    private val _longitude = MutableLiveData(0.0)
+
+    val longitude: LiveData<Double> get() = _longitude
+
     private val _deadline = MutableLiveData("")
     val deadline: LiveData<String> get() = _deadline
 
@@ -63,6 +71,15 @@ class AddJobViewModel @Inject constructor() : ViewModel() {
 
     fun setCategoryId(value: String) {
         _categoryId.value = value
+    }
+
+
+    fun setLatitude(value: Double) {
+        _latitude.value = value
+    }
+
+    fun setLongitude(value: Double) {
+        _longitude.value = value
     }
 
     fun setDeadline(value: String) {

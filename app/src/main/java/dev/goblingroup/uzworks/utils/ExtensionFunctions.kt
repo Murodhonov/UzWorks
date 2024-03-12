@@ -10,11 +10,11 @@ import android.graphics.drawable.GradientDrawable
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.textfield.TextInputLayout
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
+import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -395,4 +395,30 @@ fun TextInputLayout.clear() {
     this.editText?.isFocusable = false
     this.editText?.isClickable = true
     this.editText?.setOnLongClickListener { true }
+}
+
+fun GenderChoiceLayoutBinding.selectMale(resources: Resources) {
+    this.apply {
+        maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
+        femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
+        maleCircle.visibility = View.VISIBLE
+        femaleCircle.visibility = View.GONE
+        maleTv.setTextColor(resources.getColor(R.color.black_blue))
+        femaleTv.setTextColor(resources.getColor(R.color.text_color))
+        maleBtn.strokeColor = resources.getColor(R.color.black_blue)
+        femaleBtn.strokeColor = resources.getColor(R.color.text_color)
+    }
+}
+
+fun GenderChoiceLayoutBinding.selectFemale(resources: Resources) {
+    this.apply {
+        femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
+        maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
+        femaleCircle.visibility = View.VISIBLE
+        maleCircle.visibility = View.GONE
+        femaleTv.setTextColor(resources.getColor(R.color.black_blue))
+        maleTv.setTextColor(resources.getColor(R.color.text_color))
+        femaleBtn.strokeColor = resources.getColor(R.color.black_blue)
+        maleBtn.strokeColor = resources.getColor(R.color.text_color)
+    }
 }
