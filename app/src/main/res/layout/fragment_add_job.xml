@@ -289,7 +289,6 @@
                         android:minWidth="@dimen/_100sdp"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
-                        android:textDirection="rtl"
                         android:textSize="@dimen/_10ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -326,24 +325,6 @@
                     android:textColor="@color/black_blue" />
 
             </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/orientation_et"
-                style="@style/TextInputEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:hint="@string/orientation"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 style="@style/BoldTextViewStyle"

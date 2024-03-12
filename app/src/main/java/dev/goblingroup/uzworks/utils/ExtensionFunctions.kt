@@ -194,7 +194,7 @@ fun String.dmyToIso(): String? {
         val inputDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         val inputDateObject = inputDateFormat.parse(this)
 
-        val outputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        val outputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
         outputDateFormat.format(inputDateObject!!)
     } catch (e: Exception) {
         null
@@ -203,7 +203,7 @@ fun String.dmyToIso(): String? {
 
 fun String.isoToDmy(): String? {
     return try {
-        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
         val inputDateObject = inputDateFormat.parse(this)
 
         val outputDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
@@ -216,7 +216,7 @@ fun String.isoToDmy(): String? {
 fun String.extractDateValue(dateType: String): Int {
     return try {
         val inputDateFormat = SimpleDateFormat(
-            if (this.contains('-')) "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" else "dd.MM.yyyy",
+            if (this.contains('-')) "yyyy-MM-dd'T'HH:mm:ss" else "dd.MM.yyyy",
             Locale.getDefault()
         )
         val parsedDate = inputDateFormat.parse(this)
@@ -357,6 +357,41 @@ fun String.formatPhoneNumber(backSpacePressed: Boolean): String {
 
 private fun controlEnd(backSpacePressed: Boolean): String {
     return if (backSpacePressed) " " else ""
+}
+
+fun String.formatSalary(): String {
+    return when (this.length) {
+        0 -> ""
+        in 1..3 -> this
+        in 4..6 -> {
+            "${this.substring(0, this.length - 3)} ${this.substring(this.length - 3)}"
+        }
+
+        in 7..9 -> {
+            "${this.substring(0, this.length - 6)} ${
+                this.substring(
+                    this.length - 6,
+                    this.length - 3
+                )
+            } ${this.substring(this.length - 3)}"
+        }
+
+        else -> {
+            "${this.substring(0, this.length - 7)} ${
+                this.substring(
+                    this.length - 7,
+                    this.length - 4
+                )
+            } ${this.substring(this.length - 4, 9)}"
+        }
+    }
+}
+
+fun String.formatTgUsername(): String {
+    if (this.isEmpty() || this.length == 1) return "@"
+    else {
+        return "@${this.substring(1)}"
+    }
 }
 
 fun AnnouncementEntity.getImage(): Int {

@@ -75,7 +75,6 @@ class SplashFragment : Fragment() {
                             args = null,
                             navOptions = getNavOptions()
                         )
-                        Log.e(TAG, "login: ${it.error.message}")
                     }
 
                     is ApiStatus.Loading -> {

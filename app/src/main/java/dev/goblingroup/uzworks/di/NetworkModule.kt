@@ -1,11 +1,9 @@
 package dev.goblingroup.uzworks.di
 
-import android.content.Context
 import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.goblingroup.uzworks.networking.AuthService
 import dev.goblingroup.uzworks.networking.DistrictService
@@ -17,25 +15,17 @@ import dev.goblingroup.uzworks.networking.SecuredUserService
 import dev.goblingroup.uzworks.networking.SecuredWorkerService
 import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.networking.WorkerService
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
-
-    @Provides
-    @Singleton
-    fun provideNetworkHelper(
-        @ApplicationContext context: Context
-    ): NetworkHelper {
-        return NetworkHelper(context)
-    }
 
     @Provides
     @Singleton
@@ -70,6 +60,7 @@ class NetworkModule {
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
+            .readTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 

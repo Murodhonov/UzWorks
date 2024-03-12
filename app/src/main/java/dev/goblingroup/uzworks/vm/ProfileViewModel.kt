@@ -12,9 +12,7 @@ import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.models.response.UserUpdateResponse
 import dev.goblingroup.uzworks.repository.ProfileRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
-import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,8 +20,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val securityRepository: SecurityRepository,
-    private val userDao: UserDao,
-    private val networkHelper: NetworkHelper
+    private val userDao: UserDao
 ) : ViewModel() {
 
     private val _userLiveData = MutableLiveData<ApiStatus<UserResponse>>(ApiStatus.Loading())
@@ -38,7 +35,6 @@ class ProfileViewModel @Inject constructor(
 
     private fun fetchUserData() {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
                 val userResponse = profileRepository.getUserById(securityRepository.getUserId())
                 if (userResponse.isSuccessful) {
                     _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
@@ -48,15 +44,11 @@ class ProfileViewModel @Inject constructor(
                     Log.e(TAG, "fetchUserData: ${userResponse.message()}")
                     Log.e(TAG, "fetchUserData: ${userResponse.errorBody()}")
                 }
-            } else {
-                _userLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
-            }
         }
     }
 
     fun updateUser(userUpdateRequest: UserUpdateRequest): LiveData<ApiStatus<UserUpdateResponse>> {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
                 Log.d(TAG, "updateUser: updating user $userUpdateRequest")
                 val updateUserResponse = profileRepository.updateUser(userUpdateRequest)
                 if (updateUserResponse.isSuccessful) {
@@ -66,9 +58,6 @@ class ProfileViewModel @Inject constructor(
                     Log.e(TAG, "updateUser: ${updateUserResponse.code()}")
                     Log.e(TAG, "updateUser: ${updateUserResponse.message()}")
                 }
-            } else {
-                updateUserLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
-            }
         }
         return updateUserLiveData
     }

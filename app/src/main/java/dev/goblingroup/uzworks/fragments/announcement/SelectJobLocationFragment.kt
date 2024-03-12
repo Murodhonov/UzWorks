@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -25,20 +27,20 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.databinding.FragmentSelectJobAddressBinding
+import dev.goblingroup.uzworks.databinding.FragmentSelectJobLocationBinding
 import dev.goblingroup.uzworks.databinding.JobAddressDialogBinding
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LATITUDE
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LONGITUDE
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 
-class SelectJobAddressFragment : Fragment(), OnMapReadyCallback {
+class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
 
-    private var _binding: FragmentSelectJobAddressBinding? = null
+    private var _binding: FragmentSelectJobLocationBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var googleMap: GoogleMap
 
-    private var selectedLocation: LatLng? = null
+    private var selectedLocation = LatLng(0.0, 0.0)
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
@@ -48,7 +50,7 @@ class SelectJobAddressFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSelectJobAddressBinding.inflate(layoutInflater)
+        _binding = FragmentSelectJobLocationBinding.inflate(layoutInflater)
         binding.apply {
             return binding.root
         }
@@ -58,17 +60,7 @@ class SelectJobAddressFragment : Fragment(), OnMapReadyCallback {
         binding.apply {
             val mapFragment =
                 childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this@SelectJobAddressFragment)
-            if (arguments?.getDouble("latitude") != null && arguments?.getDouble("longitude") != null) {
-                selectedLocation = LatLng(
-                    arguments?.getDouble("latitude") ?: DEFAULT_LATITUDE,
-                    arguments?.getDouble("longitude") ?: DEFAULT_LONGITUDE
-                )
-                Log.d(
-                    TAG,
-                    "onViewCreated: map testing $selectedLocation received in ${this@SelectJobAddressFragment::class.java.simpleName}"
-                )
-            }
+            mapFragment.getMapAsync(this@SelectJobLocationFragment)
 
             setLocationBtn.setOnClickListener {
                 setLocation()
@@ -77,14 +69,6 @@ class SelectJobAddressFragment : Fragment(), OnMapReadyCallback {
             backBtn.setOnClickListener {
                 setLocation()
             }
-
-            requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        setLocation()
-                    }
-                })
 
             updateFindBtn()
             findMeBtn.setOnClickListener {
@@ -105,9 +89,10 @@ class SelectJobAddressFragment : Fragment(), OnMapReadyCallback {
                 if (it != null) {
                     selectedLocation = LatLng(it.latitude, it.longitude)
                     previousMarker?.remove()
-                    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(selectedLocation!!, 20f)
+                    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(selectedLocation, 15f)
                     googleMap.animateCamera(cameraUpdate, 1000, null)
-                    previousMarker = googleMap.addMarker(MarkerOptions().position(selectedLocation!!))
+                    previousMarker = googleMap.addMarker(MarkerOptions().position(selectedLocation))
+                    binding.setLocationBtn.visibility = View.VISIBLE
                 } else {
                     Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
                 }
@@ -159,12 +144,8 @@ class SelectJobAddressFragment : Fragment(), OnMapReadyCallback {
 
     private fun setLocation() {
         val bundle = Bundle()
-        Log.d(
-            TAG,
-            "onViewCreated: map testing $selectedLocation passed from ${this@SelectJobAddressFragment::class.java.simpleName}"
-        )
-        bundle.putDouble("latitude", selectedLocation?.latitude ?: 0.0)
-        bundle.putDouble("longitude", selectedLocation?.longitude ?: 0.0)
+        bundle.putDouble("latitude", if (selectedLocation.latitude == DEFAULT_LATITUDE) 0.0 else selectedLocation.latitude)
+        bundle.putDouble("longitude", if (selectedLocation.longitude == DEFAULT_LONGITUDE) 0.0 else selectedLocation.longitude)
         setFragmentResult("lat_lng", bundle)
         findNavController().popBackStack()
     }
@@ -184,13 +165,21 @@ class SelectJobAddressFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(map: GoogleMap) {
         displayDialog()
+
         googleMap = map
-        Log.d(TAG, "onMapReady: $previousMarker")
-        if (selectedLocation?.latitude != DEFAULT_LATITUDE && selectedLocation?.longitude != DEFAULT_LONGITUDE) {
-            previousMarker = googleMap.addMarker(MarkerOptions().position(selectedLocation!!))
+
+        if (arguments?.getDouble("latitude") != null && arguments?.getDouble("longitude") != null) {
+            selectedLocation = LatLng(arguments?.getDouble("latitude")!!, arguments?.getDouble("longitude")!!)
         }
-        Log.d(TAG, "onMapReady: $previousMarker")
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation!!, 12f))
+
+        if (selectedLocation.latitude == 0.0 && selectedLocation.longitude == 0.0) {
+            selectedLocation = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation, 4f))
+        } else {
+            previousMarker = googleMap.addMarker(MarkerOptions().position(selectedLocation))
+            binding.setLocationBtn.visibility = View.VISIBLE
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation, 15f))
+        }
 
         googleMap.setOnMapClickListener {
             binding.setLocationBtn.visibility = View.VISIBLE

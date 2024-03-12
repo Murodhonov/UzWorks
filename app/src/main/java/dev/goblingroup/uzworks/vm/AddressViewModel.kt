@@ -9,16 +9,13 @@ import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.repository.AddressRepository
-import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddressViewModel @Inject constructor(
-    private val addressRepository: AddressRepository,
-    private val networkHelper: NetworkHelper
+    private val addressRepository: AddressRepository
 ) : ViewModel() {
 
     private val _regionLiveData =
@@ -35,7 +32,6 @@ class AddressViewModel @Inject constructor(
 
     private fun fetchRegions() {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
                 if (addressRepository.listRegions().isEmpty()) {
                     val regionResponse = addressRepository.getAllRegions()
                     if (regionResponse.isSuccessful) {
@@ -60,15 +56,11 @@ class AddressViewModel @Inject constructor(
                     _regionLiveData.postValue(ApiStatus.Success(addressRepository.listRegions()))
                     fetchDistricts(addressRepository.listDistricts().map { it.id })
                 }
-            } else {
-                _regionLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
-            }
         }
     }
 
     private fun fetchDistricts(regionIdList: List<String>) {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
                 if (addressRepository.listDistricts().isEmpty()) {
                     val emptyDistrictList = ArrayList<DistrictEntity>()
                     var error = ""
@@ -99,9 +91,6 @@ class AddressViewModel @Inject constructor(
                     Log.d(TAG, "fetchDistricts: there's something in district table")
                     _districtLiveData.postValue(ApiStatus.Success(addressRepository.listDistricts()))
                 }
-            } else {
-                _districtLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
-            }
         }
     }
 

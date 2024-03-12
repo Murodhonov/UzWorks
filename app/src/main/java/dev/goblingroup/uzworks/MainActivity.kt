@@ -1,6 +1,8 @@
 package dev.goblingroup.uzworks
 
 import android.annotation.SuppressLint
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -8,7 +10,6 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -37,11 +38,17 @@ class MainActivity : AppCompatActivity() {
 
     private val securityViewModel: SecurityViewModel by viewModels()
 
+    private val connectivityReceiver = ConnectivityBroadcastReceiver()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         binding.apply {
+            registerReceiver(
+                connectivityReceiver,
+                IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+            )
             if (securityViewModel.getLanguageCode() != null) {
                 LanguageManager.setLanguage(securityViewModel.getLanguageCode().toString(), this@MainActivity)
             }
@@ -246,6 +253,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.profileFragment -> {
                     navController.navigate(R.id.homeFragment)
                 }
+                R.id.noInternetFragment, R.id.selectJobLocationFragment -> {
+
+                }
 
                 else -> {
                     super.onBackPressed()
@@ -256,6 +266,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        unregisterReceiver(connectivityReceiver)
         _binding = null
+    }
+
+    fun onNetworkChange(connected: Boolean) {
+        if (connected) {
+            if (navController.currentDestination?.id == R.id.noInternetFragment) {
+                navController.popBackStack()
+            }
+        } else {
+            if (navController.currentDestination?.id != R.id.noInternetFragment) {
+                navController.navigate(R.id.noInternetFragment)
+            }
+        }
     }
 }

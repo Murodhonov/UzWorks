@@ -128,19 +128,10 @@ class PersonalInfoFragment : Fragment() {
         binding.apply {
             dialog.dismiss()
             selectedGender = userResponse?.gender ?: ""
-            firstNameEt.visibility = View.VISIBLE
-            lastNameEt.visibility = View.VISIBLE
-            birthdayEt.visibility = View.VISIBLE
-            genderLayout.apply {
-                root.visibility = View.VISIBLE
-            }
-            emailEt.visibility = View.VISIBLE
-            phoneNumberEt.visibility = View.VISIBLE
-            saveBtn.visibility = View.VISIBLE
-            cancelBtn.visibility = View.VISIBLE
 
             firstNameEt.editText?.setText(userResponse?.firstName ?: "")
             lastNameEt.editText?.setText(userResponse?.lastName ?: "")
+            Log.d(TAG, "setData: ${userResponse?.birthDate}")
             birthdayEt.editText?.setText(
                 if (userResponse?.birthDate?.isoToDmy() == null) resources.getString(R.string.birth_date) else userResponse?.birthDate?.isoToDmy()
             )
@@ -238,10 +229,6 @@ class PersonalInfoFragment : Fragment() {
                     val formattedPhone =
                         s?.filter { !it.isWhitespace() }.toString()
                             .formatPhoneNumber(newText.length < oldText.length)
-                    Log.d(
-                        TAG,
-                        "afterTextChanged: s -> $s\tformattedPhone -> $formattedPhone\tet -> ${phoneNumberEt.editText?.text.toString()}"
-                    )
                     phoneNumberEt.editText?.setText(formattedPhone)
                     phoneNumberEt.editText?.setSelection(formattedPhone.length)
                     phoneNumberEt.tag = formattedPhone

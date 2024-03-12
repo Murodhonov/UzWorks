@@ -151,10 +151,12 @@
     <string name="title_error">Введите информация</string>
     <string name="salary_error">Введите зарплату</string>
     <string name="working_time_error">Введите рабочее время</string>
+    <string name="working_schedule_error">Введите график работы</string>
     <string name="tg_username_error">Введите свое имя пользователя в Telegram</string>
     <string name="phone_number_error">Введите свой номер телефона</string>
     <string name="orientation_error">Введите свою ориентацию</string>
     <string name="district_error">Выберите свой район</string>
     <string name="job_category_error">Выберите категорию вакансии</string>
     <string name="set_location">Готов</string>
+    <string name="no_internet">Нет соединения с интернетом</string>
 </resources>

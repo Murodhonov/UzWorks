@@ -6,6 +6,8 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -35,6 +37,9 @@ import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.dmyToIso
 import dev.goblingroup.uzworks.utils.extractDateValue
+import dev.goblingroup.uzworks.utils.formatPhoneNumber
+import dev.goblingroup.uzworks.utils.formatSalary
+import dev.goblingroup.uzworks.utils.formatTgUsername
 import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.selectFemale
 import dev.goblingroup.uzworks.utils.selectMale
@@ -58,12 +63,6 @@ class AddJobFragment : Fragment() {
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
     private val securedJobViewModel: SecuredJobViewModel by viewModels()
     private val addJobViewModel by viewModels<AddJobViewModel>()
-
-    /*private var selectedDistrictId = ""
-    private var selectedCategoryId = ""
-    private var selectedGender = ""
-
-    private var selectedLocation: LatLng? = null*/
 
     private lateinit var loadingDialog: AlertDialog
 
@@ -127,27 +126,153 @@ class AddJobFragment : Fragment() {
                 true
             }
 
-            salaryEt.editText?.setOnFocusChangeListener { v, hasFocus ->
-                if (!hasFocus) {
-                    // When losing focus, append " so'm" to the salary
-                    val currentText = salaryEt.editText?.text.toString().trim()
-                    if (currentText.isNotEmpty()) {
-                        salaryEt.editText?.setText("$currentText so'm")
-                    }
-                } else {
-                    // When gaining focus, remove " so'm" suffix
-                    val currentText = salaryEt.editText?.text.toString().trim()
-                    if (currentText.endsWith(" so'm")) {
-                        val newSalary = currentText.substring(0, currentText.length - 5)
-                        salaryEt.editText?.setText(newSalary)
-                        salaryEt.editText?.setSelection(salaryEt.editText?.text.toString().length)
-                    }
+            minAgeEt.editText?.addTextChangedListener(object : TextWatcher {
+                var isFormatting = false
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
                 }
-            }
 
-            genderLayout.apply {
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (isFormatting)
+                        return
+
+                    if (s.toString() == "0")
+                        return
+
+                    isFormatting = true
+                    if (s.toString().length > 2) {
+                        minAgeEt.editText?.setText(s.toString().substring(0, 2))
+                        minAgeEt.editText?.setSelection(2)
+                    }
+
+                    isFormatting = false
+                }
+
+            })
+
+            maxAgeEt.editText?.addTextChangedListener(object : TextWatcher {
+                var isFormatting = false
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (isFormatting)
+                        return
+
+                    if (s.toString() == "0")
+                        return
+
+                    isFormatting = true
+                    if (s.toString().length > 2) {
+                        maxAgeEt.editText?.setText(s.toString().substring(0, 2))
+                        maxAgeEt.editText?.setSelection(2)
+                    }
+
+                    isFormatting = false
+                }
+
+            })
+
+            salaryEt.editText?.addTextChangedListener(object : TextWatcher {
+                private var isFormatting = false
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (isFormatting)
+                        return
+
+                    isFormatting = true
+                    val formattedSalary = s?.filter { !it.isWhitespace() }.toString().formatSalary()
+                    salaryEt.editText?.setText(formattedSalary)
+                    salaryEt.editText?.setSelection(formattedSalary.length)
+
+                    isFormatting = false
+                }
+
+            })
+
+            phoneNumberEt.editText?.setText(resources.getString(R.string.phone_number_prefix))
+            phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
+                private var isFormatting = false
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int
+                ) {
+
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (isFormatting)
+                        return
+
+                    isFormatting = true
+                    val newText = s.toString().filter { !it.isWhitespace() }
+                    val oldText =
+                        phoneNumberEt.editText?.tag.toString().filter { !it.isWhitespace() }
+                    val formattedPhone =
+                        s?.filter { !it.isWhitespace() }.toString()
+                            .formatPhoneNumber(newText.length < oldText.length)
+                    phoneNumberEt.editText?.setText(formattedPhone)
+                    phoneNumberEt.editText?.setSelection(formattedPhone.length)
+                    phoneNumberEt.tag = formattedPhone
+
+                    isFormatting = false
+                }
+            })
+
+            tgUserNameEt.editText?.addTextChangedListener(object : TextWatcher {
+                var isFormatting = false
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (isFormatting)
+                        return
+                    isFormatting = true
+                    val formattedTgUsername = s.toString().formatTgUsername()
+                    tgUserNameEt.editText?.setText(formattedTgUsername)
+                    tgUserNameEt.editText?.setSelection(formattedTgUsername.length)
+
+                    isFormatting = false
+                }
+
+            })
 
             genderLayout.apply {
                 maleBtn.setOnClickListener {
@@ -171,8 +296,6 @@ class AddJobFragment : Fragment() {
             saveBtn.setOnClickListener {
                 if (isFormValid()) {
                     createJob()
-                } else {
-                    Toast.makeText(requireContext(), "fill forms", Toast.LENGTH_SHORT).show()
                 }
             }
             cancelBtn.setOnClickListener {
@@ -209,12 +332,6 @@ class AddJobFragment : Fragment() {
                 }
             }
 
-            orientationEt.editText?.doAfterTextChanged {
-                if (orientationEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                    orientationEt.isErrorEnabled = false
-                }
-            }
-
             selectAddressBtn.setOnClickListener {
                 saveState()
                 val bundle = Bundle()
@@ -225,16 +342,23 @@ class AddJobFragment : Fragment() {
                     bundle.putDouble("longitude", it)
                 }
                 findNavController().navigate(
-                    resId = R.id.selectJobAddressFragment,
+                    resId = R.id.selectJobLocationFragment,
                     args = bundle,
                     navOptions = getNavOptions()
                 )
             }
 
             setFragmentResultListener("lat_lng") { _, bundle ->
-                addJobViewModel.setLatitude(bundle.getDouble("latitude"))
-                addJobViewModel.setLongitude(bundle.getDouble("longitude"))
-                selectAddressTv.text = resources.getString(R.string.location_saved)
+                val lat = bundle.getDouble("latitude")
+                val lng = bundle.getDouble("longitude")
+                if (lat != 0.0 && lng != 0.0) {
+                    addJobViewModel.setLatitude(bundle.getDouble("latitude"))
+                    addJobViewModel.setLongitude(bundle.getDouble("longitude"))
+                }
+            }
+
+            jobCategoryChoice.setOnClickListener {
+                jobCategoryLayout.isErrorEnabled = false
             }
         }
     }
@@ -243,22 +367,15 @@ class AddJobFragment : Fragment() {
         binding.apply {
             addJobViewModel.setBenefit(benefitEt.editText?.text.toString())
             addJobViewModel.setDeadline(deadlineEt.editText?.text.toString())
-            addJobViewModel.setInstagramLink("")
             addJobViewModel.setMaxAge(if (maxAgeEt.editText?.text.toString().isNotEmpty()) maxAgeEt.editText?.text.toString().toInt() else 0)
             addJobViewModel.setMinAge(if (minAgeEt.editText?.text.toString().isNotEmpty()) minAgeEt.editText?.text.toString().toInt() else 0)
             addJobViewModel.setPhoneNumber(phoneNumberEt.editText?.text.toString())
             addJobViewModel.setRequirement(requirementEt.editText?.text.toString())
             addJobViewModel.setSalary(if (salaryEt.editText?.text.toString().isNotEmpty()) salaryEt.editText?.text.toString().toInt() else 0)
-            addJobViewModel.setTelegramLink("")
             addJobViewModel.setTgUsername(tgUserNameEt.editText?.text.toString())
             addJobViewModel.setTitle(titleEt.editText?.text.toString())
             addJobViewModel.setWorkingSchedule(workingScheduleEt.editText?.text.toString())
             addJobViewModel.setWorkingSchedule(workingTimeEt.editText?.text.toString())
-            findNavController().navigate(
-                resId = R.id.selectJobAddressFragment,
-                args = null,
-                navOptions = getNavOptions()
-            )
         }
     }
 
@@ -292,7 +409,7 @@ class AddJobFragment : Fragment() {
                         deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
                         districtId = districtId,
                         gender = gender,
-                        instagramLink = "",
+                        instagramLink = "link of post on instagram",
                         latitude = latitude,
                         longitude = longitude,
                         maxAge = maxAgeEt.editText?.text.toString().toInt(),
@@ -352,9 +469,75 @@ class AddJobFragment : Fragment() {
         super.onResume()
         binding.apply {
             addJobViewModel.benefit.observe(viewLifecycleOwner) {
-                Log.d(TAG, "onResume: checking lifecycle benefit: $it")
+                benefitEt.editText?.setText(it)
+            }
+            addJobViewModel.deadline.observe(viewLifecycleOwner) {
+                deadlineEt.editText?.setText(it)
+            }
+            addJobViewModel.maxAge.observe(viewLifecycleOwner) {
+                if (it == 0)
+                    maxAgeEt.editText?.setText("")
+                else
+                    maxAgeEt.editText?.setText(it.toString())
+            }
+            addJobViewModel.minAge.observe(viewLifecycleOwner) {
+                if (it == 0)
+                    minAgeEt.editText?.setText("")
+                else
+                    minAgeEt.editText?.setText(it.toString())
+            }
+            addJobViewModel.phoneNumber.observe(viewLifecycleOwner) {
+                phoneNumberEt.editText?.setText(it)
+            }
+            addJobViewModel.requirement.observe(viewLifecycleOwner) {
+                requirementEt.editText?.setText(it)
+            }
+            addJobViewModel.salary.observe(viewLifecycleOwner) {
+                if (it == 0)
+                    salaryEt.editText?.setText("")
+                else
+                    salaryEt.editText?.setText(it.toString())
+            }
+            addJobViewModel.tgUserName.observe(viewLifecycleOwner) {
+                tgUserNameEt.editText?.setText(it)
+            }
+            addJobViewModel.title.observe(viewLifecycleOwner) {
+                titleEt.editText?.setText(it)
+            }
+            addJobViewModel.workingSchedule.observe(viewLifecycleOwner) {
+                workingScheduleEt.editText?.setText(it)
+            }
+            addJobViewModel.workingTime.observe(viewLifecycleOwner) {
+                workingTimeEt.editText?.setText(it)
             }
 
+            addJobViewModel.gender.observe(viewLifecycleOwner) {
+                if (it == GenderEnum.MALE.label) {
+                    genderLayout.selectMale(resources)
+                } else if (it == GenderEnum.FEMALE.label) {
+                    genderLayout.selectFemale(resources)
+                }
+            }
+
+            addJobViewModel.categoryIndex.observe(viewLifecycleOwner) {
+                jobCategoryChoice.setSelection(it)
+            }
+            addJobViewModel.districtIndex.observe(viewLifecycleOwner) {
+                districtChoice.setSelection(it)
+            }
+            addJobViewModel.regionIndex.observe(viewLifecycleOwner) {
+                regionChoice.setSelection(it)
+            }
+
+            var isLocationAvailable = false
+            addJobViewModel.latitude.observe(viewLifecycleOwner) {
+                isLocationAvailable = it != 0.0
+            }
+            addJobViewModel.longitude.observe(viewLifecycleOwner) {
+                isLocationAvailable = it != 0.0
+            }
+            if (isLocationAvailable) selectAddressTv.text =
+                resources.getString(R.string.location_saved)
         }
 
     }
@@ -382,6 +565,10 @@ class AddJobFragment : Fragment() {
                 workingTimeEt.error = resources.getString(R.string.working_time_error)
                 isValid = false
             }
+            if (workingScheduleEt.editText?.text.toString().isEmpty()) {
+                workingScheduleEt.isErrorEnabled = true
+                workingScheduleEt.error = resources.getString(R.string.working_schedule_error)
+            }
             if (tgUserNameEt.editText?.text.toString().isEmpty()) {
                 tgUserNameEt.isErrorEnabled = true
                 tgUserNameEt.error = resources.getString(R.string.tg_username_error)
@@ -390,11 +577,6 @@ class AddJobFragment : Fragment() {
             if (phoneNumberEt.editText?.text.toString().isEmpty()) {
                 phoneNumberEt.isErrorEnabled = true
                 phoneNumberEt.error = resources.getString(R.string.phone_number_error)
-                isValid = false
-            }
-            if (orientationEt.editText?.text.toString().isEmpty()) {
-                orientationEt.isErrorEnabled = true
-                orientationEt.error = resources.getString(R.string.orientation_error)
                 isValid = false
             }
             addJobViewModel.districtId.observe(viewLifecycleOwner) {

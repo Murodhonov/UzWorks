@@ -151,10 +151,12 @@ The information displayed to you is determined by the role you choose</string>
     <string name="title_error">Enter title</string>
     <string name="salary_error">Enter salary</string>
     <string name="working_time_error">Enter working time</string>
+    <string name="working_schedule_error">Enter working schedule</string>
     <string name="tg_username_error">Enter your telegram username</string>
     <string name="phone_number_error">Enter your phone number</string>
     <string name="orientation_error">Enter your orientation</string>
     <string name="district_error">Select your district</string>
     <string name="job_category_error">Select your job category</string>
     <string name="set_location">Ready</string>
+    <string name="no_internet">No internet connection</string>
 </resources>

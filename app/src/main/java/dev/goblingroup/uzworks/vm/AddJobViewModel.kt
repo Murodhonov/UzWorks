@@ -1,9 +1,11 @@
 package dev.goblingroup.uzworks.vm
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,9 +34,6 @@ class AddJobViewModel @Inject constructor() : ViewModel() {
     private val _gender = MutableLiveData("")
     val gender: LiveData<String> get() = _gender
 
-    private val _instagramLink = MutableLiveData("")
-    val instagramLink: LiveData<String> get() = _instagramLink
-
     private val _maxAge = MutableLiveData(0)
     val maxAge: LiveData<Int> get() = _maxAge
 
@@ -50,9 +49,6 @@ class AddJobViewModel @Inject constructor() : ViewModel() {
     private val _salary = MutableLiveData(0)
     val salary: LiveData<Int> get() = _salary
 
-    private val _telegramLink = MutableLiveData("")
-    val telegramLink: LiveData<String> get() = _telegramLink
-
     private val _tgUserName = MutableLiveData("")
     val tgUserName: LiveData<String> get() = _tgUserName
 
@@ -64,6 +60,15 @@ class AddJobViewModel @Inject constructor() : ViewModel() {
 
     private val _workingTime = MutableLiveData("")
     val workingTime: LiveData<String> get() = _workingTime
+
+    private val _categoryIndex = MutableLiveData(0)
+    val categoryIndex: LiveData<Int> get() = _categoryIndex
+
+    private val _regionIndex = MutableLiveData(0)
+    val regionIndex: LiveData<Int> get() = _regionIndex
+
+    private val _districtIndex = MutableLiveData(0)
+    val districtIndex: LiveData<Int> get() = _districtIndex
 
     fun setBenefit(value: String) {
         _benefit.value = value
@@ -91,11 +96,8 @@ class AddJobViewModel @Inject constructor() : ViewModel() {
     }
 
     fun setGender(value: String) {
+        Log.d(TAG, "setGender: $value")
         _gender.value = value
-    }
-
-    fun setInstagramLink(value: String) {
-        _instagramLink.value = value
     }
 
     fun setMaxAge(value: Int) {
@@ -118,10 +120,6 @@ class AddJobViewModel @Inject constructor() : ViewModel() {
         _salary.value = value
     }
 
-    fun setTelegramLink(value: String) {
-        _telegramLink.value = value
-    }
-
     fun setTgUsername(value: String) {
         _tgUserName.value = value
     }
@@ -137,5 +135,4 @@ class AddJobViewModel @Inject constructor() : ViewModel() {
     fun setWorkingTime(value: String) {
         _workingTime.value = value
     }
-
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.announcement.SelectJobAddressFragment">
+    tools:context=".fragments.announcement.SelectJobLocationFragment">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
@@ -89,7 +89,6 @@
         android:id="@+id/find_me_btn"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/ic_location_permission_required"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintHorizontal_bias="0.95"

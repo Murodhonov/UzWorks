@@ -1,8 +1,8 @@
 package dev.goblingroup.uzworks.utils
 
 enum class GenderEnum(val label: String) {
-    MALE("Erkak"),
-    FEMALE("Ayol")
+    MALE("Male"),
+    FEMALE("Female")
 }
 
 enum class UserRole(val roleName: String) {

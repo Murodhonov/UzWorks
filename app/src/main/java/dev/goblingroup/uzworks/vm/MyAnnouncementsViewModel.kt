@@ -10,9 +10,7 @@ import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.repository.secured.SecuredJobRepository
 import dev.goblingroup.uzworks.repository.secured.SecuredWorkerRepository
-import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +18,7 @@ import javax.inject.Inject
 class MyAnnouncementsViewModel @Inject constructor(
     private val securedJobRepository: SecuredJobRepository,
     private val securedWorkerRepository: SecuredWorkerRepository,
-    private val securityRepository: SecurityRepository,
-    private val networkHelper: NetworkHelper
+    private val securityRepository: SecurityRepository
 ) : ViewModel() {
 
     private val _jobLiveData = MutableLiveData<ApiStatus<List<JobResponse>>>(ApiStatus.Loading())
@@ -40,7 +37,6 @@ class MyAnnouncementsViewModel @Inject constructor(
 
     private fun loadJobs() {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
                 val jobsByUserId = securedJobRepository.getJobsByUserId(securityRepository.getUserId())
                 if (jobsByUserId.isSuccessful) {
                     _jobLiveData.postValue(ApiStatus.Success(jobsByUserId.body()))
@@ -50,15 +46,11 @@ class MyAnnouncementsViewModel @Inject constructor(
                     Log.e(TAG, "loadJobs: ${jobsByUserId.message()}")
                     _jobLiveData.postValue(ApiStatus.Error(Throwable(jobsByUserId.message())))
                 }
-            } else {
-                _jobLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
-            }
         }
     }
 
     private fun loadWorkers() {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
                 val workersByUserId =
                     securedWorkerRepository.getWorkersByUserId(securityRepository.getUserId())
                 if (workersByUserId.isSuccessful) {
@@ -69,9 +61,6 @@ class MyAnnouncementsViewModel @Inject constructor(
                     Log.e(TAG, "loadWorkers: ${workersByUserId.message()}")
                     _workerLiveData.postValue(ApiStatus.Error(Throwable(workersByUserId.message())))
                 }
-            } else {
-                _workerLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
-            }
         }
     }
 

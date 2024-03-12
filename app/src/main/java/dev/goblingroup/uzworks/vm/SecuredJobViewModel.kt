@@ -10,15 +10,12 @@ import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.request.JobEditRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.repository.secured.SecuredJobRepository
-import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SecuredJobViewModel @Inject constructor(
-    private val securedJobRepository: SecuredJobRepository,
-    private val networkHelper: NetworkHelper
+    private val securedJobRepository: SecuredJobRepository
 ) : ViewModel() {
 
     private val TAG = "SecuredDistrictViewMode"
@@ -34,19 +31,11 @@ class SecuredJobViewModel @Inject constructor(
 
     fun createJob(jobCreateRequest: JobCreateRequest): LiveData<ApiStatus<JobCreateResponse>> {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
-                Log.d(
-                    TAG,
-                    "createJob: creating job for $jobCreateRequest object ${this@SecuredJobViewModel::class.java.simpleName}"
-                )
-                val response = securedJobRepository.createJob(jobCreateRequest)
-                if (response.isSuccessful) {
-                    createLiveData.postValue(ApiStatus.Success(response.body()))
-                } else {
-                    createLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
-                }
+            val response = securedJobRepository.createJob(jobCreateRequest)
+            if (response.isSuccessful) {
+                createLiveData.postValue(ApiStatus.Success(response.body()))
             } else {
-                createLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
+                createLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
             }
         }
         return createLiveData
@@ -54,15 +43,11 @@ class SecuredJobViewModel @Inject constructor(
 
     fun deleteJob(jobId: String): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
-                val response = securedJobRepository.deleteJob(jobId)
-                if (response.isSuccessful) {
-                    deleteLiveData.postValue(ApiStatus.Success(null))
-                } else {
-                    deleteLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
-                }
+            val response = securedJobRepository.deleteJob(jobId)
+            if (response.isSuccessful) {
+                deleteLiveData.postValue(ApiStatus.Success(null))
             } else {
-                deleteLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
+                deleteLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
             }
         }
         return deleteLiveData
@@ -70,15 +55,11 @@ class SecuredJobViewModel @Inject constructor(
 
     fun editJob(jobEditRequest: JobEditRequest): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
-                val response = securedJobRepository.editJob(jobEditRequest)
-                if (response.isSuccessful) {
-                    editLiveData.postValue(ApiStatus.Success(null))
-                } else {
-                    editLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
-                }
+            val response = securedJobRepository.editJob(jobEditRequest)
+            if (response.isSuccessful) {
+                editLiveData.postValue(ApiStatus.Success(null))
             } else {
-                editLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
+                editLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
             }
         }
         return editLiveData

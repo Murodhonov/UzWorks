@@ -8,14 +8,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.repository.AuthRepository
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val networkHelper: NetworkHelper
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val signUpLiveData =
@@ -23,15 +21,11 @@ class SignUpViewModel @Inject constructor(
 
     fun signup(signupRequest: SignUpRequest): LiveData<ApiStatus<SignUpResponse>> {
         viewModelScope.launch {
-            if (networkHelper.isConnected()) {
-                val response = authRepository.signup(signupRequest)
-                if (response.isSuccessful) {
-                    signUpLiveData.postValue(ApiStatus.Success(response.body()))
-                } else {
-                    signUpLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
-                }
+            val response = authRepository.signup(signupRequest)
+            if (response.isSuccessful) {
+                signUpLiveData.postValue(ApiStatus.Success(response.body()))
             } else {
-                signUpLiveData.postValue(ApiStatus.Error(Throwable("No internet connection")))
+                signUpLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
             }
         }
         return signUpLiveData

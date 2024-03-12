@@ -13,7 +13,6 @@ import dev.goblingroup.uzworks.repository.AuthRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.LanguageEnum
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,15 +20,13 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val securityRepository: SecurityRepository,
-    private val networkHelper: NetworkHelper
+    private val securityRepository: SecurityRepository
 ) : ViewModel() {
 
     private val loginLiveData = MutableLiveData<ApiStatus<LoginResponse>>(ApiStatus.Loading())
 
     fun login(loginRequest: LoginRequest): LiveData<ApiStatus<LoginResponse>> {
         viewModelScope.launch(Dispatchers.IO) {
-            if (networkHelper.isConnected()) {
                 Log.d(TAG, "login: loginRequest -> $loginRequest")
                 val response = authRepository.login(loginRequest)
                 if (response.isSuccessful) {
@@ -48,9 +45,6 @@ class LoginViewModel @Inject constructor(
                     Log.e(TAG, "login: ${response.code()}")
                     Log.e(TAG, "login: ${response.errorBody()}")
                 }
-            } else {
-                loginLiveData.postValue(ApiStatus.Error(Throwable("No internet connection")))
-            }
         }
         return loginLiveData
     }

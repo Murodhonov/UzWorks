@@ -5,22 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.goblingroup.uzworks.database.dao.UserDao
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.repository.AuthRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
-import dev.goblingroup.uzworks.utils.ConstValues.NO_INTERNET
-import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val securityRepository: SecurityRepository,
-    private val networkHelper: NetworkHelper
+    private val securityRepository: SecurityRepository
 ) : ViewModel() {
 
     private val TAG = "SplashViewModel"
@@ -36,7 +32,6 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             val user = securityRepository.getUser()
             if (user != null) {
-                if (networkHelper.isConnected()) {
                     val response = authRepository.login(LoginRequest(user.username, user.password))
                     if (response.isSuccessful) {
                         if (saveAuth(loginResponse = response.body()!!)) {
@@ -53,9 +48,6 @@ class SplashViewModel @Inject constructor(
                         Log.e(TAG, "login: ${response.message()}")
                         Log.e(TAG, "login: ${response.errorBody()}")
                     }
-                } else {
-                    _loginLiveData.postValue(ApiStatus.Error(Throwable(NO_INTERNET)))
-                }
             } else {
                 _loginLiveData.postValue(ApiStatus.Error(Throwable("User not found")))
             }

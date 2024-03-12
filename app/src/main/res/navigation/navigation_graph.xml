@@ -106,13 +106,18 @@
         android:label="fragment_my_announcements"
         tools:layout="@layout/fragment_my_announcements" />
     <fragment
-        android:id="@+id/selectJobAddressFragment"
-        android:name="dev.goblingroup.uzworks.fragments.announcement.SelectJobAddressFragment"
+        android:id="@+id/selectJobLocationFragment"
+        android:name="dev.goblingroup.uzworks.fragments.announcement.SelectJobLocationFragment"
         android:label="fragment_job_address"
-        tools:layout="@layout/fragment_select_job_address" />
+        tools:layout="@layout/fragment_select_job_location" />
     <fragment
         android:id="@+id/experienceFragment"
         android:name="dev.goblingroup.uzworks.fragments.profile.ExperienceFragment"
         android:label="fragment_experience"
         tools:layout="@layout/fragment_experience" />
+    <fragment
+        android:id="@+id/noInternetFragment"
+        android:name="dev.goblingroup.uzworks.fragments.NoInternetFragment"
+        android:label="fragment_no_internet"
+        tools:layout="@layout/fragment_no_internet" />
 </navigation>
