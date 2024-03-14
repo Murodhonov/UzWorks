@@ -2,6 +2,7 @@ package dev.goblingroup.uzworks.fragments.profile
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -18,9 +19,14 @@ import dev.goblingroup.uzworks.adapter.rv_adapters.ExperienceAdapter
 import dev.goblingroup.uzworks.databinding.AddEditExperienceDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentExperienceBinding
 import dev.goblingroup.uzworks.models.response.ExperienceResponse
+import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.clear
+import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.ExperienceViewModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @AndroidEntryPoint
 class ExperienceFragment : Fragment() {
@@ -86,7 +92,56 @@ class ExperienceFragment : Fragment() {
             endDateEt.clear()
             startDateEt.editText?.setOnTouchListener { v, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
+                    val datePickerDialog = DatePickerDialog(
+                        requireContext(),
+                        { _, year, month, dayOfMonth ->
+                            val selectedCalendar = Calendar.getInstance().apply {
+                                set(year, month, dayOfMonth)
+                            }
 
+                            val formatter = SimpleDateFormat(
+                                "dd.MM.yyyy", Locale.getDefault()
+                            )
+                            startDateEt.isErrorEnabled = false
+                            startDateEt.editText?.setText(formatter.format(selectedCalendar.time))
+                        },
+                        startDateEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.YEAR.dateLabel),
+                        startDateEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.MONTH.dateLabel),
+                        startDateEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.DATE.dateLabel)
+                    )
+
+                    datePickerDialog.show()
+                }
+                true
+            }
+
+            endDateEt.editText?.setOnTouchListener { v, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    val datePickerDialog = DatePickerDialog(
+                        requireContext(),
+                        { _, year, month, dayOfMonth ->
+                            val selectedCalendar = Calendar.getInstance().apply {
+                                set(year, month, dayOfMonth)
+                            }
+
+                            val formatter = SimpleDateFormat(
+                                "dd.MM.yyyy", Locale.getDefault()
+                            )
+                            endDateEt.isErrorEnabled = false
+                            endDateEt.editText?.setText(formatter.format(selectedCalendar.time))
+                        },
+                        endDateEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.YEAR.dateLabel),
+                        endDateEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.MONTH.dateLabel),
+                        endDateEt.editText?.text.toString()
+                            .extractDateValue(DateEnum.DATE.dateLabel)
+                    )
+
+                    datePickerDialog.show()
                 }
                 true
             }

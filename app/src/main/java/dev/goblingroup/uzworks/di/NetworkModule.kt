@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.goblingroup.uzworks.networking.AuthService
 import dev.goblingroup.uzworks.networking.DistrictService
+import dev.goblingroup.uzworks.networking.ExperienceService
 import dev.goblingroup.uzworks.networking.JobCategoryService
 import dev.goblingroup.uzworks.networking.JobService
 import dev.goblingroup.uzworks.networking.RegionService
@@ -29,7 +30,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBaseUrl(): String = "https://8b5b-195-158-2-216.ngrok-free.app/"
+    fun provideBaseUrl(): String = "https://accepted-first-pug.ngrok-free.app/"
 
     @Provides
     @Singleton
@@ -177,6 +178,14 @@ class NetworkModule {
         @Named(value = "secured_retrofit") retrofit: Retrofit
     ): SecuredUserService {
         return retrofit.create(SecuredUserService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideExperience(
+        @Named(value = "secured_retrofit") retrofit: Retrofit
+    ): ExperienceService {
+        return retrofit.create(ExperienceService::class.java)
     }
 
 }

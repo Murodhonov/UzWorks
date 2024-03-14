@@ -9,33 +9,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <ImageView
             android:id="@+id/logo_layout"
+            android:padding="@dimen/_3sdp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginVertical="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:background="@drawable/circle_background"
             android:backgroundTint="@color/black_blue"
-            android:gravity="center"
+            android:src="@drawable/uz_works_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/_3sdp"
-                android:contentDescription="@string/content_description"
-                android:src="@drawable/uz_works_logo" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,26 +40,18 @@
             app:layout_constraintLeft_toRightOf="@id/logo_layout"
             app:layout_constraintTop_toTopOf="@id/logo_layout" />
 
-        <LinearLayout
+        <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:padding="@dimen/_1sdp"
             android:layout_marginVertical="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:background="@drawable/circle_stroke"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
+            android:src="@drawable/ic_male"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/profile_picture"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/_1sdp"
-                android:contentDescription="@string/content_description"
-                android:src="@drawable/ic_male" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -105,14 +88,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_menu"
         app:textColor="@color/black_blue" />
-
-    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:itemIconTint="@color/black_blue"
-        app:itemTextColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_menu" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,24 +33,9 @@ interface SecuredWorkerService {
         @Body workerEditRequest: WorkerEditRequest
     ): Response<WorkerResponse>
 
-    @POST("api/Worker/CreateExperience")
-    suspend fun createExperience(
-        @Body experienceCreateRequest: ExperienceCreateRequest
-    ): Response<ExperienceCreateResponse>
-
-    @PUT("api/Worker/EditExperience")
-    suspend fun editExperience(
-        @Body experienceEditRequest: ExperienceEditRequest
-    ): Response<ExperienceEditResponse>
-
     @GET("api/Worker/GetWorkersByUserId/{id}")
     suspend fun getWorkersByUserId(
         @Path("id") userId: String
     ): Response<List<WorkerResponse>>
-
-    @GET("api/Worker/GetExperiencesByUserId/{id}")
-    suspend fun getExperiencesByUserId(
-        @Path("id") userId: String
-    ): Response<List<ExperienceResponse>>
 
 }

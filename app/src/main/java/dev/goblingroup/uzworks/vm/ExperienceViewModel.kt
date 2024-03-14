@@ -10,14 +10,15 @@ import dev.goblingroup.uzworks.models.request.ExperienceEditRequest
 import dev.goblingroup.uzworks.models.response.ExperienceCreateResponse
 import dev.goblingroup.uzworks.models.response.ExperienceEditResponse
 import dev.goblingroup.uzworks.models.response.ExperienceResponse
+import dev.goblingroup.uzworks.repository.ExperienceRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
-import dev.goblingroup.uzworks.repository.secured.SecuredWorkerRepository
+import dev.goblingroup.uzworks.repository.SecuredWorkerRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ExperienceViewModel @Inject constructor(
-    private val securedWorkerRepository: SecuredWorkerRepository,
+    private val experienceRepository: ExperienceRepository,
     private val securityRepository: SecurityRepository
 ) : ViewModel() {
 
@@ -35,7 +36,7 @@ class ExperienceViewModel @Inject constructor(
     private fun fetchExperiences() {
         viewModelScope.launch {
                 val experienceResponse =
-                    securedWorkerRepository.getExperiencesByUserId(securityRepository.getUserId())
+                    experienceRepository.getExperiencesByUserId(securityRepository.getUserId())
                 if (experienceResponse.isSuccessful) {
                     _experienceLiveData.postValue(ApiStatus.Success(experienceResponse.body()))
                 } else {
@@ -47,7 +48,7 @@ class ExperienceViewModel @Inject constructor(
     fun createExperience(experienceCreateRequest: ExperienceCreateRequest): LiveData<ApiStatus<ExperienceCreateResponse>> {
         viewModelScope.launch {
                 val experienceCreateResponse =
-                    securedWorkerRepository.createExperience(experienceCreateRequest)
+                    experienceRepository.createExperience(experienceCreateRequest)
                 if (experienceCreateResponse.isSuccessful) {
                     createExperienceLiveData.postValue(ApiStatus.Success(experienceCreateResponse.body()))
                 } else {
@@ -59,7 +60,7 @@ class ExperienceViewModel @Inject constructor(
 
     fun editExperience(experienceEditRequest: ExperienceEditRequest): LiveData<ApiStatus<ExperienceEditResponse>> {
         viewModelScope.launch {
-                val editExperienceResponse = securedWorkerRepository.editExperience(experienceEditRequest)
+                val editExperienceResponse = experienceRepository.editExperience(experienceEditRequest)
                 if (editExperienceResponse.isSuccessful) {
                     editExperienceLiveData.postValue(ApiStatus.Success(editExperienceResponse.body()))
                 } else {

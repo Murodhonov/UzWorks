@@ -159,4 +159,5 @@
     <string name="job_category_error">Иш турини танланг</string>
     <string name="set_location">Тайёр</string>
     <string name="no_internet">Интернет алоқаси йўқ</string>
+    <string name="unavailable_date">Бу санани танлаб бўлмайди, камида 16 йил олдинни танланг</string>
 </resources>

@@ -59,7 +59,7 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             val mapFragment =
-                childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+                childFragmentManager.findFragmentById(R.id.select_job_map) as SupportMapFragment
             mapFragment.getMapAsync(this@SelectJobLocationFragment)
 
             setLocationBtn.setOnClickListener {
@@ -150,14 +150,6 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
         findNavController().popBackStack()
     }
 
-    private fun displayDialog() {
-        val alertDialog = AlertDialog.Builder(requireContext()).create()
-        val addressDialogBinding = JobAddressDialogBinding.inflate(layoutInflater)
-        alertDialog.setView(addressDialogBinding.root)
-        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        alertDialog.show()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -188,5 +180,13 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
             previousMarker = newMarker
             selectedLocation = it
         }
+    }
+
+    private fun displayDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext()).create()
+        val addressDialogBinding = JobAddressDialogBinding.inflate(layoutInflater)
+        alertDialog.setView(addressDialogBinding.root)
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alertDialog.show()
     }
 }

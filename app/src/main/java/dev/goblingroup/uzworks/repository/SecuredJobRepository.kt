@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.repository.secured
+package dev.goblingroup.uzworks.repository
 
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.request.JobEditRequest

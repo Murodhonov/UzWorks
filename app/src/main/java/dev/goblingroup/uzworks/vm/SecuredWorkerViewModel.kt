@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
 import dev.goblingroup.uzworks.models.response.WorkerResponse
-import dev.goblingroup.uzworks.repository.secured.SecuredWorkerRepository
+import dev.goblingroup.uzworks.repository.SecuredWorkerRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

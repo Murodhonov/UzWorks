@@ -1,6 +1,5 @@
 package dev.goblingroup.uzworks.vm
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.request.JobEditRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse
-import dev.goblingroup.uzworks.repository.secured.SecuredJobRepository
+import dev.goblingroup.uzworks.repository.SecuredJobRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

@@ -10,16 +10,14 @@
 
     <TextView
         android:id="@+id/greeting_tv"
+        android:theme="@style/Headline_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_38sdp"
         android:layout_marginEnd="@dimen/_15sdp"
-        android:fontFamily="@font/dm_sans_bold"
         android:text="@string/welcome"
-        android:textColor="@color/black_blue"
-        android:textSize="@dimen/_23ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,20 +25,19 @@
     <TextView
         android:id="@+id/under_greeting_tv"
         android:layout_width="0dp"
+        android:theme="@style/Headline_1"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_23sdp"
         android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_23sdp"
         android:text="@string/lorem_ipsum"
         android:textAlignment="center"
-        android:textSize="@dimen/_10ssp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/greeting_tv" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_et"
-        style="@style/TextInputEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_49sdp"
@@ -62,7 +59,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password_et"
-        style="@style/TextInputEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_20sdp"

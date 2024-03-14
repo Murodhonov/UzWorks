@@ -19,7 +19,7 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/corner_dash_stroke_rectangle"
+            android:background="@drawable/stroke_dash_background"
             app:tabGravity="fill"
             app:tabIndicator="@null"
             app:tabIndicatorColor="@null"

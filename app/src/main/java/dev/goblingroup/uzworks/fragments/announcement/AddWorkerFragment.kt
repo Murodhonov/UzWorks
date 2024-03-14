@@ -123,21 +123,18 @@ class AddWorkerFragment : Fragment() {
                             val selectedCalendar = Calendar.getInstance().apply {
                                 set(year, month, dayOfMonth)
                             }
-
-                            val currentCalendar = Calendar.getInstance()
-
-                            if (selectedCalendar.after(currentCalendar)) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Cannot select date after current date",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
+                            if (checkBirthdate(selectedCalendar)) {
                                 val formatter = SimpleDateFormat(
                                     "dd.MM.yyyy", Locale.getDefault()
                                 )
                                 birthdayEt.isErrorEnabled = false
                                 birthdayEt.editText?.setText(formatter.format(selectedCalendar.time))
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    resources.getString(R.string.unavailable_date),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         },
                         birthdayEt.editText?.text.toString()
@@ -247,6 +244,13 @@ class AddWorkerFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun checkBirthdate(selectedCalendar: Calendar): Boolean {
+        val minimumAge = 16
+        val minimumCalendar = Calendar.getInstance().clone() as Calendar
+        minimumCalendar.add(Calendar.YEAR, -minimumAge)
+        return selectedCalendar.after(minimumCalendar)
     }
 
     private fun isFormValid(): Boolean {

@@ -159,4 +159,5 @@ The information displayed to you is determined by the role you choose</string>
     <string name="job_category_error">Select your job category</string>
     <string name="set_location">Ready</string>
     <string name="no_internet">No internet connection</string>
+    <string name="unavailable_date">Cannot select this date, select at least 16 years ago</string>
 </resources>

@@ -7,13 +7,10 @@
     tools:context=".fragments.announcement.SelectJobLocationFragment">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/map"
+        android:id="@+id/select_job_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.8"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent" />
 
     <ImageView
         android:id="@+id/back_btn"

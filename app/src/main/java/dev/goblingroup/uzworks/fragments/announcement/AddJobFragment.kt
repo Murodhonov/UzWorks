@@ -275,20 +275,24 @@ class AddJobFragment : Fragment() {
             })
 
             genderLayout.apply {
+                var selectedGender = ""
+
                 maleBtn.setOnClickListener {
                     addJobViewModel.gender.observe(viewLifecycleOwner) {
-                        if (it == GenderEnum.FEMALE.label || it.isEmpty()) {
-                            addJobViewModel.setGender(GenderEnum.MALE.label)
-                            selectMale(resources)
-                        }
+                        selectedGender = it
+                    }
+                    if (selectedGender == GenderEnum.FEMALE.label || selectedGender.isEmpty()) {
+                        addJobViewModel.setGender(GenderEnum.MALE.label)
+                        selectMale(resources)
                     }
                 }
                 femaleBtn.setOnClickListener {
                     addJobViewModel.gender.observe(viewLifecycleOwner) {
-                        if (it == GenderEnum.MALE.label || it.isEmpty()) {
-                            addJobViewModel.setGender(GenderEnum.FEMALE.label)
-                            selectFemale(resources)
-                        }
+                        selectedGender = it
+                    }
+                    if (selectedGender == GenderEnum.MALE.label || selectedGender.isEmpty()) {
+                        addJobViewModel.setGender(GenderEnum.FEMALE.label)
+                        selectFemale(resources)
                     }
                 }
             }
@@ -358,6 +362,7 @@ class AddJobFragment : Fragment() {
             }
 
             jobCategoryChoice.setOnClickListener {
+                Toast.makeText(requireContext(), "click", Toast.LENGTH_SHORT).show()
                 jobCategoryLayout.isErrorEnabled = false
             }
         }
@@ -560,6 +565,15 @@ class AddJobFragment : Fragment() {
                 salaryEt.error = resources.getString(R.string.salary_error)
                 isValid = false
             }
+            addJobViewModel.gender.observe(viewLifecycleOwner) {
+                if (it.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(R.string.confirm_gender),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
             if (workingTimeEt.editText?.text.toString().isEmpty()) {
                 workingTimeEt.isErrorEnabled = true
                 workingTimeEt.error = resources.getString(R.string.working_time_error)
@@ -569,12 +583,14 @@ class AddJobFragment : Fragment() {
                 workingScheduleEt.isErrorEnabled = true
                 workingScheduleEt.error = resources.getString(R.string.working_schedule_error)
             }
-            if (tgUserNameEt.editText?.text.toString().isEmpty()) {
+            if (tgUserNameEt.editText?.text.toString() == "@") {
                 tgUserNameEt.isErrorEnabled = true
                 tgUserNameEt.error = resources.getString(R.string.tg_username_error)
                 isValid = false
             }
-            if (phoneNumberEt.editText?.text.toString().isEmpty()) {
+            if (phoneNumberEt.editText?.text.toString()
+                    .filter { !it.isWhitespace() }.length != 13
+            ) {
                 phoneNumberEt.isErrorEnabled = true
                 phoneNumberEt.error = resources.getString(R.string.phone_number_error)
                 isValid = false

@@ -18,10 +18,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:errorEnabled="false"
+            app:layout_constraintRight_toRightOf="parent"
             android:hint="@string/position"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.48">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -40,9 +40,10 @@
             android:layout_height="wrap_content"
             app:errorEnabled="false"
             android:hint="@string/company_name"
+            android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.48">
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/position_et">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -66,7 +67,7 @@
             app:endIconTint="@color/black_blue"
             app:layout_constraintLeft_toLeftOf="parent"
             app:errorEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/position_et"
+            app:layout_constraintTop_toBottomOf="@id/company_name_et"
             app:layout_constraintWidth_percent="0.48">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -91,7 +92,7 @@
             app:endIconTint="@color/black_blue"
             app:layout_constraintRight_toRightOf="parent"
             app:errorEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/position_et"
+            app:layout_constraintTop_toBottomOf="@id/company_name_et"
             app:layout_constraintWidth_percent="0.48">
 
             <com.google.android.material.textfield.TextInputEditText

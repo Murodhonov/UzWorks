@@ -159,4 +159,5 @@
     <string name="job_category_error">Выберите категорию вакансии</string>
     <string name="set_location">Готов</string>
     <string name="no_internet">Нет соединения с интернетом</string>
+    <string name="unavailable_date">Невозможно выбрать эту дату. Выберите минимум 16 лет назад</string>
 </resources>

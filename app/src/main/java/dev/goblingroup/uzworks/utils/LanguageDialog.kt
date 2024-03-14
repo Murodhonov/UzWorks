@@ -128,7 +128,7 @@ private fun updateSelection(
         }
         when (languageTo) {
             LanguageEnum.KIRILL_UZB.code -> {
-                kirillUzbLayout.setBackgroundResource(R.drawable.corner_dash_stroke_rectangle)
+                kirillUzbLayout.setBackgroundResource(R.drawable.stroke_dash_background)
                 val marginLayoutParams = kirillUzbFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(10, 0, 0, 0)
                 kirillUzbFlag.layoutParams = marginLayoutParams
@@ -136,7 +136,7 @@ private fun updateSelection(
             }
 
             LanguageEnum.LATIN_UZB.code -> {
-                latinUzbLayout.setBackgroundResource(R.drawable.corner_dash_stroke_rectangle)
+                latinUzbLayout.setBackgroundResource(R.drawable.stroke_dash_background)
                 val marginLayoutParams = latinUzbFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(10, 0, 0, 0)
                 latinUzbFlag.layoutParams = marginLayoutParams
@@ -144,7 +144,7 @@ private fun updateSelection(
             }
 
             LanguageEnum.RUSSIAN.code -> {
-                ruLayout.setBackgroundResource(R.drawable.corner_dash_stroke_rectangle)
+                ruLayout.setBackgroundResource(R.drawable.stroke_dash_background)
                 val marginLayoutParams = ruFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(10, 0, 0, 0)
                 ruFlag.layoutParams = marginLayoutParams
@@ -152,7 +152,7 @@ private fun updateSelection(
             }
 
             LanguageEnum.ENGLISH.code -> {
-                enLayout.setBackgroundResource(R.drawable.corner_dash_stroke_rectangle)
+                enLayout.setBackgroundResource(R.drawable.stroke_dash_background)
                 val marginLayoutParams = enFlag.layoutParams as MarginLayoutParams
                 marginLayoutParams.setMargins(10, 0, 0, 0)
                 enFlag.layoutParams = marginLayoutParams

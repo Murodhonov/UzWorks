@@ -8,8 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.repository.SecurityRepository
-import dev.goblingroup.uzworks.repository.secured.SecuredJobRepository
-import dev.goblingroup.uzworks.repository.secured.SecuredWorkerRepository
+import dev.goblingroup.uzworks.repository.SecuredJobRepository
+import dev.goblingroup.uzworks.repository.SecuredWorkerRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import kotlinx.coroutines.launch
 import javax.inject.Inject

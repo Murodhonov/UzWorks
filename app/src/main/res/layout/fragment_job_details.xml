@@ -480,21 +480,20 @@
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_11ssp" />
 
-            <ImageView
-                android:id="@+id/map_iv"
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/job_details_map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
                 app:layout_constraintTop_toBottomOf="@id/map_address_tv"
-                android:contentDescription="@string/content_description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/map" />
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.2"/>
 
             <TextView
                 android:id="@+id/contact_tv"
                 android:layout_width="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/map_iv"
+                app:layout_constraintTop_toBottomOf="@id/job_details_map"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/_7sdp"
@@ -503,44 +502,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_15ssp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/contact_chat_btn"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="-10dp"
-                android:layout_marginTop="@dimen/_7sdp"
-                android:backgroundTint="@color/white"
-                android:paddingBottom="@dimen/_10sdp"
-                app:cardCornerRadius="@dimen/_5sdp"
-                app:cardElevation="0dp"
-                app:layout_constraintBottom_toBottomOf="@id/chat_iv"
-                app:layout_constraintTop_toBottomOf="@id/contact_tv"
-                app:strokeColor="@color/black_blue"
-                app:strokeWidth="@dimen/_2sdp" />
-
-            <ImageView
-                android:id="@+id/chat_iv"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_marginTop="10dp"
-                android:contentDescription="@string/content_description"
-                android:src="@drawable/ic_contact_by_chat"
-                app:layout_constraintRight_toLeftOf="@id/contact_tv"
-                app:layout_constraintTop_toTopOf="@id/contact_chat_btn" />
-
-            <TextView
-                android:id="@+id/contact_chat_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_7sdp"
-                android:fontFamily="@font/dm_sans_bold"
-                android:text="@string/contact_chat"
-                android:textColor="@color/black_blue"
-                android:textSize="@dimen/_13ssp"
-                app:layout_constraintBottom_toBottomOf="@id/chat_iv"
-                app:layout_constraintLeft_toRightOf="@id/chat_iv"
-                app:layout_constraintTop_toTopOf="@id/chat_iv" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/contact_tg_btn"
@@ -553,7 +514,7 @@
                 app:cardCornerRadius="@dimen/_5sdp"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="@id/contact_tg_iv"
-                app:layout_constraintTop_toBottomOf="@id/contact_chat_btn"
+                app:layout_constraintTop_toBottomOf="@id/contact_tv"
                 app:strokeColor="@color/blue"
                 app:strokeWidth="@dimen/_2sdp" />
 
@@ -564,7 +525,7 @@
                 android:layout_marginTop="10dp"
                 android:contentDescription="@string/content_description"
                 android:src="@drawable/ic_telegram"
-                app:layout_constraintLeft_toLeftOf="@id/chat_iv"
+                app:layout_constraintLeft_toLeftOf="@id/contact_tv"
                 app:layout_constraintTop_toTopOf="@id/contact_tg_btn" />
 
             <TextView

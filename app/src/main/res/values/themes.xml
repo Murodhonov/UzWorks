@@ -1,73 +1,11 @@
 <resources>
-    <!-- Base application theme. -->
     <style name="Base.Theme.UzWorks" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:textViewStyle">@style/TextViewStyle</item>
-        <item name="cardViewStyle">@style/CardViewStyle</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
-        <item name="editTextStyle">@style/CustomEditTextStyle</item>
+        <item name="textInputStyle">@style/TextInputEditTextStyle</item>
     </style>
 
     <style name="Theme.UzWorks" parent="Base.Theme.UzWorks" />
-
-    <!--
-            TextViews style
-    -->
-
-    <style name="TextViewStyle" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/dm_sans_regular</item>
-        <item name="android:textColor">@color/text_color</item>
-    </style>
-
-
-    <!--
-            Custom edit text style
-    -->
-    <style name="CustomEditTextStyle" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/edit_text_background</item>
-        <item name="android:fontFamily">@font/dm_sans_regular</item>
-        <item name="android:textColorHint">@color/text_color</item>
-        <item name="android:textColor">@color/black_blue</item>
-        <item name="android:padding">@dimen/_7sdp</item>
-        <item name="android:textSize">@dimen/_11ssp</item>
-    </style>
-
-    <!--
-            CardView style
-    -->
-
-    <style name="CardViewStyle" parent="CardView">
-        <item name="android:backgroundTint">@color/enabled</item>
-        <item name="cardCornerRadius">@dimen/_7sdp</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:foreground">?selectableItemBackgroundBorderless</item>
-        <item name="cardElevation">@dimen/_3sdp</item>
-    </style>
-
-    <!--
-        Button style
-    -->
-    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="cornerRadius">@dimen/_10sdp</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:fontFamily">@font/dm_sans_bold</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:backgroundTint">@color/black_blue</item>
-    </style>
-
-    <style name="BoldTextViewStyle" parent="Widget.AppCompat.TextView">
-        <item name="android:textColor">@color/black_blue</item>
-        <item name="android:textSize">@dimen/_13ssp</item>
-        <item name="android:fontFamily">@font/dm_sans_bold</item>
-    </style>
-
-    <style name="NormalTextViewStyle" parent="Widget.AppCompat.TextView">
-        <item name="textColor">@color/black_blue</item>
-        <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:fontFamily">@font/dm_sans_regular</item>
-    </style>
 
     <style name="TextInputEditTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="textColor">@color/black_blue</item>
@@ -75,7 +13,7 @@
         <item name="hintTextColor">@color/black_blue</item>
         <item name="strokeWidth">@dimen/_1sdp</item>
         <item name="android:textColorHint">@color/text_color</item>
-        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:textSize">@dimen/_18ssp</item>
         <item name="boxCornerRadiusBottomStart">@dimen/_7sdp</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/_7sdp</item>
         <item name="boxCornerRadiusTopStart">@dimen/_7sdp</item>
@@ -83,6 +21,84 @@
         <item name="errorEnabled">true</item>
         <item name="helperTextEnabled">true</item>
         <item name="helperTextTextColor">@color/text_color</item>
+    </style>
+
+    <style name="TextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_24ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_bold</item>
+    </style>
+
+    <style name="Headline_1" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_60ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_bold</item>
+    </style>
+
+    <style name="Headline_2" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_50ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_bold</item>
+    </style>
+
+    <style name="Headline_3" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_33ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_bold</item>
+    </style>
+
+    <style name="Headline_4" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_30ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_bold</item>
+    </style>
+
+    <style name="Headline_5" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_27ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_bold</item>
+    </style>
+
+    <style name="Small_P1" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_21ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_bold</item>
+    </style>
+
+    <style name="Small_P2_Regular" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_regular</item>
+    </style>
+
+    <style name="Small_P2_Bold" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_18ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_bold</item>
+    </style>
+
+    <style name="Small_P3" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_15ssp</item>
+        <item name="android:textColor">@color/black_blue</item>
+        <item name="android:fontFamily">@font/dm_sans_bold</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/enabled_button_background</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_21ssp</item>
+    </style>
+
+    <style name="ButtonStyle1" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background_1</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_21ssp</item>
+    </style>
+
+    <style name="ButtonStyle2" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background_2</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/_15ssp</item>
     </style>
 
 </resources>

@@ -388,9 +388,9 @@ fun String.formatSalary(): String {
 }
 
 fun String.formatTgUsername(): String {
-    if (this.isEmpty() || this.length == 1) return "@"
+    return if (this.isEmpty() || this.length == 1) "@"
     else {
-        return "@${this.substring(1)}"
+        "@${this.substring(1)}"
     }
 }
 

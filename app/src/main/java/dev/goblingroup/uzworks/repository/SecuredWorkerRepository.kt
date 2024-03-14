@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.repository.secured
+package dev.goblingroup.uzworks.repository
 
 import dev.goblingroup.uzworks.models.request.ExperienceCreateRequest
 import dev.goblingroup.uzworks.models.request.ExperienceEditRequest
@@ -18,12 +18,6 @@ class SecuredWorkerRepository @Inject constructor(
     suspend fun editWorker(workerEditRequest: WorkerEditRequest) =
         securedWorkerService.editWorker(workerEditRequest = workerEditRequest)
 
-    suspend fun createExperience(experienceCreateRequest: ExperienceCreateRequest) = securedWorkerService.createExperience(experienceCreateRequest)
-
-    suspend fun editExperience(experienceEditRequest: ExperienceEditRequest) = securedWorkerService.editExperience(experienceEditRequest)
-
     suspend fun getWorkersByUserId(userId: String) = securedWorkerService.getWorkersByUserId(userId)
-
-    suspend fun getExperiencesByUserId(userId: String) = securedWorkerService.getExperiencesByUserId(userId)
 
 }

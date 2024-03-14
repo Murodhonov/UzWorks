@@ -1,6 +1,9 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -10,10 +13,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentJobDetailsBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
+import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.LanguageEnum
@@ -23,7 +34,7 @@ import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.JobDetailsViewModel
 
 @AndroidEntryPoint
-class JobDetailsFragment : Fragment() {
+class JobDetailsFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentJobDetailsBinding? = null
 
@@ -32,6 +43,14 @@ class JobDetailsFragment : Fragment() {
     private val jobDetailsViewModel: JobDetailsViewModel by viewModels()
     private val addressViewModel: AddressViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
+
+    private lateinit var googleMap: GoogleMap
+
+    private var latitude = 0.0
+    private var longitude = 0.0
+    private var jobTitle = ""
+
+    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +62,9 @@ class JobDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
+            val mapFragment =
+                childFragmentManager.findFragmentById(R.id.job_details_map) as SupportMapFragment
+            mapFragment.getMapAsync(this@JobDetailsFragment)
             loadJob()
         }
     }
@@ -57,20 +79,24 @@ class JobDetailsFragment : Fragment() {
                     }
 
                     is ApiStatus.Loading -> {
-                        Toast.makeText(requireContext(), "loading job", Toast.LENGTH_SHORT).show()
+                        loading()
                     }
 
                     is ApiStatus.Success -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "job successfully loaded",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        loadingDialog.dismiss()
                         setJobDetails(it.response)
                     }
                 }
             }
+    }
+
+    private fun loading() {
+        loadingDialog = AlertDialog.Builder(requireContext()).create()
+        val dialogBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        loadingDialog.setView(dialogBinding.root)
+        loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
     }
 
     private fun setJobDetails(jobResponse: JobResponse?) {
@@ -105,30 +131,60 @@ class JobDetailsFragment : Fragment() {
                     )
                 }"
             requirementTv.text = jobResponse?.requirement
+            latitude = jobResponse?.latitude ?: 0.0
+            longitude = jobResponse?.longitude ?: 0.0
+
+            contactTgBtn.setOnClickListener {
+                openLink("https://t.me/${jobResponse?.tgUserName}")
+            }
+
+            contactCallBtn.setOnClickListener {
+                call(jobResponse?.phoneNumber)
+            }
+
+            if (jobResponse?.telegramLink.toString()
+                    .isEmpty() && jobResponse?.instagramLink.toString().isEmpty()
+            ) {
+                socialsDivider.visibility = View.GONE
+                socialsTv.visibility = View.GONE
+                tgIv.visibility = View.GONE
+                tgLinkTv.visibility = View.GONE
+                igIv.visibility = View.GONE
+                igLinkTv.visibility = View.GONE
+            }
+
             tgIv.setOnClickListener {
-                openLink(jobResponse?.telegramLink)
+                openLink("https://t.me/${jobResponse?.telegramLink}")
             }
 
             tgLinkTv.setOnClickListener {
-                openLink(jobResponse?.telegramLink)
+                openLink("https://t.me/${jobResponse?.telegramLink}")
             }
 
             igIv.setOnClickListener {
-                openLink(jobResponse?.instagramLink)
+                openLink("https://www.instagram.com/${jobResponse?.instagramLink}")
             }
 
             igLinkTv.setOnClickListener {
-                openLink(jobResponse?.instagramLink)
-            }
-
-            contactTgBtn.setOnClickListener {
-                openLink(jobResponse?.tgUserName)
+                openLink("https://www.instagram.com/${jobResponse?.instagramLink}")
             }
         }
     }
 
+    private fun call(phoneNumber: String?) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:$phoneNumber")
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e(ConstValues.TAG, "call: $e")
+            Log.e(ConstValues.TAG, "call: ${e.message}")
+            Log.e(ConstValues.TAG, "call: ${e.printStackTrace()}")
+        }
+    }
+
     private fun openLink(link: String?) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/Jasur_Alimov"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         try {
             startActivity(intent)
         } catch (e: Exception) {
@@ -141,5 +197,36 @@ class JobDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        val latLng = LatLng(latitude, longitude)
+        googleMap.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(latLng, 15f),
+            1000,
+            null
+        )
+        googleMap.addMarker(MarkerOptions().position(latLng))
+        googleMap.setOnMapClickListener {
+            val geoUri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude(${binding.titleTv.text})")
+            val mapIntent = Intent(Intent.ACTION_VIEW, geoUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+
+            try {
+                Toast.makeText(
+                    requireContext(),
+                    "opening $latitude, $longitude",
+                    Toast.LENGTH_SHORT
+                ).show()
+                startActivity(mapIntent)
+            } catch (e: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    "failed to open $latitude, $longitude",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 }

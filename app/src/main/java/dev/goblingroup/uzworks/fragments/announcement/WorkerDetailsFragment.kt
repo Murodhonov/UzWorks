@@ -1,6 +1,12 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
+import android.app.AlertDialog
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +16,11 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentWorkerDetailsBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.response.WorkerResponse
+import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.GenderEnum
-import dev.goblingroup.uzworks.utils.LanguageEnum
+import dev.goblingroup.uzworks.utils.isoToDmy
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -27,6 +35,8 @@ class WorkerDetailsFragment : Fragment() {
     private val workerDetailsViewModel: WorkerDetailsViewModel by viewModels()
     private val addressViewModel: AddressViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
+
+    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,18 +64,23 @@ class WorkerDetailsFragment : Fragment() {
                         ).show()
                     }
                     is ApiStatus.Loading -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "loading worker details",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        loading()
                     }
                     is ApiStatus.Success -> {
-                        Toast.makeText(requireContext(), "succeeded", Toast.LENGTH_SHORT).show()
+                        loadingDialog.dismiss()
                         setWorkerDetails(it.response)
                     }
                 }
             }
+    }
+
+    private fun loading() {
+        loadingDialog = AlertDialog.Builder(requireContext()).create()
+        val loadingBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        loadingDialog.setView(loadingBinding.root)
+        loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
     }
 
     private fun setWorkerDetails(workerResponse: WorkerResponse?) {
@@ -78,7 +93,7 @@ class WorkerDetailsFragment : Fragment() {
                     R.string.female
                 )
             fullNameTv.text = workerResponse?.fullName
-            birthdateTv.text = workerResponse?.birthDate
+            birthdateTv.text = workerResponse?.birthDate?.isoToDmy()
             addressTv.text =
                 "${addressViewModel.findRegion(addressViewModel.findDistrict(workerResponse?.districtId.toString()).regionId).name}, ${
                     addressViewModel.findDistrict(workerResponse?.districtId.toString()).name
@@ -86,30 +101,65 @@ class WorkerDetailsFragment : Fragment() {
             salaryTv.text = workerResponse?.salary.toString()
             workingTimeTv.text = workerResponse?.workingTime
             workingScheduleTv.text = workerResponse?.workingSchedule
+
+            contactTgBtn.setOnClickListener {
+                openLink("https://t.me/${workerResponse?.tgUserName}")
+            }
+
+            contactCallBtn.setOnClickListener {
+                call(workerResponse?.phoneNumber)
+            }
+
+            if (workerResponse?.telegramLink.toString()
+                    .isEmpty() && workerResponse?.instagramLink.toString().isEmpty()
+            ) {
+                socialsDivider.visibility = View.GONE
+                socialsTv.visibility = View.GONE
+                tgIv.visibility = View.GONE
+                tgLinkTv.visibility = View.GONE
+                igIv.visibility = View.GONE
+                igLinkTv.visibility = View.GONE
+            }
+
             tgIv.setOnClickListener {
-                openLink(workerResponse?.telegramLink)
+                openLink("https://t.me/${workerResponse?.telegramLink}")
             }
 
             tgLinkTv.setOnClickListener {
-                openLink(workerResponse?.telegramLink)
+                openLink("https://t.me/${workerResponse?.telegramLink}")
             }
 
             igIv.setOnClickListener {
-                openLink(workerResponse?.instagramLink)
+                openLink("https://www.instagram.com/${workerResponse?.instagramLink}")
             }
 
             igLinkTv.setOnClickListener {
-                openLink(workerResponse?.instagramLink)
-            }
-
-            contactTgBtn.setOnClickListener {
-                openLink(workerResponse?.tgUserName)
+                openLink("https://www.instagram.com/${workerResponse?.instagramLink}")
             }
         }
     }
 
-    private fun openLink(link: String?) {
+    private fun call(phoneNumber: String?) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:$phoneNumber")
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e(ConstValues.TAG, "call: $e")
+            Log.e(ConstValues.TAG, "call: ${e.message}")
+            Log.e(ConstValues.TAG, "call: ${e.printStackTrace()}")
+        }
+    }
 
+    private fun openLink(link: String?) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e(ConstValues.TAG, "openLink: $e")
+            Log.e(ConstValues.TAG, "openLink: ${e.message}")
+            Log.e(ConstValues.TAG, "openLink: ${e.printStackTrace()}")
+        }
     }
 
     override fun onDestroyView() {
