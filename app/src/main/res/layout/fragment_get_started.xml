@@ -39,8 +39,6 @@
         android:id="@+id/get_started_title_tv"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15sdp"
-        android:theme="@style/Headline_1"
-        android:fontFamily="@font/dm_sans_bold"
         android:textSize="@dimen/_30ssp"
         android:textAlignment="textStart"
         android:textColor="@color/black"
@@ -49,7 +47,7 @@
     <TextView
         android:id="@+id/get_started_bottom_tv"
         android:layout_width="match_parent"
-        android:theme="@style/Small_P1"
+        android:theme="@style/SecondaryTextStyle"
         android:layout_height="wrap_content"
         app:layout_constraintVertical_bias="0"
         android:layout_marginTop="@dimen/_7sdp"
@@ -73,9 +71,9 @@
     <TextView
         android:id="@+id/language_tv"
         android:layout_width="wrap_content"
-        android:theme="@style/Headline_4"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:textSize="@dimen/_15ssp"
         android:layout_marginStart="@dimen/_7sdp"
         app:layout_constraintBottom_toBottomOf="@id/language_btn"
         app:layout_constraintLeft_toRightOf="@id/language_btn"

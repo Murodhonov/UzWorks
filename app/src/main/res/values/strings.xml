@@ -91,7 +91,7 @@
     <string name="contact_chat">Чат орқали</string>
     <string name="contact_telegram">Телеграм орқали</string>
     <string name="contact_phone">Телефон орқали</string>
-    <string name="ad_title">50% офф\нРеклама учун\нкатта чегирма ютиб\нолинг</string>
+    <string name="ad_title">50% офф\nРеклама учун катта чегирма ютиб олинг</string>
     <string name="join">Join now</string>
     <string name="statistics">Статистикалар</string>
     <string name="jobs">Ишлар</string>
@@ -160,4 +160,6 @@
     <string name="set_location">Тайёр</string>
     <string name="no_internet">Интернет алоқаси йўқ</string>
     <string name="unavailable_date">Бу санани танлаб бўлмайди, камида 16 йил олдинни танланг</string>
+    <string name="enter_username_password">Платформага кириш учун фойдаланувчи номи ва паролингизни киритинг</string>
+    <string name="sign_up_floor">Профиль яратиш учун исмингиз, фойдаланувчи номини  ҳамда шахсий паролингизни киритинг</string>
 </resources>

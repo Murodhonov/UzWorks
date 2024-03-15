@@ -91,7 +91,7 @@
     <string name="contact_chat">Через чат</string>
     <string name="contact_telegram">Через Телеграм</string>
     <string name="contact_phone">По телефону</string>
-    <string name="ad_title">Скидка 50%\nРеклама\nВыиграйте большую скидку\n</string>
+    <string name="ad_title">Скидка 50%\nВыиграйте большую скидку на рекламу</string>
     <string name="join">Присоединяйся сейчас</string>
     <string name="statistics">Статистика</string>
     <string name="jobs">Вакансии</string>
@@ -160,4 +160,6 @@
     <string name="set_location">Готов</string>
     <string name="no_internet">Нет соединения с интернетом</string>
     <string name="unavailable_date">Невозможно выбрать эту дату. Выберите минимум 16 лет назад</string>
+    <string name="enter_username_password">Введите свое имя пользователя и пароль для доступа к платформе</string>
+    <string name="sign_up_floor">Для создания профиля введите свое имя, логин и личный пароль</string>
 </resources>

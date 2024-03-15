@@ -41,6 +41,7 @@
             app:layout_constraintTop_toTopOf="@id/logo_layout" />
 
         <ImageView
+            android:id="@+id/profile"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:padding="@dimen/_1sdp"

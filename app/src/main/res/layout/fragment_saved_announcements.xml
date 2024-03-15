@@ -20,20 +20,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/empty_layout"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_15sdp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/empty_title_tv"
             android:layout_width="wrap_content"
+            android:theme="@style/TextViewStyle"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/dm_sans_bold"
             android:text="@string/no_savings"
-            android:textColor="@color/black_blue"
-            android:textSize="@dimen/_15ssp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,11 +43,9 @@
             android:layout_marginStart="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_7sdp"
             android:layout_marginEnd="@dimen/_38sdp"
-            android:fontFamily="@font/dm_sans_regular"
+            android:theme="@style/Small_P2_Regular"
             android:text="@string/saved_announcements_not_found"
             android:textAlignment="center"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/_12ssp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/empty_title_tv" />
@@ -66,26 +62,18 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/empty_describe_tv" />
 
-        <androidx.cardview.widget.CardView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/find_announcement_btn"
+            android:theme="@style/ButtonStyle"
+            android:background="@drawable/enabled_button_background"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp"
             android:layout_marginStart="@dimen/_46sdp"
+            android:text="@string/find_announcement"
+            android:textAllCaps="true"
             android:layout_marginEnd="@dimen/_46sdp"
             android:layout_marginBottom="@dimen/_30sdp"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/dm_sans_bold"
-                android:gravity="center"
-                android:text="@string/find_announcement"
-                android:textAllCaps="true"
-                android:textSize="@dimen/_10ssp"
-                android:textColor="@color/white" />
-
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

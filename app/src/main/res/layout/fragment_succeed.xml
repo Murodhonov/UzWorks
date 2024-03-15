@@ -10,6 +10,7 @@
     <TextView
         android:id="@+id/tv_1"
         android:layout_width="match_parent"
+        android:textSize="@dimen/_20ssp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
@@ -17,10 +18,7 @@
         android:layout_marginTop="@dimen/_55sdp"
         android:layout_marginEnd="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_15sdp"
-        android:fontFamily="@font/dm_sans_bold"
         android:text="@string/registration_succeeded"
-        android:textColor="@color/black_blue"
-        android:textSize="@dimen/_24ssp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -36,24 +34,17 @@
         app:layout_constraintTop_toBottomOf="@id/tv_1"
         app:layout_constraintWidth_percent="0.2" />
 
-    <androidx.cardview.widget.CardView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/continue_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_34sdp"
         android:layout_marginStart="@dimen/_23sdp"
         android:layout_marginBottom="@dimen/_144sdp"
+        android:background="@drawable/enabled_button_background"
+        android:text="@string/open_app"
         android:layout_marginEnd="@dimen/_23sdp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/dm_sans_bold"
-            android:gravity="center"
-            android:text="@string/open_app"
-            android:textAllCaps="true"
-            android:textColor="@color/white" />
-
-    </androidx.cardview.widget.CardView>
+        android:textAllCaps="true"
+        android:theme="@style/ButtonStyle"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,9 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_7sdp"
             android:layout_marginTop="@dimen/_2sdp"
-            android:fontFamily="@font/dm_sans_bold"
-            android:textColor="@color/black_blue"
-            android:textSize="@dimen/_10ssp"
+            android:theme="@style/Small_P1"
             app:layout_constraintBottom_toTopOf="@id/address_tv"
             app:layout_constraintLeft_toRightOf="@id/iv"
             app:layout_constraintTop_toTopOf="@+id/iv" />
@@ -46,9 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_7sdp"
             android:layout_marginBottom="@dimen/_2sdp"
-            android:fontFamily="@font/dm_sans_regular"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/_8ssp"
+            android:theme="@style/Small_P2_Regular"
             app:layout_constraintBottom_toBottomOf="@+id/iv"
             app:layout_constraintLeft_toRightOf="@id/iv"
             app:layout_constraintTop_toBottomOf="@id/title_tv" />
@@ -64,33 +60,25 @@
             app:layout_constraintRight_toRightOf="@id/open_work_layout"
             android:src="@drawable/ic_saved"/>
 
-        <LinearLayout
-            android:id="@+id/cost_layout"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/cost_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:theme="@style/Small_P1"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv">
+            app:layout_constraintTop_toBottomOf="@id/iv" />
 
-            <TextView
-                android:id="@+id/cost_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/dm_sans_regular"
-                android:textColor="@color/black_blue"
-                android:textSize="@dimen/_10ssp" />
-
-            <TextView
-                android:id="@+id/per_time_tv"
-                android:text="@string/salary_per_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/dm_sans_regular"
-                android:textColor="@color/yellow"
-                android:textSize="@dimen/_10ssp" />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/per_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/salary_per_time"
+            android:textColor="@color/yellow"
+            android:theme="@style/Small_P1"
+            app:layout_constraintBottom_toBottomOf="@id/cost_tv"
+            app:layout_constraintLeft_toRightOf="@id/cost_tv"
+            app:layout_constraintTop_toTopOf="@id/cost_tv" />
 
         <LinearLayout
             android:id="@+id/gender_layout"
@@ -104,14 +92,14 @@
             android:paddingEnd="@dimen/_7sdp"
             android:paddingBottom="@dimen/_3sdp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cost_layout">
+            app:layout_constraintTop_toBottomOf="@id/cost_tv">
 
             <TextView
                 android:id="@+id/gender_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_8ssp" />
+                android:theme="@style/Small_P3"/>
 
         </LinearLayout>
 
@@ -134,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_8ssp" />
+                android:theme="@style/Small_P3" />
 
         </LinearLayout>
 
@@ -159,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/view"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_8ssp" />
+                android:theme="@style/Small_P3" />
 
         </LinearLayout>
 

@@ -59,7 +59,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/deadline_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -86,7 +85,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/birthday_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -113,7 +111,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -131,7 +128,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/salary_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -157,7 +153,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/working_time_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -176,7 +171,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tg_user_name_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_height="wrap_content"
@@ -194,7 +188,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phone_number_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -212,7 +205,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/orientation_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -229,7 +221,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                style="@style/BoldTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_12ssp"
@@ -291,7 +282,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                style="@style/BoldTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_12ssp"

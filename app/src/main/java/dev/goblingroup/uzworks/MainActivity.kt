@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            profilePicture.setOnClickListener {
+            profile.setOnClickListener {
                 navController.navigate(
                     resId = R.id.profileFragment,
                     args = null,

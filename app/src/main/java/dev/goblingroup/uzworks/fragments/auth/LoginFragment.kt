@@ -219,8 +219,7 @@ class LoginFragment : Fragment() {
             underGreetingTv.text = resources.getString(R.string.lorem_ipsum)
             usernameEt.hint = resources.getString(R.string.username)
             passwordEt.hint = resources.getString(R.string.password)
-            loginTv.text = resources.getString(R.string.login)
-            signInGoogleTv.text = resources.getString(R.string.sign_in_google)
+            loginBtn.text = resources.getString(R.string.login)
             doNotHaveAccountTv.text = resources.getString(R.string.do_not_have_account)
             signUpTv.text = resources.getString(R.string.create_account)
         }

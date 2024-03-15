@@ -26,12 +26,10 @@
 
         <TextView
             android:layout_width="wrap_content"
+            android:theme="@style/Small_P1"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_7sdp"
-            android:fontFamily="@font/dm_sans_bold"
             android:text="@string/personal_information"
-            android:textColor="@color/black_blue"
-            android:textSize="@dimen/_13ssp"
             app:layout_constraintBottom_toBottomOf="@id/info_image"
             app:layout_constraintLeft_toRightOf="@id/info_image"
             app:layout_constraintTop_toTopOf="@id/info_image" />
@@ -46,7 +44,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/first_name_et"
-            style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -63,14 +60,12 @@
                 android:layout_height="@dimen/_40sdp"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
-                android:maxLines="1"
-                android:textSize="@dimen/_10ssp" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/last_name_et"
-            style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -87,14 +82,12 @@
                 android:layout_height="@dimen/_40sdp"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
-                android:maxLines="1"
-                android:textSize="@dimen/_10ssp" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_et"
-            style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -111,14 +104,12 @@
                 android:layout_height="@dimen/_40sdp"
                 android:imeOptions="actionNext"
                 android:inputType="textWebEmailAddress"
-                android:maxLines="1"
-                android:textSize="@dimen/_10ssp" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/phone_number_et"
-            style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -135,8 +126,7 @@
                 android:layout_height="@dimen/_40sdp"
                 android:imeOptions="actionNext"
                 android:inputType="phone"
-                android:maxLines="1"
-                android:textSize="@dimen/_10ssp" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -150,7 +140,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/birthday_et"
-            style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -170,16 +159,16 @@
                 android:layout_height="@dimen/_40sdp"
                 android:imeOptions="actionNext"
                 android:inputType="phone"
-                android:maxLines="1"
-                android:textSize="@dimen/_10ssp" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/save_btn"
             android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:backgroundTint="@color/black_blue"
             app:cardCornerRadius="@dimen/_7sdp"
             app:cardElevation="0dp"
             app:layout_constraintRight_toRightOf="parent"
@@ -191,6 +180,7 @@
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginVertical="@dimen/_5sdp"
                 android:text="@string/save"
+                android:theme="@style/Small_P2_Regular"
                 android:textColor="@color/white" />
 
         </androidx.cardview.widget.CardView>
@@ -199,7 +189,7 @@
             android:id="@+id/cancel_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:backgroundTint="@color/red"
             app:cardCornerRadius="@dimen/_7sdp"
             app:cardElevation="0dp"
@@ -212,6 +202,7 @@
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginVertical="@dimen/_5sdp"
                 android:text="@string/cancel"
+                android:theme="@style/Small_P2_Regular"
                 android:textColor="@color/white" />
 
         </androidx.cardview.widget.CardView>

@@ -14,7 +14,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/position_et"
-            style="@style/TextInputEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:errorEnabled="false"
@@ -35,7 +34,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/company_name_et"
-            style="@style/TextInputEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:errorEnabled="false"
@@ -57,7 +55,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_date_et"
-            style="@style/TextInputEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -82,7 +79,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/end_date_et"
-            style="@style/TextInputEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"

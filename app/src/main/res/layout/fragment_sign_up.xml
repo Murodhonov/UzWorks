@@ -37,20 +37,19 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
-            android:fontFamily="@font/dm_sans_bold"
             android:text="@string/create_account"
-            android:textColor="@color/black_blue"
             app:layout_constraintTop_toBottomOf="@id/back" />
 
         <TextView
             android:id="@+id/tv_2"
+            android:theme="@style/SecondaryTextStyle"
             android:layout_width="match_parent"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_15sdp"
             app:layout_constraintTop_toBottomOf="@id/tv_1"
             android:layout_marginEnd="@dimen/_15sdp"
-            android:text="@string/lorem_ipsum"
+            android:text="@string/sign_up_floor"
             android:textAlignment="center" />
 
         <LinearLayout
@@ -64,11 +63,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/full_name_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/full_name"
                 app:errorEnabled="false"
+                android:theme="@style/TextInputEditTextStyle"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -79,14 +78,12 @@
                     android:layout_height="@dimen/_40sdp"
                     android:imeOptions="actionNext"
                     android:inputType="textCapWords|textPersonName"
-                    android:maxLines="1"
-                    android:textSize="@dimen/_10ssp" />
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/username_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_15sdp"
@@ -94,6 +91,7 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 app:errorEnabled="false"
+                android:theme="@style/TextInputEditTextStyle"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/under_greeting_tv">
 
@@ -102,18 +100,17 @@
                     android:layout_height="@dimen/_40sdp"
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:textSize="@dimen/_10ssp" />
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/password_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
+                android:theme="@style/TextInputEditTextStyle"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:hint="@string/password"
@@ -128,14 +125,12 @@
                     android:layout_height="@dimen/_40sdp"
                     android:imeOptions="actionNext"
                     android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:textSize="@dimen/_10ssp" />
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confirm_password_et"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
@@ -144,6 +139,7 @@
                 android:hint="@string/confirm_password"
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/black_blue"
+                android:theme="@style/TextInputEditTextStyle"
                 app:errorEnabled="false"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/under_greeting_tv">
@@ -153,62 +149,21 @@
                     android:layout_height="@dimen/_40sdp"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:textSize="@dimen/_10ssp" />
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.cardview.widget.CardView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/continue_btn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_34sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_30sdp"
-                android:layout_marginEnd="@dimen/_30sdp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/dm_sans_bold"
-                    android:gravity="center"
-                    android:text="@string/continue_sign_up"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white" />
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/sign_up_with_google_btn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_34sdp"
-                android:layout_marginStart="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_7sdp"
                 android:layout_marginEnd="@dimen/_30sdp"
-                android:backgroundTint="@color/white_blue"
-                app:cardCornerRadius="@dimen/_5sdp">
-
-                <LinearLayout
-                    android:id="@+id/layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        app:drawableLeftCompat="@drawable/ic_google"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_3sdp"
-                        android:fontFamily="@font/dm_sans_bold"
-                        android:text="@string/sign_up_google"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        android:textColor="@color/text_color" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
+                android:layout_marginStart="@dimen/_30sdp"
+                android:background="@drawable/enabled_button_background"
+                android:text="@string/continue_sign_up"
+                android:textAllCaps="true"
+                android:theme="@style/ButtonStyle" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -219,6 +174,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:theme="@style/SecondaryTextStyle"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/dm_sans_regular"
                     android:text="@string/have_account"
@@ -227,6 +183,7 @@
                 <TextView
                     android:id="@+id/sign_in_tv"
                     android:layout_width="wrap_content"
+                    android:theme="@style/SecondaryTextStyle"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/dm_sans_regular"

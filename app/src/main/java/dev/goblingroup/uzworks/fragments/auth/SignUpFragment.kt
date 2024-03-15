@@ -55,7 +55,28 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             userRole = arguments?.getString("user role")!!
-            fullNameEt.editText?.setOnFocusChangeListener { v, hasFocus ->
+            fullNameEt.editText?.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    motionLayout.setTransitionDuration(500)
+                    motionLayout.transitionToEnd()
+                    motionLayout.setTransitionDuration(1000)
+                }
+            }
+            usernameEt.editText?.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    motionLayout.setTransitionDuration(500)
+                    motionLayout.transitionToEnd()
+                    motionLayout.setTransitionDuration(1000)
+                }
+            }
+            passwordEt.editText?.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    motionLayout.setTransitionDuration(500)
+                    motionLayout.transitionToEnd()
+                    motionLayout.setTransitionDuration(1000)
+                }
+            }
+            confirmPasswordEt.editText?.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     motionLayout.setTransitionDuration(500)
                     motionLayout.transitionToEnd()
@@ -66,14 +87,6 @@ class SignUpFragment : Fragment() {
                 if (isFormValid()) {
                     signUp()
                 }
-            }
-
-            signUpWithGoogleBtn.setOnClickListener {
-                Toast.makeText(
-                    requireContext(),
-                    "Coming soon",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
 
             signInTv.setOnClickListener {
