@@ -93,11 +93,11 @@
         android:textSize="@dimen/_16ssp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_7sdp"
         android:text="@string/statistics"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ad_card" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.38" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical_line"
@@ -110,7 +110,7 @@
         android:id="@+id/users_btn"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:backgroundTint="#AFECFE"
         app:cardCornerRadius="@dimen/_5sdp"
@@ -245,18 +245,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_15sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:fontFamily="@font/dm_sans_bold"
         android:text="@string/recommended_announcements"
         android:textSize="@dimen/_16ssp"
-        app:layout_constraintBottom_toTopOf="@id/recommended_work_announcements_rv"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.77" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recommended_work_announcements_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="0.2"
         android:layout_marginTop="@dimen/_3sdp"
-        app:layout_constraintHeight_percent="0.17"
+        app:layout_constraintTop_toBottomOf="@id/recommended_works_tv"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -266,24 +269,31 @@
         android:id="@+id/no_announcements_tv"
         android:layout_width="0dp"
         android:theme="@style/SecondaryTextStyle"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintWidth_percent="0.8"
         android:text="@string/no_recommended_announcements"
         android:textAlignment="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/recommended_work_announcements_rv"
-        app:layout_constraintTop_toTopOf="@id/recommended_work_announcements_rv"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99" />
 
     <ProgressBar
         android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="@dimen/_15sdp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
         android:indeterminateTint="@color/black_blue"
-        app:layout_constraintBottom_toBottomOf="@id/recommended_work_announcements_rv"
-        app:layout_constraintTop_toTopOf="@id/recommended_work_announcements_rv"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 

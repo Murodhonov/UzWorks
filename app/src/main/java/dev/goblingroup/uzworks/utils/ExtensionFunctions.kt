@@ -395,7 +395,7 @@ fun String.formatTgUsername(): String {
     }
 }
 
-fun AnnouncementEntity.getImage(): Int {
+fun getImage(announcementType: String, gender: String): Int {
     val images = mutableListOf(
         R.drawable.ic_logo_1,
         R.drawable.ic_logo_2,
@@ -408,13 +408,13 @@ fun AnnouncementEntity.getImage(): Int {
         R.drawable.ic_logo_9,
         R.drawable.ic_logo_10,
     )
-    return when (this.announcementType) {
+    return when (announcementType) {
         AnnouncementEnum.JOB.announcementType -> {
             images[(0 until 10).random()]
         }
 
         AnnouncementEnum.WORKER.announcementType -> {
-            when (this.gender) {
+            when (gender) {
                 GenderEnum.FEMALE.label -> R.drawable.ic_female
                 GenderEnum.MALE.label -> R.drawable.ic_male
                 else -> {

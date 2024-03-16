@@ -19,9 +19,13 @@ class AnnouncementRepository @Inject constructor(
 
     suspend fun getAllJobs() = jobService.getAllJobs()
 
+    suspend fun getTopJobs() = jobService.getTopJobs()
+
     suspend fun countJobs() = jobService.countJobs()
 
     suspend fun getAllWorkers() = workerService.getAll()
+
+    suspend fun getTopWorkers() = workerService.getTopWorkers()
 
     suspend fun countWorkers() = workerService.countWorkers()
 
@@ -29,7 +33,7 @@ class AnnouncementRepository @Inject constructor(
 
     suspend fun getWorkerById(workerId: String) = workerService.getById(workerId)
 
-    fun addJobs(jobList: List<JobResponse>) {
+    fun addJobs(jobList: List<JobResponse>, isTop: Boolean) {
         val existingJobs = try {
             announcementDao.listAllAnnouncements()
         } catch (e: Exception) {
@@ -41,16 +45,16 @@ class AnnouncementRepository @Inject constructor(
         jobList.forEach { apiJob ->
             val existingJob = existingJobs.find { it.id == apiJob.id }
             if (existingJob != null) {
-                newJobs.add(apiJob.mapToEntity(existingJob.isSaved))
+                newJobs.add(apiJob.mapToEntity(existingJob.isSaved, isTop))
             } else {
-                newJobs.add(apiJob.mapToEntity(false))
+                newJobs.add(apiJob.mapToEntity(false, isTop))
             }
         }
 
         announcementDao.addAnnouncements(newJobs)
     }
 
-    fun addWorkers(workerList: List<WorkerResponse>) {
+    fun addWorkers(workerList: List<WorkerResponse>, isTop: Boolean) {
         val existingWorkers = try {
             announcementDao.listAllAnnouncements()
         } catch (e: Exception) {
@@ -61,9 +65,9 @@ class AnnouncementRepository @Inject constructor(
         workerList.forEach { apiWorker ->
             val existingWorker = existingWorkers.find { it.id == apiWorker.id }
             if (existingWorker != null) {
-                newWorkers.add(apiWorker.mapToEntity(existingWorker.isSaved))
+                newWorkers.add(apiWorker.mapToEntity(existingWorker.isSaved, isTop))
             } else {
-                newWorkers.add(apiWorker.mapToEntity(false))
+                newWorkers.add(apiWorker.mapToEntity(false, isTop))
             }
         }
 

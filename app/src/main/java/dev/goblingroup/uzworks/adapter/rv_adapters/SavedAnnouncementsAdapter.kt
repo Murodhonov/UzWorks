@@ -37,7 +37,12 @@ class SavedAnnouncementsAdapter(
                 saveIv.setImageResource(R.drawable.ic_saved)
                 categoryTv.text = getJobCategory(announcement.categoryId.toString())
                 addressTv.text = getAddress(announcement.districtId.toString())
-                iv.setImageResource(announcement.getImage())
+                iv.setImageResource(
+                    getImage(
+                        announcement.announcementType,
+                        announcement.gender.toString()
+                    )
+                )
 
                 genderTv.text = when (announcement.gender) {
                     GenderEnum.MALE.label -> {

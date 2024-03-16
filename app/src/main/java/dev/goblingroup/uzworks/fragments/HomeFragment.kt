@@ -161,8 +161,7 @@ class HomeFragment : Fragment() {
     private fun loadAnnouncements() {
         binding.apply {
             lifecycleScope.launch {
-                Log.d(TAG, "loadAnnouncements: started")
-                announcementViewModel.announcementLiveData.observe(viewLifecycleOwner) {
+                homeViewModel.announcementLiveData.observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
                             Toast.makeText(requireContext(), "failed to load announcements", Toast.LENGTH_SHORT)
@@ -172,24 +171,18 @@ class HomeFragment : Fragment() {
                             Log.e(TAG, "loadAnnouncements: ${it.error.printStackTrace()}")
                             Log.e(TAG, "loadAnnouncements: ${it.error.stackTrace}")
                             Log.e(TAG, "loadAnnouncements: ${it.error.message}")
-                            progress.visibility = View.GONE
+                            progress.visibility = View.INVISIBLE
                             noAnnouncementsTv.visibility = View.VISIBLE
                         }
-
                         is ApiStatus.Loading -> {
                             Log.d(TAG, "loadAnnouncements: loading")
                             progress.visibility = View.VISIBLE
-                            noAnnouncementsTv.visibility = View.GONE
+                            noAnnouncementsTv.visibility = View.INVISIBLE
                         }
-
                         is ApiStatus.Success -> {
                             Log.d(TAG, "loadAnnouncements: succeeded <${it.response?.size}>")
-                            progress.visibility = View.GONE
+                            progress.visibility = View.INVISIBLE
                             success()
-                        }
-
-                        else -> {
-
                         }
                     }
                 }
@@ -201,7 +194,6 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             if (_binding != null) {
                 binding.apply {
-                    binding.progress.visibility = View.GONE
                     val adapter = HomeAdapter(
                         announcementViewModel,
                         jobCategoryViewModel,

@@ -15,7 +15,7 @@ import dev.goblingroup.uzworks.database.entity.UserEntity
 
 @Database(
     entities = [UserEntity::class, RegionEntity::class, JobCategoryEntity::class, DistrictEntity::class, AnnouncementEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

@@ -13,6 +13,7 @@ import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.models.response.RegionResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
+import dev.goblingroup.uzworks.utils.getImage
 
 fun LoginResponse.mapToEntity(loginRequest: LoginRequest): UserEntity {
     return UserEntity(
@@ -27,16 +28,33 @@ fun LoginResponse.mapToEntity(loginRequest: LoginRequest): UserEntity {
     )
 }
 
-fun JobResponse.mapToEntity(isSaved: Boolean): AnnouncementEntity {
+fun JobResponse.mapToEntity(isSaved: Boolean, isTop: Boolean): AnnouncementEntity {
     return AnnouncementEntity(
         id = id,
         categoryId = categoryId,
         districtId = districtId,
         gender = gender,
+        salary = salary,
         title = title,
         announcementType = AnnouncementEnum.JOB.announcementType,
-        isSaved = isSaved,
-        salary = salary
+        isTop = isTop,
+        pictureResId = getImage(AnnouncementEnum.JOB.announcementType, ""),
+        isSaved = isSaved
+    )
+}
+
+fun WorkerResponse.mapToEntity(isSaved: Boolean, isTop: Boolean): AnnouncementEntity {
+    return AnnouncementEntity(
+        id = id,
+        categoryId = categoryId,
+        districtId = districtId,
+        gender = gender,
+        salary = salary,
+        title = title,
+        announcementType = AnnouncementEnum.WORKER.announcementType,
+        isTop = isTop,
+        pictureResId = getImage(AnnouncementEnum.WORKER.announcementType, gender),
+        isSaved = isSaved
     )
 }
 
@@ -60,18 +78,5 @@ fun DistrictResponse.mapToEntity(regionId: String): DistrictEntity {
         id = id,
         name = name,
         regionId = regionId
-    )
-}
-
-fun WorkerResponse.mapToEntity(isSaved: Boolean): AnnouncementEntity {
-    return AnnouncementEntity(
-        id = id,
-        categoryId = categoryId,
-        districtId = districtId,
-        gender = gender,
-        title = title,
-        announcementType = AnnouncementEnum.WORKER.announcementType,
-        isSaved = isSaved,
-        salary = salary
     )
 }

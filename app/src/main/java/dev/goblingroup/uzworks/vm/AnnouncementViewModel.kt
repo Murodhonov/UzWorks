@@ -38,14 +38,14 @@ class AnnouncementViewModel @Inject constructor(
 
     private fun loadJobs() {
         viewModelScope.launch {
-                val response = announcementRepository.getAllJobs()
-                if (response.isSuccessful) {
-                    Log.d(TAG, "loadJobs: ${response.body()?.size} jobs got")
-                    announcementRepository.addJobs(response.body()!!)
-                    _announcementLiveData.postValue(ApiStatus.Success(announcementRepository.listDatabaseAnnouncements()))
-                } else {
-                    _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
-                }
+            val response = announcementRepository.getAllJobs()
+            if (response.isSuccessful) {
+                Log.d(TAG, "loadJobs: ${response.body()?.size} jobs got")
+                announcementRepository.addJobs(response.body()!!, false)
+                _announcementLiveData.postValue(ApiStatus.Success(announcementRepository.listDatabaseAnnouncements()))
+            } else {
+                _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
+            }
         }
     }
 
@@ -54,7 +54,7 @@ class AnnouncementViewModel @Inject constructor(
             val response = announcementRepository.getAllWorkers()
             if (response.isSuccessful) {
                 Log.d(TAG, "loadWorkers: ${response.body()?.size} workers got")
-                announcementRepository.addWorkers(response.body()!!)
+                announcementRepository.addWorkers(response.body()!!, false)
                 _announcementLiveData.postValue(ApiStatus.Success(announcementRepository.listDatabaseAnnouncements()))
             } else {
                 _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))

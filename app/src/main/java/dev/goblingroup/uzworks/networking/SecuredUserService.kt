@@ -13,7 +13,7 @@ import retrofit2.http.Path
 
 interface SecuredUserService {
 
-    @GET("api/User/GetUserById/{id}")
+    @GET("api/User/GetById/{id}")
     suspend fun getUserById(
         @Path("id") userId: String
     ): Response<UserResponse>

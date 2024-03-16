@@ -2,11 +2,11 @@ package dev.goblingroup.uzworks.adapter.rv_adapters
 
 import android.content.res.Resources
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
-import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.databinding.AnnouncementItemBinding
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.getImage
@@ -32,7 +32,13 @@ class HomeAdapter(
                 costTv.text = "${announcement.salary} so'm"
                 categoryTv.text = getJobCategory(announcement.categoryId.toString())
                 addressTv.text = getAddress(announcement.districtId.toString())
-                iv.setImageResource(announcement.getImage())
+                iv.setImageResource(
+                    getImage(
+                        announcement.announcementType,
+                        announcement.gender.toString()
+                    )
+                )
+                badgeIv.visibility = View.VISIBLE
 
                 genderTv.text = when (announcement.gender) {
                     GenderEnum.MALE.label -> {

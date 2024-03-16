@@ -12,7 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageView
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#80EAF1FF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:navigationIconTint="@color/black_blue"
+        app:title="@string/job_address_dialog_message"
+        app:titleTextColor="@color/black_blue" />
+
+    <!--<ImageView
         android:id="@+id/back_btn"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -54,33 +65,20 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05"
-        app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintWidth_percent="0.7" />-->
 
-    <androidx.cardview.widget.CardView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/set_location_btn"
-        android:visibility="gone"
+        android:background="@drawable/enabled_button_background"
+        android:text="@string/set_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/_20sdp"
-        app:cardElevation="0dp"
+        android:theme="@style/ButtonStyle"
         app:layout_constraintRight_toLeftOf="@id/find_me_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/find_me_btn"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95"
-        app:layout_constraintWidth_percent="0.7">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingHorizontal="@dimen/_15sdp"
-            android:paddingVertical="@dimen/_10sdp"
-            android:text="@string/set_location"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="@id/find_me_btn"
+        app:layout_constraintWidth_percent="0.7" />
 
     <ImageView
         android:id="@+id/find_me_btn"

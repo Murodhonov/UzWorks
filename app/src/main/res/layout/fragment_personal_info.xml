@@ -151,6 +151,7 @@
             android:id="@+id/save_btn"
             android:layout_width="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:backgroundTint="@color/black_blue"
@@ -162,6 +163,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancel_btn"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginHorizontal="@dimen/_20sdp"

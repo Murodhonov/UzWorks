@@ -1,11 +1,14 @@
 package dev.goblingroup.uzworks.vm
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
+import dev.goblingroup.uzworks.utils.ConstValues
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,9 +24,45 @@ class HomeViewModel @Inject constructor(
     private val _jobCountLiveData = MutableLiveData<ApiStatus<Int>>(ApiStatus.Loading())
     val jobCountLiveData get() =  _jobCountLiveData
 
+    private val _announcementLiveData =
+        MutableLiveData<ApiStatus<List<AnnouncementEntity>>>(ApiStatus.Loading())
+    val announcementLiveData get() = _announcementLiveData
+
     init {
         countJobs()
         countWorkers()
+
+        if (securityRepository.isEmployee()) {
+            fetchTopJobs()
+        } else if (securityRepository.isEmployer()) {
+            fetchTopWorkers()
+        }
+    }
+
+    private fun fetchTopJobs() {
+        viewModelScope.launch {
+            val response = announcementRepository.getTopJobs()
+            if (response.isSuccessful) {
+                Log.d(ConstValues.TAG, "loadJobs: ${response.body()?.size} jobs got")
+                announcementRepository.addJobs(response.body()!!, true)
+                _announcementLiveData.postValue(ApiStatus.Success(announcementRepository.listDatabaseAnnouncements()))
+            } else {
+                _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
+            }
+        }
+    }
+
+    private fun fetchTopWorkers() {
+        viewModelScope.launch {
+            val response = announcementRepository.getTopWorkers()
+            if (response.isSuccessful) {
+                Log.d(ConstValues.TAG, "loadWorkers: ${response.body()?.size} workers got")
+                announcementRepository.addWorkers(response.body()!!, true)
+                _announcementLiveData.postValue(ApiStatus.Success(announcementRepository.listDatabaseAnnouncements()))
+            } else {
+                _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
+            }
+        }
     }
 
     private fun countJobs() {
@@ -51,9 +90,5 @@ class HomeViewModel @Inject constructor(
     fun getFullName(): String {
         return "${securityRepository.getFirstName()} ${securityRepository.getLastName()}"
     }
-
-    fun isEmployee() = securityRepository.isEmployee()
-
-    fun isEmployer() = securityRepository.isEmployer()
 
 }

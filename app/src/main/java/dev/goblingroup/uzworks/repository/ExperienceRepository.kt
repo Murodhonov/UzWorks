@@ -11,7 +11,7 @@ class ExperienceRepository @Inject constructor(
 
     suspend fun createExperience(experienceCreateRequest: ExperienceCreateRequest) = experienceService.createExperience(experienceCreateRequest)
 
-    suspend fun editExperience(experienceEditRequest: ExperienceEditRequest) = experienceService.editExperience(experienceEditRequest)
+    suspend fun editExperience(experienceEditRequest: ExperienceEditRequest) = experienceService.updateExperience(experienceEditRequest)
 
     suspend fun getExperiencesByUserId(userId: String) = experienceService.getExperiencesByUserId(userId)
 

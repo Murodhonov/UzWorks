@@ -1,12 +1,7 @@
 package dev.goblingroup.uzworks.networking
 
-import dev.goblingroup.uzworks.models.request.ExperienceCreateRequest
-import dev.goblingroup.uzworks.models.request.ExperienceEditRequest
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
-import dev.goblingroup.uzworks.models.response.ExperienceCreateResponse
-import dev.goblingroup.uzworks.models.response.ExperienceEditResponse
-import dev.goblingroup.uzworks.models.response.ExperienceResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -28,7 +23,7 @@ interface SecuredWorkerService {
         @Path("id") workerId: String
     ): Response<Unit>
 
-    @PUT("api/Worker/Edit")
+    @PUT("api/Worker/Update")
     suspend fun editWorker(
         @Body workerEditRequest: WorkerEditRequest
     ): Response<WorkerResponse>

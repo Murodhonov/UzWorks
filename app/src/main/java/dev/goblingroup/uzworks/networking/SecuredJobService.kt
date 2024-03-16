@@ -24,12 +24,12 @@ interface SecuredJobService {
         @Path("id") jobId: String
     ): Response<Unit>
 
-    @PUT("api/Job/Edit")
+    @PUT("api/Job/Update")
     suspend fun editJob(
         @Body jobEditRequest: JobEditRequest
     ): Response<Unit>
 
-    @GET("api/Job/GetJobsByUserId/{id}")
+    @GET("api/Job/GetByUserId/{id}")
     suspend fun getJobsByUserId(
         @Path("id") userId: String
     ): Response<List<JobResponse>>

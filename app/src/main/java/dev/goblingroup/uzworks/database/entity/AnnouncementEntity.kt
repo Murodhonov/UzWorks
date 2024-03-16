@@ -18,6 +18,10 @@ data class AnnouncementEntity(
     val title: String? = null,
     @ColumnInfo(name = "announcement_type")
     val announcementType: String,
+    @ColumnInfo(name = "is_top")
+    val isTop: Boolean,
+    @ColumnInfo(name = "picture_res_id")
+    val pictureResId: Int,
     @ColumnInfo(name = "is_saved")
     val isSaved: Boolean
 )

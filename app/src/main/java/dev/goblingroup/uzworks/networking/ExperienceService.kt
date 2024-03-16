@@ -14,17 +14,17 @@ import retrofit2.http.Path
 
 interface ExperienceService {
 
-    @POST("api/Experience/CreateExperience")
+    @POST("api/Experience/Create")
     suspend fun createExperience(
         @Body experienceCreateRequest: ExperienceCreateRequest
     ): Response<ExperienceCreateResponse>
 
-    @PUT("api/Experience/EditExperience")
-    suspend fun editExperience(
+    @PUT("api/Experience/Update")
+    suspend fun updateExperience(
         @Body experienceEditRequest: ExperienceEditRequest
     ): Response<ExperienceEditResponse>
 
-    @GET("api/Experience/GetExperienceById/{id}")
+    @GET("api/Experience/GetByUserId/{id}")
     suspend fun getExperiencesByUserId(
         @Path("id") userId: String
     ): Response<List<ExperienceResponse>>

@@ -2,6 +2,8 @@ package dev.goblingroup.uzworks.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,8 +23,20 @@ class DatabaseModule {
 
     @Provides
     @Singleton
+    fun provideMigration(): Migration {
+        return object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE announcement_table ADD COLUMN is_top BOOLEAN")
+                db.execSQL("ALTER TABLE announcement_table ADD COLUMN picture_res_id INTEGER")
+            }
+        }
+    }
+
+    @Provides
+    @Singleton
     fun provideAppDatabase(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        migration: Migration
     ): AppDatabase {
         return Room.databaseBuilder(
             context,
@@ -31,6 +45,7 @@ class DatabaseModule {
         )
             .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
+            .addMigrations(migration)
             .build()
     }
 
