@@ -26,6 +26,8 @@ class HomeAdapter(
         RecyclerView.ViewHolder(announcementItemBinding.root) {
         fun bindAnnouncement(announcement: AnnouncementEntity, position: Int) {
             announcementItemBinding.apply {
+                titleTv.isSelected = true
+                addressTv.isSelected = true
                 titleTv.text = announcement.title
                 costTv.text = "${announcement.salary} so'm"
                 categoryTv.text = getJobCategory(announcement.categoryId.toString())

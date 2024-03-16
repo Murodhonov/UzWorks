@@ -10,50 +10,41 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/_7sdp"
-        android:paddingTop="@dimen/_15sdp"
-        android:paddingEnd="@dimen/_7sdp"
         android:paddingBottom="@dimen/_15sdp">
 
         <ImageView
-            android:id="@+id/info_image"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
             android:contentDescription="@string/content_description"
-            android:src="@drawable/ic_personal_info"
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:src="@drawable/ic_left_arrow"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/personal_info_tv"
             android:layout_width="wrap_content"
-            android:theme="@style/Small_P1"
+            android:textSize="@dimen/_16ssp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_7sdp"
             android:text="@string/personal_information"
-            app:layout_constraintBottom_toBottomOf="@id/info_image"
-            app:layout_constraintLeft_toRightOf="@id/info_image"
-            app:layout_constraintTop_toTopOf="@id/info_image" />
-
-        <View
-            android:id="@+id/horizontal_line"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:background="#C7C5CF"
-            app:layout_constraintTop_toBottomOf="@id/info_image" />
+            app:layout_constraintBottom_toBottomOf="@id/back"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintLeft_toRightOf="@id/back"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/back" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/first_name_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:hint="@string/first_name"
-            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-            app:boxCornerRadiusTopStart="@dimen/_10sdp"
+            android:theme="@style/TextInputEditTextStyle"
             app:errorEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/horizontal_line">
+            app:layout_constraintTop_toBottomOf="@id/personal_info_tv">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -70,10 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/last_name"
-            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-            app:boxCornerRadiusTopStart="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:theme="@style/TextInputEditTextStyle"
             app:errorEnabled="false"
             app:layout_constraintTop_toBottomOf="@id/first_name_et">
 
@@ -92,10 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/email"
-            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-            app:boxCornerRadiusTopStart="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:theme="@style/TextInputEditTextStyle"
             app:errorEnabled="false"
             app:layout_constraintTop_toBottomOf="@id/last_name_et">
 
@@ -114,10 +101,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/phone_number"
-            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-            app:boxCornerRadiusTopStart="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:theme="@style/TextInputEditTextStyle"
             app:errorEnabled="false"
             app:layout_constraintTop_toBottomOf="@id/email_et">
 
@@ -133,6 +118,7 @@
         <include
             android:id="@+id/gender_layout"
             layout="@layout/gender_choice_layout"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_12sdp"
@@ -144,13 +130,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/birth_date"
-            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-            app:boxCornerRadiusTopStart="@dimen/_10sdp"
             app:endIconDrawable="@drawable/ic_calendar"
             app:endIconMode="custom"
             app:endIconTint="@color/black_blue"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:theme="@style/TextInputEditTextStyle"
             app:errorEnabled="false"
             app:layout_constraintTop_toBottomOf="@id/gender_layout">
 
@@ -163,49 +147,32 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.cardview.widget.CardView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/save_btn"
             android:layout_width="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:backgroundTint="@color/black_blue"
-            app:cardCornerRadius="@dimen/_7sdp"
-            app:cardElevation="0dp"
+            android:background="@drawable/enabled_button_background"
+            android:text="@string/save"
+            android:theme="@style/ButtonStyle"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/birthday_et">
+            app:layout_constraintTop_toBottomOf="@id/birthday_et" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginVertical="@dimen/_5sdp"
-                android:text="@string/save"
-                android:theme="@style/Small_P2_Regular"
-                android:textColor="@color/white" />
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancel_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_15sdp"
+            android:background="@drawable/enabled_button_background"
             android:backgroundTint="@color/red"
-            app:cardCornerRadius="@dimen/_7sdp"
-            app:cardElevation="0dp"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:text="@string/cancel"
+            android:theme="@style/ButtonStyle"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/birthday_et">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginVertical="@dimen/_5sdp"
-                android:text="@string/cancel"
-                android:theme="@style/Small_P2_Regular"
-                android:textColor="@color/white" />
-
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toBottomOf="@id/birthday_et" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

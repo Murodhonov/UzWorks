@@ -27,7 +27,9 @@ interface WorkerService {
         @Query("districtId") districtId: String? = null
     ): Response<List<WorkerResponse>>
 
-    @GET("api/Worker/GetCount")
-    suspend fun countWorkers(): Response<Int>
+    @GET("api/Worker/GetCount/{status}")
+    suspend fun countWorkers(
+        @Path("status") status: Boolean = false
+    ): Response<Int>
 
 }

@@ -29,7 +29,7 @@
         <TextView
             android:id="@+id/empty_title_tv"
             android:layout_width="wrap_content"
-            android:theme="@style/TextViewStyle"
+            android:textSize="@dimen/_16ssp"
             android:layout_height="wrap_content"
             android:text="@string/no_savings"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -43,7 +43,7 @@
             android:layout_marginStart="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_7sdp"
             android:layout_marginEnd="@dimen/_38sdp"
-            android:theme="@style/Small_P2_Regular"
+            android:theme="@style/SecondaryTextStyle"
             android:text="@string/saved_announcements_not_found"
             android:textAlignment="center"
             app:layout_constraintLeft_toLeftOf="parent"

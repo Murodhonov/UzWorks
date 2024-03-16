@@ -162,4 +162,19 @@
     <string name="unavailable_date">Бу санани танлаб бўлмайди, камида 16 йил олдинни танланг</string>
     <string name="enter_username_password">Платформага кириш учун фойдаланувчи номи ва паролингизни киритинг</string>
     <string name="sign_up_floor">Профиль яратиш учун исмингиз, фойдаланувчи номини  ҳамда шахсий паролингизни киритинг</string>
+    <string name="second">секунд</string>
+    <string name="seconds">секунд</string>
+    <string name="minute">минут</string>
+    <string name="minutes">минут</string>
+    <string name="hour">соат</string>
+    <string name="hours">соат</string>
+    <string name="day">кун</string>
+    <string name="days">кун</string>
+    <string name="week">ҳафта</string>
+    <string name="weeks">ҳафта</string>
+    <string name="month">ой</string>
+    <string name="months">ой</string>
+    <string name="year">йил</string>
+    <string name="years">йил</string>
+    <string name="chat_coming_soon">Чат тез кунларда…</string>
 </resources>

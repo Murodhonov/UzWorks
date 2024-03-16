@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_7sdp"
-        android:theme="@style/Small_P1"
+        android:textSize="@dimen/_14ssp"
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="@id/avatar_iv"
         app:layout_constraintTop_toBottomOf="@id/avatar_iv" />
@@ -86,7 +86,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
-                android:theme="@style/Small_P1"
                 android:text="@string/personal_information"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/personal_info_iv"
@@ -127,7 +126,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:text="@string/experience"
-                android:theme="@style/Small_P1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/experience_iv"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -167,7 +165,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:text="@string/add_job_announcement"
-                android:theme="@style/Small_P1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/add_announcement_iv"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -207,7 +204,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:text="@string/my_announcements"
-                android:theme="@style/Small_P1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/announcement_iv"
                 app:layout_constraintTop_toTopOf="parent" />

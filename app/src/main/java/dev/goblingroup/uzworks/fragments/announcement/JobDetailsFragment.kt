@@ -133,6 +133,7 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
             requirementTv.text = jobResponse?.requirement
             latitude = jobResponse?.latitude ?: 0.0
             longitude = jobResponse?.longitude ?: 0.0
+            dateTv.text = jobDetailsViewModel.getTimeAgo(jobResponse?.createDate.toString(), resources)
 
             contactTgBtn.setOnClickListener {
                 openLink("https://t.me/${jobResponse?.tgUserName}")

@@ -9,6 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
         app:layout_constraintTop_toTopOf="parent">
@@ -19,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginVertical="@dimen/_5sdp"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:background="@drawable/circle_background"
             android:backgroundTint="@color/black_blue"
             android:src="@drawable/uz_works_logo"
@@ -46,7 +47,7 @@
             android:layout_height="0dp"
             android:padding="@dimen/_1sdp"
             android:layout_marginVertical="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:background="@drawable/circle_stroke"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
@@ -73,8 +74,7 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_8sdp"
         app:backgroundColor="@color/white"
         app:cornerRadius="@dimen/_8sdp"

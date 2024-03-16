@@ -35,7 +35,7 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:text="@string/add_job_announcement"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_16ssp"
             app:layout_constraintLeft_toLeftOf="@id/back"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/back" />
@@ -61,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:hint="@string/deadline"
+                android:theme="@style/TextInputEditTextStyle"
                 app:endIconDrawable="@drawable/ic_calendar"
                 app:endIconMode="custom"
                 app:endIconTint="@color/black_blue"
@@ -79,6 +80,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_et"
+                android:theme="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -99,6 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:theme="@style/TextInputEditTextStyle"
                 app:errorEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -124,6 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:theme="@style/TextInputEditTextStyle"
                 android:hint="@string/working_time"
                 app:endIconTint="@color/black_blue"
                 app:errorEnabled="false">
@@ -142,6 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:theme="@style/TextInputEditTextStyle"
                 android:hint="@string/working_schedule"
                 app:endIconTint="@color/black_blue"
                 app:errorEnabled="false">
@@ -159,6 +164,7 @@
                 android:id="@+id/tg_user_name_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:theme="@style/TextInputEditTextStyle"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:errorEnabled="false">
 
@@ -175,6 +181,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phone_number_et"
                 android:layout_width="match_parent"
+                android:theme="@style/TextInputEditTextStyle"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:errorEnabled="false">
@@ -192,6 +199,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/benefit_et"
                 android:layout_width="match_parent"
+                android:theme="@style/TextInputEditTextStyle"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:errorEnabled="false">
@@ -210,6 +218,7 @@
                 android:id="@+id/requirement_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:theme="@style/TextInputEditTextStyle"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:errorEnabled="false">
 
@@ -243,6 +252,7 @@
                     android:layout_height="wrap_content"
                     app:errorEnabled="false"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    android:theme="@style/TextInputEditTextStyle"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -263,6 +273,7 @@
                     android:layout_height="wrap_content"
                     app:errorEnabled="false"
                     app:layout_constraintRight_toRightOf="parent"
+                    android:theme="@style/TextInputEditTextStyle"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -302,9 +313,9 @@
                 <TextView
                     android:id="@+id/select_address_tv"
                     android:layout_width="wrap_content"
+                    android:theme="@style/SecondaryTextStyle"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/dm_sans_bold"
                     android:text="@string/select_map"
                     android:textColor="@color/black_blue" />
 
@@ -326,6 +337,7 @@
                 android:background="@drawable/create_worker_edit_text_background"
                 android:backgroundTint="@android:color/transparent"
                 app:endIconMode="dropdown_menu"
+                android:theme="@style/TextInputEditTextStyle"
                 app:endIconTint="@color/black_blue"
                 app:hintEnabled="false">
 
@@ -353,6 +365,7 @@
                 android:background="@drawable/create_worker_edit_text_background"
                 android:backgroundTint="@android:color/transparent"
                 app:endIconMode="dropdown_menu"
+                android:theme="@style/TextInputEditTextStyle"
                 app:endIconTint="@color/black_blue"
                 app:hintEnabled="false">
 
@@ -388,6 +401,7 @@
                 android:backgroundTint="@android:color/transparent"
                 app:endIconMode="dropdown_menu"
                 android:id="@+id/job_category_layout"
+                android:theme="@style/TextInputEditTextStyle"
                 app:endIconTint="@color/black_blue"
                 app:hintEnabled="false">
 
@@ -411,52 +425,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_15sdp">
 
-                <androidx.cardview.widget.CardView
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/save_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:cardElevation="0dp"
                     android:backgroundTint="@color/black_blue"
+                    android:text="@string/save"
                     app:cardCornerRadius="@dimen/_7sdp"
+                    android:theme="@style/ButtonStyle"
+                    android:background="@drawable/enabled_button_background"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_7sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_7sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:text="@string/save"
-                        android:textSize="@dimen/_14ssp"
-                        android:textColor="@color/white" />
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/cancel_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/red"
-                    android:padding="@dimen/_5sdp"
+                    android:paddingHorizontal="@dimen/_10sdp"
                     app:cardCornerRadius="@dimen/_7sdp"
+                    android:text="@string/cancel"
                     app:cardElevation="0dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/save_btn">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_7sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_7sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:text="@string/cancel"
-                        android:textSize="@dimen/_14ssp"
-                        android:textColor="@color/white" />
-
-                </androidx.cardview.widget.CardView>
+                    android:theme="@style/ButtonStyle"
+                    android:background="@drawable/enabled_button_background"
+                    app:layout_constraintTop_toTopOf="@id/save_btn"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

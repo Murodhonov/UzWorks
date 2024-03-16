@@ -162,4 +162,19 @@
     <string name="unavailable_date">Невозможно выбрать эту дату. Выберите минимум 16 лет назад</string>
     <string name="enter_username_password">Введите свое имя пользователя и пароль для доступа к платформе</string>
     <string name="sign_up_floor">Для создания профиля введите свое имя, логин и личный пароль</string>
+    <string name="second">секунду</string>
+    <string name="seconds">секунды</string>
+    <string name="minute">минута</string>
+    <string name="minutes">минуты</string>
+    <string name="hour">час</string>
+    <string name="hours">часы</string>
+    <string name="day">день</string>
+    <string name="days">дни</string>
+    <string name="week">неделя</string>
+    <string name="weeks">недели</string>
+    <string name="month">месяц</string>
+    <string name="months">месяцы</string>
+    <string name="year">год</string>
+    <string name="years">годы</string>
+    <string name="chat_coming_soon">Скоро появится чат…</string>
 </resources>

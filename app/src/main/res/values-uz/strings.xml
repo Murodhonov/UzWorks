@@ -162,4 +162,19 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="unavailable_date">Bu sanani tanlab boʻlmaydi, kamida 16 yil oldinni tanlang</string>
     <string name="enter_username_password">Platformaga kirish uchun foydalanuvchi nomi va parolingizni kiriting</string>
     <string name="sign_up_floor">Profil yaratish uchun ismingiz, foydalanuvchi nomini  hamda shaxsiy parolingizni kiriting</string>
+    <string name="second">sekund</string>
+    <string name="seconds">sekund</string>
+    <string name="minute">minut</string>
+    <string name="minutes">minut</string>
+    <string name="hour">soat</string>
+    <string name="hours">soat</string>
+    <string name="day">kun</string>
+    <string name="days">kun</string>
+    <string name="week">hafta</string>
+    <string name="weeks">hafta</string>
+    <string name="month">oy</string>
+    <string name="months">oy</string>
+    <string name="year">yil</string>
+    <string name="years">yil</string>
+    <string name="chat_coming_soon">Chat tez kunlarda…</string>
 </resources>

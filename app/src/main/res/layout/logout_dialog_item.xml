@@ -14,58 +14,41 @@
         android:fontFamily="@font/dm_sans_bold"
         android:text="@string/logout"
         android:textColor="@color/black_blue"
-        android:textSize="@dimen/_13ssp" />
+        android:textSize="@dimen/_16ssp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/_12ssp"
         android:layout_marginTop="@dimen/_7sdp"
         android:fontFamily="@font/dm_sans_regular"
         android:text="@string/confirm_logout"
         android:textColor="@color/text_color"
-        android:textSize="@dimen/_10ssp" />
+        android:theme="@style/SecondaryTextStyle" />
 
-    <androidx.cardview.widget.CardView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/yes_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
         android:layout_marginStart="@dimen/_30sdp"
+        android:background="@drawable/enabled_button_background"
+        android:backgroundTint="@color/red"
+        android:text="@string/yes"
         android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginEnd="@dimen/_30sdp"
-        android:backgroundTint="@color/red">
+        android:textColor="@color/white" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/dm_sans_bold"
-            android:gravity="center"
-            android:text="@string/yes"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_11ssp" />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/cancel_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
         android:layout_marginStart="@dimen/_30sdp"
+        android:background="@drawable/enabled_button_background"
+        android:backgroundTint="@color/black_blue"
         android:layout_marginTop="@dimen/_11sdp"
+        android:text="@string/no"
         android:layout_marginEnd="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_42sdp"
-        android:backgroundTint="@color/black_blue">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/dm_sans_bold"
-            android:gravity="center"
-            android:text="@string/no"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_11ssp" />
-
-    </androidx.cardview.widget.CardView>
+        android:textColor="@color/white" />
 
 </LinearLayout>

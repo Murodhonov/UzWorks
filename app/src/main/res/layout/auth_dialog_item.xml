@@ -36,7 +36,9 @@
 
         <TextView
             android:id="@+id/dialog_tv"
-            style="@style/TextViewStyle"
+            android:theme="@style/SecondaryTextStyle"
+            android:textColor="@color/black_blue"
+            android:textSize="@dimen/_13ssp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_7sdp"

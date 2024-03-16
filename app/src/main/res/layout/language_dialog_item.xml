@@ -44,10 +44,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_7sdp"
-                    android:fontFamily="@font/dm_sans_regular"
+                    android:textSize="@dimen/_14ssp"
                     android:text="@string/uz_kirill"
                     android:textColor="@color/black_blue"
-                    android:textSize="@dimen/_13ssp"
+                    android:theme="@style/SecondaryTextStyle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/kirill_uzb_flag"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -98,10 +98,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_7sdp"
-                    android:fontFamily="@font/dm_sans_regular"
                     android:text="@string/uz_latin"
                     android:textColor="@color/black_blue"
-                    android:textSize="@dimen/_13ssp"
+                    android:textSize="@dimen/_14ssp"
+                    android:theme="@style/SecondaryTextStyle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/latin_uzb_flag"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -152,10 +152,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_7sdp"
-                    android:fontFamily="@font/dm_sans_regular"
+                    android:textSize="@dimen/_14ssp"
                     android:text="@string/ru"
                     android:textColor="@color/black_blue"
-                    android:textSize="@dimen/_13ssp"
+                    android:theme="@style/SecondaryTextStyle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/ru_flag"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -206,10 +206,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_7sdp"
-                    android:fontFamily="@font/dm_sans_regular"
+                    android:textSize="@dimen/_14ssp"
                     android:text="@string/en"
                     android:textColor="@color/black_blue"
-                    android:textSize="@dimen/_13ssp"
+                    android:theme="@style/SecondaryTextStyle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/en_flag"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -235,46 +235,30 @@
             android:layout_marginTop="@dimen/_7sdp"
             android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/save_btn"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel_btn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginEnd="@dimen/_4sdp"
+                android:background="@drawable/enabled_button_background"
                 android:layout_weight="1"
+                android:text="@string/cancel"
+                android:theme="@style/ButtonStyle"
+                android:backgroundTint="@color/red"
                 app:cardCornerRadius="@dimen/_6sdp"
-                app:cardElevation="0dp">
+                app:cardElevation="0dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/dm_sans_bold"
-                    android:gravity="center"
-                    android:text="@string/save"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_11ssp" />
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cancel_btn"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/save_btn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/red"
                 app:cardCornerRadius="@dimen/_6sdp"
-                app:cardElevation="0dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/dm_sans_bold"
-                    android:gravity="center"
-                    android:text="@string/cancel"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_11ssp" />
-
-            </androidx.cardview.widget.CardView>
+                android:background="@drawable/enabled_button_background"
+                android:text="@string/save"
+                android:theme="@style/ButtonStyle"
+                app:cardElevation="0dp" />
 
         </LinearLayout>
 

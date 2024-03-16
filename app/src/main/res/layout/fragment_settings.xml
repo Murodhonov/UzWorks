@@ -25,10 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15sdp"
-        android:fontFamily="@font/dm_sans_medium"
         android:text="@string/settings"
-        android:textColor="@color/black_blue"
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_16ssp"
         app:layout_constraintLeft_toLeftOf="@id/back"
         app:layout_constraintTop_toBottomOf="@id/back" />
 
@@ -60,13 +58,13 @@
 
             <TextView
                 android:id="@+id/notification_tv"
+                android:textSize="@dimen/_12ssp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
-                android:fontFamily="@font/dm_sans_regular"
                 android:text="@string/notifications"
                 android:textColor="@color/black_blue"
-                android:textSize="@dimen/_10ssp"
+                android:theme="@style/SecondaryTextStyle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/notification_iv"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -127,12 +125,13 @@
                 android:id="@+id/theme_mode_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/_12ssp"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:fontFamily="@font/dm_sans_regular"
                 android:text="@string/dark_mode"
                 android:textColor="@color/black_blue"
-                android:textSize="@dimen/_10ssp"
+                android:theme="@style/SecondaryTextStyle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/theme_iv"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -195,9 +194,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:fontFamily="@font/dm_sans_regular"
+                android:textSize="@dimen/_12ssp"
                 android:text="@string/language"
                 android:textColor="@color/black_blue"
-                android:textSize="@dimen/_10ssp"
+                android:theme="@style/SecondaryTextStyle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/language_iv"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -248,9 +248,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:fontFamily="@font/dm_sans_regular"
+                android:textSize="@dimen/_12ssp"
                 android:text="@string/password"
                 android:textColor="@color/black_blue"
-                android:textSize="@dimen/_10ssp"
+                android:theme="@style/SecondaryTextStyle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/password_iv"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -303,7 +304,8 @@
                 android:fontFamily="@font/dm_sans_regular"
                 android:text="@string/logout"
                 android:textColor="@color/red"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_12ssp"
+                android:theme="@style/SecondaryTextStyle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/logout_iv"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -321,28 +323,19 @@
 
         </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/save_btn"
         android:layout_width="match_parent"
+        android:background="@drawable/enabled_button_background"
+        android:text="@string/save"
         android:layout_height="@dimen/_44sdp"
         android:layout_marginStart="@dimen/_80sdp"
         android:layout_marginBottom="55dp"
         android:layout_marginEnd="@dimen/_80sdp"
+        android:textAllCaps="true"
+        android:theme="@style/ButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <TextView
-            android:id="@+id/save_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/dm_sans_bold"
-            android:gravity="center"
-            android:text="@string/save"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_10ssp" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

@@ -238,11 +238,6 @@ class AddWorkerFragment : Fragment() {
                 }
             }
 
-            orientationEt.editText?.doAfterTextChanged {
-                if (orientationEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                    orientationEt.isErrorEnabled = false
-                }
-            }
         }
     }
 
@@ -292,11 +287,6 @@ class AddWorkerFragment : Fragment() {
                 phoneNumberEt.error = resources.getString(R.string.phone_number_error)
                 isValid = false
             }
-            if (orientationEt.editText?.text.toString().isEmpty()) {
-                orientationEt.isErrorEnabled = true
-                orientationEt.error = resources.getString(R.string.orientation_error)
-                isValid = false
-            }
             if (selectedDistrictId == "") {
                 districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
                 districtChoice.error = resources.getString(R.string.district_error)
@@ -321,8 +311,8 @@ class AddWorkerFragment : Fragment() {
                         deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
                         districtId = selectedDistrictId,
                         gender = selectedGender,
-                        instagramLink = "",
-                        location = orientationEt.editText?.text.toString(),
+                        instagramLink = "link to post on ig",
+                        location = "kajsdjashd",
                         phoneNumber = phoneNumberEt.editText?.text.toString(),
                         salary = salaryEt.editText?.text.toString()
                             .substring(0, salaryEt.editText?.text.toString().length - 5)

@@ -78,7 +78,6 @@
             android:layout_height="@dimen/_40sdp"
             android:inputType="textPassword"
             android:imeOptions="actionDone"
-            android:text="password example"
             android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>

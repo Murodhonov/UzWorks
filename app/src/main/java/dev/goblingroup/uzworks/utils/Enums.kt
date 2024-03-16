@@ -30,3 +30,13 @@ enum class AnnouncementEnum(val announcementType: String) {
     JOB("Job"),
     WORKER("Worker")
 }
+
+enum class PeriodEnum(val label: String) {
+    SECONDS("seconds"),
+    MINUTES("minutes"),
+    HOURS("hours"),
+    DAYS("days"),
+    WEEKS("weeks"),
+    MONTHS("months"),
+    YEARS("years")
+}

@@ -3,11 +3,13 @@ package dev.goblingroup.uzworks.models.response
 data class JobResponse(
     val benefit: String,
     val categoryId: String,
+    val createDate: String,
     val deadline: String,
     val districtId: String,
     val gender: String,
     val id: String,
     val instagramLink: String,
+    val isTop: Boolean,
     val latitude: Double,
     val longitude: Double,
     val maxAge: Int,

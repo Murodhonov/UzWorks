@@ -34,12 +34,12 @@ class ChatsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            adapter = ChatUsersAdapter(
+            /*adapter = ChatUsersAdapter(
                 getList(),
                 { position ->
-                    /**
+                    *//**
                      * on user click
-                     */
+                     *//*
                     findNavController().navigate(
                         resId = R.id.chatFragment,
                         args = null,
@@ -50,7 +50,7 @@ class ChatsListFragment : Fragment() {
                     delete(position)
                 }
             )
-            chatUsersRv.adapter = adapter
+            chatUsersRv.adapter = adapter*/
         }
     }
 

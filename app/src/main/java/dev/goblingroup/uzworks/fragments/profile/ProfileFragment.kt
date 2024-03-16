@@ -1,9 +1,5 @@
 package dev.goblingroup.uzworks.fragments.profile
 
-import android.app.AlertDialog
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.databinding.AboutDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentProfileBinding
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -84,12 +79,6 @@ class ProfileFragment : Fragment() {
                 )
             }
 
-            aboutBtn.setOnClickListener {
-                if (userResponse != null) {
-                    aboutDialog(requireContext(), layoutInflater)
-                }
-            }
-
             experienceBtn.setOnClickListener {
                 findNavController().navigate(
                     resId = R.id.experienceFragment,
@@ -120,19 +109,6 @@ class ProfileFragment : Fragment() {
                 GenderEnum.MALE.label -> avatarIv.setImageResource(R.drawable.ic_male)
                 GenderEnum.FEMALE.label -> avatarIv.setImageResource(R.drawable.ic_female)
             }
-        }
-    }
-
-    private fun aboutDialog(
-        context: Context,
-        layoutInflater: LayoutInflater
-    ) {
-        val alertDialog = AlertDialog.Builder(context).create()
-        val binding = AboutDialogItemBinding.inflate(layoutInflater)
-        binding.apply {
-            alertDialog.setView(root)
-            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            alertDialog.show()
         }
     }
 

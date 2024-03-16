@@ -17,6 +17,7 @@ import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 fun turnSwitchOff(
@@ -455,5 +456,39 @@ fun GenderChoiceLayoutBinding.selectFemale(resources: Resources) {
         maleTv.setTextColor(resources.getColor(R.color.text_color))
         femaleBtn.strokeColor = resources.getColor(R.color.black_blue)
         maleBtn.strokeColor = resources.getColor(R.color.text_color)
+    }
+}
+
+fun String.timeAgo(): Pair<Int, String> {
+    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
+    val then = format.parse(this) ?: return Pair(0, "")
+
+    val now = Date()
+    val diffMs = now.time - then.time
+
+    val diffSeconds = diffMs / 1000
+    val diffMinute = diffSeconds / 60
+    val diffHour = diffMinute / 60
+    val diffDay = diffHour / 24
+    val diffWeek = diffDay / 7
+    val diffMonth = diffDay / 30
+    val diffYear = diffMonth / 12
+
+    return when {
+        diffSeconds < 60 -> Pair(diffSeconds.toInt(), PeriodEnum.SECONDS.label)
+        diffMinute < 60 -> Pair(diffMinute.toInt(), PeriodEnum.MINUTES.label)
+        diffHour < 24 -> Pair(diffHour.toInt(), PeriodEnum.HOURS.label)
+        diffDay < 7 -> Pair(diffDay.toInt(), PeriodEnum.DAYS.label)
+        diffWeek < 5 -> if (diffDay < 30) {
+            Pair(diffWeek.toInt(), PeriodEnum.WEEKS.label)
+        } else {
+            Pair(diffMonth.toInt(), PeriodEnum.MONTHS.label)
+        }
+
+        else -> if (diffMonth < 12) {
+            Pair(diffMonth.toInt(), PeriodEnum.MONTHS.label)
+        } else {
+            Pair(diffYear.toInt(), PeriodEnum.YEARS.label)
+        }
     }
 }

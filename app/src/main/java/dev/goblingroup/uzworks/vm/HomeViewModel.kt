@@ -28,12 +28,12 @@ class HomeViewModel @Inject constructor(
 
     private fun countJobs() {
         viewModelScope.launch {
-                val countJobsResponse = announcementRepository.countJobs()
-                if (countJobsResponse.isSuccessful) {
-                    _jobCountLiveData.postValue(ApiStatus.Success(countJobsResponse.body()))
-                } else {
-                    _jobCountLiveData.postValue(ApiStatus.Error(Throwable(countJobsResponse.message())))
-                }
+            val countJobsResponse = announcementRepository.countJobs()
+            if (countJobsResponse.isSuccessful) {
+                _jobCountLiveData.postValue(ApiStatus.Success(countJobsResponse.body()))
+            } else {
+                _jobCountLiveData.postValue(ApiStatus.Error(Throwable(countJobsResponse.message())))
+            }
         }
     }
 
