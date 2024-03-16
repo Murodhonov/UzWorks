@@ -1,6 +1,7 @@
 package dev.goblingroup.uzworks.di
 
 import android.content.SharedPreferences
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +17,7 @@ import dev.goblingroup.uzworks.networking.SecuredUserService
 import dev.goblingroup.uzworks.networking.SecuredWorkerService
 import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.networking.WorkerService
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -46,6 +48,7 @@ class NetworkModule {
     fun provideInterceptor(
         @Named(value = "token") token: String
     ): Interceptor {
+        Log.d(TAG, "provideInterceptor: $token")
         return Interceptor { chain ->
             val request = chain.request().newBuilder()
                 .addHeader("Authorization", "Bearer $token")
@@ -56,11 +59,22 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(
+    @Named(value = "secured_ok_http_client")
+    fun provideSecuredOkHttpClient(
         interceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named(value = "ok_http_client")
+    fun provideOkHttpClient(
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
             .readTimeout(30, TimeUnit.SECONDS)
             .build()
     }
@@ -76,7 +90,7 @@ class NetworkModule {
     @Named(value = "secured_retrofit")
     fun provideSecuredRetrofit(
         baseUrl: String,
-        httpClient: OkHttpClient,
+        @Named(value = "secured_ok_http_client") httpClient: OkHttpClient,
         converterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
@@ -91,11 +105,12 @@ class NetworkModule {
     @Named(value = "retrofit")
     fun provideRetrofit(
         baseUrl: String,
+        @Named(value = "ok_http_client") httpClient: OkHttpClient,
         converterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
-            .client(OkHttpClient.Builder().build())
+            .client(httpClient)
             .addConverterFactory(converterFactory)
             .build()
     }

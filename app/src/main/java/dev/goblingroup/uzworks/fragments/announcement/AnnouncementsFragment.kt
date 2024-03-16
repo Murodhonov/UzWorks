@@ -47,6 +47,7 @@ class AnnouncementsFragment : Fragment() {
                         announcementId: String,
                         announcementType: String
                     ) {
+                        Log.d(TAG, "onAllAnnouncementClick: checking announcement details $announcementId $announcementType")
                         openAnnouncementDetails(announcementId, announcementType)
                     }
 
@@ -99,14 +100,6 @@ class AnnouncementsFragment : Fragment() {
         val savedAnnouncementBottomBinding = SavedAnnouncementBottomBinding.inflate(layoutInflater)
         savedAnnouncementBottomBinding.apply {
             bottomSheetDialog.setContentView(root)
-            contactChatBtn.setOnClickListener {
-                bottomSheetDialog.dismiss()
-                findNavController().navigate(
-                    resId = R.id.chatFragment,
-                    args = null,
-                    navOptions = getNavOptions()
-                )
-            }
             shareBtn.setOnClickListener {
                 bottomSheetDialog.dismiss()
                 val shareIntent = Intent(Intent.ACTION_SEND)

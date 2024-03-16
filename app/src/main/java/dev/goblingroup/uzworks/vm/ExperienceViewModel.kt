@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.vm
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,7 @@ import dev.goblingroup.uzworks.models.response.ExperienceEditResponse
 import dev.goblingroup.uzworks.models.response.ExperienceResponse
 import dev.goblingroup.uzworks.repository.ExperienceRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
-import dev.goblingroup.uzworks.repository.SecuredWorkerRepository
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -47,13 +48,22 @@ class ExperienceViewModel @Inject constructor(
 
     fun createExperience(experienceCreateRequest: ExperienceCreateRequest): LiveData<ApiStatus<ExperienceCreateResponse>> {
         viewModelScope.launch {
-                val experienceCreateResponse =
-                    experienceRepository.createExperience(experienceCreateRequest)
-                if (experienceCreateResponse.isSuccessful) {
-                    createExperienceLiveData.postValue(ApiStatus.Success(experienceCreateResponse.body()))
-                } else {
-                    createExperienceLiveData.postValue(ApiStatus.Error(Throwable(experienceCreateResponse.message())))
-                }
+            Log.d(TAG, "createExperience: creating $experienceCreateRequest")
+            val experienceCreateResponse =
+                experienceRepository.createExperience(experienceCreateRequest)
+            if (experienceCreateResponse.isSuccessful) {
+                createExperienceLiveData.postValue(ApiStatus.Success(experienceCreateResponse.body()))
+            } else {
+                createExperienceLiveData.postValue(
+                    ApiStatus.Error(
+                        Throwable(
+                            experienceCreateResponse.message()
+                        )
+                    )
+                )
+                Log.e(TAG, "createExperience: ${experienceCreateResponse.errorBody()}")
+                Log.e(TAG, "createExperience: ${experienceCreateResponse.code()}")
+            }
         }
         return createExperienceLiveData
     }
@@ -65,6 +75,8 @@ class ExperienceViewModel @Inject constructor(
                     editExperienceLiveData.postValue(ApiStatus.Success(editExperienceResponse.body()))
                 } else {
                     editExperienceLiveData.postValue(ApiStatus.Error(Throwable(editExperienceResponse.message())))
+                    Log.e(TAG, "editExperience: ${editExperienceResponse.errorBody()}")
+                    Log.e(TAG, "editExperience: ${editExperienceResponse.code()}")
                 }
         }
         return editExperienceLiveData

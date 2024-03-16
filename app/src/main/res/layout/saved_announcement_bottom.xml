@@ -6,37 +6,7 @@
     android:background="@drawable/bottom_dialog_background"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/_15sdp">
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/contact_chat_btn"
-        android:layout_width="match_parent"
-        android:layout_marginStart="@dimen/_23sdp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_23sdp"
-        app:cardCornerRadius="@dimen/_5sdp"
-        android:backgroundTint="@color/white"
-        app:cardElevation="0dp"
-        app:strokeColor="@color/black_blue"
-        app:strokeWidth="@dimen/_2sdp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_7sdp"
-            android:paddingStart="@dimen/_23sdp"
-            android:paddingTop="@dimen/_5sdp"
-            android:paddingEnd="@dimen/_3sdp"
-            android:drawablePadding="@dimen/_10sdp"
-            android:fontFamily="@font/dm_sans_bold"
-            android:paddingBottom="@dimen/_5sdp"
-            android:text="@string/send_message"
-            android:textColor="@color/black_blue"
-            android:textSize="@dimen/_13ssp"
-            app:drawableLeftCompat="@drawable/ic_send_message_stroke" />
-
-    </com.google.android.material.card.MaterialCardView>
+    android:paddingVertical="@dimen/_15sdp">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/share_btn"
@@ -46,7 +16,7 @@
         android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_23sdp"
         android:backgroundTint="@color/white"
-        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_7sdp"
         app:cardElevation="0dp"
         app:strokeColor="@color/black_blue"
         app:strokeWidth="@dimen/_2sdp">
@@ -76,7 +46,7 @@
         android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_23sdp"
         android:backgroundTint="@color/white"
-        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_7sdp"
         app:cardElevation="0dp"
         app:strokeColor="@color/black_blue"
         app:strokeWidth="@dimen/_2sdp">
@@ -106,7 +76,7 @@
         android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_23sdp"
         android:backgroundTint="@color/red"
-        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_7sdp"
         app:cardElevation="0dp"
         app:strokeColor="@color/red"
         app:strokeWidth="@dimen/_1sdp">

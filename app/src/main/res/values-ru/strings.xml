@@ -177,4 +177,8 @@
     <string name="year">год</string>
     <string name="years">годы</string>
     <string name="chat_coming_soon">Скоро появится чат…</string>
+    <string name="position_error">Введите свою посиция</string>
+    <string name="company_name_error">Введите название компании</string>
+    <string name="start_date_error">Введите время начала</string>
+    <string name="end_date_error">Введите время окончания</string>
 </resources>

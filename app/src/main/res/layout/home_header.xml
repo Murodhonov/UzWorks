@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/greeting_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:textSize="@dimen/_22ssp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/ad_card"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_130sdp"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:backgroundTint="@color/black_blue"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardElevation="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/greeting_tv" />
+
+    <TextView
+        android:id="@+id/ad_title_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_30sdp"
+        android:fontFamily="@font/dm_sans_semi_bold"
+        android:text="@string/ad_title"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16ssp"
+        android:theme="@style/SecondaryTextStyle"
+        app:layout_constraintLeft_toLeftOf="@id/ad_card"
+        app:layout_constraintRight_toLeftOf="@id/ad_img"
+        app:layout_constraintTop_toTopOf="@id/ad_card" />
+
+    <ImageView
+        android:id="@+id/ad_img"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_150sdp"
+        android:contentDescription="@string/content_description"
+        android:src="@drawable/ic_ad_face"
+        app:layout_constraintBottom_toBottomOf="@id/ad_card"
+        app:layout_constraintRight_toRightOf="@id/ad_card" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="-10dp"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="-10dp"
+        android:layout_marginBottom="-5dp"
+        android:backgroundTint="@color/yellow"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/join_tv"
+        app:layout_constraintLeft_toLeftOf="@id/join_tv"
+        app:layout_constraintRight_toRightOf="@id/join_tv"
+        app:layout_constraintTop_toTopOf="@id/join_tv" />
+
+    <TextView
+        android:id="@+id/join_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="@string/join"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_11ssp"
+        app:layout_constraintBottom_toBottomOf="@id/ad_card"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ad_card"
+        app:layout_constraintVertical_bias="0.9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

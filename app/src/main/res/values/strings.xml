@@ -177,4 +177,8 @@
     <string name="year">йил</string>
     <string name="years">йил</string>
     <string name="chat_coming_soon">Чат тез кунларда…</string>
+    <string name="position_error">Лавозимингизни киритинг</string>
+    <string name="company_name_error">Компания номини киритинг</string>
+    <string name="start_date_error">Бошланган вақтини киритинг</string>
+    <string name="end_date_error">Тугаган вақтини киритинг</string>
 </resources>

@@ -177,4 +177,8 @@ The information displayed to you is determined by the role you choose</string>
     <string name="year">year</string>
     <string name="years">years</string>
     <string name="chat_coming_soon">Chat coming soon…</string>
+    <string name="position_error">Enter position</string>
+    <string name="company_name_error">Enter company name</string>
+    <string name="start_date_error">Select start date</string>
+    <string name="end_date_error">Select end date</string>
 </resources>

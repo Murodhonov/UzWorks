@@ -155,6 +155,7 @@ class AllAnnouncementsFragment : Fragment() {
                     addressViewModel,
                     resources,
                     { announcementId, announcementType ->
+                        Log.d(TAG, "success: checking announcement details $announcementId $announcementType")
                         announcementClickListener?.onAllAnnouncementClick(announcementId, announcementType)
                     }, { state, announcementId ->
                         notifySaveUnSave(state, announcementId)

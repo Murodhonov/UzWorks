@@ -177,4 +177,8 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="year">yil</string>
     <string name="years">yil</string>
     <string name="chat_coming_soon">Chat tez kunlarda…</string>
+    <string name="position_error">Lavozimingizni kiriting</string>
+    <string name="company_name_error">Kompaniya nomini kiriting</string>
+    <string name="start_date_error">Boshlangan vaqtini kiriting</string>
+    <string name="end_date_error">Tugagan vaqtini kiriting</string>
 </resources>

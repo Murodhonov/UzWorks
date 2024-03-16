@@ -18,9 +18,13 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.rv_adapters.ExperienceAdapter
 import dev.goblingroup.uzworks.databinding.AddEditExperienceDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentExperienceBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.models.request.ExperienceCreateRequest
+import dev.goblingroup.uzworks.models.request.ExperienceEditRequest
 import dev.goblingroup.uzworks.models.response.ExperienceResponse
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.clear
+import dev.goblingroup.uzworks.utils.dmyToIso
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.ExperienceViewModel
@@ -36,8 +40,11 @@ class ExperienceFragment : Fragment() {
 
     private val experienceViewModel: ExperienceViewModel by viewModels()
 
-    private lateinit var dialog: AlertDialog
-    private lateinit var dialogItemBinding: AddEditExperienceDialogItemBinding
+    private lateinit var experienceDialog: AlertDialog
+    private lateinit var addEditExperienceDialogItemBinding: AddEditExperienceDialogItemBinding
+
+    private lateinit var loadingDialog: AlertDialog
+    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,10 +80,11 @@ class ExperienceFragment : Fragment() {
                 }
             }
 
-            dialog = AlertDialog.Builder(requireContext()).create()
-            dialogItemBinding = AddEditExperienceDialogItemBinding.inflate(layoutInflater)
-            dialog.setView(dialogItemBinding.root)
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            experienceDialog = AlertDialog.Builder(requireContext()).create()
+            addEditExperienceDialogItemBinding =
+                AddEditExperienceDialogItemBinding.inflate(layoutInflater)
+            experienceDialog.setView(addEditExperienceDialogItemBinding.root)
+            experienceDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             addExperienceBtn.setOnClickListener {
                 addEditExperience(null)
@@ -84,10 +92,37 @@ class ExperienceFragment : Fragment() {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun addEditExperience(experienceResponse: ExperienceResponse?) {
+    private fun isFormValid(dialogItemBinding: AddEditExperienceDialogItemBinding): Boolean {
+        var result = true
         dialogItemBinding.apply {
-            dialog.show()
+            if (companyNameEt.editText?.text.toString().isEmpty()) {
+                result = false
+                companyNameEt.isErrorEnabled = true
+                companyNameEt.error = resources.getString(R.string.company_name_error)
+            }
+            if (positionEt.editText?.text.toString().isEmpty()) {
+                result = false
+                positionEt.isErrorEnabled = true
+                positionEt.error = resources.getString(R.string.position_error)
+            }
+            if (startDateEt.editText?.text.toString().isEmpty()) {
+                result = false
+                startDateEt.isErrorEnabled = true
+                startDateEt.error = resources.getString(R.string.start_date_error)
+            }
+            if (endDateEt.editText?.text.toString().isEmpty()) {
+                result = false
+                endDateEt.isErrorEnabled = true
+                endDateEt.error = resources.getString(R.string.end_date_error)
+            }
+            return result
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun addEditExperience(addEditExperience: ExperienceResponse?) {
+        addEditExperienceDialogItemBinding.apply {
+            experienceDialog.show()
             startDateEt.clear()
             endDateEt.clear()
             startDateEt.editText?.setOnTouchListener { v, event ->
@@ -145,7 +180,89 @@ class ExperienceFragment : Fragment() {
                 }
                 true
             }
+
+            cancelBtn.setOnClickListener {
+                experienceDialog.dismiss()
+            }
+
+            saveBtn.setOnClickListener {
+                if (isFormValid(addEditExperienceDialogItemBinding)) {
+                    if (addEditExperience != null) {
+                        experienceViewModel.editExperience(
+                            ExperienceEditRequest(
+                                companyName = companyNameEt.editText?.text.toString(),
+                                description = "fjsdkfj",
+                                endDate = endDateEt.editText?.text.toString().dmyToIso().toString(),
+                                id = addEditExperience.id,
+                                position = positionEt.editText?.text.toString(),
+                                startDate = startDateEt.editText?.text.toString().dmyToIso().toString()
+                            )
+                        ).observe(viewLifecycleOwner) {
+                            when (it) {
+                                is ApiStatus.Error -> {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "something went wrong while editing experience",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                is ApiStatus.Loading -> {
+                                    addEditExperienceLoading()
+                                }
+                                is ApiStatus.Success -> {
+                                    loadingDialog.dismiss()
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "successfully edited",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                    }
+                    experienceViewModel.createExperience(
+                        ExperienceCreateRequest(
+                            companyName = companyNameEt.editText?.text.toString(),
+                            description = "some description",
+                            endDate = endDateEt.editText?.text.toString().dmyToIso().toString(),
+                            position = positionEt.editText?.text.toString(),
+                            startDate = startDateEt.editText?.text.toString().dmyToIso().toString()
+                        )
+                    ).observe(viewLifecycleOwner) {
+                        when (it) {
+                            is ApiStatus.Error -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "something went wrong while creating experience",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            is ApiStatus.Loading -> {
+                                addEditExperienceLoading()
+                            }
+
+                            is ApiStatus.Success -> {
+                                loadingDialog.dismiss()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "successfully created",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    private fun addEditExperienceLoading() {
+        loadingDialog = AlertDialog.Builder(requireContext()).create()
+        loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        loadingDialog.setView(loadingDialogItemBinding.root)
+        loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        loadingDialog.setCancelable(false)
     }
 
     private fun setExperiences(experienceList: List<ExperienceResponse>) {
