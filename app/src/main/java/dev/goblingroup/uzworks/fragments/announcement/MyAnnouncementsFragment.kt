@@ -44,6 +44,10 @@ class MyAnnouncementsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
+            back.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
             loadAnnouncements()
         }
     }

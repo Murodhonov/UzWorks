@@ -36,12 +36,7 @@ class AllAnnouncementsAdapter(
                 costTv.text = "${announcement.salary} so'm"
                 categoryTv.text = getJobCategory(announcement.categoryId.toString())
                 addressTv.text = getAddress(announcement.districtId.toString())
-                iv.setImageResource(
-                    getImage(
-                        announcement.announcementType,
-                        announcement.gender.toString()
-                    )
-                )
+                iv.setImageResource(announcement.pictureResId)
 
                 genderTv.text = when (announcement.gender) {
                     GenderEnum.MALE.label -> {

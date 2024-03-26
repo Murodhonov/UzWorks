@@ -63,7 +63,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackgroundBorderless"
-        android:layout_marginHorizontal="@dimen/_7sdp"
+        android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_7sdp"
         android:backgroundTint="@color/white"
         app:cardCornerRadius="@dimen/_7sdp"
@@ -77,8 +77,8 @@
 
             <ImageView
                 android:id="@+id/personal_info_iv"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:contentDescription="@string/content_description"
                 android:src="@drawable/ic_personal_info"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -88,6 +88,7 @@
             <TextView
                 android:id="@+id/personal_info_tv"
                 android:layout_width="wrap_content"
+                android:textSize="@dimen/_12ssp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:text="@string/personal_information"
@@ -103,7 +104,7 @@
         android:id="@+id/add_announcement_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_7sdp"
+        android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_7sdp"
         android:backgroundTint="@color/white"
         android:clickable="true"
@@ -120,8 +121,8 @@
 
             <ImageView
                 android:id="@+id/add_announcement_iv"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:contentDescription="@string/content_description"
                 android:src="@drawable/ic_add_announcement"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -131,6 +132,7 @@
             <TextView
                 android:id="@+id/add_announcement_tv"
                 android:layout_width="wrap_content"
+                android:textSize="@dimen/_12ssp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:text="@string/add_job_announcement"
@@ -145,7 +147,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/my_announcements_btn"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_7sdp"
+        android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/_7sdp"
         android:backgroundTint="@color/white"
@@ -163,8 +165,8 @@
 
             <ImageView
                 android:id="@+id/announcement_iv"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:contentDescription="@string/content_description"
                 android:src="@drawable/ic_my_announcements"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -175,6 +177,7 @@
                 android:id="@+id/announcement_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/_12ssp"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:text="@string/my_announcements"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -189,7 +192,7 @@
         android:id="@+id/experience_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_7sdp"
+        android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_7sdp"
         android:clickable="true"
         android:focusable="true"
@@ -207,8 +210,8 @@
 
             <ImageView
                 android:id="@+id/experience_iv"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:contentDescription="@string/content_description"
                 android:src="@drawable/ic_experience"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -217,6 +220,7 @@
 
             <TextView
                 android:id="@+id/experience_tv"
+                android:textSize="@dimen/_12ssp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_7sdp"

@@ -43,23 +43,6 @@ class ProfileFragment : Fragment() {
                     R.string.add_job_announcement
                 )
 
-            profileViewModel.userLiveData.observe(viewLifecycleOwner) {
-                when (it) {
-                    is ApiStatus.Error -> {
-
-                    }
-
-                    is ApiStatus.Loading -> {
-
-                    }
-
-                    is ApiStatus.Success -> {
-                        userResponse = it.response
-                        succeeded()
-                    }
-                }
-            }
-
             settings.setOnClickListener {
                 findNavController().navigate(
                     resId = R.id.settingsFragment,
@@ -104,6 +87,26 @@ class ProfileFragment : Fragment() {
                 experienceLayout.visibility = View.GONE
             } else if (profileViewModel.isEmployee()) {
                 experienceLayout.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        profileViewModel.userLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is ApiStatus.Error -> {
+
+                }
+
+                is ApiStatus.Loading -> {
+
+                }
+
+                is ApiStatus.Success -> {
+                    userResponse = it.response
+                    succeeded()
+                }
             }
         }
     }

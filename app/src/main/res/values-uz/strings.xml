@@ -184,4 +184,5 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="address_failed">Manzil yuklanmadi</string>
     <string name="close">Yopish</string>
     <string name="username_exist">Foydalanuvchi nomi allaqachon ishlatilgan, boshqasini tanlang</string>
+    <string name="update_succeeded">Muvaffaqiyatli yangilandi</string>
 </resources>

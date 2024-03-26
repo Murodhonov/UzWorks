@@ -31,8 +31,6 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
-    private lateinit var linearSnapHelper: LinearSnapHelper
-
     private val announcementViewModel: AnnouncementViewModel by viewModels()
     private val addressViewModel: AddressViewModel by viewModels()
 
@@ -44,9 +42,9 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onResume() {
+        super.onResume()
         binding.apply {
-            linearSnapHelper = LinearSnapHelper()
             val homeFragmentAdapter = HomeFragmentAdapter(
                 viewLifecycleOwner,
                 homeViewModel,

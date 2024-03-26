@@ -3,6 +3,7 @@ package dev.goblingroup.uzworks.vm
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import android.view.MotionEvent
 import androidx.core.widget.doAfterTextChanged
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.models.request.ExperienceCreateRequest
 import dev.goblingroup.uzworks.models.request.ExperienceEditRequest
 import dev.goblingroup.uzworks.models.response.ExperienceCreateResponse
@@ -204,6 +206,37 @@ class ExperienceViewModel @Inject constructor(
             }
             true
         }
+    }
+
+    fun isFormValid(
+        resources: Resources,
+        positionEt: TextInputLayout,
+        companyNameEt: TextInputLayout,
+        startDateEt: TextInputLayout,
+        endDateEt: TextInputLayout
+    ): Boolean {
+        var result = true
+        if (positionEt.editText?.text.toString().isEmpty()) {
+            result = false
+            positionEt.isErrorEnabled = true
+            positionEt.error = resources.getString(R.string.position_error)
+        }
+        if (companyNameEt.editText?.text.toString().isEmpty()) {
+            result = false
+            companyNameEt.isErrorEnabled = true
+            companyNameEt.error = resources.getString(R.string.company_name_error)
+        }
+        if (startDateEt.editText?.text.toString().isEmpty()) {
+            result = false
+            startDateEt.isErrorEnabled = true
+            startDateEt.error = resources.getString(R.string.start_date_error)
+        }
+        if (endDateEt.editText?.text.toString().isEmpty()) {
+            result = false
+            endDateEt.isErrorEnabled = true
+            endDateEt.error = resources.getString(R.string.end_date_error)
+        }
+        return result
     }
 
 }

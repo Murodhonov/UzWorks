@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.ExperienceAdapter
@@ -64,6 +65,10 @@ class ExperienceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
+            backBtn.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
             experienceViewModel.experienceLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
@@ -95,7 +100,10 @@ class ExperienceFragment : Fragment() {
                 AddEditExperienceDialogItemBinding.inflate(layoutInflater)
             addEditExperienceDialog.setView(addEditExperienceDialogBinding.root)
             addEditExperienceDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            addEditExperienceDialog.setCancelable(false)
+            addEditExperienceDialog.setOnDismissListener {
+                experienceViewModel.adding = false
+                experienceViewModel.editing = false
+            }
 
             addExperienceBtn.setOnClickListener {
                 addExperience()
@@ -111,95 +119,55 @@ class ExperienceFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume: ")
-        addEditExperienceDialog.show()
+        if (experienceViewModel.adding) {
+            addEditExperienceDialog.show()
+        }
+        if (experienceViewModel.editing) {
+            addEditExperienceDialog.show()
+            addEditExperienceDialogBinding.apply {
+                experienceViewModel.positionLiveData.observe(viewLifecycleOwner) {
+                    positionEt.editText?.setText(it)
+                }
+                experienceViewModel.companyNameLiveData.observe(viewLifecycleOwner) {
+                    companyNameEt.editText?.setText(it)
+                }
+                experienceViewModel.startDateLiveData.observe(viewLifecycleOwner) {
+                    startDateEt.editText?.setText(it)
+                }
+                experienceViewModel.endDateLiveData.observe(viewLifecycleOwner) {
+                    endDateEt.editText?.setText(it)
+                }
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun addExperience() {
         addEditExperienceDialogBinding.apply {
             addEditExperienceDialog.show()
-            startDateEt.clear()
-            endDateEt.clear()
-            startDateEt.editText?.setOnTouchListener { v, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    val datePickerDialog = DatePickerDialog(
-                        requireContext(),
-                        { _, year, month, dayOfMonth ->
-                            val selectedCalendar = Calendar.getInstance().apply {
-                                set(year, month, dayOfMonth)
-                            }
-
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            startDateEt.isErrorEnabled = false
-                            startDateEt.editText?.setText(formatter.format(selectedCalendar.time))
-                        },
-                        startDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.YEAR.dateLabel),
-                        startDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.MONTH.dateLabel),
-                        startDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.DATE.dateLabel)
-                    )
-
-                    datePickerDialog.show()
-                }
-                true
-            }
-
-            endDateEt.editText?.setOnTouchListener { v, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    val datePickerDialog = DatePickerDialog(
-                        requireContext(),
-                        { _, year, month, dayOfMonth ->
-                            val selectedCalendar = Calendar.getInstance().apply {
-                                set(year, month, dayOfMonth)
-                            }
-
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            endDateEt.isErrorEnabled = false
-                            endDateEt.editText?.setText(formatter.format(selectedCalendar.time))
-                        },
-                        endDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.YEAR.dateLabel),
-                        endDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.MONTH.dateLabel),
-                        endDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.DATE.dateLabel)
-                    )
-
-                    datePickerDialog.show()
-                }
-                true
-            }
-
-            positionEt.editText?.doAfterTextChanged {
-                if (it.toString().isNotEmpty()) {
-                    positionEt.isErrorEnabled = false
-                }
-            }
-
-            companyNameEt.editText?.doAfterTextChanged {
-                if (it.toString().isNotEmpty()) {
-                    companyNameEt.isErrorEnabled = false
-                }
-            }
-
-            cancelBtn.setOnClickListener {
-                addEditExperienceDialog.dismiss()
-            }
 
             positionEt.editText?.setText("")
             companyNameEt.editText?.setText("")
             startDateEt.editText?.setText("")
             endDateEt.editText?.setText("")
 
+            experienceViewModel.controlExperienceInput(
+                requireContext(),
+                positionEt,
+                companyNameEt,
+                startDateEt,
+                endDateEt
+            )
+
             saveBtn.setOnClickListener {
-                if (isFormValid(addEditExperienceDialogBinding)) {
+                if (experienceViewModel.isFormValid(
+                        resources,
+                        positionEt,
+                        companyNameEt,
+                        startDateEt,
+                        endDateEt
+                    )
+                ) {
                     experienceViewModel.createExperience(
                         ExperienceCreateRequest(
                             companyName = companyNameEt.editText?.text.toString(),

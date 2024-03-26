@@ -2,21 +2,16 @@ package dev.goblingroup.uzworks.fragments.profile
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,19 +23,12 @@ import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.utils.DateEnum
-import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.convertPhoneNumber
 import dev.goblingroup.uzworks.utils.dmyToIso
-import dev.goblingroup.uzworks.utils.extractDateValue
-import dev.goblingroup.uzworks.utils.formatPhoneNumber
 import dev.goblingroup.uzworks.utils.isoToDmy
 import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.ProfileViewModel
+import dev.goblingroup.uzworks.vm.PersonalInfoViewModel
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import java.util.regex.Pattern
 
 @AndroidEntryPoint
@@ -52,7 +40,7 @@ class PersonalInfoFragment : Fragment() {
     private var userResponse: UserResponse? = null
     private var selectedGender = ""
 
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private val personalInfoViewModel: PersonalInfoViewModel by viewModels()
 
     private lateinit var dialog: AlertDialog
 
@@ -66,13 +54,17 @@ class PersonalInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
+            back.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 userResponse = arguments?.getParcelable("user_response", UserResponse::class.java)
             }
             if (userResponse != null) {
                 setData()
             } else {
-                profileViewModel.userLiveData.observe(viewLifecycleOwner) {
+                personalInfoViewModel.userLiveData.observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
                             Toast.makeText(
@@ -95,23 +87,16 @@ class PersonalInfoFragment : Fragment() {
                 }
             }
 
-            firstNameEt.editText?.addTextChangedListener {
-                if (it.toString().isNotEmpty()) {
-                    firstNameEt.isErrorEnabled = false
-                }
-            }
-
-            lastNameEt.editText?.addTextChangedListener {
-                if (it.toString().isNotEmpty()) {
-                    lastNameEt.isErrorEnabled = false
-                }
-            }
-
-            emailEt.editText?.addTextChangedListener {
-                if (it.toString().isNotEmpty()) {
-                    emailEt.isErrorEnabled = false
-                }
-            }
+            personalInfoViewModel.controlInput(
+                requireContext(),
+                resources,
+                firstNameEt,
+                lastNameEt,
+                emailEt,
+                phoneNumberEt,
+                genderLayout,
+                birthdayEt
+            )
         }
     }
 
@@ -127,17 +112,15 @@ class PersonalInfoFragment : Fragment() {
     private fun setData() {
         binding.apply {
             dialog.dismiss()
-            selectedGender = userResponse?.gender ?: ""
 
             firstNameEt.editText?.setText(userResponse?.firstName ?: "")
             lastNameEt.editText?.setText(userResponse?.lastName ?: "")
-            Log.d(TAG, "setData: ${userResponse?.birthDate}")
+
             birthdayEt.editText?.setText(
                 if (userResponse?.birthDate?.isoToDmy() == null) resources.getString(R.string.birth_date) else userResponse?.birthDate?.isoToDmy()
             )
-            genderLayout.apply {
+            /*genderLayout.apply {
                 when (selectedGender) {
-
                     GenderEnum.MALE.label -> {
                         maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
                         femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
@@ -188,7 +171,7 @@ class PersonalInfoFragment : Fragment() {
                         maleBtn.strokeColor = resources.getColor(R.color.text_color)
                     }
                 }
-            }
+            }*/
 
             emailEt.editText?.setText(userResponse?.email ?: "")
             phoneNumberEt.editText?.setText(
@@ -196,7 +179,7 @@ class PersonalInfoFragment : Fragment() {
                     ?: resources.getString(R.string.phone_number_prefix)
             )
 
-            phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
+            /*phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
                 private var isFormatting = false
 
                 override fun beforeTextChanged(
@@ -272,19 +255,27 @@ class PersonalInfoFragment : Fragment() {
                     datePickerDialog.show()
                 }
                 true
-            }
+            }*/
 
             saveBtn.setOnClickListener {
-                if (isFormValid()) {
+                if (personalInfoViewModel.isFormValid(
+                        resources,
+                        firstNameEt,
+                        lastNameEt,
+                        emailEt,
+                        phoneNumberEt,
+                        birthdayEt
+                    )
+                ) {
                     lifecycleScope.launch {
-                        profileViewModel.updateUser(
+                        personalInfoViewModel.updateUser(
                             UserUpdateRequest(
                                 birthDate = birthdayEt.editText?.text.toString().dmyToIso()
                                     .toString(),
                                 email = emailEt.editText?.text.toString(),
                                 firstName = firstNameEt.editText?.text.toString(),
                                 gender = selectedGender,
-                                id = profileViewModel.getUserId(),
+                                id = personalInfoViewModel.getUserId(),
                                 lastName = lastNameEt.editText?.text.toString(),
                                 mobileId = Settings.Secure.getString(
                                     requireContext().contentResolver,
@@ -292,7 +283,7 @@ class PersonalInfoFragment : Fragment() {
                                 ),
                                 phoneNumber = phoneNumberEt.editText?.text.toString()
                                     .filter { !it.isWhitespace() },
-                                userName = profileViewModel.getUsername()
+                                userName = personalInfoViewModel.getUsername()
                             )
                         ).observe(viewLifecycleOwner) {
                             when (it) {
@@ -312,7 +303,7 @@ class PersonalInfoFragment : Fragment() {
                                 is ApiStatus.Success -> {
                                     Toast.makeText(
                                         requireContext(),
-                                        "successfully updated",
+                                        resources.getString(R.string.update_succeeded),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     findNavController().popBackStack()

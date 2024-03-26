@@ -8,7 +8,6 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.databinding.AnnouncementItemBinding
 import dev.goblingroup.uzworks.utils.GenderEnum
-import dev.goblingroup.uzworks.utils.getImage
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -37,12 +36,7 @@ class SavedAnnouncementsAdapter(
                 saveIv.setImageResource(R.drawable.ic_saved)
                 categoryTv.text = getJobCategory(announcement.categoryId.toString())
                 addressTv.text = getAddress(announcement.districtId.toString())
-                iv.setImageResource(
-                    getImage(
-                        announcement.announcementType,
-                        announcement.gender.toString()
-                    )
-                )
+                iv.setImageResource(announcement.pictureResId)
 
                 genderTv.text = when (announcement.gender) {
                     GenderEnum.MALE.label -> {

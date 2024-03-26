@@ -184,4 +184,5 @@ The information displayed to you is determined by the role you choose</string>
     <string name="address_failed">Failed to load address</string>
     <string name="close">Close</string>
     <string name="username_exist">Username has already been used, choose another</string>
+    <string name="update_succeeded">Successfully updated</string>
 </resources>

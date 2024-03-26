@@ -184,4 +184,5 @@
     <string name="address_failed">Манзил юкланмади</string>
     <string name="close">Ёпиш</string>
     <string name="username_exist">Фойдаланувчи номи аллақачон ишлатилган, бошқасини танланг</string>
+    <string name="update_succeeded">Муваффақиятли янгиланди</string>
 </resources>
