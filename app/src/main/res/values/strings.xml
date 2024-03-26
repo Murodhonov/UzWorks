@@ -181,4 +181,7 @@
     <string name="company_name_error">Компания номини киритинг</string>
     <string name="start_date_error">Бошланган вақтини киритинг</string>
     <string name="end_date_error">Тугаган вақтини киритинг</string>
+    <string name="address_failed">Манзил юкланмади</string>
+    <string name="close">Ёпиш</string>
+    <string name="username_exist">Фойдаланувчи номи аллақачон ишлатилган, бошқасини танланг</string>
 </resources>

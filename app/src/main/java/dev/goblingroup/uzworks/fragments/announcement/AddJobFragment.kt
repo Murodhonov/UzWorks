@@ -28,7 +28,7 @@ import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -362,7 +362,6 @@ class AddJobFragment : Fragment() {
             }
 
             jobCategoryChoice.setOnClickListener {
-                Toast.makeText(requireContext(), "click", Toast.LENGTH_SHORT).show()
                 jobCategoryLayout.isErrorEnabled = false
             }
         }
@@ -376,7 +375,7 @@ class AddJobFragment : Fragment() {
             addJobViewModel.setMinAge(if (minAgeEt.editText?.text.toString().isNotEmpty()) minAgeEt.editText?.text.toString().toInt() else 0)
             addJobViewModel.setPhoneNumber(phoneNumberEt.editText?.text.toString())
             addJobViewModel.setRequirement(requirementEt.editText?.text.toString())
-            addJobViewModel.setSalary(if (salaryEt.editText?.text.toString().isNotEmpty()) salaryEt.editText?.text.toString().toInt() else 0)
+            addJobViewModel.setSalary(if (salaryEt.editText?.text.toString().isNotEmpty()) salaryEt.editText?.text.toString().filter { !it.isWhitespace() }.toInt() else 0)
             addJobViewModel.setTgUsername(tgUserNameEt.editText?.text.toString())
             addJobViewModel.setTitle(titleEt.editText?.text.toString())
             addJobViewModel.setWorkingSchedule(workingScheduleEt.editText?.text.toString())
@@ -458,7 +457,7 @@ class AddJobFragment : Fragment() {
 
     private fun loading() {
         loadingDialog = AlertDialog.Builder(requireContext()).create()
-        val loadingBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        val loadingBinding = LoadingDialogBinding.inflate(layoutInflater)
         loadingDialog.setView(loadingBinding.root)
         loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         loadingDialog.setCancelable(false)

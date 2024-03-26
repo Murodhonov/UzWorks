@@ -4,29 +4,25 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.utils.getNavOptions
-import dev.goblingroup.uzworks.utils.isStrongPassword
 import dev.goblingroup.uzworks.utils.splitFullName
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.LoginViewModel
-import dev.goblingroup.uzworks.vm.SignUpViewModel
+import dev.goblingroup.uzworks.vm.SharedSignUpViewModel
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -34,15 +30,15 @@ class SignUpFragment : Fragment() {
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
-    private val TAG = "SignUpFragment"
 
-    private val signupViewModel: SignUpViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
 
-    private lateinit var authDialog: AlertDialog
-    private lateinit var authDialogBinding: AuthDialogItemBinding
+    private lateinit var loadingDialog: AlertDialog
+    private lateinit var loadingBinding: LoadingDialogBinding
 
     private lateinit var userRole: String
+
+    private val sharedSignUpViewModel: SharedSignUpViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,36 +51,23 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             userRole = arguments?.getString("user role")!!
-            fullNameEt.editText?.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    motionLayout.setTransitionDuration(500)
-                    motionLayout.transitionToEnd()
-                    motionLayout.setTransitionDuration(1000)
-                }
-            }
-            usernameEt.editText?.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    motionLayout.setTransitionDuration(500)
-                    motionLayout.transitionToEnd()
-                    motionLayout.setTransitionDuration(1000)
-                }
-            }
-            passwordEt.editText?.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    motionLayout.setTransitionDuration(500)
-                    motionLayout.transitionToEnd()
-                    motionLayout.setTransitionDuration(1000)
-                }
-            }
-            confirmPasswordEt.editText?.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    motionLayout.setTransitionDuration(500)
-                    motionLayout.transitionToEnd()
-                    motionLayout.setTransitionDuration(1000)
-                }
-            }
+            sharedSignUpViewModel.controlInput(
+                fullNameEt,
+                usernameEt,
+                passwordEt,
+                confirmPasswordEt,
+                motionLayout
+            )
+
             continueBtn.setOnClickListener {
-                if (isFormValid()) {
+                if (sharedSignUpViewModel.isFormValid(
+                        fullNameEt,
+                        usernameEt,
+                        passwordEt,
+                        confirmPasswordEt,
+                        resources
+                    )
+                ) {
                     signUp()
                 }
             }
@@ -100,76 +83,11 @@ class SignUpFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
-            fullNameEt.editText?.addTextChangedListener {
-                if (fullNameEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                    fullNameEt.isErrorEnabled = false
-                }
-            }
-
-            usernameEt.editText?.addTextChangedListener {
-                if (usernameEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                    usernameEt.isErrorEnabled = false
-                }
-            }
-
-            passwordEt.editText?.addTextChangedListener {
-                if (passwordEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                    passwordEt.isErrorEnabled = false
-                }
-            }
-
-            confirmPasswordEt.editText?.addTextChangedListener {
-                if (confirmPasswordEt.isErrorEnabled && it.toString()
-                        .isNotEmpty()
-                ) {
-                    confirmPasswordEt.isErrorEnabled = false
-                }
-            }
-
-            fullNameEt.onFocusChangeListener =
-                OnFocusChangeListener { view, hasFocus ->
-                    if (hasFocus) {
-                        motionLayout.setTransitionDuration(500)
-                        motionLayout.transitionToEnd()
-                        motionLayout.setTransitionDuration(1000)
-                    }
-                }
-        }
-    }
-
-    private fun isFormValid(): Boolean {
-        binding.apply {
-            var validation = true
-            val (firstName, lastName) = fullNameEt.splitFullName()
-            if (firstName == null && lastName == null) {
-                fullNameEt.isErrorEnabled = true
-                fullNameEt.error = resources.getString(R.string.enter_full_name)
-                validation = false
-            }
-            if (usernameEt.editText?.text.toString().isEmpty()) {
-                usernameEt.isErrorEnabled = true
-                usernameEt.error = resources.getString(R.string.enter_username)
-                validation = false
-            }
-            if (passwordEt.editText?.text.toString().isEmpty()) {
-                passwordEt.isErrorEnabled = true
-                passwordEt.error = resources.getString(R.string.enter_password)
-                validation = false
-            } else {
-                if (!passwordEt.editText?.text.toString().isStrongPassword()) {
-                    passwordEt.isErrorEnabled = true
-                    passwordEt.error = resources.getString(R.string.password_requirements)
-                    validation = false
-                }
-            }
-            if (confirmPasswordEt.editText?.text.toString().isEmpty() ||
-                confirmPasswordEt.editText?.text.toString() != passwordEt.editText?.text.toString()
-            ) {
-                confirmPasswordEt.isErrorEnabled = true
-                confirmPasswordEt.error = resources.getString(R.string.confirm_password)
-                validation = false
-            }
-            return validation
+            loadingDialog = AlertDialog.Builder(requireContext()).create()
+            loadingBinding = LoadingDialogBinding.inflate(layoutInflater)
+            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            loadingDialog.setCancelable(false)
+            loadingDialog.setView(loadingBinding.root)
         }
     }
 
@@ -177,7 +95,7 @@ class SignUpFragment : Fragment() {
         binding.apply {
             lifecycleScope.launch {
                 val (firstName, lastName) = fullNameEt.splitFullName()
-                signupViewModel.signup(
+                sharedSignUpViewModel.signup(
                     signupRequest = SignUpRequest(
                         username = usernameEt.editText?.text.toString(),
                         password = passwordEt.editText?.text.toString(),
@@ -199,6 +117,8 @@ class SignUpFragment : Fragment() {
                         is ApiStatus.Success -> {
                             signupSuccess()
                         }
+
+                        else -> {}
                     }
                 }
             }
@@ -206,26 +126,31 @@ class SignUpFragment : Fragment() {
     }
 
     private fun signupError(signUpError: Throwable) {
-        authDialogBinding.apply {
-            Log.e(TAG, "signupError: $signUpError")
-            Log.e(TAG, "signupError: ${signUpError.stackTrace}")
-            Log.e(TAG, "signupError: ${signUpError.printStackTrace()}")
-            errorIv.visibility = View.VISIBLE
-            dialogTv.text = "Error ${signUpError.message.toString()}"
-            closeDialog.visibility = View.VISIBLE
-            closeDialog.setOnClickListener {
-                authDialog.dismiss()
+        binding.apply {
+            loadingBinding.apply {
+                progress.visibility = View.INVISIBLE
+                resultIv.setImageResource(R.drawable.ic_error)
+                resultIv.visibility = View.VISIBLE
+                dialogMessageTv.text = resources.getString(R.string.username_exist)
+                close.text = resources.getString(R.string.close)
+                close.visibility = View.VISIBLE
+                close.setOnClickListener {
+                    loadingDialog.dismiss()
+                }
             }
         }
     }
 
     private fun signupLoading() {
-        authDialog = AlertDialog.Builder(requireContext()).create()
-        authDialogBinding = AuthDialogItemBinding.inflate(layoutInflater)
-        authDialog.setView(authDialogBinding.root)
-        authDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        authDialog.setCancelable(false)
-        authDialog.show()
+        loadingBinding.apply {
+            resultIv.visibility = View.GONE
+            progress.visibility = View.VISIBLE
+            dialogMessageTv.text = resources.getString(R.string.loading)
+            close.visibility = View.GONE
+            if (!loadingDialog.isShowing) {
+                loadingDialog.show()
+            }
+        }
     }
 
     private fun signupSuccess() {
@@ -247,16 +172,46 @@ class SignUpFragment : Fragment() {
                         }
 
                         is ApiStatus.Success -> {
-                            authDialog.dismiss()
+                            loadingDialog.dismiss()
                             findNavController().navigate(
                                 resId = R.id.succeedFragment,
                                 args = null,
                                 navOptions = getNavOptions()
                             )
                         }
+
+                        else -> {}
                     }
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.apply {
+            sharedSignUpViewModel.fullName.observe(viewLifecycleOwner) {
+                fullNameEt.editText?.setText(it)
+            }
+            sharedSignUpViewModel.username.observe(viewLifecycleOwner) {
+                usernameEt.editText?.setText(it)
+            }
+            sharedSignUpViewModel.password.observe(viewLifecycleOwner) {
+                passwordEt.editText?.setText(it)
+            }
+            sharedSignUpViewModel.confirmPassword.observe(viewLifecycleOwner) {
+                confirmPasswordEt.editText?.setText(it)
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.apply {
+            sharedSignUpViewModel.setFullName(fullNameEt.editText?.text.toString())
+            sharedSignUpViewModel.setUsername(usernameEt.editText?.text.toString())
+            sharedSignUpViewModel.setPassword(passwordEt.editText?.text.toString())
+            sharedSignUpViewModel.setConfirmPassword(confirmPasswordEt.editText?.text.toString())
         }
     }
 

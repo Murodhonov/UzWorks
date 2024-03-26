@@ -13,7 +13,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.textfield.TextInputLayout
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -492,3 +491,5 @@ fun String.timeAgo(): Pair<Int, String> {
         }
     }
 }
+
+fun TextInputLayout.isEmpty(): Boolean = this.editText?.text.toString().isEmpty()

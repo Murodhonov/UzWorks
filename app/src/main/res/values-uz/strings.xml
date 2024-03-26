@@ -181,4 +181,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="company_name_error">Kompaniya nomini kiriting</string>
     <string name="start_date_error">Boshlangan vaqtini kiriting</string>
     <string name="end_date_error">Tugagan vaqtini kiriting</string>
+    <string name="address_failed">Manzil yuklanmadi</string>
+    <string name="close">Yopish</string>
+    <string name="username_exist">Foydalanuvchi nomi allaqachon ishlatilgan, boshqasini tanlang</string>
 </resources>

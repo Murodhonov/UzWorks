@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.adapter.rv_adapters
+package dev.goblingroup.uzworks.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import dev.goblingroup.uzworks.models.response.ExperienceResponse
 
 class ExperienceAdapter(
     private val experienceList: List<ExperienceResponse>,
-    private val editClick: (ExperienceResponse) -> Unit
+    private val editClick: (ExperienceResponse, Int) -> Unit
 ) : RecyclerView.Adapter<ExperienceAdapter.ExperienceViewHolder>() {
 
     inner class ExperienceViewHolder(private val itemBinding: ExperienceItemBinding) :
@@ -19,7 +19,7 @@ class ExperienceAdapter(
                 companyNameTv.text = experienceResponse.companyName
                 durationTv.text = "${experienceResponse.startDate} ${experienceResponse.endDate}"
                 editExperienceBtn.setOnClickListener {
-                    editClick.invoke(experienceResponse)
+                    editClick.invoke(experienceResponse, position)
                 }
             }
         }

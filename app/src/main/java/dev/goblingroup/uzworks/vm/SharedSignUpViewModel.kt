@@ -1,6 +1,7 @@
 package dev.goblingroup.uzworks.vm
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LiveData
@@ -13,13 +14,15 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.repository.AuthRepository
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.isStrongPassword
 import dev.goblingroup.uzworks.utils.splitFullName
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(
+class SharedSignUpViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -37,6 +40,9 @@ class SignUpViewModel @Inject constructor(
 
     private val _confirmPassword = MutableLiveData("")
     val confirmPassword get() = _confirmPassword
+
+    private val _selectedRole = MutableLiveData("")
+    val selectedRole get() = _selectedRole
 
     fun signup(signupRequest: SignUpRequest): LiveData<ApiStatus<SignUpResponse>> {
         viewModelScope.launch {
@@ -168,4 +174,17 @@ class SignUpViewModel @Inject constructor(
     fun setConfirmPassword(confirmPassword: String) {
         _confirmPassword.value = confirmPassword
     }
+
+    fun setSelectedRole(selectedRole: String) {
+        _selectedRole.value = selectedRole
+    }
+
+    fun isEmployer() =
+        selectedRole.value == UserRole.EMPLOYER.roleName || selectedRole.value.toString().isEmpty()
+
+    fun isEmployee() =
+        selectedRole.value == UserRole.EMPLOYEE.roleName || selectedRole.value.toString().isEmpty()
+
+    fun isRoleSelected() = selectedRole.value.toString().isNotEmpty()
+
 }

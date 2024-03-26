@@ -1,7 +1,8 @@
-package dev.goblingroup.uzworks.adapter.rv_adapters
+package dev.goblingroup.uzworks.adapter
 
 import android.content.res.Resources
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.R
@@ -13,25 +14,20 @@ import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 
-class AllAnnouncementsAdapter(
+class HomeAdapter(
     private val announcementViewModel: AnnouncementViewModel,
     private val jobCategoryViewModel: JobCategoryViewModel,
     private val addressViewModel: AddressViewModel,
     private val resources: Resources,
     private val onItemClick: (String, String) -> Unit,
-    private val onSaveClick: (Boolean, String) -> Unit
-    /**
-     * boolean parameter:
-     * true -> just saved
-     * false -> just unsaved
-     * this parameter for notifying saving/un_saving event among all and saved announcements
-     */
-) : RecyclerView.Adapter<AllAnnouncementsAdapter.AnnouncementsViewHolder>() {
+) : RecyclerView.Adapter<HomeAdapter.AnnouncementsViewHolder>() {
 
     inner class AnnouncementsViewHolder(private val announcementItemBinding: AnnouncementItemBinding) :
         RecyclerView.ViewHolder(announcementItemBinding.root) {
-        fun bindAnnouncement(announcement: AnnouncementEntity) {
+        fun bindAnnouncement(announcement: AnnouncementEntity, position: Int) {
             announcementItemBinding.apply {
+                titleTv.isSelected = true
+                addressTv.isSelected = true
                 titleTv.text = announcement.title
                 costTv.text = "${announcement.salary} so'm"
                 categoryTv.text = getJobCategory(announcement.categoryId.toString())
@@ -42,6 +38,7 @@ class AllAnnouncementsAdapter(
                         announcement.gender.toString()
                     )
                 )
+                badgeIv.visibility = View.VISIBLE
 
                 genderTv.text = when (announcement.gender) {
                     GenderEnum.MALE.label -> {
@@ -67,11 +64,9 @@ class AllAnnouncementsAdapter(
                     if (announcementViewModel.isAnnouncementSaved(announcement.id)) {
                         announcementViewModel.unSaveAnnouncement(announcement.id)
                         saveIv.setImageResource(R.drawable.ic_unsaved)
-                        onSaveClick.invoke(false, announcement.id)
                     } else {
                         announcementViewModel.saveAnnouncement(announcement.id)
                         saveIv.setImageResource(R.drawable.ic_saved)
-                        onSaveClick.invoke(true, announcement.id)
                     }
                 }
 
@@ -82,7 +77,13 @@ class AllAnnouncementsAdapter(
         }
 
         private fun getAddress(districtId: String): String {
-            return "${addressViewModel.findDistrict(districtId).name}, ${addressViewModel.findRegionByDistrictId(districtId).name}"
+            val district = addressViewModel.findDistrict(districtId)
+            return try {
+                "${addressViewModel.findDistrict(districtId).name}, ${addressViewModel.findRegion(district.regionId).name}"
+            } catch (e: Exception) {
+                resources.getString(R.string.address_failed)
+            }
+
         }
 
         private fun getJobCategory(categoryId: String): String {
@@ -103,6 +104,6 @@ class AllAnnouncementsAdapter(
     override fun getItemCount(): Int = announcementViewModel.listAnnouncements().size
 
     override fun onBindViewHolder(holder: AnnouncementsViewHolder, position: Int) {
-        holder.bindAnnouncement(announcementViewModel.listAnnouncements()[position])
+        holder.bindAnnouncement(announcementViewModel.listAnnouncements()[position], position)
     }
 }

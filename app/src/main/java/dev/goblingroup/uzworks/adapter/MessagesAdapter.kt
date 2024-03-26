@@ -1,4 +1,4 @@
-package dev.goblingroup.uzworks.adapter.rv_adapters
+package dev.goblingroup.uzworks.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

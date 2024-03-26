@@ -1,25 +1,26 @@
-package dev.goblingroup.uzworks.adapter.rv_adapters
+package dev.goblingroup.uzworks.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.databinding.MyAnnouncementItemBinding
-import dev.goblingroup.uzworks.models.response.JobResponse
+import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.vm.AddressViewModel
 
-class MyJobsAdapter(
-    private val jobList: List<JobResponse>,
+class MyWorkersAdapter(
+    private val jobList: List<WorkerResponse>,
     private val jobCategoryList: List<JobCategoryEntity>,
     private val addressViewModel: AddressViewModel,
     private val onItemClick: (String) -> Unit,
     private val onItemLongClick: (String) -> Unit
-) : RecyclerView.Adapter<MyJobsAdapter.MyJobViewHolder>() {
+) : RecyclerView.Adapter<MyWorkersAdapter.MyJobViewHolder>() {
 
     inner class MyJobViewHolder(private val itemBinding: MyAnnouncementItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun onBind(jobResponse: JobResponse) {
+        fun onBind(jobResponse: WorkerResponse) {
             itemBinding.apply {
+                titleTv.text = jobResponse.title
                 titleTv.text = jobResponse.title
                 costTv.text = "${jobResponse.salary} so'm"
                 genderTv.text = jobResponse.gender

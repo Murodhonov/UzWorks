@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.adapter.rv_adapters.HomeFragmentAdapter
+import dev.goblingroup.uzworks.adapter.HomeFragmentAdapter
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.getNavOptions

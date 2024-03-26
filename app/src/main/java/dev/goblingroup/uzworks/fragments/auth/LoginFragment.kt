@@ -4,26 +4,20 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.databinding.AuthDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
-import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.utils.LanguageEnum
-import dev.goblingroup.uzworks.utils.LanguageManager
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
 import dev.goblingroup.uzworks.utils.getNavOptions
-import dev.goblingroup.uzworks.utils.languageDialog
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.LoginViewModel
 import kotlinx.coroutines.launch
@@ -31,15 +25,13 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    private val TAG = "LoginFragment"
-
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
     private val loginViewModel: LoginViewModel by viewModels()
 
-    private lateinit var authDialog: AlertDialog
-    private lateinit var authDialogBinding: AuthDialogItemBinding
+    private lateinit var loadingDialog: AlertDialog
+    private lateinit var loadingDialogBinding: LoadingDialogBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,20 +52,8 @@ class LoginFragment : Fragment() {
             }
 
             loginBtn.setOnClickListener {
-                if (usernameEt.editText?.text.toString()
-                        .isNotEmpty() && passwordEt.editText?.text.toString()
-                        .isNotEmpty()
-                ) {
+                if (loginViewModel.isFormValid(usernameEt, passwordEt, resources)) {
                     login()
-                } else {
-                    if (usernameEt.editText?.text.toString().isEmpty()) {
-                        usernameEt.error = resources.getString(R.string.enter_username)
-                        usernameEt.isErrorEnabled = true
-                    }
-                    if (passwordEt.editText?.text.toString().isEmpty()) {
-                        passwordEt.error = resources.getString(R.string.enter_password)
-                        passwordEt.isErrorEnabled = true
-                    }
                 }
             }
 
@@ -85,39 +65,15 @@ class LoginFragment : Fragment() {
                 chooseLanguage()
             }
 
-            usernameEt.editText?.addTextChangedListener {
-                if (usernameEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                    usernameEt.isErrorEnabled = false
-                }
-            }
+            loginViewModel.controlInput(usernameEt, passwordEt)
 
-            passwordEt.editText?.addTextChangedListener {
-                if (passwordEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                    passwordEt.isErrorEnabled = false
-                }
-            }
+            languageTv.text = loginViewModel.getLanguageName()
 
-            languageTv.text = when (loginViewModel.getLanguageCode()) {
-                LanguageEnum.LATIN_UZB.code -> {
-                    LanguageEnum.LATIN_UZB.languageName
-                }
-
-                LanguageEnum.KIRILL_UZB.code -> {
-                    LanguageEnum.KIRILL_UZB.languageName
-                }
-
-                LanguageEnum.RUSSIAN.code -> {
-                    LanguageEnum.RUSSIAN.languageName
-                }
-
-                LanguageEnum.ENGLISH.code -> {
-                    LanguageEnum.ENGLISH.languageName
-                }
-
-                else -> {
-                    ""
-                }
-            }
+            loadingDialog = AlertDialog.Builder(requireContext()).create()
+            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
+            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            loadingDialog.setCancelable(false)
+            loadingDialog.setView(loadingDialogBinding.root)
         }
     }
 
@@ -134,7 +90,7 @@ class LoginFragment : Fragment() {
                     ) {
                         when (it) {
                             is ApiStatus.Error -> {
-                                loginError(it.error)
+                                loginError()
                             }
 
                             is ApiStatus.Loading -> {
@@ -142,7 +98,7 @@ class LoginFragment : Fragment() {
                             }
 
                             is ApiStatus.Success -> {
-                                loginSuccess(it.response as LoginResponse)
+                                loginSuccess()
                             }
                         }
                     }
@@ -150,67 +106,58 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun loginError(loginError: Throwable) {
-        binding.apply {
-            authDialogBinding.apply {
-                progressBar.visibility = View.INVISIBLE
-                errorIv.visibility = View.VISIBLE
-                dialogTv.text = resources.getString(R.string.incorrect_username_password)
-                closeDialog.visibility = View.VISIBLE
-                closeDialog.setOnClickListener {
-                    authDialog.dismiss()
-                }
-                Log.e(TAG, "loginError: login error $loginError")
-                Log.e(TAG, "loginError: login error ${loginError.stackTrace}")
-                Log.e(TAG, "loginError: login error ${loginError.printStackTrace()}")
-                Log.e(TAG, "loginError: login error ${loginError.message}")
+    private fun loginError() {
+        loadingDialogBinding.apply {
+            progress.visibility = View.INVISIBLE
+            resultIv.setImageResource(R.drawable.ic_error)
+            resultIv.visibility = View.VISIBLE
+            dialogMessageTv.text = resources.getString(R.string.incorrect_username_password)
+            close.text = resources.getString(R.string.close)
+            close.visibility = View.VISIBLE
+            close.setOnClickListener {
+                loadingDialog.dismiss()
             }
         }
     }
 
     private fun loginLoading() {
-        binding.apply {
-            authDialog = AlertDialog.Builder(requireContext()).create()
-            authDialogBinding = AuthDialogItemBinding.inflate(layoutInflater)
-            authDialog.setView(authDialogBinding.root)
-            authDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            authDialog.setCancelable(false)
-            authDialogBinding.apply {
-                progressBar.visibility = View.VISIBLE
-                errorIv.visibility = View.INVISIBLE
-                closeDialog.visibility = View.INVISIBLE
+        loadingDialogBinding.apply {
+            resultIv.visibility = View.GONE
+            progress.visibility = View.VISIBLE
+            dialogMessageTv.text = resources.getString(R.string.loading)
+            close.visibility = View.GONE
+            if (!loadingDialog.isShowing) {
+                loadingDialog.show()
             }
-            authDialog.show()
         }
     }
 
-    private fun loginSuccess(loginResponse: LoginResponse) {
-        authDialog.dismiss()
+    private fun loginSuccess() {
+        if (loadingDialog.isShowing)
+            loadingDialog.dismiss()
         findNavController().navigate(
             resId = R.id.homeFragment,
             args = null,
             navOptions = getNavOptions()
         )
-        Log.d(TAG, "loginSuccess: login success $loginResponse")
     }
 
     private fun chooseLanguage() {
-        languageDialog(
-            loginViewModel.getLanguageCode(),
+        loginViewModel.chooseLanguage(
             requireContext(),
             layoutInflater,
             object : LanguageSelectionListener {
                 override fun onLanguageSelected(languageCode: String?, languageName: String?) {
                     binding.languageTv.text = languageName
-                    loginViewModel.setLanguageCode(languageCode)
-                    LanguageManager.setLanguage(languageCode.toString(), requireContext())
                     updateTexts()
                 }
 
                 override fun onCanceled() {
 
                 }
-            })
+
+            }
+        )
     }
 
     private fun updateTexts() {

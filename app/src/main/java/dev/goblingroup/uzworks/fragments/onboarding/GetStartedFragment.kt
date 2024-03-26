@@ -84,22 +84,24 @@ class GetStartedFragment : Fragment() {
     }
 
     private fun chooseLanguage() {
-        languageDialog(
-            getStartedViewModel.getLanguageCode(),
+        getStartedViewModel.chooseLanguage(
             requireContext(),
             layoutInflater,
             object : LanguageSelectionListener {
-                override fun onLanguageSelected(languageCode: String?, languageName: String?) {
+                override fun onLanguageSelected(
+                    languageCode: String?,
+                    languageName: String?
+                ) {
                     binding.languageTv.text = languageName
-                    getStartedViewModel.setLanguageCode(languageCode)
-                    LanguageManager.setLanguage(languageCode.toString(), requireContext())
                     updateTexts()
                 }
 
                 override fun onCanceled() {
 
                 }
-            })
+
+            }
+        )
     }
 
     private fun updateTexts() {

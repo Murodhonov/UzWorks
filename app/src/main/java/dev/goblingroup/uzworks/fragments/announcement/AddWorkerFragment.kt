@@ -3,6 +3,8 @@ package dev.goblingroup.uzworks.fragments.announcement
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -30,6 +32,9 @@ import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.dmyToIso
 import dev.goblingroup.uzworks.utils.extractDateValue
+import dev.goblingroup.uzworks.utils.formatPhoneNumber
+import dev.goblingroup.uzworks.utils.formatSalary
+import dev.goblingroup.uzworks.utils.formatTgUsername
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -150,23 +155,95 @@ class AddWorkerFragment : Fragment() {
                 true
             }
 
-            salaryEt.editText?.setOnFocusChangeListener { v, hasFocus ->
-                if (!hasFocus) {
-                    // When losing focus, append " so'm" to the salary
-                    val currentText = salaryEt.editText?.text.toString().trim()
-                    if (currentText.isNotEmpty()) {
-                        salaryEt.editText?.setText("$currentText so'm")
-                    }
-                } else {
-                    // When gaining focus, remove " so'm" suffix
-                    val currentText = salaryEt.editText?.text.toString().trim()
-                    if (currentText.endsWith(" so'm")) {
-                        val newSalary = currentText.substring(0, currentText.length - 5)
-                        salaryEt.editText?.setText(newSalary)
-                        salaryEt.editText?.setSelection(salaryEt.editText?.text.toString().length)
-                    }
+            salaryEt.editText?.addTextChangedListener(object : TextWatcher {
+                private var isFormatting = false
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
                 }
-            }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (isFormatting)
+                        return
+
+                    isFormatting = true
+                    val formattedSalary = s?.filter { !it.isWhitespace() }.toString().formatSalary()
+                    salaryEt.editText?.setText(formattedSalary)
+                    salaryEt.editText?.setSelection(formattedSalary.length)
+
+                    isFormatting = false
+                }
+
+            })
+
+            phoneNumberEt.editText?.setText(resources.getString(R.string.phone_number_prefix))
+            phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
+                private var isFormatting = false
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int
+                ) {
+
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (isFormatting)
+                        return
+
+                    isFormatting = true
+                    val newText = s.toString().filter { !it.isWhitespace() }
+                    val oldText =
+                        phoneNumberEt.editText?.tag.toString().filter { !it.isWhitespace() }
+                    val formattedPhone =
+                        s?.filter { !it.isWhitespace() }.toString()
+                            .formatPhoneNumber(newText.length < oldText.length)
+                    phoneNumberEt.editText?.setText(formattedPhone)
+                    phoneNumberEt.editText?.setSelection(formattedPhone.length)
+                    phoneNumberEt.tag = formattedPhone
+
+                    isFormatting = false
+                }
+            })
+
+            tgUserNameEt.editText?.addTextChangedListener(object : TextWatcher {
+                var isFormatting = false
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (isFormatting)
+                        return
+                    isFormatting = true
+                    val formattedTgUsername = s.toString().formatTgUsername()
+                    tgUserNameEt.editText?.setText(formattedTgUsername)
+                    tgUserNameEt.editText?.setSelection(formattedTgUsername.length)
+
+                    isFormatting = false
+                }
+
+            })
 
             genderLayout.apply {
                 maleBtn.setOnClickListener {

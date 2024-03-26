@@ -40,3 +40,8 @@ enum class PeriodEnum(val label: String) {
     MONTHS("months"),
     YEARS("years")
 }
+
+enum class ToastType {
+    ERROR,
+    SUCCESS
+}

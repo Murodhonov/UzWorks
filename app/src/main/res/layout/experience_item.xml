@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/dm_sans_bold"
             android:textColor="@color/black_blue"
-            android:text="daskjd"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +34,6 @@
         <TextView
             android:id="@+id/company_name_tv"
             android:layout_width="wrap_content"
-            android:text="kdsajd"
             android:layout_marginTop="@dimen/_10sdp"
             android:textSize="@dimen/_12ssp"
             android:layout_height="wrap_content"
@@ -47,7 +45,6 @@
             android:id="@+id/duration_tv"
             android:layout_width="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="jdskad"
             android:layout_height="wrap_content"
             android:theme="@style/SecondaryTextStyle"
             android:textSize="@dimen/_11ssp"

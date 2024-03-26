@@ -80,11 +80,12 @@ class ProfileFragment : Fragment() {
             }
 
             experienceBtn.setOnClickListener {
-                findNavController().navigate(
-                    resId = R.id.experienceFragment,
-                    args = null,
-                    navOptions = getNavOptions()
-                )
+                if (profileViewModel.isEmployee())
+                    findNavController().navigate(
+                        resId = R.id.experienceFragment,
+                        args = null,
+                        navOptions = getNavOptions()
+                    )
             }
 
             myAnnouncementsBtn.setOnClickListener {
@@ -97,6 +98,12 @@ class ProfileFragment : Fragment() {
 
             addAnnouncementBtn.setOnClickListener {
                 addAnnouncement()
+            }
+
+            if (profileViewModel.isEmployer()) {
+                experienceLayout.visibility = View.GONE
+            } else if (profileViewModel.isEmployee()) {
+                experienceLayout.visibility = View.VISIBLE
             }
         }
     }

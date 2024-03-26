@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentJobDetailsBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -92,7 +92,7 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
 
     private fun loading() {
         loadingDialog = AlertDialog.Builder(requireContext()).create()
-        val dialogBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        val dialogBinding = LoadingDialogBinding.inflate(layoutInflater)
         loadingDialog.setView(dialogBinding.root)
         loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         loadingDialog.setCancelable(false)

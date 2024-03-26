@@ -16,7 +16,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentWorkerDetailsBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.GenderEnum
@@ -76,7 +76,7 @@ class WorkerDetailsFragment : Fragment() {
 
     private fun loading() {
         loadingDialog = AlertDialog.Builder(requireContext()).create()
-        val loadingBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        val loadingBinding = LoadingDialogBinding.inflate(layoutInflater)
         loadingDialog.setView(loadingBinding.root)
         loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         loadingDialog.setCancelable(false)

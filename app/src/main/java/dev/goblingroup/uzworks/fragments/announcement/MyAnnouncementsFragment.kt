@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.adapter.rv_adapters.MyJobsAdapter
+import dev.goblingroup.uzworks.adapter.MyJobsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentMyAnnouncementsBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse

@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import dev.goblingroup.uzworks.adapter.rv_adapters.MessagesAdapter
+import dev.goblingroup.uzworks.adapter.MessagesAdapter
 import dev.goblingroup.uzworks.databinding.FragmentChatBinding
 
 @AndroidEntryPoint

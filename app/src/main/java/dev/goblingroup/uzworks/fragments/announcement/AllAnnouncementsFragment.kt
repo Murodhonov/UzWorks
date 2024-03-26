@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import dev.goblingroup.uzworks.adapter.rv_adapters.AllAnnouncementsAdapter
+import dev.goblingroup.uzworks.adapter.AllAnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentAllAnnouncementsBinding
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.vm.AddressViewModel

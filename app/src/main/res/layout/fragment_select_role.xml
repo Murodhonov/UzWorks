@@ -131,12 +131,12 @@
                 android:layout_margin="@dimen/_11sdp"
                 android:backgroundTint="@color/white"
                 app:cardCornerRadius="@dimen/_7sdp"
-                app:cardElevation="0dp"
+                app:cardElevation="@dimen/_2sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1.2:1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeColor="@color/black_blue"
-                app:strokeWidth="@dimen/_1sdp">
+                app:strokeWidth="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -146,7 +146,7 @@
                         android:id="@+id/employee_circle"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:background="@drawable/selected_circle_background"
+                        android:background="@drawable/unselected_circle_background"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="1:1"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -170,6 +170,7 @@
             <TextView
                 android:id="@+id/employee_tv"
                 android:layout_width="0dp"
+                android:textColor="@color/text_color"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/_7sdp"
                 android:textSize="@dimen/_12ssp"

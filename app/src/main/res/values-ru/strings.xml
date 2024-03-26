@@ -181,4 +181,7 @@
     <string name="company_name_error">Введите название компании</string>
     <string name="start_date_error">Введите время начала</string>
     <string name="end_date_error">Введите время окончания</string>
+    <string name="address_failed">Не удалось загрузить адрес</string>
+    <string name="close">Закрывать</string>
+    <string name="username_exist">Имя пользователя уже использовано, выберите другое</string>
 </resources>

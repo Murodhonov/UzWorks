@@ -33,6 +33,9 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/notification_switch"
         android:layout_width="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_height="@dimen/_44sdp"
         android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_30sdp"
@@ -101,6 +104,9 @@
         android:layout_height="@dimen/_44sdp"
         android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_7sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginEnd="@dimen/_20sdp"
         android:backgroundTint="@color/white"
         app:cardCornerRadius="@dimen/_7sdp"
@@ -169,6 +175,9 @@
         android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_20sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:backgroundTint="@color/white"
         app:cardCornerRadius="@dimen/_7sdp"
         app:layout_constraintTop_toBottomOf="@id/theme_switch">
@@ -223,6 +232,9 @@
         android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_20sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:backgroundTint="@color/white"
         app:cardCornerRadius="@dimen/_7sdp"
         app:layout_constraintTop_toBottomOf="@id/language_btn">
@@ -279,6 +291,9 @@
         android:layout_marginEnd="@dimen/_20sdp"
         android:backgroundTint="@color/white"
         app:cardCornerRadius="@dimen/_7sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintTop_toBottomOf="@id/password_btn">
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="@dimen/_10sdp"
-        app:layoutDescription="@xml/fragment_add_worker_scene">
+        android:padding="@dimen/_10sdp">
 
         <ImageView
             android:contentDescription="@string/content_description"

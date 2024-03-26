@@ -24,7 +24,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentPersonalInfoBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -117,7 +117,7 @@ class PersonalInfoFragment : Fragment() {
 
     private fun loading() {
         dialog = AlertDialog.Builder(requireContext()).create()
-        val itemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+        val itemBinding = LoadingDialogBinding.inflate(layoutInflater)
         dialog.setView(itemBinding.root)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCancelable(false)

@@ -14,6 +14,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +23,7 @@ import dev.goblingroup.uzworks.databinding.ActivityMainBinding
 import dev.goblingroup.uzworks.utils.LanguageManager
 import dev.goblingroup.uzworks.utils.dpToPx
 import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.vm.MainViewModel
 import dev.goblingroup.uzworks.vm.SecurityViewModel
 
 @AndroidEntryPoint
@@ -37,6 +40,8 @@ class MainActivity : AppCompatActivity() {
     private var lastId: Int? = null
 
     private val securityViewModel: SecurityViewModel by viewModels()
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     private val connectivityReceiver = ConnectivityBroadcastReceiver()
 
@@ -117,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                 lastId == R.id.chatsListFragment ||
                 lastId == R.id.profileFragment
             ) return
-            // Animation to show the bottom navigation
+
             val showBottomBarAnimation = TranslateAnimation(
                 0f, 0f, bottomBar.height.toFloat() + 7f.dpToPx(), 0f
             )
@@ -125,17 +130,16 @@ class MainActivity : AppCompatActivity() {
 
             showBottomBarAnimation.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(animation: Animation) {
-                    // Animation start
+
                 }
 
                 override fun onAnimationEnd(animation: Animation) {
-                    // Set visibility to VISIBLE after animation ends
                     bottomBar.visibility = View.VISIBLE
                     lastId = navController.currentDestination?.id
                 }
 
                 override fun onAnimationRepeat(animation: Animation) {
-                    // Animation repeat
+
                 }
             })
 
