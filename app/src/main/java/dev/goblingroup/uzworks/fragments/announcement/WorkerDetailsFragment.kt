@@ -67,6 +67,7 @@ class WorkerDetailsFragment : Fragment() {
                             "failed to load worker",
                             Toast.LENGTH_SHORT
                         ).show()
+                        loadingDialog.dismiss()
                     }
                     is ApiStatus.Loading -> {
                         loading()
@@ -91,18 +92,14 @@ class WorkerDetailsFragment : Fragment() {
     private fun setWorkerDetails(workerResponse: WorkerResponse?) {
         binding.apply {
             titleTv.text = workerResponse?.title
-            jobCategoryTv.text =
-                jobCategoryViewModel.findJobCategory(workerResponse?.categoryId.toString()).title
+            jobCategoryTv.text = workerResponse?.categoryName
             genderTv.text =
                 if (workerResponse?.gender == GenderEnum.MALE.label) resources.getString(R.string.male) else resources.getString(
                     R.string.female
                 )
             fullNameTv.text = workerResponse?.fullName
             birthdateTv.text = workerResponse?.birthDate?.isoToDmy()
-            addressTv.text =
-                "${addressViewModel.findRegion(addressViewModel.findDistrict(workerResponse?.districtId.toString()).regionId).name}, ${
-                    addressViewModel.findDistrict(workerResponse?.districtId.toString()).name
-                }"
+            addressTv.text = "${workerResponse?.regionName}, ${workerResponse?.districtName}"
             salaryTv.text = workerResponse?.salary.toString()
             workingTimeTv.text = workerResponse?.workingTime
             workingScheduleTv.text = workerResponse?.workingSchedule

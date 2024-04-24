@@ -9,12 +9,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.AllAnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentAllAnnouncementsBinding
+import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.vm.AddressViewModel
-import dev.goblingroup.uzworks.vm.AnnouncementViewModel
+import dev.goblingroup.uzworks.vm.AllAnnouncementsViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import kotlinx.coroutines.launch
@@ -25,11 +28,11 @@ class AllAnnouncementsFragment : Fragment() {
     private var _binding: FragmentAllAnnouncementsBinding? = null
     private val binding get() = _binding!!
 
-    private var announcementClickListener: AllAnnouncementClickListener? = null
+//    private var announcementClickListener: AllAnnouncementClickListener? = null
 
     private lateinit var allAnnouncementsAdapter: AllAnnouncementsAdapter
 
-    private val announcementViewModel: AnnouncementViewModel by viewModels()
+    private val allAnnouncementsViewModel: AllAnnouncementsViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
     private val addressViewModel: AddressViewModel by viewModels()
 
@@ -118,7 +121,7 @@ class AllAnnouncementsFragment : Fragment() {
 
     private fun loadAnnouncements() {
         lifecycleScope.launch {
-            announcementViewModel.announcementLiveData.observe(viewLifecycleOwner) {
+            allAnnouncementsViewModel.announcementLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
                         Toast.makeText(
@@ -138,29 +141,37 @@ class AllAnnouncementsFragment : Fragment() {
 
                     is ApiStatus.Success -> {
                         Log.d(TAG, "onViewCreated: succeeded ${it.response}")
-                        success()
+                        success(it.response!!)
                     }
                 }
             }
         }
     }
 
-    private fun success() {
+    private fun success(response: List<Any>) {
         if (_binding != null) {
             binding.apply {
                 progress.visibility = View.GONE
                 allAnnouncementsAdapter = AllAnnouncementsAdapter(
-                    announcementViewModel,
-                    jobCategoryViewModel,
-                    addressViewModel,
+                    allAnnouncementsViewModel,
+                    response,
                     resources,
                     { announcementId, announcementType ->
-                        Log.d(TAG, "success: checking announcement details $announcementId $announcementType")
-                        announcementClickListener?.onAllAnnouncementClick(announcementId, announcementType)
-                    }, { state, announcementId ->
-                        notifySaveUnSave(state, announcementId)
+                        val direction =
+                            if (announcementType == AnnouncementEnum.JOB.announcementType)
+                                R.id.action_startFragment_to_jobDetailsFragment
+                            else
+                                R.id.action_startFragment_to_workerDetailsFragment
+                        val bundle = Bundle()
+                        bundle.putString("announcement_id", announcementId)
+                        findNavController().navigate(
+                            resId = direction,
+                            args = bundle
+                        )
                     }
-                )
+                ) { state, announcementId ->
+                    notifySaveUnSave(state, announcementId)
+                }
                 Log.d(
                     TAG,
                     "success: called in ${this@AllAnnouncementsFragment::class.java.simpleName}"
@@ -179,13 +190,13 @@ class AllAnnouncementsFragment : Fragment() {
 
     }
 
-    interface AllAnnouncementClickListener {
-        fun onAllAnnouncementClick(announcementId: String, announcementType: String)
-    }
-
-    fun setOnAnnouncementClickListener(listener: AllAnnouncementClickListener) {
-        announcementClickListener = listener
-    }
+//    interface AllAnnouncementClickListener {
+//        fun onAllAnnouncementClick(announcementId: String, announcementType: String)
+//    }
+//
+//    fun setOnAnnouncementClickListener(listener: AllAnnouncementClickListener) {
+//        announcementClickListener = listener
+//    }
 
     override fun onResume() {
         super.onResume()

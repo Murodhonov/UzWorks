@@ -2,20 +2,18 @@ package dev.goblingroup.uzworks.adapter
 
 import android.content.res.Resources
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.databinding.AnnouncementItemBinding
 import dev.goblingroup.uzworks.utils.GenderEnum
-import dev.goblingroup.uzworks.vm.AddressViewModel
-import dev.goblingroup.uzworks.vm.AnnouncementViewModel
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
+import dev.goblingroup.uzworks.vm.SavedAnnouncementsViewModel
 
 class SavedAnnouncementsAdapter(
-    private val announcementViewModel: AnnouncementViewModel,
-    private val jobCategoryViewModel: JobCategoryViewModel,
-    private val addressViewModel: AddressViewModel,
+    private val savedAnnouncementsViewModel: SavedAnnouncementsViewModel,
+    private val savedAnnouncements: List<AnnouncementEntity>,
     private val resources: Resources,
     private val onItemClick: (String, String) -> Unit,
     private val onSaveClick: (Boolean, String) -> Unit
@@ -32,11 +30,14 @@ class SavedAnnouncementsAdapter(
         fun bindAnnouncement(announcement: AnnouncementEntity, position: Int) {
             announcementItemBinding.apply {
                 titleTv.text = announcement.title
-                costTv.text = "${announcement.salary} so'm"
+                costTv.text = "${announcement.salary} ${resources.getString(R.string.money_unit)}"
                 saveIv.setImageResource(R.drawable.ic_saved)
-                categoryTv.text = getJobCategory(announcement.categoryId.toString())
-                addressTv.text = getAddress(announcement.districtId.toString())
+                categoryTv.text = announcement.categoryName
+                addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
                 iv.setImageResource(announcement.pictureResId)
+                if (announcement.isTop) {
+                    badgeIv.visibility = View.VISIBLE
+                }
 
                 genderTv.text = when (announcement.gender) {
                     GenderEnum.MALE.label -> {
@@ -53,24 +54,16 @@ class SavedAnnouncementsAdapter(
                 }
 
                 saveIv.setOnClickListener {
-                    announcementViewModel.unSaveAnnouncement(announcement.id)
-                    onSaveClick.invoke(announcementViewModel.countSavedAnnouncements() == 0, announcement.id)
+                    savedAnnouncementsViewModel.unSave(announcement.id)
+                    onSaveClick.invoke(savedAnnouncementsViewModel.countAnnouncements() == 0, announcement.id)
                     notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, announcementViewModel.countSavedAnnouncements() - position)
+                    notifyItemRangeChanged(position, savedAnnouncementsViewModel.countAnnouncements() - position)
                 }
 
                 root.setOnClickListener {
                     onItemClick.invoke(announcement.id, announcement.announcementType)
                 }
             }
-        }
-
-        private fun getAddress(districtId: String): String {
-            return "${addressViewModel.findDistrict(districtId).name}, ${addressViewModel.findRegionByDistrictId(districtId).name}"
-        }
-
-        private fun getJobCategory(categoryId: String): String {
-            return jobCategoryViewModel.findJobCategory(categoryId).title
         }
     }
 
@@ -84,9 +77,9 @@ class SavedAnnouncementsAdapter(
         )
     }
 
-    override fun getItemCount(): Int = announcementViewModel.countSavedAnnouncements()
+    override fun getItemCount(): Int = savedAnnouncements.size
 
     override fun onBindViewHolder(holder: AnnouncementsViewHolder, position: Int) {
-        holder.bindAnnouncement(announcementViewModel.listAnnouncements()[position], position)
+        holder.bindAnnouncement(savedAnnouncements[position], position)
     }
 }

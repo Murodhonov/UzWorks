@@ -1,7 +1,6 @@
 package dev.goblingroup.uzworks.fragments.onboarding
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,15 +10,15 @@ import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSplashBinding
-import dev.goblingroup.uzworks.models.response.LoginResponse
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.utils.UserRole
-import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
+import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.SplashViewModel
 import kotlinx.coroutines.launch
 
@@ -31,6 +30,8 @@ class SplashFragment : Fragment() {
     private var expandLogo: Animation? = null
 
     private val splashViewModel: SplashViewModel by viewModels()
+    private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
+    private val addressViewModel: AddressViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,37 +44,65 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
             expandLogo = AnimationUtils.loadAnimation(requireContext(), R.anim.expand_logo)
-            expand()
+
+            logo.startAnimation(expandLogo)
+            expandLogo?.setAnimationListener(object : AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    loadCategories()
+                }
+
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+            })
         }
     }
 
-    private fun expand() {
-        binding.logo.startAnimation(expandLogo)
-        expandLogo?.setAnimationListener(object : AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
+    private fun loadCategories() {
+        jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is ApiStatus.Error -> {
 
+                }
+                is ApiStatus.Loading -> {
+
+                }
+                is ApiStatus.Success -> {
+                    loadAddresses()
+                }
             }
+        }
+    }
 
-            override fun onAnimationEnd(animation: Animation?) {
-                login()
+    private fun loadAddresses() {
+        addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is ApiStatus.Error -> {
+
+                }
+                is ApiStatus.Loading -> {
+
+                }
+                is ApiStatus.Success -> {
+                    login()
+                }
             }
-
-            override fun onAnimationRepeat(animation: Animation?) {
-
-            }
-
-        })
+        }
     }
 
     private fun login() {
         lifecycleScope.launch {
-            splashViewModel.loginLiveData.observe(viewLifecycleOwner) {
+            splashViewModel.splashLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
                         findNavController().navigate(
-                            resId = R.id.getStartedFragment,
-                            args = null,
-                            navOptions = getNavOptions()
+                            resId = R.id.action_splashFragment_to_getStartedFragment,
+                            args = null
                         )
                     }
 
@@ -82,10 +111,17 @@ class SplashFragment : Fragment() {
                     }
 
                     is ApiStatus.Success -> {
-                        findNavController().navigate(
-                            resId = R.id.homeFragment,
-                            args = null
-                        )
+                        if (it.response == true) {
+                            findNavController().navigate(
+                                resId = R.id.action_splashFragment_to_startFragment,
+                                args = null
+                            )
+                        } else {
+                            findNavController().navigate(
+                                resId = R.id.action_splashFragment_to_getStartedFragment,
+                                args = null
+                            )
+                        }
                     }
                 }
             }

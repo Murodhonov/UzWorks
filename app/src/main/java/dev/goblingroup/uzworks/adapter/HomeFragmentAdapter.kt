@@ -10,18 +10,12 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.HomeAnnouncementBinding
 import dev.goblingroup.uzworks.databinding.HomeHeaderBinding
 import dev.goblingroup.uzworks.databinding.HomeStatisticsBinding
-import dev.goblingroup.uzworks.vm.AddressViewModel
-import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.HomeViewModel
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 
 class HomeFragmentAdapter(
     private val fragmentLifecycleOwner: LifecycleOwner,
     private val homeViewModel: HomeViewModel,
-    private val announcementViewModel: AnnouncementViewModel,
-    private val jobCategoryViewModel: JobCategoryViewModel,
-    private val addressViewModel: AddressViewModel,
     private val resources: Resources,
     private val onItemClick: (String, String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -30,8 +24,20 @@ class HomeFragmentAdapter(
         RecyclerView.ViewHolder(homeHeaderBinding.root) {
         fun onBind() {
             homeHeaderBinding.apply {
-                greetingTv.text =
-                    "${resources.getString(R.string.greeting)}\n${homeViewModel.getFullName()}"
+                homeViewModel.fullNameLiveData.observe(fragmentLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+
+                        }
+                        is ApiStatus.Loading -> {
+
+                        }
+                        is ApiStatus.Success -> {
+                            greetingTv.text =
+                                "${resources.getString(R.string.greeting)}\n${it.response}"
+                        }
+                    }
+                }
             }
         }
     }
@@ -100,50 +106,6 @@ class HomeFragmentAdapter(
         RecyclerView.ViewHolder(homeAnnouncementBinding.root) {
         fun onBind() {
             homeAnnouncementBinding.apply {
-                jobCategoryViewModel.jobCategoriesLiveData.observe(fragmentLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            homeAnnouncementProgress.visibility = View.INVISIBLE
-                            noAnnouncementsTv.visibility = View.VISIBLE
-                        }
-
-                        is ApiStatus.Loading -> {
-                            homeAnnouncementProgress.visibility = View.VISIBLE
-                            noAnnouncementsTv.visibility = View.INVISIBLE
-                        }
-
-                        is ApiStatus.Success -> {
-                            loadAddresses()
-                        }
-                    }
-                }
-            }
-        }
-
-        private fun loadAddresses() {
-            homeAnnouncementBinding.apply {
-                addressViewModel.districtLiveData.observe(fragmentLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            homeAnnouncementProgress.visibility = View.INVISIBLE
-                            noAnnouncementsTv.visibility = View.VISIBLE
-                        }
-
-                        is ApiStatus.Loading -> {
-                            homeAnnouncementProgress.visibility = View.VISIBLE
-                            noAnnouncementsTv.visibility = View.INVISIBLE
-                        }
-
-                        is ApiStatus.Success -> {
-                            loadAnnouncements()
-                        }
-                    }
-                }
-            }
-        }
-
-        private fun loadAnnouncements() {
-            homeAnnouncementBinding.apply {
                 homeViewModel.announcementLiveData.observe(fragmentLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
@@ -160,9 +122,8 @@ class HomeFragmentAdapter(
                             homeAnnouncementProgress.visibility = View.INVISIBLE
                             noAnnouncementsTv.visibility = View.INVISIBLE
                             val adapter = HomeAdapter(
-                                announcementViewModel,
-                                jobCategoryViewModel,
-                                addressViewModel,
+                                homeViewModel,
+                                it.response!!,
                                 resources
                             ) { announcementId, announcementType ->
                                 onItemClick.invoke(announcementId, announcementType)
@@ -173,7 +134,6 @@ class HomeFragmentAdapter(
                 }
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

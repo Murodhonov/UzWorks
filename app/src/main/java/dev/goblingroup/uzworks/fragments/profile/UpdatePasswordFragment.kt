@@ -1,23 +1,37 @@
 package dev.goblingroup.uzworks.fragments.profile
 
+import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentUpdatePasswordBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
+import dev.goblingroup.uzworks.models.request.ResetPasswordRequest
+import dev.goblingroup.uzworks.vm.ApiStatus
+import dev.goblingroup.uzworks.vm.UpdatePasswordViewModel
 
 @AndroidEntryPoint
 class UpdatePasswordFragment : Fragment() {
 
     private var _binding: FragmentUpdatePasswordBinding? = null
     private val binding get() = _binding!!
+
+    private val updatePasswordViewModel: UpdatePasswordViewModel by viewModels()
+
+    private lateinit var loadingDialog: AlertDialog
+    private lateinit var loadingDialogBinding: LoadingDialogBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,79 +44,61 @@ class UpdatePasswordFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            oldPasswordEt.editText?.transformationMethod =
-                PasswordTransformationMethod.getInstance()
-            newPasswordEt.editText?.transformationMethod =
-                PasswordTransformationMethod.getInstance()
-            confirmNewPasswordEt.editText?.transformationMethod =
-                PasswordTransformationMethod.getInstance()
+            loadingDialog = AlertDialog.Builder(requireContext()).create()
+            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
+            loadingDialog.setView(loadingDialogBinding.root)
+            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            loadingDialog.setCancelable(false)
 
             updateBtn.setOnClickListener {
-                checkPasswords()
+                if (updatePasswordViewModel.isFormValid(
+                        resources,
+                        oldPasswordEt,
+                        newPasswordEt,
+                        confirmNewPasswordEt
+                    )
+                ) {
+                    updatePasswordViewModel.updatePassword(
+                        ResetPasswordRequest(
+                            confirmPassword = confirmNewPasswordEt.editText?.text.toString(),
+                            newPassword = newPasswordEt.editText?.text.toString(),
+                            oldPassword = oldPasswordEt.editText?.text.toString(),
+                            userId = updatePasswordViewModel.getUserId()
+                        )
+                    ).observe(viewLifecycleOwner) {
+                        when (it) {
+                            is ApiStatus.Error -> {
+                                loadingDialog.dismiss()
+                                oldPasswordEt.isErrorEnabled = true
+                                oldPasswordEt.error =
+                                    resources.getString(R.string.enter_old_password)
+                            }
+
+                            is ApiStatus.Loading -> {
+                                loadingDialog.show()
+                            }
+
+                            is ApiStatus.Success -> {
+                                loadingDialog.dismiss()
+                                Toast.makeText(requireContext(), resources.getString(R.string.password_updated), Toast.LENGTH_SHORT).show()
+                                findNavController().popBackStack()
+                            }
+                        }
+                    }
+                }
             }
 
             back.setOnClickListener {
                 findNavController().popBackStack()
             }
 
-            oldPasswordEt.editText?.addTextChangedListener {
-                if (oldPasswordEt.isErrorEnabled && it?.toString()
-                        ?.isNotEmpty() == true
-                ) {
-                    oldPasswordEt.isErrorEnabled = false
-                }
-            }
-
-            newPasswordEt.editText?.addTextChangedListener {
-                if (newPasswordEt.isErrorEnabled && it?.toString()
-                        ?.isNotEmpty() == true
-                ) {
-                    newPasswordEt.isErrorEnabled = false
-                }
-            }
-
-            confirmNewPasswordEt.editText?.addTextChangedListener {
-                if (confirmNewPasswordEt.isErrorEnabled && it?.toString()
-                        ?.isNotEmpty() == true
-                ) {
-                    confirmNewPasswordEt.isErrorEnabled = false
-                }
-            }
+            updatePasswordViewModel.controlInput(
+                oldPasswordEt,
+                newPasswordEt,
+                confirmNewPasswordEt,
+                root
+            )
         }
-    }
-
-    private fun checkPasswords() {
-        binding.apply {
-            if (oldPasswordEt.editText?.text?.toString()
-                    ?.isNotEmpty() == true && newPasswordEt.editText?.text?.toString()
-                    ?.isNotEmpty() == true && confirmNewPasswordEt.editText?.text?.toString()
-                    ?.isNotEmpty() == true
-            ) {
-                if (confirmNewPasswordEt.editText?.text.toString() != newPasswordEt.editText?.text.toString()) {
-                    confirmNewPasswordEt.error = "Please confirm the password"
-                    confirmNewPasswordEt.isErrorEnabled = true
-                } else {
-                    updatePassword()
-                }
-            } else {
-                if (oldPasswordEt.editText?.text?.toString()?.isEmpty() == true) {
-                    oldPasswordEt.error = "Enter your old password"
-                    oldPasswordEt.isErrorEnabled = true
-                }
-                if (newPasswordEt.editText?.text?.toString()?.isEmpty() == true) {
-                    newPasswordEt.error = "Enter your new password"
-                    newPasswordEt.isErrorEnabled = true
-                }
-                if (confirmNewPasswordEt.editText?.text?.toString()?.isEmpty() == true) {
-                    confirmNewPasswordEt.error = "Confirm your new password"
-                    confirmNewPasswordEt.isErrorEnabled = true
-                }
-            }
-        }
-    }
-
-    private fun updatePassword() {
-
     }
 
     override fun onDestroyView() {

@@ -25,10 +25,14 @@ class HomeViewModel @Inject constructor(
     val jobCountLiveData get() =  _jobCountLiveData
 
     private val _announcementLiveData =
-        MutableLiveData<ApiStatus<List<AnnouncementEntity>>>(ApiStatus.Loading())
+        MutableLiveData<ApiStatus<List<Any>>>(ApiStatus.Loading())
     val announcementLiveData get() = _announcementLiveData
 
+    private val _fullNameLiveData = MutableLiveData<ApiStatus<String>>(ApiStatus.Loading())
+    val fullNameLiveData get() = _fullNameLiveData
+
     init {
+        loadUser()
         countJobs()
         countWorkers()
 
@@ -39,13 +43,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun loadUser() {
+        viewModelScope.launch {
+            val response = securityRepository.getUser()
+            if (response.isSuccessful) {
+                fullNameLiveData.postValue(ApiStatus.Success("${response.body()?.firstName} ${response.body()?.lastName}"))
+            } else {
+                fullNameLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+            }
+        }
+    }
+
     private fun fetchTopJobs() {
         viewModelScope.launch {
             val response = announcementRepository.getTopJobs()
             if (response.isSuccessful) {
                 Log.d(ConstValues.TAG, "loadJobs: ${response.body()?.size} jobs got")
-                announcementRepository.addJobs(response.body()!!, true)
-                _announcementLiveData.postValue(ApiStatus.Success(announcementRepository.listDatabaseAnnouncements()))
+                _announcementLiveData.postValue(ApiStatus.Success(response.body()))
             } else {
                 _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
             }
@@ -57,8 +71,7 @@ class HomeViewModel @Inject constructor(
             val response = announcementRepository.getTopWorkers()
             if (response.isSuccessful) {
                 Log.d(ConstValues.TAG, "loadWorkers: ${response.body()?.size} workers got")
-                announcementRepository.addWorkers(response.body()!!, true)
-                _announcementLiveData.postValue(ApiStatus.Success(announcementRepository.listDatabaseAnnouncements()))
+                _announcementLiveData.postValue(ApiStatus.Success(response.body()))
             } else {
                 _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
             }
@@ -78,17 +91,28 @@ class HomeViewModel @Inject constructor(
 
     private fun countWorkers() {
         viewModelScope.launch {
-                val countWorkersResponse = announcementRepository.countWorkers()
-                if (countWorkersResponse.isSuccessful) {
-                    _workerCountLivedata.postValue(ApiStatus.Success(countWorkersResponse.body()))
-                } else {
-                    _workerCountLivedata.postValue(ApiStatus.Error(Throwable(countWorkersResponse.message())))
-                }
+            val countWorkersResponse = announcementRepository.countWorkers()
+            if (countWorkersResponse.isSuccessful) {
+                _workerCountLivedata.postValue(ApiStatus.Success(countWorkersResponse.body()))
+            } else {
+                _workerCountLivedata.postValue(ApiStatus.Error(Throwable(countWorkersResponse.message())))
+            }
         }
     }
 
-    fun getFullName(): String {
-        return "${securityRepository.getFirstName()} ${securityRepository.getLastName()}"
+    fun isSaved(announcementId: String): Boolean =
+        announcementRepository.isAnnouncementSaved(announcementId)
+
+    fun unSave(announcement: AnnouncementEntity) {
+        announcementRepository.saveAnnouncement(announcement)
     }
+
+    fun save(announcement: AnnouncementEntity) {
+        announcementRepository.saveAnnouncement(announcement)
+    }
+
+//    fun getFullName(): String {
+//        return "${securityRepository.getFirstName()} ${securityRepository.getLastName()}"
+//    }
 
 }

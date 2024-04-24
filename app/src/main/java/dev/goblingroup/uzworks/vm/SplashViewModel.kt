@@ -3,62 +3,43 @@ package dev.goblingroup.uzworks.vm
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.goblingroup.uzworks.mapper.mapToEntity
-import dev.goblingroup.uzworks.models.request.LoginRequest
-import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.repository.AuthRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
-import kotlinx.coroutines.launch
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.utils.isoToDmy
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
     private val securityRepository: SecurityRepository
 ) : ViewModel() {
 
-    private val TAG = "SplashViewModel"
-
-    private val _loginLiveData = MutableLiveData<ApiStatus<LoginResponse>>(ApiStatus.Loading())
-    val loginLiveData get() = _loginLiveData
+    private val _splashLiveData = MutableLiveData<ApiStatus<Boolean>>(ApiStatus.Loading())
+    val splashLiveData get() = _splashLiveData
 
     init {
         login()
     }
 
     private fun login() {
-        viewModelScope.launch {
-            val user = securityRepository.getUser()
-            if (user != null) {
-                    val response = authRepository.login(LoginRequest(user.username, user.password))
-                    if (response.isSuccessful) {
-                        if (saveAuth(loginResponse = response.body()!!)) {
-                            securityRepository.addUser(
-                                response.body()!!
-                                    .mapToEntity(LoginRequest(user.username, user.password))
-                            )
-                            _loginLiveData.postValue(ApiStatus.Success(response.body()))
-                        }
-                    } else {
-                        _loginLiveData.postValue(ApiStatus.Error(Throwable("Some error on ${this@SplashViewModel::class.java.simpleName}")))
-                        Log.e(TAG, "login: $response")
-                        Log.e(TAG, "login: ${response.code()}")
-                        Log.e(TAG, "login: ${response.message()}")
-                        Log.e(TAG, "login: ${response.errorBody()}")
-                    }
-            } else {
-                _loginLiveData.postValue(ApiStatus.Error(Throwable("User not found")))
-            }
+        try {
+            val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val expirationDate =
+                dateFormat.parse(securityRepository.getExpirationDate().isoToDmy().toString())
+            val currentDate = dateFormat.parse(dateFormat.format(Calendar.getInstance().time))
+            val calendar = Calendar.getInstance()
+            calendar.time = currentDate!!
+            Log.d(TAG, "login: expirationDate: $expirationDate")
+            Log.d(TAG, "login: currentDate: $currentDate")
+            splashLiveData.postValue(ApiStatus.Success(calendar.time.before(expirationDate)))
+        } catch (e: Exception) {
+            Log.e(TAG, "login: ${e.message}")
+            splashLiveData.postValue(ApiStatus.Error(Throwable("Token expired")))
         }
-    }
-
-    private fun saveAuth(loginResponse: LoginResponse): Boolean {
-        val rolesSaved = securityRepository.setUserRoles(loginResponse.access)
-        val tokenSaved = securityRepository.setToken(loginResponse.token)
-        val userIdSaved = securityRepository.setUserId(loginResponse.userId)
-        return tokenSaved && userIdSaved && rolesSaved
     }
 
 }

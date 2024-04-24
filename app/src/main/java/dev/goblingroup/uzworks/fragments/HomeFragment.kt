@@ -8,17 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.HomeFragmentAdapter
 import dev.goblingroup.uzworks.databinding.FragmentHomeBinding
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
-import dev.goblingroup.uzworks.utils.getNavOptions
-import dev.goblingroup.uzworks.vm.AddressViewModel
-import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.HomeViewModel
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -29,10 +24,6 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val homeViewModel: HomeViewModel by viewModels()
-    private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
-
-    private val announcementViewModel: AnnouncementViewModel by viewModels()
-    private val addressViewModel: AddressViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,9 +39,6 @@ class HomeFragment : Fragment() {
             val homeFragmentAdapter = HomeFragmentAdapter(
                 viewLifecycleOwner,
                 homeViewModel,
-                announcementViewModel,
-                jobCategoryViewModel,
-                addressViewModel,
                 resources
             ) { announcementId, announcementType ->
                 announcementDetails(announcementId, announcementType)
@@ -66,16 +54,14 @@ class HomeFragment : Fragment() {
         if (announcementType == AnnouncementEnum.JOB.announcementType) {
             Log.d(TAG, "announcementDetails: navigating to job details")
             findNavController().navigate(
-                resId = R.id.jobDetailsFragment,
-                args = bundle,
-                navOptions = getNavOptions()
+                resId = R.id.action_startFragment_to_jobDetailsFragment,
+                args = bundle
             )
         } else {
             Log.d(TAG, "announcementDetails: navigating to worker details")
             findNavController().navigate(
-                resId = R.id.workerDetailsFragment,
-                args = bundle,
-                navOptions = getNavOptions()
+                resId = R.id.action_startFragment_to_workerDetailsFragment,
+                args = bundle
             )
         }
     }
@@ -84,4 +70,15 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    companion object {
+
+        fun newInstance() =
+            HomeFragment().apply {
+                arguments = Bundle().apply {
+
+                }
+            }
+    }
+
 }

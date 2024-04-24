@@ -1,51 +1,47 @@
 package dev.goblingroup.uzworks.vm
 
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.TranslateAnimation
+import android.app.AlertDialog
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.util.Log
+import android.view.LayoutInflater
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.utils.dpToPx
-import me.ibrahimsn.lib.SmoothBottomBar
+import dev.goblingroup.uzworks.databinding.NoInternetDialogBinding
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
 
-    private var lastId: Int? = null
+    private lateinit var noInternetDialog: AlertDialog
+    private lateinit var noInternetBinding: NoInternetDialogBinding
 
-    fun showBottomBar(
-        bottomBar: SmoothBottomBar,
-        destinationId: Int
-    ) {
-        if (lastId == R.id.homeFragment ||
-            lastId == R.id.announcementsFragment ||
-            lastId == R.id.chatsListFragment ||
-            lastId == R.id.profileFragment
-        ) return
-
-        val showBottomBarAnimation = TranslateAnimation(
-            0f, 0f, bottomBar.height.toFloat() + 7f.dpToPx(), 0f
-        )
-        showBottomBarAnimation.duration = 300
-
-        showBottomBarAnimation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {
-
+    fun disconnected(context: Context) {
+        Log.d(TAG, "disconnected: ")
+        try {
+            if (!noInternetDialog.isShowing) {
+                noInternetDialog.show()
             }
-
-            override fun onAnimationEnd(animation: Animation) {
-                bottomBar.visibility = View.VISIBLE
-                lastId = destinationId
-            }
-
-            override fun onAnimationRepeat(animation: Animation) {
-
-            }
-        })
-
-        bottomBar.startAnimation(showBottomBarAnimation)
+        } catch (e: Exception) {
+            noInternetDialog = AlertDialog.Builder(context).create()
+            noInternetBinding = NoInternetDialogBinding.inflate(LayoutInflater.from(context))
+            noInternetDialog.setView(noInternetBinding.root)
+            noInternetDialog.setCancelable(false)
+            noInternetDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            noInternetDialog.show()
+        }
     }
 
+    fun connected() {
+        Log.d(TAG, "connected: ")
+        try {
+            if (noInternetDialog.isShowing) {
+                noInternetDialog.dismiss()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "connected: ${e.message}")
+        }
+    }
 }

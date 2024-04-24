@@ -7,8 +7,6 @@ import dev.goblingroup.uzworks.fragments.announcement.SavedAnnouncementsFragment
 
 class AnnouncementPagerAdapter(
     fragment: Fragment,
-    private val allAnnouncementClickListener: AllAnnouncementsFragment.AllAnnouncementClickListener,
-    private val savedAnnouncementClickListener: SavedAnnouncementsFragment.SavedAnnouncementClickListener,
     private val findAnnouncementClickListener: SavedAnnouncementsFragment.FindAnnouncementClickListener
 ) :
     FragmentStateAdapter(fragment) {
@@ -16,11 +14,8 @@ class AnnouncementPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return if (position == 0) AllAnnouncementsFragment.newInstance()
-            .apply { setOnAnnouncementClickListener(allAnnouncementClickListener) }
-        else SavedAnnouncementsFragment.newInstance()
-            .apply {
-                setOnAnnouncementClickListener(savedAnnouncementClickListener)
-                setOnFindAnnouncementClickListener(findAnnouncementClickListener)
-            }
+        else SavedAnnouncementsFragment.newInstance().apply {
+            setOnFindAnnouncementClickListener(findAnnouncementClickListener)
+        }
     }
 }

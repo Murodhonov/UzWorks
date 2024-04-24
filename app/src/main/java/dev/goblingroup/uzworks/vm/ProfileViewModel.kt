@@ -31,15 +31,15 @@ class ProfileViewModel @Inject constructor(
 
     private fun fetchUserData() {
         viewModelScope.launch {
-                val userResponse = profileRepository.getUserById(securityRepository.getUserId())
-                if (userResponse.isSuccessful) {
-                    _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
-                } else {
-                    _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
-                    Log.e(TAG, "fetchUserData: ${userResponse.code()}")
-                    Log.e(TAG, "fetchUserData: ${userResponse.message()}")
-                    Log.e(TAG, "fetchUserData: ${userResponse.errorBody()}")
-                }
+            val userResponse = profileRepository.getUserById(securityRepository.getUserId())
+            if (userResponse.isSuccessful) {
+                _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
+            } else {
+                _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
+                Log.e(TAG, "fetchUserData: ${userResponse.code()}")
+                Log.e(TAG, "fetchUserData: ${userResponse.message()}")
+                Log.e(TAG, "fetchUserData: ${userResponse.errorBody()}")
+            }
         }
     }
 

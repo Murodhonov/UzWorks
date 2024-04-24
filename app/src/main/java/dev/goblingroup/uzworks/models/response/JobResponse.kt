@@ -2,10 +2,10 @@ package dev.goblingroup.uzworks.models.response
 
 data class JobResponse(
     val benefit: String,
-    val categoryId: String,
+    val categoryName: String,
     val createDate: String,
     val deadline: String,
-    val districtId: String,
+    val districtName: String,
     val gender: String,
     val id: String,
     val instagramLink: String,
@@ -15,6 +15,7 @@ data class JobResponse(
     val maxAge: Int,
     val minAge: Int,
     val phoneNumber: String,
+    val regionName: String,
     val requirement: String,
     val salary: Int,
     val telegramLink: String,

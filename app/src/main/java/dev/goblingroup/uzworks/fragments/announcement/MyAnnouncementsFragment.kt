@@ -7,17 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.MyJobsAdapter
+import dev.goblingroup.uzworks.adapter.MyWorkersAdapter
 import dev.goblingroup.uzworks.databinding.FragmentMyAnnouncementsBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
+import dev.goblingroup.uzworks.utils.AnnouncementEnum
+import dev.goblingroup.uzworks.utils.ConstValues.ANNOUNCEMENT_ADD_EDIT_STATUS
+import dev.goblingroup.uzworks.utils.ConstValues.ANNOUNCEMENT_EDITING
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
@@ -30,9 +34,7 @@ class MyAnnouncementsFragment : Fragment() {
     private var _binding: FragmentMyAnnouncementsBinding? = null
     private val binding get() = _binding!!
 
-    private val myAnnouncementsViewModel: MyAnnouncementsViewModel by viewModels()
-    private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
-    private val addressViewModel: AddressViewModel by viewModels()
+    private val myAnnouncementsViewModel: MyAnnouncementsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,12 +44,12 @@ class MyAnnouncementsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onResume() {
+        super.onResume()
         binding.apply {
             back.setOnClickListener {
                 findNavController().popBackStack()
             }
-
             loadAnnouncements()
         }
     }
@@ -55,7 +57,7 @@ class MyAnnouncementsFragment : Fragment() {
     private fun loadAnnouncements() {
         if (myAnnouncementsViewModel.isEmployee()) {
             loadWorkers()
-        } else {
+        } else if (myAnnouncementsViewModel.isEmployer()) {
             loadJobs()
         }
     }
@@ -87,20 +89,10 @@ class MyAnnouncementsFragment : Fragment() {
         binding.apply {
             val myJobsAdapter = MyJobsAdapter(
                 jobList = jobList,
-                jobCategoryList = jobCategoryViewModel.listJobCategories(),
-                addressViewModel = addressViewModel,
-                { jobId ->
-                    val bundle = Bundle()
-                    bundle.putString("job_id", jobId)
-                    findNavController().navigate(
-                        resId = R.id.jobDetailsFragment,
-                        args = bundle,
-                        navOptions = getNavOptions()
-                    )
-                }, { jobId ->
-                    showBottomDialog(jobId)
-                }
-            )
+                resources = resources,
+            ) { jobId ->
+                showBottom(jobId, AnnouncementEnum.JOB.announcementType)
+            }
             myAnnouncementsRv.adapter = myJobsAdapter
             if (myJobsAdapter.itemCount == 0) {
                 noAnnouncementsTv.visibility = View.VISIBLE
@@ -108,6 +100,47 @@ class MyAnnouncementsFragment : Fragment() {
                 noAnnouncementsTv.visibility = View.GONE
             }
         }
+    }
+
+    private fun showBottom(jobId: String, announcementType: String) {
+        val bundle = Bundle()
+        bundle.putString("announcement_id", jobId)
+        bundle.putString(ANNOUNCEMENT_ADD_EDIT_STATUS, ANNOUNCEMENT_EDITING)
+        myAnnouncementsViewModel.showBottom(
+            requireContext(),
+            {
+                val direction = when (announcementType) {
+                    AnnouncementEnum.JOB.announcementType -> {
+                        R.id.action_myAnnouncementsFragment_to_jobDetailsFragment
+                    }
+
+                    AnnouncementEnum.WORKER.announcementType -> {
+                        R.id.action_myAnnouncementsFragment_to_workerDetailsFragment
+                    }
+
+                    else -> 0
+                }
+                findNavController().navigate(resId = direction, args = bundle)
+            },
+            {
+                val direction = when (announcementType) {
+                    AnnouncementEnum.JOB.announcementType -> {
+                        R.id.action_myAnnouncementsFragment_to_addEditJobFragment
+                    }
+
+                    AnnouncementEnum.WORKER.announcementType -> {
+                        R.id.action_myAnnouncementsFragment_to_addEditWorkerFragment
+                    }
+
+                    else -> {
+                        0
+                    }
+                }
+                findNavController().navigate(resId = direction, args = bundle)
+            }, {
+
+            }
+        )
     }
 
     private fun loadWorkers() {
@@ -132,11 +165,20 @@ class MyAnnouncementsFragment : Fragment() {
     }
 
     private fun setWorkers(workerList: List<WorkerResponse>) {
-
-    }
-
-    private fun showBottomDialog(announcementId: String) {
-
+        binding.apply {
+            val myJobsAdapter = MyWorkersAdapter(
+                jobList = workerList,
+                resources = resources,
+            ) { jobId ->
+                showBottom(jobId, AnnouncementEnum.WORKER.announcementType)
+            }
+            myAnnouncementsRv.adapter = myJobsAdapter
+            if (myJobsAdapter.itemCount == 0) {
+                noAnnouncementsTv.visibility = View.VISIBLE
+            } else {
+                noAnnouncementsTv.visibility = View.GONE
+            }
+        }
     }
 
     override fun onDestroyView() {

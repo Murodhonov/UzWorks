@@ -12,7 +12,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.repository.AuthRepository
@@ -43,7 +42,6 @@ class LoginViewModel @Inject constructor(
             val response = authRepository.login(loginRequest)
             if (response.isSuccessful) {
                 if (saveAuth(response.body()!!)) {
-                    authRepository.addUser(response.body()!!.mapToEntity(loginRequest))
                     loginLiveData.postValue(
                         ApiStatus.Success(
                             response = response.body()
@@ -65,7 +63,8 @@ class LoginViewModel @Inject constructor(
         val rolesSaved = securityRepository.setUserRoles(loginResponse.access)
         val tokenSaved = securityRepository.setToken(loginResponse.token)
         val userIdSaved = securityRepository.setUserId(loginResponse.userId)
-        return tokenSaved && userIdSaved && rolesSaved
+        val tokenExpirationSaved = securityRepository.setExpirationDate(loginResponse.expiration)
+        return tokenSaved && userIdSaved && rolesSaved && tokenExpirationSaved
     }
 
     private fun getLanguageCode() = securityRepository.getLanguageCode()
@@ -145,17 +144,14 @@ class LoginViewModel @Inject constructor(
         passwordEt: TextInputLayout,
         resources: Resources
     ): Boolean {
-        var result = true
         if (usernameEt.isEmpty()) {
-            result = false
             usernameEt.error = resources.getString(R.string.enter_username)
             usernameEt.isErrorEnabled = true
         }
         if (passwordEt.isEmpty()) {
-            result = false
             passwordEt.error = resources.getString(R.string.enter_password)
             passwordEt.isErrorEnabled = true
         }
-        return result
+        return !usernameEt.isErrorEnabled && !passwordEt.isErrorEnabled
     }
 }

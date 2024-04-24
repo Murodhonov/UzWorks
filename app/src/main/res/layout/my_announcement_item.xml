@@ -4,6 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:backgroundTint="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:layout_marginTop="@dimen/_5sdp"
     app:cardCornerRadius="@dimen/_7sdp"
     app:cardElevation="0dp">

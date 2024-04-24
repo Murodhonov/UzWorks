@@ -81,6 +81,7 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
                     is ApiStatus.Error -> {
                         Toast.makeText(requireContext(), "failed to load job", Toast.LENGTH_SHORT)
                             .show()
+                        loadingDialog.dismiss()
                     }
 
                     is ApiStatus.Loading -> {
@@ -107,16 +108,12 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
     private fun setJobDetails(jobResponse: JobResponse?) {
         binding.apply {
             titleTv.text = jobResponse?.title
-            jobCategoryTv.text =
-                jobCategoryViewModel.findJobCategory(jobResponse?.categoryId.toString()).title
+            jobCategoryTv.text = jobResponse?.categoryName
             genderTv.text =
                 if (jobResponse?.gender == GenderEnum.MALE.label) resources.getString(R.string.male) else resources.getString(
                     R.string.female
                 )
-            addressTv.text =
-                "${addressViewModel.findRegion(addressViewModel.findDistrict(jobResponse?.districtId.toString()).regionId).name}, ${
-                    addressViewModel.findDistrict(jobResponse?.districtId.toString()).name
-                }"
+            addressTv.text = "${jobResponse?.regionName}, ${jobResponse?.districtName}"
             salaryTv.text = jobResponse?.salary.toString()
             workingTimeTv.text = jobResponse?.workingTime
             workingScheduleTv.text = jobResponse?.workingSchedule

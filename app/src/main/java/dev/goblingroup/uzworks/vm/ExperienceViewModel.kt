@@ -1,6 +1,7 @@
 package dev.goblingroup.uzworks.vm
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.res.Resources
@@ -14,6 +15,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.adapter.ExperienceAdapter
+import dev.goblingroup.uzworks.databinding.AddEditExperienceDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.ExperienceCreateRequest
 import dev.goblingroup.uzworks.models.request.ExperienceEditRequest
 import dev.goblingroup.uzworks.models.response.ExperienceCreateResponse
@@ -44,26 +48,10 @@ class ExperienceViewModel @Inject constructor(
         ApiStatus.Loading()
     )
 
-    private val editExperienceLiveData = MutableLiveData<ApiStatus<ExperienceEditResponse>>(
-        ApiStatus.Loading()
-    )
+    private val editExperienceLiveData =
+        MutableLiveData<ApiStatus<ExperienceEditResponse>>(ApiStatus.Loading())
 
-    private val _positionLiveData = MutableLiveData("")
-    val positionLiveData get() = _positionLiveData
-
-    private val _companyNameLiveData = MutableLiveData("")
-    val companyNameLiveData get() = _companyNameLiveData
-
-    private val _startDateLiveData = MutableLiveData("")
-    val startDateLiveData get() = _startDateLiveData
-
-    private val _endDateLiveData = MutableLiveData("")
-    val endDateLiveData get() = _endDateLiveData
-
-    var adding = false
-    var editing = false
-
-
+    lateinit var experienceList: ArrayList<ExperienceResponse>
 
     init {
         fetchExperiences()
@@ -71,13 +59,15 @@ class ExperienceViewModel @Inject constructor(
 
     private fun fetchExperiences() {
         viewModelScope.launch {
-                val experienceResponse =
-                    experienceRepository.getExperiencesByUserId(securityRepository.getUserId())
-                if (experienceResponse.isSuccessful) {
-                    _experienceLiveData.postValue(ApiStatus.Success(experienceResponse.body()))
-                } else {
-                    _experienceLiveData.postValue(ApiStatus.Error(Throwable(experienceResponse.message())))
-                }
+            val experienceResponse =
+                experienceRepository.getExperiencesByUserId(securityRepository.getUserId())
+            if (experienceResponse.isSuccessful) {
+                experienceList = ArrayList()
+                experienceList.addAll(experienceResponse.body()!!)
+                _experienceLiveData.postValue(ApiStatus.Success(experienceResponse.body()))
+            } else {
+                _experienceLiveData.postValue(ApiStatus.Error(Throwable(experienceResponse.message())))
+            }
         }
     }
 
@@ -105,38 +95,25 @@ class ExperienceViewModel @Inject constructor(
 
     fun editExperience(experienceEditRequest: ExperienceEditRequest): LiveData<ApiStatus<ExperienceEditResponse>> {
         viewModelScope.launch {
-                val editExperienceResponse = experienceRepository.editExperience(experienceEditRequest)
-                if (editExperienceResponse.isSuccessful) {
-                    editExperienceLiveData.postValue(ApiStatus.Success(editExperienceResponse.body()))
-                } else {
-                    editExperienceLiveData.postValue(
-                        ApiStatus.Error(
-                            Throwable(
-                                editExperienceResponse.message()
-                            )
+            val editExperienceResponse = experienceRepository.editExperience(experienceEditRequest)
+            if (editExperienceResponse.isSuccessful) {
+                editExperienceLiveData.postValue(ApiStatus.Success(editExperienceResponse.body()))
+            } else {
+                editExperienceLiveData.postValue(
+                    ApiStatus.Error(
+                        Throwable(
+                            editExperienceResponse.message()
                         )
                     )
-                    Log.e(TAG, "editExperience: ${editExperienceResponse.errorBody()}")
-                    Log.e(TAG, "editExperience: ${editExperienceResponse.code()}")
-                }
+                )
+                Log.e(TAG, "editExperience: ${editExperienceResponse.errorBody()}")
+                Log.e(TAG, "editExperience: ${editExperienceResponse.code()}")
+                Log.e(TAG, "editExperience: ${editExperienceResponse.message()}")
+                Log.e(TAG, "editExperience: ${editExperienceResponse.headers()}")
+                Log.e(TAG, "editExperience: ${editExperienceResponse.raw()}")
+            }
         }
         return editExperienceLiveData
-    }
-
-    fun setPosition(position: String) {
-        _positionLiveData.value = position
-    }
-
-    fun setCompanyName(companyName: String) {
-        _companyNameLiveData.value = companyName
-    }
-
-    fun setStartDate(startDate: String) {
-        _startDateLiveData.value = startDate
-    }
-
-    fun setEndDate(endDate: String) {
-        _endDateLiveData.value = endDate
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -181,7 +158,7 @@ class ExperienceViewModel @Inject constructor(
                     startDateEt.editText?.text.toString()
                         .extractDateValue(DateEnum.MONTH.dateLabel),
                     startDateEt.editText?.text.toString().extractDateValue(DateEnum.DATE.dateLabel),
-                )
+                ).show()
             }
             true
         }

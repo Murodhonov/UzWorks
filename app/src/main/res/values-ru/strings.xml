@@ -116,6 +116,7 @@
     <string name="instagram_username">Профиль в Инстаграм</string>
     <string name="orientation">Ориентация</string>
     <string name="select_region">Выберите регион</string>
+    <string name="select_district">Выберите район</string>
     <string name="select_region_first">Сначала выберите регион</string>
     <string name="select_job_category">Выберите тип работы</string>
     <string name="min">Мин</string>
@@ -157,6 +158,7 @@
     <string name="orientation_error">Введите свою ориентацию</string>
     <string name="district_error">Выберите свой район</string>
     <string name="job_category_error">Выберите категорию вакансии</string>
+    <string name="benefit_error">Введите выгоду</string>
     <string name="set_location">Готов</string>
     <string name="no_internet">Нет соединения с интернетом</string>
     <string name="unavailable_date">Невозможно выбрать эту дату. Выберите минимум 16 лет назад</string>
@@ -185,4 +187,9 @@
     <string name="close">Закрывать</string>
     <string name="username_exist">Имя пользователя уже использовано, выберите другое</string>
     <string name="update_succeeded">Успешно обновлено</string>
+    <string name="current_password_wrong">Текущий пароль неверен</string>
+    <string name="password_updated">Пароль успешно обновлен</string>
+    <string name="edit">Редактировать</string>
+    <string name="confirm_delete">Вы уверены, что хотите удалить это объявление?</string>
+    <string name="money_unit">сўм</string>
 </resources>

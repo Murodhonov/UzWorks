@@ -116,6 +116,7 @@
     <string name="instagram_username">Instagram профил</string>
     <string name="orientation">Мўлжал</string>
     <string name="select_region">Вилоят танланг</string>
+    <string name="select_district">Туман танланг</string>
     <string name="select_region_first">Олдин вилоят танланг</string>
     <string name="select_job_category">Иш турини танланг</string>
     <string name="min">Мин</string>
@@ -157,6 +158,7 @@
     <string name="orientation_error">Ориентациянгизни киритинг</string>
     <string name="district_error">Туманингизни танланг</string>
     <string name="job_category_error">Иш турини танланг</string>
+    <string name="benefit_error">Фойдани киритинг</string>
     <string name="set_location">Тайёр</string>
     <string name="no_internet">Интернет алоқаси йўқ</string>
     <string name="unavailable_date">Бу санани танлаб бўлмайди, камида 16 йил олдинни танланг</string>
@@ -185,4 +187,9 @@
     <string name="close">Ёпиш</string>
     <string name="username_exist">Фойдаланувчи номи аллақачон ишлатилган, бошқасини танланг</string>
     <string name="update_succeeded">Муваффақиятли янгиланди</string>
+    <string name="current_password_wrong">Жорий пароль нотўғри</string>
+    <string name="password_updated">Пароль мувафақиятли ўзгартирилди</string>
+    <string name="edit">Таҳрирлаш</string>
+    <string name="confirm_delete">Ҳақиқатдан ушбу эълонни ўчирмоқчимисиз ?</string>
+    <string name="money_unit">сўм</string>
 </resources>

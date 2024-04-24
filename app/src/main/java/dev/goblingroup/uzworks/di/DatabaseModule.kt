@@ -14,7 +14,6 @@ import dev.goblingroup.uzworks.database.dao.AnnouncementDao
 import dev.goblingroup.uzworks.database.dao.DistrictDao
 import dev.goblingroup.uzworks.database.dao.JobCategoryDao
 import dev.goblingroup.uzworks.database.dao.RegionDao
-import dev.goblingroup.uzworks.database.dao.UserDao
 import javax.inject.Singleton
 
 @Module
@@ -47,14 +46,6 @@ class DatabaseModule {
             .allowMainThreadQueries()
             .addMigrations(migration)
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserDao(
-        appDatabase: AppDatabase
-    ): UserDao {
-        return appDatabase.userDao()
     }
 
     @Provides

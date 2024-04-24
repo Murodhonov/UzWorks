@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,14 +10,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.SavedAnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentSavedAnnouncementsBinding
+import dev.goblingroup.uzworks.databinding.SavedAnnouncementBottomBinding
+import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.vm.AddressViewModel
-import dev.goblingroup.uzworks.vm.AnnouncementViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
+import dev.goblingroup.uzworks.vm.SavedAnnouncementsViewModel
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -25,12 +31,11 @@ class SavedAnnouncementsFragment : Fragment() {
     private var _binding: FragmentSavedAnnouncementsBinding? = null
     private val binding get() = _binding!!
 
-    private var savedAnnouncementClickListener: SavedAnnouncementClickListener? = null
     private var findAnnouncementClickListener: FindAnnouncementClickListener? = null
 
     private lateinit var savedAnnouncementsAdapter: SavedAnnouncementsAdapter
 
-    private val announcementViewModel: AnnouncementViewModel by viewModels()
+    private val savedAnnouncementsViewModel: SavedAnnouncementsViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
     private val addressViewModel: AddressViewModel by viewModels()
 
@@ -122,18 +127,17 @@ class SavedAnnouncementsFragment : Fragment() {
         lifecycleScope.launch {
             binding.apply {
                 savedAnnouncementsAdapter = SavedAnnouncementsAdapter(
-                    announcementViewModel,
-                    jobCategoryViewModel,
-                    addressViewModel,
+                    savedAnnouncementsViewModel,
+                    savedAnnouncementsViewModel.getSavedAnnouncements(),
                     resources,
                     { announcementId, announcementType ->
-                        savedAnnouncementClickListener?.onSavedAnnouncementClick(announcementId, announcementType)
-                    }, { isEmpty, announcementId ->
-                        notifyUnSave(isEmpty, announcementId)
+                        showBottom(announcementId, announcementType)
                     }
-                )
+                ) { isEmpty, announcementId ->
+                    notifyUnSave(isEmpty, announcementId)
+                }
                 recommendedWorkAnnouncementsRv.adapter = savedAnnouncementsAdapter
-                if (announcementViewModel.countSavedAnnouncements() == 0) {
+                if (savedAnnouncementsViewModel.countAnnouncements() == 0) {
                     emptyLayout.visibility = View.VISIBLE
                 } else {
                     emptyLayout.visibility = View.GONE
@@ -142,14 +146,47 @@ class SavedAnnouncementsFragment : Fragment() {
         }
     }
 
+    private fun showBottom(announcementId: String, announcementType: String) {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val savedAnnouncementBottomBinding = SavedAnnouncementBottomBinding.inflate(layoutInflater)
+        savedAnnouncementBottomBinding.apply {
+            bottomSheetDialog.setContentView(root)
+            shareBtn.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "public link is in progress")
+                startActivity(Intent.createChooser(shareIntent, "Share via"))
+            }
+            seeMoreBtn.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                val direction =
+                    if (announcementType == AnnouncementEnum.JOB.announcementType)
+                        R.id.action_startFragment_to_jobDetailsFragment
+                    else
+                        R.id.action_startFragment_to_workerDetailsFragment
+                val bundle = Bundle()
+                bundle.putString("announcement_id", announcementId)
+                findNavController().navigate(
+                    resId = direction,
+                    args = bundle
+                )
+            }
+            deleteBtn.setOnClickListener {
+                Toast.makeText(
+                    requireContext(),
+                    "delete job from saved is in progress",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        bottomSheetDialog.show()
+    }
+
     private fun notifyUnSave(isEmpty: Boolean, announcementId: String) {
         binding.apply {
             if (isEmpty) emptyLayout.visibility = View.VISIBLE
         }
-    }
-
-    interface SavedAnnouncementClickListener {
-        fun onSavedAnnouncementClick(announcementId: String, announcementType: String)
     }
 
     interface FindAnnouncementClickListener {
@@ -158,10 +195,6 @@ class SavedAnnouncementsFragment : Fragment() {
 
     fun setOnFindAnnouncementClickListener(listener: FindAnnouncementClickListener) {
         findAnnouncementClickListener = listener
-    }
-
-    fun setOnAnnouncementClickListener(listener: SavedAnnouncementClickListener) {
-        savedAnnouncementClickListener = listener
     }
 
     override fun onResume() {
@@ -176,7 +209,6 @@ class SavedAnnouncementsFragment : Fragment() {
 
     companion object {
 
-        @JvmStatic
         fun newInstance() =
             SavedAnnouncementsFragment().apply {
                 arguments = Bundle().apply {

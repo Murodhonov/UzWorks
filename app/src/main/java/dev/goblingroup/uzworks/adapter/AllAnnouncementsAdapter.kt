@@ -2,21 +2,24 @@ package dev.goblingroup.uzworks.adapter
 
 import android.content.res.Resources
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.databinding.AnnouncementItemBinding
+import dev.goblingroup.uzworks.mapper.mapToEntity
+import dev.goblingroup.uzworks.models.response.JobResponse
+import dev.goblingroup.uzworks.models.response.WorkerResponse
+import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.getImage
-import dev.goblingroup.uzworks.vm.AddressViewModel
-import dev.goblingroup.uzworks.vm.AnnouncementViewModel
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
+import dev.goblingroup.uzworks.vm.AllAnnouncementsViewModel
+import dev.goblingroup.uzworks.vm.HomeViewModel
 
 class AllAnnouncementsAdapter(
-    private val announcementViewModel: AnnouncementViewModel,
-    private val jobCategoryViewModel: JobCategoryViewModel,
-    private val addressViewModel: AddressViewModel,
+    private val allAnnouncementsViewModel: AllAnnouncementsViewModel,
+    private val announcementList: List<Any>,
     private val resources: Resources,
     private val onItemClick: (String, String) -> Unit,
     private val onSaveClick: (Boolean, String) -> Unit
@@ -30,58 +33,106 @@ class AllAnnouncementsAdapter(
 
     inner class AnnouncementsViewHolder(private val announcementItemBinding: AnnouncementItemBinding) :
         RecyclerView.ViewHolder(announcementItemBinding.root) {
-        fun bindAnnouncement(announcement: AnnouncementEntity) {
+        fun bindAnnouncement(announcement: Any) {
             announcementItemBinding.apply {
-                titleTv.text = announcement.title
-                costTv.text = "${announcement.salary} so'm"
-                categoryTv.text = getJobCategory(announcement.categoryId.toString())
-                addressTv.text = getAddress(announcement.districtId.toString())
-                iv.setImageResource(announcement.pictureResId)
+                when (announcement) {
+                    is JobResponse -> {
+                        titleTv.text = announcement.title
+                        costTv.text = "${announcement.salary} ${resources.getString(R.string.money_unit)}"
+                        categoryTv.text = announcement.categoryName
+                        addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
+                        iv.setImageResource(getImage(AnnouncementEnum.JOB.announcementType, announcement.gender))
+                        if (announcement.isTop) {
+                            badgeIv.visibility = View.VISIBLE
+                        }
 
-                genderTv.text = when (announcement.gender) {
-                    GenderEnum.MALE.label -> {
-                        resources.getString(R.string.male)
+                        genderTv.text = when (announcement.gender) {
+                            GenderEnum.MALE.label -> {
+                                resources.getString(R.string.male)
+                            }
+
+                            GenderEnum.FEMALE.label -> {
+                                resources.getString(R.string.female)
+                            }
+
+                            else -> {
+                                ""
+                            }
+                        }
+
+                        if (allAnnouncementsViewModel.isSaved(announcement.id)) {
+                            saveIv.setImageResource(R.drawable.ic_saved)
+                        } else {
+                            saveIv.setImageResource(R.drawable.ic_unsaved)
+                        }
                     }
+                    is WorkerResponse -> {
+                        titleTv.text = announcement.title
+                        costTv.text = "${announcement.salary} ${resources.getString(R.string.money_unit)}"
+                        categoryTv.text = announcement.categoryName
+                        addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
+                        iv.setImageResource(getImage(AnnouncementEnum.JOB.announcementType, announcement.gender))
 
-                    GenderEnum.FEMALE.label -> {
-                        resources.getString(R.string.female)
+                        genderTv.text = when (announcement.gender) {
+                            GenderEnum.MALE.label -> {
+                                resources.getString(R.string.male)
+                            }
+
+                            GenderEnum.FEMALE.label -> {
+                                resources.getString(R.string.female)
+                            }
+
+                            else -> {
+                                ""
+                            }
+                        }
+
+                        if (allAnnouncementsViewModel.isSaved(announcement.id)) {
+                            saveIv.setImageResource(R.drawable.ic_saved)
+                        } else {
+                            saveIv.setImageResource(R.drawable.ic_unsaved)
+                        }
                     }
-
-                    else -> {
-                        ""
-                    }
-                }
-
-                if (announcement.isSaved) {
-                    saveIv.setImageResource(R.drawable.ic_saved)
-                } else {
-                    saveIv.setImageResource(R.drawable.ic_unsaved)
                 }
 
                 saveIv.setOnClickListener {
-                    if (announcementViewModel.isAnnouncementSaved(announcement.id)) {
-                        announcementViewModel.unSaveAnnouncement(announcement.id)
-                        saveIv.setImageResource(R.drawable.ic_unsaved)
-                        onSaveClick.invoke(false, announcement.id)
-                    } else {
-                        announcementViewModel.saveAnnouncement(announcement.id)
-                        saveIv.setImageResource(R.drawable.ic_saved)
-                        onSaveClick.invoke(true, announcement.id)
+                    when (announcement) {
+                        is JobResponse -> {
+                            if (allAnnouncementsViewModel.isSaved(announcement.id)) {
+                                allAnnouncementsViewModel.unSave(announcement.id)
+                                saveIv.setImageResource(R.drawable.ic_unsaved)
+                                onSaveClick.invoke(false, announcement.id)
+                            } else {
+                                allAnnouncementsViewModel.save(announcement.mapToEntity())
+                                saveIv.setImageResource(R.drawable.ic_saved)
+                                onSaveClick.invoke(true, announcement.id)
+                            }
+                        }
+                        is WorkerResponse -> {
+                            if (allAnnouncementsViewModel.isSaved(announcement.id)) {
+                                allAnnouncementsViewModel.unSave(announcement.id)
+                                saveIv.setImageResource(R.drawable.ic_unsaved)
+                                onSaveClick.invoke(false, announcement.id)
+                            } else {
+                                allAnnouncementsViewModel.save(announcement.mapToEntity())
+                                saveIv.setImageResource(R.drawable.ic_saved)
+                                onSaveClick.invoke(true, announcement.id)
+                            }
+                        }
                     }
                 }
 
                 root.setOnClickListener {
-                    onItemClick.invoke(announcement.id, announcement.announcementType)
+                    when (announcement) {
+                        is JobResponse -> {
+                            onItemClick.invoke(announcement.id, AnnouncementEnum.JOB.announcementType)
+                        }
+                        is WorkerResponse -> {
+                            onItemClick.invoke(announcement.id, AnnouncementEnum.WORKER.announcementType)
+                        }
+                    }
                 }
             }
-        }
-
-        private fun getAddress(districtId: String): String {
-            return "${addressViewModel.findDistrict(districtId).name}, ${addressViewModel.findRegionByDistrictId(districtId).name}"
-        }
-
-        private fun getJobCategory(categoryId: String): String {
-            return jobCategoryViewModel.findJobCategory(categoryId).title
         }
     }
 
@@ -95,9 +146,9 @@ class AllAnnouncementsAdapter(
         )
     }
 
-    override fun getItemCount(): Int = announcementViewModel.listAnnouncements().size
+    override fun getItemCount(): Int = announcementList.size
 
     override fun onBindViewHolder(holder: AnnouncementsViewHolder, position: Int) {
-        holder.bindAnnouncement(announcementViewModel.listAnnouncements()[position])
+        holder.bindAnnouncement(announcementList[position])
     }
 }

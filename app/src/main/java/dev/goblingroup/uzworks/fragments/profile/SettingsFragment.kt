@@ -17,7 +17,6 @@ import dev.goblingroup.uzworks.databinding.FragmentSettingsBinding
 import dev.goblingroup.uzworks.databinding.LogoutDialogItemBinding
 import dev.goblingroup.uzworks.utils.LanguageManager
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
-import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.utils.languageDialog
 import dev.goblingroup.uzworks.utils.turnSwitchOff
 import dev.goblingroup.uzworks.utils.turnSwitchOn
@@ -105,9 +104,8 @@ class SettingsFragment : Fragment() {
 
             passwordBtn.setOnClickListener {
                 findNavController().navigate(
-                    resId = R.id.updatePasswordFragment,
-                    args = null,
-                    navOptions = getNavOptions()
+                    resId = R.id.action_settingsFragment_to_updatePasswordFragment,
+                    args = null
                 )
             }
 
@@ -159,7 +157,7 @@ class SettingsFragment : Fragment() {
 
     private fun logout() {
         lifecycleScope.launch {
-            if (securityViewModel.deleteUser()) {
+            if (securityViewModel.logout()) {
                 findNavController().navigate(R.id.getStartedFragment)
             } else {
                 Snackbar.make(

@@ -2,17 +2,14 @@ package dev.goblingroup.uzworks.fragments.profile
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -25,16 +22,10 @@ import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.ExperienceCreateRequest
 import dev.goblingroup.uzworks.models.request.ExperienceEditRequest
 import dev.goblingroup.uzworks.models.response.ExperienceResponse
-import dev.goblingroup.uzworks.utils.DateEnum
-import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.dmyToIso
-import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.isoToDmy
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.ExperienceViewModel
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 @AndroidEntryPoint
 class ExperienceFragment : Fragment() {
@@ -52,7 +43,6 @@ class ExperienceFragment : Fragment() {
     private lateinit var loadingDialog: AlertDialog
     private lateinit var loadingDialogBinding: LoadingDialogBinding
 
-    private lateinit var experienceList: ArrayList<ExperienceResponse>
     private lateinit var experienceAdapter: ExperienceAdapter
 
     override fun onCreateView(
@@ -69,6 +59,27 @@ class ExperienceFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
+            addEditExperienceDialog = AlertDialog.Builder(requireContext()).create()
+            addEditExperienceDialogBinding =
+                AddEditExperienceDialogItemBinding.inflate(layoutInflater)
+            addEditExperienceDialog.setView(addEditExperienceDialogBinding.root)
+            addEditExperienceDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            addExperienceBtn.setOnClickListener {
+                addExperience()
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause: ")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.apply {
             experienceViewModel.experienceLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
@@ -88,54 +99,8 @@ class ExperienceFragment : Fragment() {
 
                     is ApiStatus.Success -> {
                         progressBar.visibility = View.GONE
-                        experienceList = ArrayList()
-                        experienceList.addAll(it.response ?: emptyList())
                         setExperiences()
                     }
-                }
-            }
-
-            addEditExperienceDialog = AlertDialog.Builder(requireContext()).create()
-            addEditExperienceDialogBinding =
-                AddEditExperienceDialogItemBinding.inflate(layoutInflater)
-            addEditExperienceDialog.setView(addEditExperienceDialogBinding.root)
-            addEditExperienceDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            addEditExperienceDialog.setOnDismissListener {
-                experienceViewModel.adding = false
-                experienceViewModel.editing = false
-            }
-
-            addExperienceBtn.setOnClickListener {
-                addExperience()
-            }
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause: ")
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (experienceViewModel.adding) {
-            addEditExperienceDialog.show()
-        }
-        if (experienceViewModel.editing) {
-            addEditExperienceDialog.show()
-            addEditExperienceDialogBinding.apply {
-                experienceViewModel.positionLiveData.observe(viewLifecycleOwner) {
-                    positionEt.editText?.setText(it)
-                }
-                experienceViewModel.companyNameLiveData.observe(viewLifecycleOwner) {
-                    companyNameEt.editText?.setText(it)
-                }
-                experienceViewModel.startDateLiveData.observe(viewLifecycleOwner) {
-                    startDateEt.editText?.setText(it)
-                }
-                experienceViewModel.endDateLiveData.observe(viewLifecycleOwner) {
-                    endDateEt.editText?.setText(it)
                 }
             }
         }
@@ -187,11 +152,6 @@ class ExperienceFragment : Fragment() {
                             }
 
                             is ApiStatus.Loading -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "add experience loading",
-                                    Toast.LENGTH_SHORT
-                                ).show()
                                 addEditExperienceLoading()
                             }
 
@@ -202,7 +162,7 @@ class ExperienceFragment : Fragment() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 loadingDialog.dismiss()
-                                experienceList.add(
+                                experienceViewModel.experienceList.add(
                                     ExperienceResponse(
                                         companyName = it.response?.companyName.toString(),
                                         description = it.response?.description.toString(),
@@ -212,11 +172,19 @@ class ExperienceFragment : Fragment() {
                                         startDate = it.response?.startDate.toString()
                                     )
                                 )
-                                experienceAdapter.notifyItemInserted(experienceList.size - 1)
+                                experienceAdapter.notifyItemInserted(experienceViewModel.experienceList.size - 1)
+                                addEditExperienceDialog.dismiss()
+                                if (experienceAdapter.itemCount != 0) {
+                                    binding.noExperienceTv.visibility = View.VISIBLE
+                                }
                             }
                         }
                     }
                 }
+            }
+
+            cancelBtn.setOnClickListener {
+                addEditExperienceDialog.dismiss()
             }
         }
     }
@@ -225,79 +193,14 @@ class ExperienceFragment : Fragment() {
     private fun updateExperience(experience: ExperienceResponse, position: Int) {
         addEditExperienceDialogBinding.apply {
             addEditExperienceDialog.show()
-            startDateEt.clear()
-            endDateEt.clear()
-            startDateEt.editText?.setOnTouchListener { v, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    val datePickerDialog = DatePickerDialog(
-                        requireContext(),
-                        { _, year, month, dayOfMonth ->
-                            val selectedCalendar = Calendar.getInstance().apply {
-                                set(year, month, dayOfMonth)
-                            }
 
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            startDateEt.isErrorEnabled = false
-                            startDateEt.editText?.setText(formatter.format(selectedCalendar.time))
-                        },
-                        startDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.YEAR.dateLabel),
-                        startDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.MONTH.dateLabel),
-                        startDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.DATE.dateLabel)
-                    )
-
-                    datePickerDialog.show()
-                }
-                true
-            }
-
-            endDateEt.editText?.setOnTouchListener { v, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    val datePickerDialog = DatePickerDialog(
-                        requireContext(),
-                        { _, year, month, dayOfMonth ->
-                            val selectedCalendar = Calendar.getInstance().apply {
-                                set(year, month, dayOfMonth)
-                            }
-
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            endDateEt.isErrorEnabled = false
-                            endDateEt.editText?.setText(formatter.format(selectedCalendar.time))
-                        },
-                        endDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.YEAR.dateLabel),
-                        endDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.MONTH.dateLabel),
-                        endDateEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.DATE.dateLabel)
-                    )
-
-                    datePickerDialog.show()
-                }
-                true
-            }
-
-            positionEt.editText?.doAfterTextChanged {
-                if (it.toString().isNotEmpty()) {
-                    positionEt.isErrorEnabled = false
-                }
-            }
-
-            companyNameEt.editText?.doAfterTextChanged {
-                if (it.toString().isNotEmpty()) {
-                    companyNameEt.isErrorEnabled = false
-                }
-            }
-
-            cancelBtn.setOnClickListener {
-                addEditExperienceDialog.dismiss()
-            }
+            experienceViewModel.controlExperienceInput(
+                requireContext(),
+                positionEt,
+                companyNameEt,
+                startDateEt,
+                endDateEt
+            )
 
             positionEt.editText?.setText(experience.position)
             companyNameEt.editText?.setText(experience.companyName)
@@ -331,7 +234,7 @@ class ExperienceFragment : Fragment() {
 
                             is ApiStatus.Success -> {
                                 loadingDialog.dismiss()
-                                experienceList[position] = ExperienceResponse(
+                                experienceViewModel.experienceList[position] = ExperienceResponse(
                                     companyName = it.response?.companyName.toString(),
                                     description = it.response?.description.toString(),
                                     endDate = it.response?.endDate.toString(),
@@ -340,10 +243,15 @@ class ExperienceFragment : Fragment() {
                                     startDate = it.response?.startDate.toString()
                                 )
                                 experienceAdapter.notifyItemChanged(position)
+                                addEditExperienceDialog.dismiss()
                             }
                         }
                     }
                 }
+            }
+
+            cancelBtn.setOnClickListener {
+                addEditExperienceDialog.dismiss()
             }
         }
     }
@@ -376,17 +284,22 @@ class ExperienceFragment : Fragment() {
     }
 
     private fun addEditExperienceLoading() {
-        loadingDialog = AlertDialog.Builder(requireContext()).create()
-        loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
-        loadingDialog.setView(loadingDialogBinding.root)
-        loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        loadingDialog.setCancelable(false)
+        try {
+            loadingDialog.show()
+        } catch (e: Exception) {
+            loadingDialog = AlertDialog.Builder(requireContext()).create()
+            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
+            loadingDialog.setView(loadingDialogBinding.root)
+            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
     }
 
     private fun setExperiences() {
         binding.apply {
             experienceAdapter =
-                ExperienceAdapter(experienceList) { experienceResponse, position ->
+                ExperienceAdapter(experienceViewModel.experienceList) { experienceResponse, position ->
                     updateExperience(experienceResponse, position)
             }
             experienceRv.adapter = experienceAdapter

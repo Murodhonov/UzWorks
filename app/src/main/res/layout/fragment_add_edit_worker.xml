@@ -6,7 +6,7 @@
     android:fillViewport="true"
     android:layout_height="match_parent"
     android:scrollbars="none"
-    tools:context=".fragments.announcement.AddWorkerFragment">
+    tools:context=".fragments.announcement.AddEditWorkerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -219,6 +219,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
+                android:id="@+id/region_layout"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/create_worker_edit_text_background"

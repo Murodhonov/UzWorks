@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSucceedBinding
-import dev.goblingroup.uzworks.utils.getNavOptions
 
 @AndroidEntryPoint
 class SucceedFragment : Fragment() {
@@ -29,9 +28,8 @@ class SucceedFragment : Fragment() {
         binding.apply {
             continueBtn.setOnClickListener {
                 findNavController().navigate(
-                    resId = R.id.homeFragment,
-                    args = null,
-                    navOptions = getNavOptions()
+                    resId = R.id.action_succeedFragment_to_startFragment,
+                    args = null
                 )
             }
         }

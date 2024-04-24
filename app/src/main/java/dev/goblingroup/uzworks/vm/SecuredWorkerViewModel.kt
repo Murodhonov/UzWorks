@@ -31,16 +31,16 @@ class SecuredWorkerViewModel @Inject constructor(
 
     fun createWorker(workerCreateRequest: WorkerCreateRequest): LiveData<ApiStatus<WorkerResponse>> {
         viewModelScope.launch {
-                Log.d(
-                    TAG,
-                    "createWorker: starting create worker $workerCreateRequest in view model"
-                )
-                val response = securedWorkerRepository.createWorker(workerCreateRequest)
-                if (response.isSuccessful) {
-                    createLiveData.postValue(ApiStatus.Success(response.body()))
-                } else {
-                    createLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
-                }
+            Log.d(
+                TAG,
+                "createWorker: starting create worker $workerCreateRequest in view model"
+            )
+            val response = securedWorkerRepository.createWorker(workerCreateRequest)
+            if (response.isSuccessful) {
+                createLiveData.postValue(ApiStatus.Success(response.body()))
+            } else {
+                createLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+            }
         }
         return createLiveData
     }

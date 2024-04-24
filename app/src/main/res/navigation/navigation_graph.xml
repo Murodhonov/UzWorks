@@ -11,20 +11,18 @@
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
     <fragment
-        android:id="@+id/chatsListFragment"
-        android:name="dev.goblingroup.uzworks.fragments.chat.ChatsListFragment"
-        android:label="fragment_chats_list"
-        tools:layout="@layout/fragment_chats_list" />
-    <fragment
         android:id="@+id/getStartedFragment"
         android:name="dev.goblingroup.uzworks.fragments.onboarding.GetStartedFragment"
         android:label="fragment_get_started"
-        tools:layout="@layout/fragment_get_started"/>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="dev.goblingroup.uzworks.fragments.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_get_started">
+        <action
+            android:id="@+id/action_getStartedFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
+    </fragment>
     <fragment
         android:id="@+id/jobDetailsFragment"
         android:name="dev.goblingroup.uzworks.fragments.announcement.JobDetailsFragment"
@@ -38,63 +36,138 @@
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment"
-            app:popUpTo="@id/loginFragment"/>
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit"
+            app:popUpTo="@id/loginFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_startFragment"
+            app:destination="@id/startFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out"
+            app:popUpTo="@id/navigation_graph" />
+        <action
+            android:id="@+id/action_loginFragment_to_selectRoleFragment"
+            app:destination="@id/selectRoleFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
     </fragment>
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="dev.goblingroup.uzworks.fragments.profile.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/selectRoleFragment"
         android:name="dev.goblingroup.uzworks.fragments.auth.SelectRoleFragment"
         android:label="fragment_select_role"
-        tools:layout="@layout/fragment_select_role" />
+        tools:layout="@layout/fragment_select_role" >
+        <action
+            android:id="@+id/action_selectRoleFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="dev.goblingroup.uzworks.fragments.profile.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_updatePasswordFragment"
+            app:destination="@id/updatePasswordFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_settingsFragment_to_getStartedFragment"
+            app:destination="@id/getStartedFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out"
+            app:popUpTo="@id/navigation_graph" />
+    </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="dev.goblingroup.uzworks.fragments.auth.SignUpFragment"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" />
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_succeedFragment"
+            app:destination="@id/succeedFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
+    </fragment>
     <fragment
         android:id="@+id/splashFragment"
         android:name="dev.goblingroup.uzworks.fragments.onboarding.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" />
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_getStartedFragment"
+            app:destination="@id/getStartedFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out"
+            app:popUpTo="@id/navigation_graph" />
+        <action
+            android:id="@+id/action_splashFragment_to_startFragment"
+            app:destination="@id/startFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out"
+            app:popUpTo="@id/navigation_graph" />
+    </fragment>
     <fragment
         android:id="@+id/succeedFragment"
         android:name="dev.goblingroup.uzworks.fragments.auth.SucceedFragment"
         android:label="fragment_succeed"
-        tools:layout="@layout/fragment_succeed" />
+        tools:layout="@layout/fragment_succeed" >
+        <action
+            android:id="@+id/action_succeedFragment_to_startFragment"
+            app:destination="@id/startFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out"
+            app:popUpTo="@id/navigation_graph" />
+    </fragment>
     <fragment
         android:id="@+id/updatePasswordFragment"
         android:name="dev.goblingroup.uzworks.fragments.profile.UpdatePasswordFragment"
         android:label="fragment_update_password"
         tools:layout="@layout/fragment_update_password" />
     <fragment
-        android:id="@+id/addWorkerFragment"
-        android:name="dev.goblingroup.uzworks.fragments.announcement.AddWorkerFragment"
+        android:id="@+id/addEditWorkerFragment"
+        android:name="dev.goblingroup.uzworks.fragments.announcement.AddEditWorkerFragment"
         android:label="fragment_add_worker"
-        tools:layout="@layout/fragment_add_worker" />
+        tools:layout="@layout/fragment_add_edit_worker" />
     <fragment
-        android:id="@+id/addJobFragment"
-        android:name="dev.goblingroup.uzworks.fragments.announcement.AddJobFragment"
+        android:id="@+id/addEditJobFragment"
+        android:name="dev.goblingroup.uzworks.fragments.announcement.AddEditJobFragment"
         android:label="fragment_add_job"
-        tools:layout="@layout/fragment_add_job" />
+        tools:layout="@layout/fragment_add_edit_job" >
+        <action
+            android:id="@+id/action_addEditJobFragment_to_selectJobLocationFragment"
+            app:destination="@id/selectJobLocationFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+    </fragment>
     <fragment
         android:id="@+id/workerDetailsFragment"
         android:name="dev.goblingroup.uzworks.fragments.announcement.WorkerDetailsFragment"
         android:label="fragment_worker_details"
         tools:layout="@layout/fragment_worker_details" />
-    <fragment
-        android:id="@+id/announcementsFragment"
-        android:name="dev.goblingroup.uzworks.fragments.announcement.AnnouncementsFragment"
-        android:label="fragment_announcements"
-        tools:layout="@layout/fragment_announcements" />
     <fragment
         android:id="@+id/personalInfoFragment"
         android:name="dev.goblingroup.uzworks.fragments.profile.PersonalInfoFragment"
@@ -104,7 +177,36 @@
         android:id="@+id/myAnnouncementsFragment"
         android:name="dev.goblingroup.uzworks.fragments.announcement.MyAnnouncementsFragment"
         android:label="fragment_my_announcements"
-        tools:layout="@layout/fragment_my_announcements" />
+        tools:layout="@layout/fragment_my_announcements" >
+        <action
+            android:id="@+id/action_myAnnouncementsFragment_to_workerDetailsFragment"
+            app:destination="@id/workerDetailsFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_myAnnouncementsFragment_to_jobDetailsFragment"
+            app:destination="@id/jobDetailsFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_myAnnouncementsFragment_to_addEditJobFragment"
+            app:destination="@id/addEditJobFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_myAnnouncementsFragment_to_addEditWorkerFragment"
+            app:destination="@id/addEditWorkerFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+    </fragment>
     <fragment
         android:id="@+id/selectJobLocationFragment"
         android:name="dev.goblingroup.uzworks.fragments.announcement.SelectJobLocationFragment"
@@ -120,4 +222,72 @@
         android:name="dev.goblingroup.uzworks.fragments.NoInternetFragment"
         android:label="fragment_no_internet"
         tools:layout="@layout/fragment_no_internet" />
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="dev.goblingroup.uzworks.fragments.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_startFragment_to_personalInfoFragment"
+            app:destination="@id/personalInfoFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_startFragment_to_workerDetailsFragment"
+            app:destination="@id/workerDetailsFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_startFragment_to_jobDetailsFragment"
+            app:destination="@id/jobDetailsFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_startFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_startFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_startFragment_to_myAnnouncementsFragment"
+            app:destination="@id/myAnnouncementsFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_startFragment_to_addEditWorkerFragment"
+            app:destination="@id/addEditWorkerFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in" />
+        <action
+            android:id="@+id/action_startFragment_to_addEditJobFragment"
+            app:destination="@id/addEditJobFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_startFragment_to_experienceFragment"
+            app:destination="@id/experienceFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+    </fragment>
 </navigation>

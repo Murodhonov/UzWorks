@@ -15,7 +15,6 @@ import dev.goblingroup.uzworks.networking.RegionService
 import dev.goblingroup.uzworks.networking.SecuredJobService
 import dev.goblingroup.uzworks.networking.SecuredUserService
 import dev.goblingroup.uzworks.networking.SecuredWorkerService
-import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.networking.WorkerService
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import okhttp3.Interceptor
@@ -32,7 +31,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBaseUrl(): String = "https://accepted-first-pug.ngrok-free.app/"
+    fun provideBaseUrl(): String = "https://accepted-sole-enough.ngrok-free.app/"
 
     @Provides
     @Singleton
@@ -177,14 +176,6 @@ class NetworkModule {
         @Named(value = "secured_retrofit") retrofit: Retrofit
     ): SecuredWorkerService {
         return retrofit.create(SecuredWorkerService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserService(
-        @Named(value = "retrofit") retrofit: Retrofit
-    ): UserService {
-        return retrofit.create(UserService::class.java)
     }
 
     @Provides

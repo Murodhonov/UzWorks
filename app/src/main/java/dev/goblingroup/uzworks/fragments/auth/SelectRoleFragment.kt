@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSelectRoleBinding
 import dev.goblingroup.uzworks.utils.UserRole
-import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.SharedSignUpViewModel
 
 @AndroidEntryPoint
@@ -67,11 +66,9 @@ class SelectRoleFragment : Fragment() {
                         val bundle = Bundle()
                         bundle.putString("user role", it)
                         findNavController().navigate(
-                            resId = R.id.signUpFragment,
-                            args = bundle,
-                            navOptions = getNavOptions()
+                            resId = R.id.action_selectRoleFragment_to_signUpFragment,
+                            args = bundle
                         )
-
                     }
                 } else Toast.makeText(
                     requireContext(),

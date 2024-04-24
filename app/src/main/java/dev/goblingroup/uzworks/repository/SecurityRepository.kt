@@ -3,8 +3,7 @@ package dev.goblingroup.uzworks.repository
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import dev.goblingroup.uzworks.database.dao.AnnouncementDao
-import dev.goblingroup.uzworks.database.dao.UserDao
-import dev.goblingroup.uzworks.database.entity.UserEntity
+import dev.goblingroup.uzworks.networking.SecuredUserService
 import dev.goblingroup.uzworks.utils.UserRole
 import java.lang.reflect.Type
 import javax.inject.Inject
@@ -14,8 +13,10 @@ class SecurityRepository @Inject constructor(
     private val gson: Gson,
     private val type: Type,
     private val announcementDao: AnnouncementDao,
-    private val userDao: UserDao
+    private val securedUserService: SecuredUserService
 ) {
+
+    suspend fun getUser() = securedUserService.getUserById(getUserId())
 
     fun getUserRoles(): List<String> {
         val userRolesJson = sharedPreferences.getString("user_roles", null)
@@ -38,9 +39,16 @@ class SecurityRepository @Inject constructor(
         return sharedPreferences.getString("user_id", null).toString()
     }
 
-    fun deleteUser(): Boolean {
-        userDao.deleteUser()
-        announcementDao.deleteAnnouncements()
+    fun setExpirationDate(expiration: String): Boolean {
+        return sharedPreferences.edit().putString("expiration", expiration).commit()
+    }
+
+    fun getExpirationDate(): String {
+        return sharedPreferences.getString("expiration", null).toString()
+    }
+
+    fun logout(): Boolean {
+        announcementDao.clearTable()
         return sharedPreferences.edit().clear().commit()
     }
 
@@ -67,16 +75,4 @@ class SecurityRepository @Inject constructor(
     private fun jsonToList(jsonString: String): List<String> {
         return gson.fromJson(jsonString, type)
     }
-
-    fun getUser() = userDao.getUser()
-
-    fun addUser(userEntity: UserEntity) {
-        userDao.deleteUser()
-        userDao.addUser(userEntity)
-    }
-
-    fun getFirstName() = userDao.getUser()?.firstname
-
-    fun getLastName() = userDao.getUser()?.lastName
-
 }

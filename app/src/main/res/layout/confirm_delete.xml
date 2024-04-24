@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_dialog_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/_15sdp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_23sdp"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="@string/delete"
+        android:textColor="@color/black_blue"
+        android:textSize="@dimen/_16ssp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12ssp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:fontFamily="@font/dm_sans_regular"
+        android:text="@string/confirm_delete"
+        android:textColor="@color/text_color"
+        android:theme="@style/SecondaryTextStyle" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/yes_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:background="@drawable/enabled_button_background"
+        android:backgroundTint="@color/red"
+        android:text="@string/yes"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:textColor="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancel_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:background="@drawable/enabled_button_background"
+        android:backgroundTint="@color/black_blue"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:text="@string/no"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_42sdp"
+        android:textColor="@color/white" />
+
+</LinearLayout>

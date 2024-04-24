@@ -18,7 +18,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.database.dao.UserDao
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.models.response.UserResponse
@@ -30,6 +29,8 @@ import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.formatPhoneNumber
+import dev.goblingroup.uzworks.utils.selectFemale
+import dev.goblingroup.uzworks.utils.selectMale
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -39,8 +40,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PersonalInfoViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val securityRepository: SecurityRepository,
-    private val userDao: UserDao
+    private val securityRepository: SecurityRepository
 ) : ViewModel() {
 
     private val _userLiveData = MutableLiveData<ApiStatus<UserResponse>>(ApiStatus.Loading())
@@ -49,7 +49,10 @@ class PersonalInfoViewModel @Inject constructor(
     private val updateUserLiveData =
         MutableLiveData<ApiStatus<UserUpdateResponse>>(ApiStatus.Loading())
 
-    private var selectedGender = userDao.getUser()?.gender
+    private val _username = MutableLiveData("")
+    val username get() = _username
+
+    var selectedGender = ""
 
     init {
         fetchUserData()
@@ -59,6 +62,8 @@ class PersonalInfoViewModel @Inject constructor(
         viewModelScope.launch {
             val userResponse = profileRepository.getUserById(securityRepository.getUserId())
             if (userResponse.isSuccessful) {
+                selectedGender = userResponse.body()?.gender.toString()
+                _username.postValue(userResponse.body()?.userName.toString())
                 _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
             } else {
                 _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
@@ -87,7 +92,7 @@ class PersonalInfoViewModel @Inject constructor(
     fun getUserId() = securityRepository.getUserId()
 
     fun getUsername(): String {
-        return userDao.getUser()?.username.toString()
+        return _username.value.toString()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -288,6 +293,20 @@ class PersonalInfoViewModel @Inject constructor(
             birthdayEt.error = resources.getString(R.string.enter_firstname)
         }
         return result
+    }
+
+    fun selectGender(gender: String?, genderLayout: GenderChoiceLayoutBinding, resources: Resources) {
+        genderLayout.apply {
+            when (gender) {
+                GenderEnum.MALE.label -> {
+                    selectMale(resources)
+                }
+                GenderEnum.FEMALE.label -> {
+                    selectFemale(resources)
+                }
+                else -> {}
+            }
+        }
     }
 
 }

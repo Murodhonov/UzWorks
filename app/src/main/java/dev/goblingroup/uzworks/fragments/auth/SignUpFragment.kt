@@ -18,7 +18,7 @@ import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.SignUpRequest
-import dev.goblingroup.uzworks.utils.getNavOptions
+import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.splitFullName
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.LoginViewModel
@@ -174,9 +174,8 @@ class SignUpFragment : Fragment() {
                         is ApiStatus.Success -> {
                             loadingDialog.dismiss()
                             findNavController().navigate(
-                                resId = R.id.succeedFragment,
-                                args = null,
-                                navOptions = getNavOptions()
+                                resId = R.id.action_signUpFragment_to_succeedFragment,
+                                args = null
                             )
                         }
 

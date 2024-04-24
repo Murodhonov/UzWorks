@@ -27,15 +27,15 @@ class JobDetailsViewModel @Inject constructor(
 
     fun fetchJob(jobId: String): LiveData<ApiStatus<JobResponse>> {
         viewModelScope.launch {
-                val jobByIdResponse = announcementRepository.getJobById(jobId)
-                if (jobByIdResponse.isSuccessful) {
-                    jobLiveData.postValue(ApiStatus.Success(jobByIdResponse.body()))
-                } else {
-                    jobLiveData.postValue(ApiStatus.Error(Throwable(jobByIdResponse.message())))
-                    Log.e(TAG, "fetchJob: ${jobByIdResponse.errorBody()}", )
-                    Log.e(TAG, "fetchJob: ${jobByIdResponse.code()}", )
-                    Log.e(TAG, "fetchJob: ${jobByIdResponse.message()}", )
-                }
+            val jobByIdResponse = announcementRepository.getJobById(jobId)
+            if (jobByIdResponse.isSuccessful) {
+                jobLiveData.postValue(ApiStatus.Success(jobByIdResponse.body()))
+            } else {
+                jobLiveData.postValue(ApiStatus.Error(Throwable(jobByIdResponse.message())))
+                Log.e(TAG, "fetchJob: ${jobByIdResponse.errorBody()}")
+                Log.e(TAG, "fetchJob: ${jobByIdResponse.code()}")
+                Log.e(TAG, "fetchJob: ${jobByIdResponse.message()}")
+            }
         }
         return jobLiveData
     }

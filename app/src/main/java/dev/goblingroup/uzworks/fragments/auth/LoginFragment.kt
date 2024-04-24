@@ -17,7 +17,6 @@ import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
-import dev.goblingroup.uzworks.utils.getNavOptions
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.LoginViewModel
 import kotlinx.coroutines.launch
@@ -45,9 +44,8 @@ class LoginFragment : Fragment() {
         binding.apply {
             signUpTv.setOnClickListener {
                 findNavController().navigate(
-                    resId = R.id.selectRoleFragment,
-                    args = null,
-                    navOptions = getNavOptions()
+                    resId = R.id.action_loginFragment_to_selectRoleFragment,
+                    args = null
                 )
             }
 
@@ -136,9 +134,8 @@ class LoginFragment : Fragment() {
         if (loadingDialog.isShowing)
             loadingDialog.dismiss()
         findNavController().navigate(
-            resId = R.id.homeFragment,
-            args = null,
-            navOptions = getNavOptions()
+            resId = R.id.action_loginFragment_to_startFragment,
+            args = null
         )
     }
 

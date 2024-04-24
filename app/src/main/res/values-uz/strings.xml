@@ -116,6 +116,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="instagram_username">Instagram profil</string>
     <string name="orientation">Mo\'ljal</string>
     <string name="select_region">Viloyat tanlang</string>
+    <string name="select_district">Tuman tanlang</string>
     <string name="select_region_first">Oldin viloyat tanlang</string>
     <string name="select_job_category">Ish turini tanlang</string>
     <string name="min">Min</string>
@@ -157,6 +158,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="orientation_error">Orientatsiyangizni kiriting</string>
     <string name="district_error">Tumaningizni tanlang</string>
     <string name="job_category_error">Ish turini tanlang</string>
+    <string name="benefit_error">Foydani kiriting</string>
     <string name="set_location">Tayyor</string>
     <string name="no_internet">Internet aloqasi yo\'q</string>
     <string name="unavailable_date">Bu sanani tanlab boʻlmaydi, kamida 16 yil oldinni tanlang</string>
@@ -185,4 +187,9 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="close">Yopish</string>
     <string name="username_exist">Foydalanuvchi nomi allaqachon ishlatilgan, boshqasini tanlang</string>
     <string name="update_succeeded">Muvaffaqiyatli yangilandi</string>
+    <string name="current_password_wrong">Joriy parol noto\'g\'ri</string>
+    <string name="password_updated">Parol muvafaqiyatli o\'zgartirildi</string>
+    <string name="edit">Tahrirlash</string>
+    <string name="confirm_delete">Haqiqatdan ushbu e\'lonni o\'chirmoqchimisiz ?</string>
+    <string name="money_unit">so\'m</string>
 </resources>

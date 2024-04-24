@@ -186,7 +186,7 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_7sdp"
                 android:text="@string/full_name"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/about_job_tv" />
 
@@ -195,7 +195,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/full_name_title_tv" />
 
@@ -215,7 +215,7 @@
                 android:theme="@style/SecondaryTextStyle"
                 android:layout_marginTop="@dimen/_7sdp"
                 android:text="@string/birth_date"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/birthdate_divider" />
 
@@ -224,7 +224,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/birthdate_title_tv" />
 
@@ -244,7 +244,7 @@
                 android:theme="@style/SecondaryTextStyle"
                 android:layout_marginTop="@dimen/_7sdp"
                 android:text="@string/address"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_divider" />
 
@@ -253,7 +253,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_title_tv" />
 
@@ -273,7 +273,7 @@
                 android:theme="@style/SecondaryTextStyle"
                 android:layout_marginTop="@dimen/_11sdp"
                 android:text="@string/salary"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/salary_divider" />
 
@@ -283,7 +283,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans_bold"
                 android:textColor="@color/black_blue"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/salary_title_tv" />
 
@@ -293,7 +293,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/salary_per_time"
                 android:textColor="@color/yellow"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintLeft_toRightOf="@id/salary_tv"
                 app:layout_constraintTop_toTopOf="@id/salary_tv" />
 
@@ -313,7 +313,7 @@
                 android:layout_marginTop="@dimen/_11sdp"
                 android:theme="@style/SecondaryTextStyle"
                 android:text="@string/working_time"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/working_time_divider" />
 
@@ -322,7 +322,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/working_time_title_tv" />
 
@@ -342,7 +342,7 @@
                 android:theme="@style/SecondaryTextStyle"
                 android:layout_marginTop="@dimen/_11sdp"
                 android:text="@string/working_schedule"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/working_schedule_divider" />
 
@@ -351,7 +351,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/working_schedule_title_tv" />
 
@@ -371,7 +371,7 @@
                 android:theme="@style/SecondaryTextStyle"
                 android:layout_marginTop="@dimen/_11sdp"
                 android:text="@string/social"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/socials_divider" />
 
@@ -393,7 +393,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/telegram"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintBottom_toBottomOf="@id/tg_iv"
                 app:layout_constraintLeft_toRightOf="@id/tg_iv"
                 app:layout_constraintTop_toTopOf="@id/tg_iv" />
@@ -416,7 +416,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/instagram"
                 android:textColor="@color/yellow"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintBottom_toBottomOf="@id/ig_iv"
                 app:layout_constraintLeft_toRightOf="@id/ig_iv"
                 app:layout_constraintTop_toTopOf="@id/ig_iv" />
@@ -438,9 +438,12 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/contact_tg_btn"
                 android:layout_width="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintWidth_percent="0.7"
+                app:layout_constraintWidth_percent="0.8"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/_7sdp"
                 android:layout_marginBottom="-10dp"
@@ -458,30 +461,35 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintHorizontal_bias="0.9"
                 android:contentDescription="@string/content_description"
                 android:src="@drawable/ic_telegram"
-                app:layout_constraintLeft_toLeftOf="@id/contact_tv"
+                app:layout_constraintRight_toLeftOf="@id/contact_tg_tv"
                 app:layout_constraintTop_toTopOf="@id/contact_tg_btn" />
 
             <TextView
                 android:id="@+id/contact_tg_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
                 android:fontFamily="@font/dm_sans_bold"
                 android:text="@string/contact_telegram"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_13ssp"
                 app:layout_constraintBottom_toBottomOf="@id/contact_tg_iv"
-                app:layout_constraintLeft_toRightOf="@id/contact_tg_iv"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/contact_tg_iv" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/contact_call_btn"
                 android:layout_width="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintWidth_percent="0.7"
+                app:layout_constraintWidth_percent="0.8"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/_7sdp"
                 android:layout_marginBottom="-10dp"
@@ -508,13 +516,12 @@
                 android:id="@+id/contact_call_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
                 android:fontFamily="@font/dm_sans_bold"
                 android:text="@string/contact_phone"
                 android:textColor="@color/green"
                 android:textSize="@dimen/_13ssp"
                 app:layout_constraintBottom_toBottomOf="@id/contact_call_iv"
-                app:layout_constraintLeft_toRightOf="@id/contact_call_iv"
+                app:layout_constraintLeft_toLeftOf="@id/contact_tg_tv"
                 app:layout_constraintTop_toTopOf="@id/contact_call_iv" />
 
             <View

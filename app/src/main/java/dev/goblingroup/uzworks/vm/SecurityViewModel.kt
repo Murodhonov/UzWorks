@@ -13,7 +13,7 @@ class SecurityViewModel @Inject constructor(
 
     fun getUserRoles() = securityRepository.getUserRoles()
 
-    fun deleteUser() = securityRepository.deleteUser()
+    fun logout() = securityRepository.logout()
 
     fun getLanguageCode() = securityRepository.getLanguageCode()
 

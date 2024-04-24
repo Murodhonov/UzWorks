@@ -4,57 +4,41 @@ import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
-import dev.goblingroup.uzworks.database.entity.UserEntity
-import dev.goblingroup.uzworks.models.request.LoginRequest
+import dev.goblingroup.uzworks.models.response.AnnouncementResponse
 import dev.goblingroup.uzworks.models.response.DistrictResponse
 import dev.goblingroup.uzworks.models.response.JobCategoryResponse
 import dev.goblingroup.uzworks.models.response.JobResponse
-import dev.goblingroup.uzworks.models.response.LoginResponse
 import dev.goblingroup.uzworks.models.response.RegionResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.getImage
 
-fun LoginResponse.mapToEntity(loginRequest: LoginRequest): UserEntity {
-    return UserEntity(
-        username = loginRequest.username,
-        password = loginRequest.password,
-        birthDate = birthDate,
-        email = email,
-        firstname = firstname,
-        lastName = lastName,
-        gender = gender,
-        phoneNumber = phoneNumber
-    )
-}
-
-fun JobResponse.mapToEntity(isSaved: Boolean, isTop: Boolean): AnnouncementEntity {
+fun JobResponse.mapToEntity(): AnnouncementEntity {
     return AnnouncementEntity(
         id = id,
-        categoryId = categoryId,
-        districtId = districtId,
+        categoryName = categoryName,
+        districtName = districtName,
         gender = gender,
         salary = salary,
         title = title,
         announcementType = AnnouncementEnum.JOB.announcementType,
         isTop = isTop,
         pictureResId = getImage(AnnouncementEnum.JOB.announcementType, ""),
-        isSaved = isSaved
     )
 }
 
-fun WorkerResponse.mapToEntity(isSaved: Boolean, isTop: Boolean): AnnouncementEntity {
+fun WorkerResponse.mapToEntity(): AnnouncementEntity {
     return AnnouncementEntity(
         id = id,
-        categoryId = categoryId,
-        districtId = districtId,
+        categoryName = categoryName,
+        districtName = districtName,
+        regionName = regionName,
         gender = gender,
         salary = salary,
         title = title,
         announcementType = AnnouncementEnum.WORKER.announcementType,
         isTop = isTop,
         pictureResId = getImage(AnnouncementEnum.WORKER.announcementType, gender),
-        isSaved = isSaved
     )
 }
 
@@ -78,5 +62,35 @@ fun DistrictResponse.mapToEntity(regionId: String): DistrictEntity {
         id = id,
         name = name,
         regionId = regionId
+    )
+}
+
+fun JobResponse.map(): AnnouncementResponse {
+    return AnnouncementResponse(
+        id = id,
+        categoryName = categoryName,
+        districtName = districtName,
+        regionName = regionName,
+        gender = gender,
+        salary = salary,
+        title = title,
+        announcementType = AnnouncementEnum.JOB.announcementType,
+        isTop = isTop,
+        pictureResId = getImage(AnnouncementEnum.JOB.announcementType, gender)
+    )
+}
+
+fun WorkerResponse.map(): AnnouncementResponse {
+    return AnnouncementResponse(
+        id = id,
+        categoryName = categoryName,
+        districtName = districtName,
+        regionName = regionName,
+        gender = gender,
+        salary = salary,
+        title = title,
+        announcementType = AnnouncementEnum.JOB.announcementType,
+        isTop = isTop,
+        pictureResId = getImage(AnnouncementEnum.JOB.announcementType, gender)
     )
 }

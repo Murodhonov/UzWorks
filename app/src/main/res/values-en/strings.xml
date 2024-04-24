@@ -116,6 +116,7 @@ The information displayed to you is determined by the role you choose</string>
     <string name="instagram_username">Instagram username</string>
     <string name="orientation">Orientation</string>
     <string name="select_region">Select region</string>
+    <string name="select_district">Select district</string>
     <string name="select_region_first">First select your region</string>
     <string name="select_job_category">Select job category</string>
     <string name="min">Min</string>
@@ -157,6 +158,7 @@ The information displayed to you is determined by the role you choose</string>
     <string name="orientation_error">Enter your orientation</string>
     <string name="district_error">Select your district</string>
     <string name="job_category_error">Select your job category</string>
+    <string name="benefit_error">Enter benefit</string>
     <string name="set_location">Ready</string>
     <string name="no_internet">No internet connection</string>
     <string name="unavailable_date">Cannot select this date, select at least 16 years ago</string>
@@ -185,4 +187,9 @@ The information displayed to you is determined by the role you choose</string>
     <string name="close">Close</string>
     <string name="username_exist">Username has already been used, choose another</string>
     <string name="update_succeeded">Successfully updated</string>
+    <string name="current_password_wrong">Current password is wrong</string>
+    <string name="password_updated">Password successfully updated</string>
+    <string name="edit">Edit</string>
+    <string name="confirm_delete">Are you sure you want to delete this announcement ?</string>
+    <string name="money_unit">UZS</string>
 </resources>

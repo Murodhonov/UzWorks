@@ -14,10 +14,7 @@ import dev.goblingroup.uzworks.databinding.FragmentGetStartedBinding
 import dev.goblingroup.uzworks.utils.LanguageEnum
 import dev.goblingroup.uzworks.utils.LanguageManager
 import dev.goblingroup.uzworks.utils.LanguageSelectionListener
-import dev.goblingroup.uzworks.utils.getNavOptions
-import dev.goblingroup.uzworks.utils.languageDialog
 import dev.goblingroup.uzworks.vm.GetStartedViewModel
-import me.ibrahimsn.lib.SmoothBottomBar
 
 @AndroidEntryPoint
 class GetStartedFragment : Fragment() {
@@ -67,9 +64,8 @@ class GetStartedFragment : Fragment() {
 
             nextBtn.setOnClickListener {
                 findNavController().navigate(
-                    resId = R.id.loginFragment,
-                    args = null,
-                    navOptions = getNavOptions()
+                    resId = R.id.action_getStartedFragment_to_loginFragment,
+                    args = null
                 )
             }
 

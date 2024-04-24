@@ -38,7 +38,6 @@ class PersonalInfoFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var userResponse: UserResponse? = null
-    private var selectedGender = ""
 
     private val personalInfoViewModel: PersonalInfoViewModel by viewModels()
 
@@ -119,59 +118,6 @@ class PersonalInfoFragment : Fragment() {
             birthdayEt.editText?.setText(
                 if (userResponse?.birthDate?.isoToDmy() == null) resources.getString(R.string.birth_date) else userResponse?.birthDate?.isoToDmy()
             )
-            /*genderLayout.apply {
-                when (selectedGender) {
-                    GenderEnum.MALE.label -> {
-                        maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                        femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                        maleCircle.visibility = View.VISIBLE
-                        femaleCircle.visibility = View.GONE
-                        maleTv.setTextColor(resources.getColor(R.color.black_blue))
-                        femaleTv.setTextColor(resources.getColor(R.color.text_color))
-                        maleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                        femaleBtn.strokeColor = resources.getColor(R.color.text_color)
-                    }
-
-                    GenderEnum.FEMALE.label -> {
-                        femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                        maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                        femaleCircle.visibility = View.VISIBLE
-                        maleCircle.visibility = View.GONE
-                        femaleTv.setTextColor(resources.getColor(R.color.black_blue))
-                        maleTv.setTextColor(resources.getColor(R.color.text_color))
-                        femaleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                        maleBtn.strokeColor = resources.getColor(R.color.text_color)
-                    }
-
-                }
-
-                maleBtn.setOnClickListener {
-                    if (selectedGender == GenderEnum.FEMALE.label || selectedGender.isEmpty()) {
-                        selectedGender = GenderEnum.MALE.label
-                        maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                        femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                        maleCircle.visibility = View.VISIBLE
-                        femaleCircle.visibility = View.GONE
-                        maleTv.setTextColor(resources.getColor(R.color.black_blue))
-                        femaleTv.setTextColor(resources.getColor(R.color.text_color))
-                        maleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                        femaleBtn.strokeColor = resources.getColor(R.color.text_color)
-                    }
-                }
-                femaleBtn.setOnClickListener {
-                    if (selectedGender == GenderEnum.MALE.label || selectedGender.isEmpty()) {
-                        selectedGender = GenderEnum.FEMALE.label
-                        femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                        maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                        femaleCircle.visibility = View.VISIBLE
-                        maleCircle.visibility = View.GONE
-                        femaleTv.setTextColor(resources.getColor(R.color.black_blue))
-                        maleTv.setTextColor(resources.getColor(R.color.text_color))
-                        femaleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                        maleBtn.strokeColor = resources.getColor(R.color.text_color)
-                    }
-                }
-            }*/
 
             emailEt.editText?.setText(userResponse?.email ?: "")
             phoneNumberEt.editText?.setText(
@@ -179,83 +125,7 @@ class PersonalInfoFragment : Fragment() {
                     ?: resources.getString(R.string.phone_number_prefix)
             )
 
-            /*phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
-                private var isFormatting = false
-
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-
-                }
-
-                override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int
-                ) {
-
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    if (isFormatting) {
-                        return
-                    }
-
-                    isFormatting = true
-                    val newText = s.toString().filter { !it.isWhitespace() }
-                    val oldText =
-                        phoneNumberEt.editText?.tag.toString().filter { !it.isWhitespace() }
-                    val formattedPhone =
-                        s?.filter { !it.isWhitespace() }.toString()
-                            .formatPhoneNumber(newText.length < oldText.length)
-                    phoneNumberEt.editText?.setText(formattedPhone)
-                    phoneNumberEt.editText?.setSelection(formattedPhone.length)
-                    phoneNumberEt.tag = formattedPhone
-
-                    isFormatting = false
-                }
-            })
-
-            birthdayEt.editText?.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    val datePickerDialog = DatePickerDialog(
-                        requireContext(),
-                        { _, year, month, dayOfMonth ->
-                            val selectedCalendar = Calendar.getInstance().apply {
-                                set(year, month, dayOfMonth)
-                            }
-
-                            val currentCalendar = Calendar.getInstance()
-
-                            if (selectedCalendar.after(currentCalendar)) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Cannot select date after current date",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                val formatter = SimpleDateFormat(
-                                    "dd.MM.yyyy", Locale.getDefault()
-                                )
-                                birthdayEt.editText?.setText(formatter.format(selectedCalendar.time))
-                            }
-                        },
-                        birthdayEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.YEAR.dateLabel),
-                        birthdayEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.MONTH.dateLabel),
-                        birthdayEt.editText?.text.toString()
-                            .extractDateValue(DateEnum.DATE.dateLabel),
-                    )
-
-                    datePickerDialog.show()
-                }
-                true
-            }*/
+            personalInfoViewModel.selectGender(userResponse?.gender, genderLayout, resources)
 
             saveBtn.setOnClickListener {
                 if (personalInfoViewModel.isFormValid(
@@ -274,7 +144,7 @@ class PersonalInfoFragment : Fragment() {
                                     .toString(),
                                 email = emailEt.editText?.text.toString(),
                                 firstName = firstNameEt.editText?.text.toString(),
-                                gender = selectedGender,
+                                gender = personalInfoViewModel.selectedGender,
                                 id = personalInfoViewModel.getUserId(),
                                 lastName = lastNameEt.editText?.text.toString(),
                                 mobileId = Settings.Secure.getString(
@@ -313,35 +183,6 @@ class PersonalInfoFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    private fun isFormValid(): Boolean {
-        binding.apply {
-            var result = true
-            if (firstNameEt.editText?.text.toString().isEmpty()) {
-                firstNameEt.error = resources.getString(R.string.enter_firstname)
-                result = false
-            }
-            if (lastNameEt.editText?.text.toString().isEmpty()) {
-                lastNameEt.error = resources.getString(R.string.enter_lastname)
-                result = false
-            }
-            if (selectedGender.isEmpty()) {
-                result = false
-                Toast.makeText(
-                    requireContext(),
-                    resources.getString(R.string.confirm_gender),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            if (emailEt.editText?.text.toString()
-                    .isNotEmpty() && !isEmailValid(emailEt.editText?.text.toString())
-            ) {
-                emailEt.error = resources.getString(R.string.enter_valid_email)
-                result = false
-            }
-            return result
         }
     }
 
