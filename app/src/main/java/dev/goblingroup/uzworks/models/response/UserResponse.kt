@@ -7,19 +7,17 @@ data class UserResponse(
     val birthDate: String,
     val email: String,
     val firstName: String,
-    val gender: String,
+    val gender: Int,
     val id: String,
     val lastName: String,
     val mobileId: String,
-    val phoneNumber: String,
-    val userName: String
+    val phoneNumber: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
-        parcel.readString().toString(),
-        parcel.readString().toString(),
+        parcel.readString()!!.toInt(),
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
@@ -31,12 +29,11 @@ data class UserResponse(
         parcel.writeString(birthDate)
         parcel.writeString(email)
         parcel.writeString(firstName)
-        parcel.writeString(gender)
+        parcel.writeInt(gender)
         parcel.writeString(id)
         parcel.writeString(lastName)
         parcel.writeString(mobileId)
         parcel.writeString(phoneNumber)
-        parcel.writeString(userName)
     }
 
     override fun describeContents(): Int {

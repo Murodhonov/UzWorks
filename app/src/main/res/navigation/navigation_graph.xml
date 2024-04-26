@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/forgotPasswordFragment">
 
     <fragment
         android:id="@+id/chatFragment"
@@ -52,6 +52,13 @@
         <action
             android:id="@+id/action_loginFragment_to_selectRoleFragment"
             app:destination="@id/selectRoleFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment"
             app:enterAnim="@anim/enter"
             app:exitAnim="@anim/exit"
             app:popEnterAnim="@anim/pop_enter"
@@ -290,4 +297,9 @@
             app:popEnterAnim="@anim/scale_in"
             app:popExitAnim="@anim/scale_out" />
     </fragment>
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="dev.goblingroup.uzworks.fragments.auth.ForgotPasswordFragment"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" />
 </navigation>

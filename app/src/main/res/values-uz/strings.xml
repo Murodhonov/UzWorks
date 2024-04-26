@@ -45,7 +45,6 @@
     <string name="create_account">Hisob ochish</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</string>
     <string name="full_name">Ism familiya</string>
-    <string name="username">Foydalanuvchi nomi</string>
     <string name="password">Parol</string>
     <string name="confirm_password">Parolni tasdiqlang</string>
     <string name="continue_sign_up">Davom etish</string>
@@ -104,7 +103,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="messages_not_found">Sizda hozirda chatlar mavjud emas</string>
     <string name="return_home">Bosh sahifaga qaytish</string>
     <string name="online">Online</string>
-    <string name="enter_username">Foydalanuvchi nomini kiriting</string>
+    <string name="enter_phone_number">Telefon raqamingizni kiriting</string>
     <string name="enter_full_name">Ism familiyangizni kiriting</string>
     <string name="enter_password">Parolni kiriting</string>
     <string name="password_requirements">Parol kamida 8 belgidan iborat bo\'lishi, raqam va kichik harflarni o\'z ichiga olishi shart</string>
@@ -125,7 +124,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="current_location">Joriy manzil</string>
     <string name="select_map">Xaritadan tanlash</string>
     <string name="loading">Yuklanmoqda</string>
-    <string name="incorrect_username_password">Foydalanuvchi nomi yoki parol xato</string>
+    <string name="incorrect_phone_number_password">Telefon raqami yoki parol noto\'g\'ri</string>
     <string name="greeting">Assalomu alaykum</string>
     <string name="subscribers_count">Obunachilar soni</string>
     <string name="enter_firstname">Ismingizni kiriting</string>
@@ -162,8 +161,8 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="set_location">Tayyor</string>
     <string name="no_internet">Internet aloqasi yo\'q</string>
     <string name="unavailable_date">Bu sanani tanlab boʻlmaydi, kamida 16 yil oldinni tanlang</string>
-    <string name="enter_username_password">Platformaga kirish uchun foydalanuvchi nomi va parolingizni kiriting</string>
-    <string name="sign_up_floor">Profil yaratish uchun ismingiz, foydalanuvchi nomini  hamda shaxsiy parolingizni kiriting</string>
+    <string name="enter_phone_number_password">Platformaga kirish uchun telefon raqamingiz va parolingizni kiriting</string>
+    <string name="sign_up_floor">Profil yaratish uchun ismingizni, telefon raqamingizni va shaxsiy parolingizni kiriting</string>
     <string name="second">sekund</string>
     <string name="seconds">sekund</string>
     <string name="minute">minut</string>
@@ -185,11 +184,17 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="end_date_error">Tugagan vaqtini kiriting</string>
     <string name="address_failed">Manzil yuklanmadi</string>
     <string name="close">Yopish</string>
-    <string name="username_exist">Foydalanuvchi nomi allaqachon ishlatilgan, boshqasini tanlang</string>
+    <string name="phone_number_exist">Telefon raqami allaqachon ishlatilgan, boshqasini ishlatib ko\'ring</string>
     <string name="update_succeeded">Muvaffaqiyatli yangilandi</string>
     <string name="current_password_wrong">Joriy parol noto\'g\'ri</string>
     <string name="password_updated">Parol muvafaqiyatli o\'zgartirildi</string>
     <string name="edit">Tahrirlash</string>
     <string name="confirm_delete">Haqiqatdan ushbu e\'lonni o\'chirmoqchimisiz ?</string>
     <string name="money_unit">so\'m</string>
+    <string name="forgot_password">Parolni unutdingizmi ?</string>
+    <string name="forgot_password_explanation">Tasdiqlash kodini olish va parolni tiklash uchun pastga telefon raqamingizni kiriting</string>
+    <string name="verification_title">Tasdiqlash kodini kiriting</string>
+    <string name="verification_subtitle">Iltimos, telefon raqamingizga yuborilgan tasdiqlash kodini kiriting</string>
+    <string name="set_new_password">Yangi parol o\'rnating</string>
+    <string name="submit">Yuborish</string>
 </resources>

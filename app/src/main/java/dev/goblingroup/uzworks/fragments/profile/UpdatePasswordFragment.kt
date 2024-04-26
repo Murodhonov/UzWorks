@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentUpdatePasswordBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
-import dev.goblingroup.uzworks.models.request.ResetPasswordRequest
+import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.UpdatePasswordViewModel
 
@@ -59,7 +58,7 @@ class UpdatePasswordFragment : Fragment() {
                     )
                 ) {
                     updatePasswordViewModel.updatePassword(
-                        ResetPasswordRequest(
+                        UpdatePasswordRequest(
                             confirmPassword = confirmNewPasswordEt.editText?.text.toString(),
                             newPassword = newPasswordEt.editText?.text.toString(),
                             oldPassword = oldPasswordEt.editText?.text.toString(),

@@ -1,8 +1,8 @@
 package dev.goblingroup.uzworks.networking
 
-import dev.goblingroup.uzworks.models.request.ResetPasswordRequest
+import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
-import dev.goblingroup.uzworks.models.response.ResetPasswordResponse
+import dev.goblingroup.uzworks.models.response.UpdatePasswordResponse
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.models.response.UserUpdateResponse
 import retrofit2.Response
@@ -25,7 +25,7 @@ interface SecuredUserService {
 
     @PUT("api/User/ResetPassword")
     suspend fun resetPassword(
-        @Body resetPasswordRequest: ResetPasswordRequest
-    ): Response<ResetPasswordResponse>
+        @Body updatePasswordRequest: UpdatePasswordRequest
+    ): Response<UpdatePasswordResponse>
 
 }

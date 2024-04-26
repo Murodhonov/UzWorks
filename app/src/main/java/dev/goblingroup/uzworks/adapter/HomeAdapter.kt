@@ -44,11 +44,11 @@ class HomeAdapter(
                         badgeIv.visibility = View.VISIBLE
 
                         genderTv.text = when (announcement.gender) {
-                            GenderEnum.MALE.label -> {
+                            GenderEnum.MALE.code -> {
                                 resources.getString(R.string.male)
                             }
 
-                            GenderEnum.FEMALE.label -> {
+                            GenderEnum.FEMALE.code -> {
                                 resources.getString(R.string.female)
                             }
 

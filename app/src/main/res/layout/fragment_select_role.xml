@@ -38,6 +38,7 @@
         android:id="@+id/tv_2"
         android:layout_width="match_parent"
         android:theme="@style/SecondaryTextStyle"
+        android:fontFamily="@font/dm_sans_regular"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_15sdp"

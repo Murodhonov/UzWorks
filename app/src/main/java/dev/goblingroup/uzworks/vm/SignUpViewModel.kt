@@ -1,8 +1,6 @@
 package dev.goblingroup.uzworks.vm
 
 import android.content.res.Resources
-import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -66,7 +64,7 @@ class SignUpViewModel @Inject constructor(
         }
         if (usernameEt.editText?.text.toString().isEmpty()) {
             usernameEt.isErrorEnabled = true
-            usernameEt.error = resources.getString(R.string.enter_username)
+            usernameEt.error = resources.getString(R.string.enter_phone_number)
             validation = false
         }
         if (passwordEt.editText?.text.toString().isEmpty()) {

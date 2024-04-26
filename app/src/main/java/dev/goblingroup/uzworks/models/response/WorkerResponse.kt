@@ -8,7 +8,7 @@ data class WorkerResponse(
     val deadline: String,
     val districtName: String,
     val fullName: String,
-    val gender: String,
+    val gender: Int,
     val id: String,
     val instagramLink: String,
     val isTop: Boolean,

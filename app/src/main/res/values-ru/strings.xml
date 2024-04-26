@@ -45,7 +45,6 @@
     <string name="create_account">Зарегистрироваться</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</string>
     <string name="full_name">Имя фамилия</string>
-    <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="confirm_password">Подтвердите пароль</string>
     <string name="continue_sign_up">Продолжать</string>
@@ -104,7 +103,7 @@
     <string name="messages_not_found">У вас сейчас нет чатов</string>
     <string name="return_home">Вернуться на главную страницу</string>
     <string name="online">В сети</string>
-    <string name="enter_username">Введите имя пользователя</string>
+    <string name="enter_phone_number">Введите номер телефона</string>
     <string name="enter_full_name">Введите свое имя и фамилию</string>
     <string name="enter_password">Parolni kiriting</string>
     <string name="password_requirements">Пароль должен быть длиной не менее 8 символов, содержать цифры и строчные буквы</string>
@@ -125,7 +124,7 @@
     <string name="current_location">Текущий адрес</string>
     <string name="select_map">Выберите на карте</string>
     <string name="loading">Загрузка</string>
-    <string name="incorrect_username_password">Имя пользователя или пароль неверны</string>
+    <string name="incorrect_phone_number_password">Номер телефона или пароль неверен</string>
     <string name="greeting">Здраствуйте</string>
     <string name="subscribers_count">Количество подписчиков</string>
     <string name="enter_firstname">Введите ваше имя</string>
@@ -162,8 +161,8 @@
     <string name="set_location">Готов</string>
     <string name="no_internet">Нет соединения с интернетом</string>
     <string name="unavailable_date">Невозможно выбрать эту дату. Выберите минимум 16 лет назад</string>
-    <string name="enter_username_password">Введите свое имя пользователя и пароль для доступа к платформе</string>
-    <string name="sign_up_floor">Для создания профиля введите свое имя, логин и личный пароль</string>
+    <string name="enter_phone_number_password">Введите свой номер телефона и пароль для доступа к платформе</string>
+    <string name="sign_up_floor">Для создания профиля введите свое имя, номер телефона и личный пароль.</string>
     <string name="second">секунду</string>
     <string name="seconds">секунды</string>
     <string name="minute">минута</string>
@@ -185,11 +184,17 @@
     <string name="end_date_error">Введите время окончания</string>
     <string name="address_failed">Не удалось загрузить адрес</string>
     <string name="close">Закрывать</string>
-    <string name="username_exist">Имя пользователя уже использовано, выберите другое</string>
+    <string name="phone_number_exist">Номер телефона уже использован, попробуйте использовать другой</string>
     <string name="update_succeeded">Успешно обновлено</string>
     <string name="current_password_wrong">Текущий пароль неверен</string>
     <string name="password_updated">Пароль успешно обновлен</string>
     <string name="edit">Редактировать</string>
     <string name="confirm_delete">Вы уверены, что хотите удалить это объявление?</string>
     <string name="money_unit">сўм</string>
+    <string name="forgot_password">Забыли пароль ?</string>
+    <string name="forgot_password_explanation">Введите свой номер телефона ниже, чтобы получить код подтверждения и сбросить пароль</string>
+    <string name="verification_title">Введите код подтверждения</string>
+    <string name="verification_subtitle">Пожалуйста, введите код подтверждения, отправленный на ваш номер телефона</string>
+    <string name="set_new_password">Установить новый пароль</string>
+    <string name="submit">Отправить</string>
 </resources>

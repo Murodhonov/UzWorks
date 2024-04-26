@@ -68,6 +68,14 @@ class SecurityRepository @Inject constructor(
         return sharedPreferences.getString("language_code", null)
     }
 
+    fun setGender(gender: Int): Boolean {
+        return sharedPreferences.edit().putInt("gender", gender).commit()
+    }
+
+    fun getGender(): String? {
+        return sharedPreferences.getString("gender", null)
+    }
+
     private fun listToJson(list: List<String>): String {
         return gson.toJson(list)
     }

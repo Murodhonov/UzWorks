@@ -49,10 +49,7 @@ class PersonalInfoViewModel @Inject constructor(
     private val updateUserLiveData =
         MutableLiveData<ApiStatus<UserUpdateResponse>>(ApiStatus.Loading())
 
-    private val _username = MutableLiveData("")
-    val username get() = _username
-
-    var selectedGender = ""
+    var selectedGender: Int? = null
 
     init {
         fetchUserData()
@@ -62,8 +59,7 @@ class PersonalInfoViewModel @Inject constructor(
         viewModelScope.launch {
             val userResponse = profileRepository.getUserById(securityRepository.getUserId())
             if (userResponse.isSuccessful) {
-                selectedGender = userResponse.body()?.gender.toString()
-                _username.postValue(userResponse.body()?.userName.toString())
+                selectedGender = userResponse.body()?.gender
                 _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
             } else {
                 _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
@@ -90,10 +86,6 @@ class PersonalInfoViewModel @Inject constructor(
     }
 
     fun getUserId() = securityRepository.getUserId()
-
-    fun getUsername(): String {
-        return _username.value.toString()
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     fun controlInput(
@@ -126,7 +118,7 @@ class PersonalInfoViewModel @Inject constructor(
 
         genderLayout.apply {
             when (selectedGender) {
-                GenderEnum.MALE.label -> {
+                GenderEnum.MALE.code -> {
                     maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
                     femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
                     maleCircle.visibility = View.VISIBLE
@@ -137,7 +129,7 @@ class PersonalInfoViewModel @Inject constructor(
                     femaleBtn.strokeColor = resources.getColor(R.color.text_color)
                 }
 
-                GenderEnum.FEMALE.label -> {
+                GenderEnum.FEMALE.code -> {
                     femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
                     maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
                     femaleCircle.visibility = View.VISIBLE
@@ -151,8 +143,8 @@ class PersonalInfoViewModel @Inject constructor(
             }
 
             maleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.FEMALE.label || selectedGender?.isEmpty() == true) {
-                    selectedGender = GenderEnum.MALE.label
+                if (selectedGender == GenderEnum.FEMALE.code || selectedGender == null) {
+                    selectedGender = GenderEnum.MALE.code
                     maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
                     femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
                     maleCircle.visibility = View.VISIBLE
@@ -164,8 +156,8 @@ class PersonalInfoViewModel @Inject constructor(
                 }
             }
             femaleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.MALE.label || selectedGender?.isEmpty() == true) {
-                    selectedGender = GenderEnum.FEMALE.label
+                if (selectedGender == GenderEnum.MALE.code || selectedGender == null) {
+                    selectedGender = GenderEnum.FEMALE.code
                     femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
                     maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
                     femaleCircle.visibility = View.VISIBLE
@@ -295,13 +287,13 @@ class PersonalInfoViewModel @Inject constructor(
         return result
     }
 
-    fun selectGender(gender: String?, genderLayout: GenderChoiceLayoutBinding, resources: Resources) {
+    fun selectGender(gender: Int?, genderLayout: GenderChoiceLayoutBinding, resources: Resources) {
         genderLayout.apply {
             when (gender) {
-                GenderEnum.MALE.label -> {
+                GenderEnum.MALE.code -> {
                     selectMale(resources)
                 }
-                GenderEnum.FEMALE.label -> {
+                GenderEnum.FEMALE.code -> {
                     selectFemale(resources)
                 }
                 else -> {}

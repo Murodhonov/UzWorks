@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">UzWorks</string>
+    <string name="zero" translatable="false">0</string>
     <string name="home">Уй</string>
     <string name="announcements">Эълонлар</string>
     <string name="chat">Чат</string>
@@ -45,7 +46,6 @@
     <string name="create_account">Ҳисоб очиш</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</string>
     <string name="full_name">Исм фамилия</string>
-    <string name="username">Фойдаланувчи номи</string>
     <string name="password">Парол</string>
     <string name="confirm_password">Паролни тасдиқланг</string>
     <string name="continue_sign_up">Давом этиш</string>
@@ -104,7 +104,7 @@
     <string name="messages_not_found">Сизда ҳозирда чатлар мавжуд эмас</string>
     <string name="return_home">Бош саҳифага қайтиш</string>
     <string name="online">Онлайн</string>
-    <string name="enter_username">Фойдаланувчи номини киритинг</string>
+    <string name="enter_phone_number">Телефон рақамингизни киритинг</string>
     <string name="enter_full_name">Исм фамилиянгизни киритинг</string>
     <string name="enter_password">Паролни киритинг</string>
     <string name="password_requirements">Парол камида 8 белгидан иборат бўлиши, рақам ва кичик ҳарфларни ўз ичига олиши шарт</string>
@@ -125,7 +125,7 @@
     <string name="current_location">Жорий манзил</string>
     <string name="select_map">Харитадан танлаш</string>
     <string name="loading">Юкланмоқда</string>
-    <string name="incorrect_username_password">Фойдаланувчи номи ёки парол хато</string>
+    <string name="incorrect_phone_number_password">Телефон рақами ёки пароль нотўғри</string>
     <string name="greeting">Ассалому алайкум</string>
     <string name="subscribers_count">Обуначилар сони</string>
     <string name="enter_firstname">Исмингизни киритинг</string>
@@ -162,8 +162,8 @@
     <string name="set_location">Тайёр</string>
     <string name="no_internet">Интернет алоқаси йўқ</string>
     <string name="unavailable_date">Бу санани танлаб бўлмайди, камида 16 йил олдинни танланг</string>
-    <string name="enter_username_password">Платформага кириш учун фойдаланувчи номи ва паролингизни киритинг</string>
-    <string name="sign_up_floor">Профиль яратиш учун исмингиз, фойдаланувчи номини  ҳамда шахсий паролингизни киритинг</string>
+    <string name="enter_phone_number_password">Платформага кириш учун телефон рақамингиз ва паролингизни киритинг</string>
+    <string name="sign_up_floor">Профиль яратиш учун исмингизни, телефон рақамингизни ва шахсий паролингизни киритинг</string>
     <string name="second">секунд</string>
     <string name="seconds">секунд</string>
     <string name="minute">минут</string>
@@ -185,11 +185,17 @@
     <string name="end_date_error">Тугаган вақтини киритинг</string>
     <string name="address_failed">Манзил юкланмади</string>
     <string name="close">Ёпиш</string>
-    <string name="username_exist">Фойдаланувчи номи аллақачон ишлатилган, бошқасини танланг</string>
+    <string name="phone_number_exist">Телефон рақами аллақачон ишлатилган, бошқасини ишлатиб кўринг</string>
     <string name="update_succeeded">Муваффақиятли янгиланди</string>
     <string name="current_password_wrong">Жорий пароль нотўғри</string>
     <string name="password_updated">Пароль мувафақиятли ўзгартирилди</string>
     <string name="edit">Таҳрирлаш</string>
     <string name="confirm_delete">Ҳақиқатдан ушбу эълонни ўчирмоқчимисиз ?</string>
     <string name="money_unit">сўм</string>
+    <string name="forgot_password">Паролни унутдингизми ?</string>
+    <string name="forgot_password_explanation">Тасдиқлаш кодини олиш ва паролни тиклаш учун пастга телефон рақамингизни киритинг</string>
+    <string name="verification_title">Тасдиқлаш кодини киритинг</string>
+    <string name="verification_subtitle">Илтимос, телефон рақамингизга юборилган тасдиқлаш кодини киритинг</string>
+    <string name="set_new_password">Янги пароль ўрнатинг</string>
+    <string name="submit">Юбориш</string>
 </resources>

@@ -1,7 +1,6 @@
 package dev.goblingroup.uzworks.vm
 
 import android.content.res.Resources
-import android.util.Log
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LiveData
@@ -14,7 +13,6 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.models.request.SignUpRequest
 import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.repository.AuthRepository
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.isStrongPassword
 import dev.goblingroup.uzworks.utils.splitFullName
@@ -72,7 +70,7 @@ class SharedSignUpViewModel @Inject constructor(
         }
         if (usernameEt.editText?.text.toString().isEmpty()) {
             usernameEt.isErrorEnabled = true
-            usernameEt.error = resources.getString(R.string.enter_username)
+            usernameEt.error = resources.getString(R.string.enter_phone_number)
             validation = false
         }
         if (passwordEt.editText?.text.toString().isEmpty()) {
@@ -98,7 +96,7 @@ class SharedSignUpViewModel @Inject constructor(
 
     fun controlInput(
         fullNameEt: TextInputLayout,
-        usernameEt: TextInputLayout,
+        phoneNumberEt: TextInputLayout,
         passwordEt: TextInputLayout,
         confirmPasswordEt: TextInputLayout,
         motionLayout: MotionLayout
@@ -110,7 +108,7 @@ class SharedSignUpViewModel @Inject constructor(
                 motionLayout.setTransitionDuration(1000)
             }
         }
-        usernameEt.editText?.setOnFocusChangeListener { _, hasFocus ->
+        phoneNumberEt.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 motionLayout.setTransitionDuration(500)
                 motionLayout.transitionToEnd()
@@ -138,9 +136,9 @@ class SharedSignUpViewModel @Inject constructor(
             }
         }
 
-        usernameEt.editText?.addTextChangedListener {
-            if (usernameEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                usernameEt.isErrorEnabled = false
+        phoneNumberEt.editText?.addTextChangedListener {
+            if (phoneNumberEt.isErrorEnabled && it.toString().isNotEmpty()) {
+                phoneNumberEt.isErrorEnabled = false
             }
         }
 

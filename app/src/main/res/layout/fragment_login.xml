@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/under_greeting_tv"
-        android:text="@string/enter_username_password"
+        android:text="@string/enter_phone_number_password"
         android:textSize="@dimen/_12ssp"
         android:layout_width="0dp"
         android:theme="@style/SecondaryTextStyle"
@@ -39,13 +39,14 @@
         app:layout_constraintTop_toBottomOf="@id/greeting_tv" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_et"
+        android:id="@+id/phone_number_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_49sdp"
         android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginEnd="@dimen/_20sdp"
-        android:hint="@string/username"
+        android:hint="@string/phone_number"
+        app:errorEnabled="false"
         android:theme="@style/TextInputEditTextStyle"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/under_greeting_tv">
@@ -54,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:imeOptions="actionNext"
-            android:inputType="textPersonName"
+            android:inputType="phone"
             android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -70,8 +71,9 @@
         android:theme="@style/TextInputEditTextStyle"
         app:endIconTint="@color/black_blue"
         app:endIconMode="password_toggle"
+        app:errorEnabled="false"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/username_et">
+        app:layout_constraintTop_toBottomOf="@id/phone_number_et">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -82,19 +84,31 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/forgot_password_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/dm_sans_regular"
+        android:text="@string/forgot_password"
+        android:theme="@style/SecondaryTextStyle"
+        app:layout_constraintRight_toRightOf="@id/password_et"
+        app:layout_constraintTop_toBottomOf="@id/password_et" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_btn"
         android:layout_height="wrap_content"
         android:background="@drawable/enabled_button_background"
         android:layout_width="match_parent"
         android:text="@string/login"
+        android:textColor="@color/white"
         android:theme="@style/ButtonStyle"
         android:layout_marginStart="@dimen/_30sdp"
         android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginEnd="@dimen/_30sdp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password_et" />
+        app:layout_constraintTop_toBottomOf="@id/forgot_password_tv" />
 
     <TextView
         android:id="@+id/do_not_have_account_tv"

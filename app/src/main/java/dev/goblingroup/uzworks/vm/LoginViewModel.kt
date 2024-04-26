@@ -60,11 +60,12 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun saveAuth(loginResponse: LoginResponse): Boolean {
-        val rolesSaved = securityRepository.setUserRoles(loginResponse.access)
+        val rolesSaved = securityRepository.setUserRoles(loginResponse.roles)
         val tokenSaved = securityRepository.setToken(loginResponse.token)
-        val userIdSaved = securityRepository.setUserId(loginResponse.userId)
+        val userIdSaved = securityRepository.setUserId(loginResponse.id)
         val tokenExpirationSaved = securityRepository.setExpirationDate(loginResponse.expiration)
-        return tokenSaved && userIdSaved && rolesSaved && tokenExpirationSaved
+        val genderSaved = securityRepository.setGender(loginResponse.gender!!)
+        return tokenSaved && userIdSaved && rolesSaved && tokenExpirationSaved && genderSaved
     }
 
     private fun getLanguageCode() = securityRepository.getLanguageCode()
@@ -145,7 +146,7 @@ class LoginViewModel @Inject constructor(
         resources: Resources
     ): Boolean {
         if (usernameEt.isEmpty()) {
-            usernameEt.error = resources.getString(R.string.enter_username)
+            usernameEt.error = resources.getString(R.string.enter_phone_number)
             usernameEt.isErrorEnabled = true
         }
         if (passwordEt.isEmpty()) {

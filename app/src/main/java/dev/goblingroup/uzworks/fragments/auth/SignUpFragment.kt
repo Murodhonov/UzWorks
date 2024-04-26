@@ -18,7 +18,6 @@ import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.SignUpRequest
-import dev.goblingroup.uzworks.utils.UserRole
 import dev.goblingroup.uzworks.utils.splitFullName
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.LoginViewModel
@@ -53,7 +52,7 @@ class SignUpFragment : Fragment() {
             userRole = arguments?.getString("user role")!!
             sharedSignUpViewModel.controlInput(
                 fullNameEt,
-                usernameEt,
+                phoneNumberEt,
                 passwordEt,
                 confirmPasswordEt,
                 motionLayout
@@ -62,7 +61,7 @@ class SignUpFragment : Fragment() {
             continueBtn.setOnClickListener {
                 if (sharedSignUpViewModel.isFormValid(
                         fullNameEt,
-                        usernameEt,
+                        phoneNumberEt,
                         passwordEt,
                         confirmPasswordEt,
                         resources
@@ -97,11 +96,12 @@ class SignUpFragment : Fragment() {
                 val (firstName, lastName) = fullNameEt.splitFullName()
                 sharedSignUpViewModel.signup(
                     signupRequest = SignUpRequest(
-                        username = usernameEt.editText?.text.toString(),
-                        password = passwordEt.editText?.text.toString(),
                         confirmPassword = confirmPasswordEt.editText?.text.toString(),
                         firstName = firstName.toString(),
                         lastName = lastName.toString(),
+                        password = passwordEt.editText?.text.toString(),
+                        phoneNumber = phoneNumberEt.editText?.text.toString().trim()
+                            .filter { !it.isWhitespace() }.substring(1),
                         role = userRole
                     )
                 ).observe(viewLifecycleOwner) {
@@ -131,7 +131,7 @@ class SignUpFragment : Fragment() {
                 progress.visibility = View.INVISIBLE
                 resultIv.setImageResource(R.drawable.ic_error)
                 resultIv.visibility = View.VISIBLE
-                dialogMessageTv.text = resources.getString(R.string.username_exist)
+                dialogMessageTv.text = resources.getString(R.string.phone_number_exist)
                 close.text = resources.getString(R.string.close)
                 close.visibility = View.VISIBLE
                 close.setOnClickListener {
@@ -158,7 +158,7 @@ class SignUpFragment : Fragment() {
             lifecycleScope.launch {
                 loginViewModel.login(
                     loginRequest = LoginRequest(
-                        usernameEt.editText?.text.toString(),
+                        phoneNumberEt.editText?.text.toString(),
                         passwordEt.editText?.text.toString()
                     )
                 ).observe(viewLifecycleOwner) {
@@ -193,7 +193,7 @@ class SignUpFragment : Fragment() {
                 fullNameEt.editText?.setText(it)
             }
             sharedSignUpViewModel.username.observe(viewLifecycleOwner) {
-                usernameEt.editText?.setText(it)
+                phoneNumberEt.editText?.setText(it)
             }
             sharedSignUpViewModel.password.observe(viewLifecycleOwner) {
                 passwordEt.editText?.setText(it)
@@ -208,7 +208,7 @@ class SignUpFragment : Fragment() {
         super.onPause()
         binding.apply {
             sharedSignUpViewModel.setFullName(fullNameEt.editText?.text.toString())
-            sharedSignUpViewModel.setUsername(usernameEt.editText?.text.toString())
+            sharedSignUpViewModel.setUsername(phoneNumberEt.editText?.text.toString())
             sharedSignUpViewModel.setPassword(passwordEt.editText?.text.toString())
             sharedSignUpViewModel.setConfirmPassword(confirmPasswordEt.editText?.text.toString())
         }

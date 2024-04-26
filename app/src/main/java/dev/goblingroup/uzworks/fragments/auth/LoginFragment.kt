@@ -50,7 +50,7 @@ class LoginFragment : Fragment() {
             }
 
             loginBtn.setOnClickListener {
-                if (loginViewModel.isFormValid(usernameEt, passwordEt, resources)) {
+                if (loginViewModel.isFormValid(phoneNumberEt, passwordEt, resources)) {
                     login()
                 }
             }
@@ -63,7 +63,7 @@ class LoginFragment : Fragment() {
                 chooseLanguage()
             }
 
-            loginViewModel.controlInput(usernameEt, passwordEt)
+            loginViewModel.controlInput(phoneNumberEt, passwordEt)
 
             languageTv.text = loginViewModel.getLanguageName()
 
@@ -72,6 +72,13 @@ class LoginFragment : Fragment() {
             loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             loadingDialog.setCancelable(false)
             loadingDialog.setView(loadingDialogBinding.root)
+
+            forgotPasswordTv.setOnClickListener {
+                findNavController().navigate(
+                    resId = R.id.action_loginFragment_to_forgotPasswordFragment,
+                    args = null
+                )
+            }
         }
     }
 
@@ -80,8 +87,8 @@ class LoginFragment : Fragment() {
             lifecycleScope.launch {
                 loginViewModel.login(
                     loginRequest = LoginRequest(
-                        username = usernameEt.editText?.text.toString(),
-                        password = passwordEt.editText?.text.toString()
+                        password = passwordEt.editText?.text.toString(),
+                        phoneNumber = phoneNumberEt.editText?.text.toString()
                     )
                 )
                     .observe(viewLifecycleOwner
@@ -109,7 +116,7 @@ class LoginFragment : Fragment() {
             progress.visibility = View.INVISIBLE
             resultIv.setImageResource(R.drawable.ic_error)
             resultIv.visibility = View.VISIBLE
-            dialogMessageTv.text = resources.getString(R.string.incorrect_username_password)
+            dialogMessageTv.text = resources.getString(R.string.incorrect_phone_number_password)
             close.text = resources.getString(R.string.close)
             close.visibility = View.VISIBLE
             close.setOnClickListener {
@@ -161,7 +168,7 @@ class LoginFragment : Fragment() {
         binding.apply {
             greetingTv.text = resources.getString(R.string.welcome)
             underGreetingTv.text = resources.getString(R.string.lorem_ipsum)
-            usernameEt.hint = resources.getString(R.string.username)
+            phoneNumberEt.hint = resources.getString(R.string.phone_number)
             passwordEt.hint = resources.getString(R.string.password)
             loginBtn.text = resources.getString(R.string.login)
             doNotHaveAccountTv.text = resources.getString(R.string.do_not_have_account)

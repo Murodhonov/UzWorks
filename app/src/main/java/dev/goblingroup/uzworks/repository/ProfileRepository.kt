@@ -1,6 +1,6 @@
 package dev.goblingroup.uzworks.repository
 
-import dev.goblingroup.uzworks.models.request.ResetPasswordRequest
+import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.networking.SecuredUserService
 import javax.inject.Inject
@@ -13,6 +13,6 @@ class ProfileRepository @Inject constructor(
 
     suspend fun updateUser(userUpdateRequest: UserUpdateRequest) = securedUserService.update(userUpdateRequest)
 
-    suspend fun resetPassword(resetPasswordRequest: ResetPasswordRequest) =
-        securedUserService.resetPassword(resetPasswordRequest)
+    suspend fun resetPassword(updatePasswordRequest: UpdatePasswordRequest) =
+        securedUserService.resetPassword(updatePasswordRequest)
 }

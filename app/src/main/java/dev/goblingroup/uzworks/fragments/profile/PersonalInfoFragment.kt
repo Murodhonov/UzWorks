@@ -107,7 +107,7 @@ class PersonalInfoFragment : Fragment() {
         dialog.setCancelable(false)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "HardwareIds")
     private fun setData() {
         binding.apply {
             dialog.dismiss()
@@ -152,8 +152,7 @@ class PersonalInfoFragment : Fragment() {
                                     Settings.Secure.ANDROID_ID
                                 ),
                                 phoneNumber = phoneNumberEt.editText?.text.toString()
-                                    .filter { !it.isWhitespace() },
-                                userName = personalInfoViewModel.getUsername()
+                                    .filter { !it.isWhitespace() }
                             )
                         ).observe(viewLifecycleOwner) {
                             when (it) {

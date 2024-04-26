@@ -10,8 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.models.request.ResetPasswordRequest
-import dev.goblingroup.uzworks.models.response.ResetPasswordResponse
+import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
+import dev.goblingroup.uzworks.models.response.UpdatePasswordResponse
 import dev.goblingroup.uzworks.networking.SecuredUserService
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.isStrongPassword
@@ -24,14 +24,14 @@ class UpdatePasswordViewModel @Inject constructor(
     private val securityRepository: SecurityRepository
 ) : ViewModel() {
 
-    private val resetPasswordLiveData = MutableLiveData<ApiStatus<ResetPasswordResponse>>()
+    private val resetPasswordLiveData = MutableLiveData<ApiStatus<UpdatePasswordResponse>>()
 
-    fun updatePassword(resetPasswordRequest: ResetPasswordRequest): LiveData<ApiStatus<ResetPasswordResponse>> {
+    fun updatePassword(updatePasswordRequest: UpdatePasswordRequest): LiveData<ApiStatus<UpdatePasswordResponse>> {
         viewModelScope.launch {
             if (resetPasswordLiveData.value !is ApiStatus.Loading) {
                 resetPasswordLiveData.postValue(ApiStatus.Loading())
             }
-            val resetPasswordResponse = securedUserService.resetPassword(resetPasswordRequest)
+            val resetPasswordResponse = securedUserService.resetPassword(updatePasswordRequest)
             if (resetPasswordResponse.isSuccessful) {
                 resetPasswordLiveData.postValue(ApiStatus.Success(resetPasswordResponse.body()))
             } else {

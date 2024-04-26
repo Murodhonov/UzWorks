@@ -39,10 +39,11 @@
             android:id="@+id/tv_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
-            motion:layout_constraintTop_toBottomOf="@id/tv_1" />
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            motion:layout_constraintTop_toBottomOf="@id/tv_1"
+            motion:layout_editor_absoluteX="19dp" />
 
         <Constraint
             android:id="@+id/inputs_layout"

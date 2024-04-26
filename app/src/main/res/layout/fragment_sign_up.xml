@@ -42,15 +42,15 @@
 
         <TextView
             android:id="@+id/tv_2"
-            android:theme="@style/SecondaryTextStyle"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/_10sdp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_15sdp"
-            app:layout_constraintTop_toBottomOf="@id/tv_1"
-            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/sign_up_floor"
-            android:textAlignment="center" />
+            android:fontFamily="@font/dm_sans_regular"
+            android:textAlignment="center"
+            android:theme="@style/SecondaryTextStyle"
+            app:layout_constraintTop_toBottomOf="@id/tv_1"
+            tools:layout_editor_absoluteX="19dp" />
 
         <LinearLayout
             android:id="@+id/inputs_layout"
@@ -83,11 +83,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/username_et"
+                android:id="@+id/phone_number_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:hint="@string/username"
+                android:hint="@string/phone_number"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 app:errorEnabled="false"
@@ -99,7 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
                     android:imeOptions="actionNext"
-                    android:inputType="textPersonName"
+                    android:inputType="phone"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -159,6 +159,7 @@
                 android:layout_height="@dimen/_34sdp"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:layout_marginEnd="@dimen/_30sdp"
+                android:textColor="@color/white"
                 android:layout_marginStart="@dimen/_30sdp"
                 android:background="@drawable/enabled_button_background"
                 android:text="@string/continue_sign_up"

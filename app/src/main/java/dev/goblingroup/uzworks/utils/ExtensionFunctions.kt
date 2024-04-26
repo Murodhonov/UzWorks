@@ -5,15 +5,26 @@ import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.GradientDrawable
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.util.TypedValue
+import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.textfield.TextInputLayout
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -394,7 +405,7 @@ fun String.formatTgUsername(): String {
     }
 }
 
-fun getImage(announcementType: String, gender: String): Int {
+fun getImage(announcementType: String, gender: Int): Int {
     val images = mutableListOf(
         R.drawable.ic_logo_1,
         R.drawable.ic_logo_2,
@@ -414,8 +425,8 @@ fun getImage(announcementType: String, gender: String): Int {
 
         AnnouncementEnum.WORKER.announcementType -> {
             when (gender) {
-                GenderEnum.FEMALE.label -> R.drawable.ic_female
-                GenderEnum.MALE.label -> R.drawable.ic_male
+                GenderEnum.FEMALE.code -> R.drawable.ic_female
+                GenderEnum.MALE.code -> R.drawable.ic_male
                 else -> {
                     R.drawable.uz_works_logo
                 }
@@ -493,3 +504,50 @@ fun String.timeAgo(): Pair<Int, String> {
 }
 
 fun TextInputLayout.isEmpty(): Boolean = this.editText?.text.toString().isEmpty()
+
+fun EditText.setFocus(fragmentActivity: FragmentActivity) {
+    this.requestFocus()
+    val inputMethodManager = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+    this.setSelection(this.text.toString().length)
+}
+
+fun EditText.addCodeTextWatcher(
+    fragmentActivity: FragmentActivity,
+    previousInput: EditText?,
+    nextInput: EditText?
+) {
+    setOnKeyListener { _, keyCode, event ->
+        if (event.action == KeyEvent.ACTION_DOWN) {
+            when (keyCode) {
+                in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
+                    if (text.isNotEmpty()) {
+                        nextInput?.setText((keyCode - 7).toString())
+                    }
+                    nextInput?.setFocus(fragmentActivity)
+                }
+                KeyEvent.KEYCODE_DEL -> {
+                    previousInput?.setFocus(fragmentActivity)
+                }
+            }
+        }
+        false
+    }
+
+    setOnEditorActionListener { _, actionId, _ ->
+        when (actionId) {
+            EditorInfo.IME_ACTION_DONE -> {
+                val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+                true
+            }
+            EditorInfo.IME_ACTION_NEXT -> {
+                nextInput?.setFocus(fragmentActivity)
+                true
+            }
+            else -> {
+                false
+            }
+        }
+    }
+}

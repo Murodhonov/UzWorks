@@ -6,7 +6,7 @@ data class JobResponse(
     val createDate: String,
     val deadline: String,
     val districtName: String,
-    val gender: String,
+    val gender: Int,
     val id: String,
     val instagramLink: String,
     val isTop: Boolean,
