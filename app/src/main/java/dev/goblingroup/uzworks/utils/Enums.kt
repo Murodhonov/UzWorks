@@ -1,9 +1,11 @@
 package dev.goblingroup.uzworks.utils
 
+import java.util.StringTokenizer
+
 enum class GenderEnum(val code: Int) {
     MALE(0),
     FEMALE(1),
-    Unknown(2)
+    UNKNOWN(2)
 }
 
 enum class UserRole(val roleName: String) {
@@ -45,4 +47,17 @@ enum class PeriodEnum(val label: String) {
 enum class ToastType {
     ERROR,
     SUCCESS
+}
+
+enum class LoginError(val errorMessage: String) {
+    NOT_FOUND("Not Found"),
+    VERIFY_PHONE_NUMBER("Please verify your phone number"),
+    WRONG_PASSWORD("Your Password is incorrect.")
+}
+
+enum class SignUpError(val errorMessage: String) {
+    PHONE_NUMBER_SYNTAX_ERROR("Syntax error with your phone number."),
+    SELECT_ROLE("Please select ${UserRole.EMPLOYEE} or ${UserRole.EMPLOYER} as your role."),
+    USER_EXISTS_LOGIN("This user already created. You can Login to your account."),
+    SERVER_ERROR("Didn't Succeed.")
 }

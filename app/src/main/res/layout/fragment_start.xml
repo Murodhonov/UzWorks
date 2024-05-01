@@ -43,6 +43,7 @@
             app:layout_constraintTop_toTopOf="@id/logo_layout" />
 
         <ImageView
+            android:src="@drawable/ic_unknown"
             android:id="@+id/profile"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -71,7 +72,6 @@
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-        android:layout_marginBottom="@dimen/_8sdp"
         app:backgroundColor="@color/white"
         app:cornerRadius="@dimen/_8sdp"
         app:corners="all"

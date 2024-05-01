@@ -6,7 +6,7 @@
     android:fillViewport="true"
     android:layout_height="match_parent"
     android:scrollbars="none"
-    tools:context=".fragments.announcement.AddEditWorkerFragment">
+    tools:context=".fragments.announcement.AddWorkerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -56,6 +56,120 @@
             app:layout_constraintTop_toBottomOf="@id/stretcher">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/title_et"
+                android:theme="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:hint="@string/title"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapSentences"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/salary_et"
+                android:layout_width="match_parent"
+                android:theme="@style/TextInputEditTextStyle"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:digits="1234567890"
+                    android:hint="@string/salary"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/working_time_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:theme="@style/TextInputEditTextStyle"
+                android:hint="@string/working_time"
+                app:endIconTint="@color/black_blue"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/working_schedule_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:hint="@string/working_schedule"
+                android:theme="@style/TextInputEditTextStyle"
+                app:endIconTint="@color/black_blue"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tg_user_name_et"
+                android:layout_width="match_parent"
+                android:theme="@style/TextInputEditTextStyle"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_height="wrap_content"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:hint="@string/telegram_username"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phone_number_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIconDrawable="@drawable/ic_copy"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black_blue"
+                android:theme="@style/TextInputEditTextStyle"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:hint="@string/phone_number"
+                    android:editable="false"
+                    android:inputType="none"
+                    android:textSize="@dimen/_10ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/deadline_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,8 +208,8 @@
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:endIconDrawable="@drawable/ic_calendar"
                 app:endIconMode="custom"
-                app:endIconTint="@color/black_blue"
                 app:errorEnabled="false"
+                app:endIconTint="@color/black_blue"
                 android:theme="@style/TextInputEditTextStyle"
                 app:layout_constraintTop_toBottomOf="@id/gender_layout">
 
@@ -109,104 +223,12 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/title_et"
-                android:theme="@style/TextInputEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:hint="@string/title"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/salary_et"
-                android:layout_width="match_parent"
-                android:theme="@style/TextInputEditTextStyle"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:digits="1234567890"
-                    android:hint="@string/salary"
-                    android:imeOptions="actionNext"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
             <include
                 android:id="@+id/gender_layout"
                 layout="@layout/gender_choice_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_10sdp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/working_time_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:theme="@style/TextInputEditTextStyle"
-                android:hint="@string/working_time"
-                app:endIconTint="@color/black_blue"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tg_user_name_et"
-                android:layout_width="match_parent"
-                android:theme="@style/TextInputEditTextStyle"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_height="wrap_content"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:hint="@string/telegram_username"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phone_number_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/TextInputEditTextStyle"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:hint="@string/phone_number"
-                    android:imeOptions="actionNext"
-                    android:inputType="phone"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -227,6 +249,7 @@
                 app:endIconMode="dropdown_menu"
                 android:theme="@style/TextInputEditTextStyle"
                 app:endIconTint="@color/black_blue"
+                app:errorEnabled="false"
                 app:hintEnabled="false">
 
                 <AutoCompleteTextView
@@ -254,6 +277,7 @@
                 android:backgroundTint="@android:color/transparent"
                 app:endIconMode="dropdown_menu"
                 android:theme="@style/TextInputEditTextStyle"
+                app:errorEnabled="false"
                 app:endIconTint="@color/black_blue"
                 app:hintEnabled="false">
 
@@ -291,6 +315,7 @@
                 android:id="@+id/job_category_layout"
                 android:theme="@style/TextInputEditTextStyle"
                 app:endIconTint="@color/black_blue"
+                app:errorEnabled="false"
                 app:hintEnabled="false">
 
                 <AutoCompleteTextView

@@ -2,14 +2,15 @@ package dev.goblingroup.uzworks.vm
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.res.Resources
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,15 +20,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
-import dev.goblingroup.uzworks.models.response.WorkerResponse
-import dev.goblingroup.uzworks.repository.SecuredWorkerRepository
+import dev.goblingroup.uzworks.models.response.WorkerCreateResponse
+import dev.goblingroup.uzworks.repository.AnnouncementRepository
+import dev.goblingroup.uzworks.repository.SecurityRepository
+import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_BIRTHDAY
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.extractDateValue
-import dev.goblingroup.uzworks.utils.formatPhoneNumber
+import dev.goblingroup.uzworks.utils.extractErrorMessage
 import dev.goblingroup.uzworks.utils.formatSalary
 import dev.goblingroup.uzworks.utils.formatTgUsername
+import dev.goblingroup.uzworks.utils.selectFemale
+import dev.goblingroup.uzworks.utils.selectMale
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -36,22 +43,53 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddWorkerViewModel @Inject constructor(
-    private val securedWorkerRepository: SecuredWorkerRepository
+    private val announcementRepository: AnnouncementRepository,
+    private val networkHelper: NetworkHelper,
+    securityRepository: SecurityRepository
 ) : ViewModel() {
 
-    private val addLiveData = MutableLiveData<ApiStatus<WorkerResponse>>(ApiStatus.Loading())
+    private val addLiveData = MutableLiveData<ApiStatus<WorkerCreateResponse>>(ApiStatus.Loading())
 
-    var selectedDistrictId = ""
-    var selectedCategoryId = ""
-    var selectedGender = ""
+    var districtId = ""
+    var jobCategoryId = ""
+    var gender = securityRepository.getGender()
+    var birthdate = securityRepository.getBirthdate().toString()
+    var phoneNumber = securityRepository.getPhoneNumber().toString()
 
-    fun addWorker(workerCreateRequest: WorkerCreateRequest): LiveData<ApiStatus<WorkerResponse>> {
+    /*fun addWorker(workerCreateRequest: WorkerCreateRequest): LiveData<ApiStatus<WorkerCreateResponse>> {
         viewModelScope.launch {
-            val addWorkerResponse = securedWorkerRepository.createWorker(workerCreateRequest)
-            if (addWorkerResponse.isSuccessful) {
-                addLiveData.postValue(ApiStatus.Success(addWorkerResponse.body()))
-            } else {
-                addLiveData.postValue(ApiStatus.Error(Throwable(addWorkerResponse.message())))
+            if (networkHelper.isNetworkConnected()) {
+                Log.d(TAG, "addWorker: creating $workerCreateRequest")
+                val addWorkerResponse = announcementRepository.createWorker(workerCreateRequest)
+                if (addWorkerResponse.isSuccessful) {
+                    Log.d(TAG, "addWorker: succeeded")
+                    addLiveData.postValue(ApiStatus.Success(addWorkerResponse.body()))
+                } else {
+                    addLiveData.postValue(ApiStatus.Error(Throwable(addWorkerResponse.message())))
+                    Log.e(TAG, "addWorker: ${addWorkerResponse.code()}")
+                    Log.e(
+                        TAG,
+                        "addWorker: ${
+                            addWorkerResponse.errorBody()?.extractErrorMessage().toString()
+                        }"
+                    )
+                }
+            }
+        }
+        return addLiveData
+    }*/
+
+    fun addWorker(workerCreateRequest: WorkerCreateRequest): LiveData<ApiStatus<WorkerCreateResponse>> {
+        viewModelScope.launch {
+            if (networkHelper.isNetworkConnected()) {
+                val createWorker = announcementRepository.createWorker(workerCreateRequest)
+                if (createWorker.isSuccessful) {
+                    addLiveData.postValue(ApiStatus.Success(createWorker.body()))
+                } else {
+                    addLiveData.postValue(ApiStatus.Error(Throwable(createWorker.message())))
+                    Log.e(TAG, "addWorker: ${createWorker.errorBody()?.extractErrorMessage()}")
+                    Log.e(TAG, "addWorker: ${createWorker.code()}")
+                }
             }
         }
         return addLiveData
@@ -59,24 +97,32 @@ class AddWorkerViewModel @Inject constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     fun controlInput(
-        context: Context,
-        resources: Resources,
+        fragmentActivity: FragmentActivity,
         deadlineEt: TextInputLayout,
         birthdayEt: TextInputLayout,
         titleEt: TextInputLayout,
         salaryEt: TextInputLayout,
         genderLayout: GenderChoiceLayoutBinding,
         workingTimeEt: TextInputLayout,
-        tgUserNameEt: TextInputLayout,
-        phoneNumberEt: TextInputLayout
+        workingScheduleEt: TextInputLayout,
+        tgUserNameEt: TextInputLayout
     ) {
         deadlineEt.clear()
         birthdayEt.clear()
 
+        if (gender != GenderEnum.UNKNOWN.code) {
+            genderLayout.root.visibility = View.GONE
+        }
+
+        if (birthdate != DEFAULT_BIRTHDAY) {
+            birthdayEt.visibility = View.GONE
+            birthdayEt.isErrorEnabled = false
+        }
+
         deadlineEt.editText?.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 val datePickerDialog = DatePickerDialog(
-                    context,
+                    fragmentActivity,
                     R.style.DatePickerDialogTheme,
                     { _, year, month, dayOfMonth ->
                         val selectedCalendar = Calendar.getInstance().apply {
@@ -87,10 +133,11 @@ class AddWorkerViewModel @Inject constructor(
 
                         if (selectedCalendar.before(currentCalendar)) {
                             Toast.makeText(
-                                context,
-                                "Cannot select date before current date",
+                                fragmentActivity,
+                                fragmentActivity.resources.getString(R.string.invalid_deadline),
                                 Toast.LENGTH_SHORT
                             ).show()
+                            deadlineEt.isErrorEnabled = true
                         } else {
                             val formatter = SimpleDateFormat(
                                 "dd.MM.yyyy", Locale.getDefault()
@@ -102,7 +149,7 @@ class AddWorkerViewModel @Inject constructor(
                     deadlineEt.editText?.text.toString()
                         .extractDateValue(DateEnum.YEAR.dateLabel),
                     deadlineEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.MONTH.dateLabel),
+                        .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
                     deadlineEt.editText?.text.toString()
                         .extractDateValue(DateEnum.DATE.dateLabel)
                 )
@@ -115,7 +162,7 @@ class AddWorkerViewModel @Inject constructor(
         birthdayEt.editText?.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 val datePickerDialog = DatePickerDialog(
-                    context,
+                    fragmentActivity,
                     R.style.DatePickerDialogTheme,
                     { _, year, month, dayOfMonth ->
                         val selectedCalendar = Calendar.getInstance().apply {
@@ -129,16 +176,17 @@ class AddWorkerViewModel @Inject constructor(
                             birthdayEt.editText?.setText(formatter.format(selectedCalendar.time))
                         } else {
                             Toast.makeText(
-                                context,
-                                resources.getString(R.string.unavailable_date),
+                                fragmentActivity,
+                                fragmentActivity.resources.getString(R.string.birthdate_requirement),
                                 Toast.LENGTH_SHORT
                             ).show()
+                            birthdayEt.isErrorEnabled = true
                         }
                     },
                     birthdayEt.editText?.text.toString()
                         .extractDateValue(DateEnum.YEAR.dateLabel),
                     birthdayEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.MONTH.dateLabel),
+                        .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
                     birthdayEt.editText?.text.toString()
                         .extractDateValue(DateEnum.DATE.dateLabel)
                 )
@@ -167,51 +215,11 @@ class AddWorkerViewModel @Inject constructor(
                 val formattedSalary = s?.filter { !it.isWhitespace() }.toString().formatSalary()
                 salaryEt.editText?.setText(formattedSalary)
                 salaryEt.editText?.setSelection(formattedSalary.length)
+                if (formattedSalary.isNotEmpty()) salaryEt.isErrorEnabled = false
 
                 isFormatting = false
             }
 
-        })
-
-        phoneNumberEt.editText?.setText(resources.getString(R.string.phone_number_prefix))
-        phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
-            private var isFormatting = false
-
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-
-            }
-
-            override fun onTextChanged(
-                s: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (isFormatting)
-                    return
-
-                isFormatting = true
-                val newText = s.toString().filter { !it.isWhitespace() }
-                val oldText =
-                    phoneNumberEt.editText?.tag.toString().filter { !it.isWhitespace() }
-                val formattedPhone =
-                    s?.filter { !it.isWhitespace() }.toString()
-                        .formatPhoneNumber(newText.length < oldText.length)
-                phoneNumberEt.editText?.setText(formattedPhone)
-                phoneNumberEt.editText?.setSelection(formattedPhone.length)
-                phoneNumberEt.tag = formattedPhone
-
-                isFormatting = false
-            }
         })
 
         tgUserNameEt.editText?.addTextChangedListener(object : TextWatcher {
@@ -232,6 +240,7 @@ class AddWorkerViewModel @Inject constructor(
                 val formattedTgUsername = s.toString().formatTgUsername()
                 tgUserNameEt.editText?.setText(formattedTgUsername)
                 tgUserNameEt.editText?.setSelection(formattedTgUsername.length)
+                if (formattedTgUsername.isNotEmpty()) tgUserNameEt.isErrorEnabled = false
 
                 isFormatting = false
             }
@@ -240,29 +249,15 @@ class AddWorkerViewModel @Inject constructor(
 
         genderLayout.apply {
             maleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.FEMALE.label || selectedGender.isEmpty()) {
-                    selectedGender = GenderEnum.MALE.label
-                    maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                    femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                    maleCircle.visibility = View.VISIBLE
-                    femaleCircle.visibility = View.GONE
-                    maleTv.setTextColor(resources.getColor(R.color.black_blue))
-                    femaleTv.setTextColor(resources.getColor(R.color.text_color))
-                    maleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                    femaleBtn.strokeColor = resources.getColor(R.color.text_color)
+                if (gender != GenderEnum.MALE.code) {
+                    gender = GenderEnum.MALE.code
+                    selectMale(fragmentActivity.resources)
                 }
             }
             femaleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.MALE.label || selectedGender.isEmpty()) {
-                    selectedGender = GenderEnum.FEMALE.label
-                    femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                    maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                    femaleCircle.visibility = View.VISIBLE
-                    maleCircle.visibility = View.GONE
-                    femaleTv.setTextColor(resources.getColor(R.color.black_blue))
-                    maleTv.setTextColor(resources.getColor(R.color.text_color))
-                    femaleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                    maleBtn.strokeColor = resources.getColor(R.color.text_color)
+                if (gender != GenderEnum.FEMALE.code) {
+                    gender = GenderEnum.FEMALE.code
+                    selectFemale(fragmentActivity.resources)
                 }
             }
         }
@@ -285,19 +280,18 @@ class AddWorkerViewModel @Inject constructor(
             }
         }
 
+        workingScheduleEt.editText?.doAfterTextChanged {
+            if (it.toString().isNotEmpty()) {
+                workingScheduleEt.isErrorEnabled = false
+            }
+        }
+
         tgUserNameEt.editText?.doAfterTextChanged {
             if (it.toString().isNotEmpty()) {
                 tgUserNameEt.isErrorEnabled = false
             }
         }
-
-        phoneNumberEt.editText?.doAfterTextChanged {
-            if (it.toString().filter { !it.isWhitespace() }.length == 13) {
-                phoneNumberEt.isErrorEnabled = false
-            }
-        }
     }
-
 
     private fun checkBirthdate(selectedCalendar: Calendar): Boolean {
         val minimumAge = 16
@@ -307,15 +301,14 @@ class AddWorkerViewModel @Inject constructor(
     }
 
     fun isFormValid(
-        context: Context,
         resources: Resources,
         deadlineEt: TextInputLayout,
         birthdayEt: TextInputLayout,
         titleEt: TextInputLayout,
         salaryEt: TextInputLayout,
         workingTimeEt: TextInputLayout,
+        workingScheduleEt: TextInputLayout,
         tgUserNameEt: TextInputLayout,
-        phoneNumberEt: TextInputLayout,
         districtLayout: TextInputLayout,
         jobCategoryLayout: TextInputLayout,
     ): Boolean {
@@ -323,9 +316,13 @@ class AddWorkerViewModel @Inject constructor(
             deadlineEt.error = resources.getString(R.string.deadline_error)
             deadlineEt.isErrorEnabled = true
         }
-        if (birthdayEt.editText?.text.toString().isEmpty()) {
+        if (birthdayEt.visibility == View.VISIBLE && birthdayEt.editText?.text.toString()
+                .isEmpty()
+        ) {
             birthdayEt.error = resources.getString(R.string.birthday_error)
             birthdayEt.isErrorEnabled = true
+        } else {
+            birthdayEt.isErrorEnabled = false
         }
         if (titleEt.editText?.text.toString().isEmpty()) {
             titleEt.error = resources.getString(R.string.title_error)
@@ -335,44 +332,34 @@ class AddWorkerViewModel @Inject constructor(
             salaryEt.error = resources.getString(R.string.salary_error)
             salaryEt.isErrorEnabled = true
         }
-        if (selectedGender.isEmpty()) {
-            Toast.makeText(
-                context,
-                resources.getString(R.string.confirm_gender),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
         if (workingTimeEt.editText?.text.toString().isEmpty()) {
             workingTimeEt.error = resources.getString(R.string.working_time_error)
             workingTimeEt.isErrorEnabled = true
+        }
+        if (workingScheduleEt.editText?.text.toString().isEmpty()) {
+            workingScheduleEt.error = resources.getString(R.string.working_schedule_error)
+            workingScheduleEt.isErrorEnabled = true
         }
         if (tgUserNameEt.editText?.text.toString().length <= 1) {
             tgUserNameEt.error = resources.getString(R.string.tg_username_error)
             tgUserNameEt.isErrorEnabled = true
         }
-        if (phoneNumberEt.editText?.text.toString().filter { !it.isWhitespace() }.length != 13) {
-            phoneNumberEt.error = resources.getString(R.string.phone_number_error)
-            phoneNumberEt.isErrorEnabled = true
-        }
-        if (selectedDistrictId.isEmpty()) {
+        if (districtId.isEmpty()) {
             districtLayout.error = resources.getString(R.string.district_error)
             districtLayout.isErrorEnabled = true
-            districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
         }
-        if (selectedCategoryId.isEmpty()) {
+        if (jobCategoryId.isEmpty()) {
             jobCategoryLayout.error = resources.getString(R.string.job_category_error)
-//            jobCategoryLayout.isErrorEnabled = true
-            districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
+            jobCategoryLayout.isErrorEnabled = true
         }
         return !deadlineEt.isErrorEnabled &&
                 !birthdayEt.isErrorEnabled &&
                 !titleEt.isErrorEnabled &&
                 !salaryEt.isErrorEnabled &&
                 !workingTimeEt.isErrorEnabled &&
+                !workingScheduleEt.isErrorEnabled &&
                 !tgUserNameEt.isErrorEnabled &&
-                !phoneNumberEt.isErrorEnabled &&
-                selectedGender.isNotEmpty() &&
-                selectedCategoryId.isNotEmpty()
+                !jobCategoryLayout.isErrorEnabled &&
+                !districtLayout.isErrorEnabled
     }
-
 }

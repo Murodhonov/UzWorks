@@ -1,6 +1,5 @@
 package dev.goblingroup.uzworks.fragments.profile
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,13 +12,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentProfileBinding
 import dev.goblingroup.uzworks.models.response.UserResponse
-import dev.goblingroup.uzworks.utils.ConstValues.ANNOUNCEMENT_ADDING
-import dev.goblingroup.uzworks.utils.ConstValues.ANNOUNCEMENT_ADD_EDIT_STATUS
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.ProfileViewModel
-import kotlin.math.log
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -30,8 +25,6 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val profileViewModel: ProfileViewModel by viewModels()
-
-    private var userResponse: UserResponse? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,9 +51,6 @@ class ProfileFragment : Fragment() {
             }
 
             personalInfoBtn.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putParcelable("user_response", userResponse)
-                Log.d(TAG, "onViewCreated: $userResponse")
                 findNavController().navigate(
                     resId = R.id.action_startFragment_to_personalInfoFragment,
                     args = null
@@ -96,7 +86,6 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume: checking UzWorks")
         profileViewModel.userLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 is ApiStatus.Error -> {
@@ -108,71 +97,32 @@ class ProfileFragment : Fragment() {
                 }
 
                 is ApiStatus.Success -> {
-                    userResponse = it.response
-                    succeeded()
+                    succeeded(it.response!!)
                 }
             }
         }
     }
 
-    private fun succeeded() {
+    private fun succeeded(response: UserResponse) {
         binding.apply {
-            userNameTv.text = "${userResponse?.firstName} ${userResponse?.lastName}"
-            Log.d(TAG, "succeeded: $userResponse")
-            when (userResponse?.gender ?: "") {
-                GenderEnum.MALE.label -> avatarIv.setImageResource(R.drawable.ic_male)
-                GenderEnum.FEMALE.label -> avatarIv.setImageResource(R.drawable.ic_female)
+            userNameTv.text = "${response?.firstName} ${response?.lastName}"
+            when (response.gender ?: "") {
+                GenderEnum.MALE.code -> avatarIv.setImageResource(R.drawable.ic_male)
+                GenderEnum.FEMALE.code -> avatarIv.setImageResource(R.drawable.ic_female)
             }
         }
     }
 
     private fun addAnnouncement() {
-        val bundle = Bundle()
-        bundle.putString(ANNOUNCEMENT_ADD_EDIT_STATUS, ANNOUNCEMENT_ADDING)
         val direction = if (profileViewModel.isEmployee()) {
-            R.id.action_startFragment_to_addEditWorkerFragment
+            R.id.action_startFragment_to_addWorkerFragment
         } else {
-            R.id.action_startFragment_to_addEditJobFragment
+            R.id.action_startFragment_to_addJobFragment
         }
         findNavController().navigate(
             resId = direction,
-            args = bundle
+            args = null
         )
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.d(TAG, "onDetach: checking UzWorks")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause: checking UzWorks")
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d(TAG, "onAttach: checking UzWorks")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart: checking UzWorks")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop: checking UzWorks")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy: checking UzWorks")
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate: checking UzWorks")
     }
 
     override fun onDestroyView() {

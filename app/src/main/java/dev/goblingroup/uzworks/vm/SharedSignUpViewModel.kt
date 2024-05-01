@@ -1,6 +1,11 @@
 package dev.goblingroup.uzworks.vm
 
+import android.content.Context
 import android.content.res.Resources
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
+import android.widget.Toast
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LiveData
@@ -11,9 +16,14 @@ import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.models.request.SignUpRequest
+import dev.goblingroup.uzworks.models.request.VerifyPhoneRequest
+import dev.goblingroup.uzworks.models.response.ErrorResponse
 import dev.goblingroup.uzworks.models.response.SignUpResponse
 import dev.goblingroup.uzworks.repository.AuthRepository
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.UserRole
+import dev.goblingroup.uzworks.utils.extractErrorMessage
+import dev.goblingroup.uzworks.utils.formatPhoneNumber
 import dev.goblingroup.uzworks.utils.isStrongPassword
 import dev.goblingroup.uzworks.utils.splitFullName
 import kotlinx.coroutines.launch
@@ -21,17 +31,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SharedSignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    private val signUpLiveData =
-        MutableLiveData<ApiStatus<SignUpResponse>>(ApiStatus.Loading())
+    private val _signUpLiveData =
+        MutableLiveData<AuthApiStatus<SignUpResponse>>(AuthApiStatus.Loading())
+
+    private val _verifyPhoneLiveData = MutableLiveData<AuthApiStatus<Unit>>(AuthApiStatus.Loading())
 
     private val _fullName = MutableLiveData("")
     val fullName get() = _fullName
 
-    private val _username = MutableLiveData("")
-    val username get() = _username
+    private val _phoneNumber = MutableLiveData("")
+    val phoneNumber get() = _phoneNumber
 
     private val _password = MutableLiveData("")
     val password get() = _password
@@ -42,16 +55,44 @@ class SharedSignUpViewModel @Inject constructor(
     private val _selectedRole = MutableLiveData("")
     val selectedRole get() = _selectedRole
 
-    fun signup(signupRequest: SignUpRequest): LiveData<ApiStatus<SignUpResponse>> {
+    suspend fun signup(signupRequest: SignUpRequest): LiveData<AuthApiStatus<SignUpResponse>> {
         viewModelScope.launch {
-            val response = authRepository.signup(signupRequest)
-            if (response.isSuccessful) {
-                signUpLiveData.postValue(ApiStatus.Success(response.body()))
-            } else {
-                signUpLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+            if (networkHelper.isNetworkConnected()) {
+                val response = authRepository.signup(signupRequest)
+                if (response.isSuccessful) {
+                    _signUpLiveData.postValue(AuthApiStatus.Success(response.body()))
+                } else {
+                    _signUpLiveData.postValue(
+                        AuthApiStatus.Error(
+                            ErrorResponse(
+                                response.code(),
+                                response.errorBody()?.extractErrorMessage().toString()
+                            )
+                        )
+                    )
+                }
             }
         }
-        return signUpLiveData
+        return _signUpLiveData
+    }
+
+    suspend fun verifyPhone(verifyPhoneRequest: VerifyPhoneRequest): LiveData<AuthApiStatus<Unit>> {
+        if (networkHelper.isNetworkConnected()) {
+            val response = authRepository.verifyPhone(verifyPhoneRequest)
+            if (response.isSuccessful) {
+                _verifyPhoneLiveData.postValue(AuthApiStatus.Success(response.body()))
+            } else {
+                _verifyPhoneLiveData.postValue(
+                    AuthApiStatus.Error(
+                        ErrorResponse(
+                            code = response.code(),
+                            message = response.errorBody()?.extractErrorMessage().toString()
+                        )
+                    )
+                )
+            }
+        }
+        return _verifyPhoneLiveData
     }
 
     fun isFormValid(
@@ -136,11 +177,46 @@ class SharedSignUpViewModel @Inject constructor(
             }
         }
 
-        phoneNumberEt.editText?.addTextChangedListener {
-            if (phoneNumberEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                phoneNumberEt.isErrorEnabled = false
+        phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
+            private var isFormatting = false
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+
             }
-        }
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isFormatting) {
+                    return
+                }
+
+                isFormatting = true
+                val newText = s.toString().filter { !it.isWhitespace() }
+                val oldText =
+                    phoneNumberEt.editText?.tag.toString().filter { !it.isWhitespace() }
+                val formattedPhone =
+                    s?.filter { !it.isWhitespace() }.toString()
+                        .formatPhoneNumber(newText.length < oldText.length)
+                phoneNumberEt.editText?.setText(formattedPhone)
+                phoneNumberEt.editText?.setSelection(formattedPhone.length)
+                phoneNumberEt.tag = formattedPhone
+
+                isFormatting = false
+            }
+        })
 
         passwordEt.editText?.addTextChangedListener {
             if (passwordEt.isErrorEnabled && it.toString().isNotEmpty()) {
@@ -161,8 +237,8 @@ class SharedSignUpViewModel @Inject constructor(
         _fullName.value = fullName
     }
 
-    fun setUsername(username: String) {
-        _username.value = username
+    fun setPhoneNumber(username: String) {
+        _phoneNumber.value = username
     }
 
     fun setPassword(password: String) {
@@ -184,5 +260,22 @@ class SharedSignUpViewModel @Inject constructor(
         selectedRole.value == UserRole.EMPLOYEE.roleName || selectedRole.value.toString().isEmpty()
 
     fun isRoleSelected() = selectedRole.value.toString().isNotEmpty()
+    fun isCodeValid(
+        context: Context,
+        resources: Resources,
+        code1: EditText,
+        code2: EditText,
+        code3: EditText,
+        code4: EditText
+    ): Boolean {
+        if (code1.text.isEmpty() || code2.text.isEmpty() || code3.text.isEmpty() || code4.text.isEmpty()) {
+            Toast.makeText(
+                context,
+                resources.getString(R.string.verification_code_error),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        return code1.text.isNotEmpty() && code2.text.isNotEmpty() && code3.text.isNotEmpty() && code4.text.isNotEmpty()
+    }
 
 }

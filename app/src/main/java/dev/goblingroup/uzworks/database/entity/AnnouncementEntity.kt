@@ -15,7 +15,7 @@ data class AnnouncementEntity(
     val districtName: String? = null,
     @ColumnInfo(name = "region_name")
     val regionName: String? = null,
-    val gender: String? = null,
+    val gender: Int? = null,
     val salary: Int,
     val title: String? = null,
     @ColumnInfo(name = "announcement_type")

@@ -23,7 +23,7 @@ fun JobResponse.mapToEntity(): AnnouncementEntity {
         title = title,
         announcementType = AnnouncementEnum.JOB.announcementType,
         isTop = isTop,
-        pictureResId = getImage(AnnouncementEnum.JOB.announcementType, ""),
+        pictureResId = getImage(AnnouncementEnum.JOB.announcementType, gender),
     )
 }
 

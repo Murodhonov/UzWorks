@@ -17,6 +17,7 @@
     <string name="gender">Jins</string>
     <string name="male">Erkak</string>
     <string name="female">Ayol</string>
+    <string name="unknown">Ko\'rsatilmagan</string>
     <string name="send_message">Xabar yozish</string>
     <string name="share">Ulashish</string>
     <string name="see_more">Batafsil ko\'rish</string>
@@ -124,7 +125,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="current_location">Joriy manzil</string>
     <string name="select_map">Xaritadan tanlash</string>
     <string name="loading">Yuklanmoqda</string>
-    <string name="incorrect_phone_number_password">Telefon raqami yoki parol noto\'g\'ri</string>
+    <string name="user_not_found">Foydalanuvchi topilmadi</string>
     <string name="greeting">Assalomu alaykum</string>
     <string name="subscribers_count">Obunachilar soni</string>
     <string name="enter_firstname">Ismingizni kiriting</string>
@@ -160,7 +161,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="benefit_error">Foydani kiriting</string>
     <string name="set_location">Tayyor</string>
     <string name="no_internet">Internet aloqasi yo\'q</string>
-    <string name="unavailable_date">Bu sanani tanlab boʻlmaydi, kamida 16 yil oldinni tanlang</string>
+    <string name="unavailable_date">Bu sanani tanlab bo\'lmaydi, kamida 16 yil oldinni tanlang</string>
     <string name="enter_phone_number_password">Platformaga kirish uchun telefon raqamingiz va parolingizni kiriting</string>
     <string name="sign_up_floor">Profil yaratish uchun ismingizni, telefon raqamingizni va shaxsiy parolingizni kiriting</string>
     <string name="second">sekund</string>
@@ -184,7 +185,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="end_date_error">Tugagan vaqtini kiriting</string>
     <string name="address_failed">Manzil yuklanmadi</string>
     <string name="close">Yopish</string>
-    <string name="phone_number_exist">Telefon raqami allaqachon ishlatilgan, boshqasini ishlatib ko\'ring</string>
+    <string name="user_exist">Bu telefon raqami allaqachon ro\'yxatdan o\'tgan, agar bu sizning raqamingiz bo\'lsa, hisobingizga kirishingiz mumkin, aks holda ro\'yxatdan o\'tish uchun boshqa raqamni tanlashingiz mumkin</string>
     <string name="update_succeeded">Muvaffaqiyatli yangilandi</string>
     <string name="current_password_wrong">Joriy parol noto\'g\'ri</string>
     <string name="password_updated">Parol muvafaqiyatli o\'zgartirildi</string>
@@ -197,4 +198,15 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="verification_subtitle">Iltimos, telefon raqamingizga yuborilgan tasdiqlash kodini kiriting</string>
     <string name="set_new_password">Yangi parol o\'rnating</string>
     <string name="submit">Yuborish</string>
+    <string name="reset_password_title">Tasdiqlash kodini kiriting va yangi parol o\'rnating</string>
+    <string name="verify_set_password">Tasdiqlash va saqlash</string>
+    <string name="verification_code_error">Tasdiqlash kodini kiriting</string>
+    <string name="verification_code_incorrect">Tasdiqlash kodi noto\'g\'ri</string>
+    <string name="password_incorrect">Parol noto\'g\'ri</string>
+    <string name="phone_verified">Raqamingiz tasdiqlandi, endi siz hisobingizga kirishingiz mumkin</string>
+    <string name="server_problem">Serverda kutilmagan xatolik yuz berdi, keyinroq qayta urinib ko\'ring</string>
+    <string name="birthdate_requirement">Siz kamida 16 yoshda bo\'lishingiz kerak</string>
+    <string name="phone_number_copied">Telefon raqami nusxalandi</string>
+    <string name="update_user_failed">Nimadir xato ketdi, keyinroq qayta urining</string>
+    <string name="invalid_deadline">Muddati bugundan oldin bo\'lishi mumkin emas</string>
 </resources>

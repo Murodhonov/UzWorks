@@ -3,7 +3,9 @@ package dev.goblingroup.uzworks.repository
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import dev.goblingroup.uzworks.database.dao.AnnouncementDao
-import dev.goblingroup.uzworks.networking.SecuredUserService
+import dev.goblingroup.uzworks.networking.UserService
+import dev.goblingroup.uzworks.utils.ConstValues.BEARER
+import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.UserRole
 import java.lang.reflect.Type
 import javax.inject.Inject
@@ -13,10 +15,12 @@ class SecurityRepository @Inject constructor(
     private val gson: Gson,
     private val type: Type,
     private val announcementDao: AnnouncementDao,
-    private val securedUserService: SecuredUserService
+    private val userService: UserService
 ) {
 
-    suspend fun getUser() = securedUserService.getUserById(getUserId())
+    suspend fun getUser() = userService.getUserById(getToken(), getUserId())
+
+    fun getToken() = "$BEARER ${sharedPreferences.getString("token", null).toString()}"
 
     fun getUserRoles(): List<String> {
         val userRolesJson = sharedPreferences.getString("user_roles", null)
@@ -68,17 +72,22 @@ class SecurityRepository @Inject constructor(
         return sharedPreferences.getString("language_code", null)
     }
 
-    fun setGender(gender: Int): Boolean {
-        return sharedPreferences.edit().putInt("gender", gender).commit()
-    }
+    fun setGender(gender: Int) = sharedPreferences.edit().putInt("gender", gender).commit()
 
-    fun getGender(): String? {
-        return sharedPreferences.getString("gender", null)
-    }
+    fun getGender() = sharedPreferences.getInt("gender", GenderEnum.UNKNOWN.code)
 
-    private fun listToJson(list: List<String>): String {
-        return gson.toJson(list)
-    }
+
+    fun setBirthdate(birthDate: String) =
+        sharedPreferences.edit().putString("birthdate", birthDate).commit()
+
+    fun getBirthdate(): String? = sharedPreferences.getString("birthdate", null)
+
+    fun setPhoneNumber(phoneNumber: String) =
+        sharedPreferences.edit().putString("phone_number", phoneNumber).commit()
+
+    fun getPhoneNumber() = sharedPreferences.getString("phone_number", null)
+
+    private fun listToJson(list: List<String>) = gson.toJson(list)
 
     private fun jsonToList(jsonString: String): List<String> {
         return gson.fromJson(jsonString, type)

@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.vm
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,8 @@ import dev.goblingroup.uzworks.adapter.view_pager_adapters.StartPagerAdapter
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.repository.ProfileRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.utils.extractErrorMessage
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,9 +31,12 @@ class StartViewModel @Inject constructor(
         viewModelScope.launch {
             val response = profileRepository.getUserById(securityRepository.getUserId())
             if (response.isSuccessful) {
-                userLiveData.postValue(ApiStatus.Success(response.body()))
+                _userLiveData.postValue(ApiStatus.Success(response.body()))
             } else {
-                userLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                _userLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                Log.e(TAG, "fetchUser: ${response.errorBody()?.extractErrorMessage()}")
+                Log.e(TAG, "fetchUser: ${response.code()}")
+                Log.e(TAG, "fetchUser: ${response.message()}")
             }
         }
     }

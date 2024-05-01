@@ -17,6 +17,7 @@
     <string name="gender">Gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="unknown">Not specified</string>
     <string name="send_message">Send message</string>
     <string name="share">Share</string>
     <string name="see_more">See more</string>
@@ -124,7 +125,7 @@ The information displayed to you is determined by the role you choose</string>
     <string name="current_location">Current address</string>
     <string name="select_map">Select on map</string>
     <string name="loading">Loading</string>
-    <string name="incorrect_phone_number_password">Phone number or password is incorrect</string>
+    <string name="user_not_found">User not found</string>
     <string name="greeting">Hello</string>
     <string name="subscribers_count">Number of subscribers</string>
     <string name="enter_firstname">Enter your name</string>
@@ -184,7 +185,7 @@ The information displayed to you is determined by the role you choose</string>
     <string name="end_date_error">Select end date</string>
     <string name="address_failed">Failed to load address</string>
     <string name="close">Close</string>
-    <string name="phone_number_exist">Phone number has already been used, try to use another</string>
+    <string name="user_exist">This phone number has already been registered, if this is your number you can login to your account, otherwise you can choose another number to register</string>
     <string name="update_succeeded">Successfully updated</string>
     <string name="current_password_wrong">Current password is wrong</string>
     <string name="password_updated">Password successfully updated</string>
@@ -197,4 +198,15 @@ The information displayed to you is determined by the role you choose</string>
     <string name="verification_subtitle">Please enter the verification code sent to your phone number</string>
     <string name="set_new_password">Set new password</string>
     <string name="submit">Submit</string>
+    <string name="reset_password_title">Enter the verification code and set a new password</string>
+    <string name="verify_set_password">Verify and save</string>
+    <string name="verification_code_error">Enter verification code</string>
+    <string name="verification_code_incorrect">Verification code is incorrect</string>
+    <string name="password_incorrect">Password is incorrect</string>
+    <string name="phone_verified">Your number verified, now you can log in to your account</string>
+    <string name="server_problem">There is an unexpected error from server, please try again later</string>
+    <string name="birthdate_requirement">You need to be at least 16 years old</string>
+    <string name="phone_number_copied">Phone number copied</string>
+    <string name="update_user_failed">Something went wrong, try again later</string>
+    <string name="invalid_deadline">Deadline cannot be before today</string>
 </resources>

@@ -110,7 +110,7 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
             titleTv.text = jobResponse?.title
             jobCategoryTv.text = jobResponse?.categoryName
             genderTv.text =
-                if (jobResponse?.gender == GenderEnum.MALE.label) resources.getString(R.string.male) else resources.getString(
+                if (jobResponse?.gender == GenderEnum.MALE.code) resources.getString(R.string.male) else resources.getString(
                     R.string.female
                 )
             addressTv.text = "${jobResponse?.regionName}, ${jobResponse?.districtName}"

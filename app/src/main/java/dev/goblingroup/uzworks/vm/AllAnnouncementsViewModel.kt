@@ -7,13 +7,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AllAnnouncementsViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository,
-    private val securityRepository: SecurityRepository
+    securityRepository: SecurityRepository,
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
     private val _announcementLiveData = MutableLiveData<ApiStatus<List<Any>>>(ApiStatus.Loading())
@@ -29,22 +31,26 @@ class AllAnnouncementsViewModel @Inject constructor(
 
     private fun loadWorkers() {
         viewModelScope.launch {
-            val response = announcementRepository.getAllWorkers()
-            if (response.isSuccessful) {
-                _announcementLiveData.postValue(ApiStatus.Success(response.body()))
-            } else {
-                _announcementLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+            if (networkHelper.isNetworkConnected()) {
+                val response = announcementRepository.getAllWorkers()
+                if (response.isSuccessful) {
+                    _announcementLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    _announcementLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             }
         }
     }
 
     private fun loadJobs() {
         viewModelScope.launch {
-            val response = announcementRepository.getAllJobs()
-            if (response.isSuccessful) {
-                _announcementLiveData.postValue(ApiStatus.Success(response.body()))
-            } else {
-                _announcementLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+            if (networkHelper.isNetworkConnected()) {
+                val response = announcementRepository.getAllJobs()
+                if (response.isSuccessful) {
+                    _announcementLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    _announcementLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             }
         }
     }

@@ -29,9 +29,11 @@ class HomeFragmentAdapter(
                         is ApiStatus.Error -> {
 
                         }
+
                         is ApiStatus.Loading -> {
 
                         }
+
                         is ApiStatus.Success -> {
                             greetingTv.text =
                                 "${resources.getString(R.string.greeting)}\n${it.response}"
@@ -129,6 +131,9 @@ class HomeFragmentAdapter(
                                 onItemClick.invoke(announcementId, announcementType)
                             }
                             announcementRv.adapter = adapter
+                            if (adapter.itemCount == 0) {
+                                noAnnouncementsTv.visibility = View.VISIBLE
+                            }
                         }
                     }
                 }

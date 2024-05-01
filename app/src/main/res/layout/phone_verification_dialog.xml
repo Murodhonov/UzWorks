@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_dialog_background"
-    android:paddingHorizontal="@dimen/_20sdp"
-    android:paddingVertical="@dimen/_30sdp">
+    android:padding="@dimen/_20sdp">
 
     <TextView
         android:id="@+id/verification_title"
@@ -30,95 +29,108 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/verification_title" />
 
-    <LinearLayout
-        android:id="@+id/code_layout"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/code1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_20sdp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/verification_subtitle">
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:autofillHints="phone"
+        android:background="@drawable/edit_text_background"
+        android:backgroundTint="@color/white_blue"
+        android:digits="0123456789"
+        android:hint="@string/zero"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="1"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black_blue"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/verification_subtitle" />
 
-        <EditText
-            android:id="@+id/code1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:autofillHints="phone"
-            android:background="@drawable/edit_text_background"
-            android:backgroundTint="@color/white_blue"
-            android:digits="0123456789"
-            android:hint="@string/zero"
-            android:imeOptions="actionNext"
-            android:inputType="number"
-            android:maxLength="1"
-            android:padding="@dimen/_10sdp"
-            android:textColor="@color/black_blue" />
+    <EditText
+        android:id="@+id/code2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:autofillHints="phone"
+        android:background="@drawable/edit_text_background"
+        android:backgroundTint="@color/white_blue"
+        android:digits="0123456789"
+        android:hint="@string/zero"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="1"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black_blue"
+        app:layout_constraintLeft_toRightOf="@id/code1"
+        app:layout_constraintRight_toLeftOf="@id/code3"
+        app:layout_constraintTop_toTopOf="@id/code1" />
 
-        <EditText
-            android:id="@+id/code2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:autofillHints="phone"
-            android:background="@drawable/edit_text_background"
-            android:backgroundTint="@color/white_blue"
-            android:digits="0123456789"
-            android:hint="@string/zero"
-            android:imeOptions="actionNext"
-            android:inputType="number"
-            android:maxLength="1"
-            android:padding="@dimen/_10sdp"
-            android:textColor="@color/black_blue" />
+    <EditText
+        android:id="@+id/code3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:autofillHints="phone"
+        android:background="@drawable/edit_text_background"
+        android:backgroundTint="@color/white_blue"
+        android:digits="0123456789"
+        android:hint="@string/zero"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="1"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black_blue"
+        app:layout_constraintLeft_toRightOf="@id/code2"
+        app:layout_constraintRight_toLeftOf="@id/code4"
+        app:layout_constraintTop_toTopOf="@id/code1" />
 
-        <EditText
-            android:id="@+id/code3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:autofillHints="phone"
-            android:background="@drawable/edit_text_background"
-            android:backgroundTint="@color/white_blue"
-            android:digits="0123456789"
-            android:hint="@string/zero"
-            android:imeOptions="actionNext"
-            android:inputType="number"
-            android:maxLength="1"
-            android:padding="@dimen/_10sdp"
-            android:textColor="@color/black_blue" />
+    <EditText
+        android:id="@+id/code4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:autofillHints="phone"
+        android:background="@drawable/edit_text_background"
+        android:backgroundTint="@color/white_blue"
+        android:digits="0123456789"
+        android:hint="@string/zero"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:maxLength="1"
+        android:padding="@dimen/_15sdp"
+        android:textColor="@color/black_blue"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/code1" />
 
-        <EditText
-            android:id="@+id/code4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:autofillHints="phone"
-            android:background="@drawable/edit_text_background"
-            android:backgroundTint="@color/white_blue"
-            android:digits="0123456789"
-            android:hint="@string/zero"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:maxLength="1"
-            android:padding="@dimen/_10sdp"
-            android:textColor="@color/black_blue" />
-
-    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/enabled_button_background"
+        android:backgroundTint="@color/red"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10ssp"
+        android:theme="@style/ButtonStyle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/code1" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submit_btn"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_30sdp"
+        android:paddingHorizontal="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_30sdp"
         android:background="@drawable/enabled_button_background"
         android:text="@string/submit"
         android:textColor="@color/white"
         android:textSize="@dimen/_10ssp"
         android:theme="@style/ButtonStyle"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/code_layout" />
+        app:layout_constraintTop_toBottomOf="@id/code1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,9 +7,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
-import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
@@ -23,16 +20,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
-import dev.goblingroup.uzworks.models.request.JobEditRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
-import dev.goblingroup.uzworks.repository.SecuredJobRepository
 import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.extractDateValue
+import dev.goblingroup.uzworks.utils.extractErrorMessage
 import dev.goblingroup.uzworks.utils.formatPhoneNumber
 import dev.goblingroup.uzworks.utils.formatSalary
 import dev.goblingroup.uzworks.utils.formatTgUsername
@@ -45,9 +42,9 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class AddEditJobViewModel @Inject constructor(
+class AddJobViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository,
-    private val securedJobRepository: SecuredJobRepository
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
     private val TAG = "SecuredDistrictViewMode"
@@ -58,9 +55,8 @@ class AddEditJobViewModel @Inject constructor(
     private val editLiveData =
         MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
-    lateinit var status: String
     lateinit var jobId: String
-    var selectedGender = ""
+    var selectedGender: Int? = null
 
     private val _jobLiveData = MutableLiveData<ApiStatus<JobResponse>>(ApiStatus.Loading())
 
@@ -84,8 +80,8 @@ class AddEditJobViewModel @Inject constructor(
     private val _districtId = MutableLiveData("")
     val districtId: LiveData<String> get() = _districtId
 
-    private val _gender = MutableLiveData("")
-    val gender: LiveData<String> get() = _gender
+    private val _gender = MutableLiveData(0)
+    val gender: LiveData<Int> get() = _gender
 
     private val _maxAge = MutableLiveData(0)
     val maxAge: LiveData<Int> get() = _maxAge
@@ -123,41 +119,21 @@ class AddEditJobViewModel @Inject constructor(
     private val _districtIndex = MutableLiveData(0)
     val districtIndex: LiveData<Int> get() = _districtIndex
 
-    fun getJob(id: String): LiveData<ApiStatus<JobResponse>> {
-        viewModelScope.launch {
-            jobId = id
-            val response = announcementRepository.getJobById(jobId)
-            if (response.isSuccessful) {
-                _jobLiveData.postValue(ApiStatus.Success(response.body()))
-            } else {
-                _jobLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
-            }
-        }
-        return _jobLiveData
-    }
-
     fun createJob(jobCreateRequest: JobCreateRequest): LiveData<ApiStatus<JobCreateResponse>> {
         viewModelScope.launch {
-            val response = securedJobRepository.createJob(jobCreateRequest)
-            if (response.isSuccessful) {
-                createLiveData.postValue(ApiStatus.Success(response.body()))
-            } else {
-                createLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+            if (networkHelper.isNetworkConnected()) {
+                Log.d(TAG, "createJob: creating job $jobCreateRequest")
+                val response = announcementRepository.createJob(jobCreateRequest)
+                if (response.isSuccessful) {
+                    createLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    Log.e(TAG, "createJob: ${response.code()}")
+                    Log.e(TAG, "createJob: ${response.errorBody()?.extractErrorMessage()}")
+                    createLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             }
         }
         return createLiveData
-    }
-
-    fun editJob(jobEditRequest: JobEditRequest): LiveData<ApiStatus<Unit>> {
-        viewModelScope.launch {
-            val response = securedJobRepository.editJob(jobEditRequest)
-            if (response.isSuccessful) {
-                editLiveData.postValue(ApiStatus.Success(null))
-            } else {
-                editLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
-            }
-        }
-        return editLiveData
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -373,14 +349,14 @@ class AddEditJobViewModel @Inject constructor(
 
         genderLayout.apply {
             maleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.FEMALE.label || selectedGender.isEmpty()) {
-                    selectedGender = GenderEnum.MALE.label
+                if (selectedGender == GenderEnum.FEMALE.code || selectedGender == null) {
+                    selectedGender = GenderEnum.MALE.code
                     selectMale(context.resources)
                 }
             }
             femaleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.MALE.label || selectedGender.isEmpty()) {
-                    selectedGender = GenderEnum.FEMALE.label
+                if (selectedGender == GenderEnum.MALE.code || selectedGender == null) {
+                    selectedGender = GenderEnum.FEMALE.code
                     selectFemale(context.resources)
                 }
             }
@@ -466,7 +442,7 @@ class AddEditJobViewModel @Inject constructor(
         _districtId.value = value
     }
 
-    fun setGender(value: String) {
+    fun setGender(value: Int) {
         Log.d(ConstValues.TAG, "setGender: $value")
         _gender.value = value
     }
@@ -579,7 +555,7 @@ class AddEditJobViewModel @Inject constructor(
             jobCategoryChoice.error = context.resources.getString(R.string.district_error)
             jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
         }
-        if (selectedGender.isEmpty()) {
+        if (selectedGender == null) {
             Toast.makeText(
                 context,
                 context.resources.getString(R.string.confirm_gender),
@@ -592,7 +568,7 @@ class AddEditJobViewModel @Inject constructor(
         return !deadlineEt.isErrorEnabled &&
                 !titleEt.isErrorEnabled &&
                 !salaryEt.isErrorEnabled &&
-                selectedGender.isNotEmpty() &&
+                selectedGender != null &&
                 !workingTimeEt.isErrorEnabled &&
                 !workingScheduleEt.isErrorEnabled &&
                 !tgUserNameEt.isErrorEnabled &&

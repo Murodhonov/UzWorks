@@ -5,7 +5,7 @@ data class JobCreateRequest(
     var categoryId: String,
     var deadline: String,
     var districtId: String,
-    var gender: String,
+    var gender: Int?,
     var instagramLink: String,
     var latitude: Double,
     var longitude: Double,

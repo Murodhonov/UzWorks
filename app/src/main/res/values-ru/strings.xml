@@ -17,6 +17,7 @@
     <string name="gender">Пол</string>
     <string name="male">Мужской</string>
     <string name="female">Женский</string>
+    <string name="unknown">Не указан</string>
     <string name="send_message">Напиши сообщение</string>
     <string name="share">Поделиться</string>
     <string name="see_more">Ещё</string>
@@ -66,7 +67,7 @@
     <string name="sign_up">Зарегистрироваться</string>
     <string name="back_login">Вернуться к входу</string>
     <string name="no_savings">Нет сохраненных объявлений</string>
-    <string name="saved_announcements_not_found">У вас нет сохраненных объявлений, найдите их в поиске, чтобы сохранить объявления.</string>
+    <string name="saved_announcements_not_found">У вас нет сохраненных объявлений, найдите их в поиске, чтобы сохранить объявления</string>
     <string name="find_announcement">Поисковое объявление</string>
     <string name="about_me">Обо мне</string>
     <string name="experience">Опыт</string>
@@ -96,7 +97,7 @@
     <string name="jobs">Вакансии</string>
     <string name="workers">Рабочие</string>
     <string name="recommended_announcements">Рекомендуемые объявления</string>
-    <string name="no_recommended_announcements">На данный момент нет предлагаемых объявлений.</string>
+    <string name="no_recommended_announcements">На данный момент нет предлагаемых объявлений</string>
     <string name="search_messages">Поиск в чатах</string>
     <string name="messages">Чаты</string>
     <string name="no_messages">Чаты не найдены</string>
@@ -124,7 +125,7 @@
     <string name="current_location">Текущий адрес</string>
     <string name="select_map">Выберите на карте</string>
     <string name="loading">Загрузка</string>
-    <string name="incorrect_phone_number_password">Номер телефона или пароль неверен</string>
+    <string name="user_not_found">Пользователь не найден</string>
     <string name="greeting">Здраствуйте</string>
     <string name="subscribers_count">Количество подписчиков</string>
     <string name="enter_firstname">Введите ваше имя</string>
@@ -162,7 +163,7 @@
     <string name="no_internet">Нет соединения с интернетом</string>
     <string name="unavailable_date">Невозможно выбрать эту дату. Выберите минимум 16 лет назад</string>
     <string name="enter_phone_number_password">Введите свой номер телефона и пароль для доступа к платформе</string>
-    <string name="sign_up_floor">Для создания профиля введите свое имя, номер телефона и личный пароль.</string>
+    <string name="sign_up_floor">Для создания профиля введите свое имя, номер телефона и личный пароль</string>
     <string name="second">секунду</string>
     <string name="seconds">секунды</string>
     <string name="minute">минута</string>
@@ -184,7 +185,7 @@
     <string name="end_date_error">Введите время окончания</string>
     <string name="address_failed">Не удалось загрузить адрес</string>
     <string name="close">Закрывать</string>
-    <string name="phone_number_exist">Номер телефона уже использован, попробуйте использовать другой</string>
+    <string name="user_exist">Этот номер телефона уже зарегистрирован, если это ваш номер, вы можете войти в свою учетную запись, в противном случае вы можете выбрать другой номер для регистрации</string>
     <string name="update_succeeded">Успешно обновлено</string>
     <string name="current_password_wrong">Текущий пароль неверен</string>
     <string name="password_updated">Пароль успешно обновлен</string>
@@ -197,4 +198,15 @@
     <string name="verification_subtitle">Пожалуйста, введите код подтверждения, отправленный на ваш номер телефона</string>
     <string name="set_new_password">Установить новый пароль</string>
     <string name="submit">Отправить</string>
+    <string name="reset_password_title">Введите код подтверждения и установите новый пароль</string>
+    <string name="verify_set_password">Подтвердите и сохраните</string>
+    <string name="verification_code_error">Введите код подтверждения</string>
+    <string name="verification_code_incorrect">Код подтверждения неверен</string>
+    <string name="password_incorrect">Неверный пароль</string>
+    <string name="phone_verified">Ваш номер подтвержден, теперь вы можете войти в свою учетную запись</string>
+    <string name="server_problem">Произошла непредвиденная ошибка на сервере. Повторите попытку позже</string>
+    <string name="birthdate_requirement">Вам должно быть не менее 16 лет</string>
+    <string name="phone_number_copied">Номер телефона скопирован</string>
+    <string name="update_user_failed">Что-то пошло не так, повторите попытку позже.</string>
+    <string name="invalid_deadline">Крайний срок не может быть раньше сегодняшнего дня</string>
 </resources>

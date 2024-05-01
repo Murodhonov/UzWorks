@@ -89,7 +89,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 android:inputType="textWebEmailAddress"
                 android:maxLines="1" />
 
@@ -101,6 +101,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/phone_number"
+            app:endIconDrawable="@drawable/ic_copy"
+            app:endIconMode="custom"
+            app:endIconTint="@color/black_blue"
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:theme="@style/TextInputEditTextStyle"
             app:errorEnabled="false"
@@ -109,8 +112,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:imeOptions="actionNext"
-                android:inputType="phone"
+                android:editable="false"
+                android:inputType="none"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -141,8 +144,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:imeOptions="actionNext"
-                android:inputType="phone"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>

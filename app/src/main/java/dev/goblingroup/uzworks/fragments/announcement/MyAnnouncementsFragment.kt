@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,12 +18,8 @@ import dev.goblingroup.uzworks.databinding.FragmentMyAnnouncementsBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
-import dev.goblingroup.uzworks.utils.ConstValues.ANNOUNCEMENT_ADD_EDIT_STATUS
-import dev.goblingroup.uzworks.utils.ConstValues.ANNOUNCEMENT_EDITING
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.MyAnnouncementsViewModel
 import kotlinx.coroutines.launch
 
@@ -105,7 +100,6 @@ class MyAnnouncementsFragment : Fragment() {
     private fun showBottom(jobId: String, announcementType: String) {
         val bundle = Bundle()
         bundle.putString("announcement_id", jobId)
-        bundle.putString(ANNOUNCEMENT_ADD_EDIT_STATUS, ANNOUNCEMENT_EDITING)
         myAnnouncementsViewModel.showBottom(
             requireContext(),
             {
@@ -125,11 +119,11 @@ class MyAnnouncementsFragment : Fragment() {
             {
                 val direction = when (announcementType) {
                     AnnouncementEnum.JOB.announcementType -> {
-                        R.id.action_myAnnouncementsFragment_to_addEditJobFragment
+                        R.id.action_myAnnouncementsFragment_to_addJobFragment
                     }
 
                     AnnouncementEnum.WORKER.announcementType -> {
-                        R.id.action_myAnnouncementsFragment_to_addEditWorkerFragment
+                        R.id.action_myAnnouncementsFragment_to_addWorkerFragment
                     }
 
                     else -> {

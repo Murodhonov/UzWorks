@@ -2,17 +2,18 @@ package dev.goblingroup.uzworks.repository
 
 import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
-import dev.goblingroup.uzworks.networking.SecuredUserService
+import dev.goblingroup.uzworks.networking.UserService
 import javax.inject.Inject
 
 class ProfileRepository @Inject constructor(
-    private val securedUserService: SecuredUserService
+    private val userService: UserService,
+    private val securityRepository: SecurityRepository
 ) {
 
-    suspend fun getUserById(userId: String) = securedUserService.getUserById(userId)
+    suspend fun getUserById(userId: String) = userService.getUserById(securityRepository.getToken(), userId)
 
-    suspend fun updateUser(userUpdateRequest: UserUpdateRequest) = securedUserService.update(userUpdateRequest)
+    suspend fun updateUser(userUpdateRequest: UserUpdateRequest) = userService.update(securityRepository.getToken(), userUpdateRequest)
 
     suspend fun resetPassword(updatePasswordRequest: UpdatePasswordRequest) =
-        securedUserService.resetPassword(updatePasswordRequest)
+        userService.resetPassword(securityRepository.getToken(), updatePasswordRequest)
 }

@@ -8,9 +8,6 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.GradientDrawable
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
@@ -19,12 +16,14 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.textfield.TextInputLayout
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -283,13 +282,12 @@ fun String.isStrongPassword(): Boolean {
     return true
 }
 
-fun String.convertPhoneNumber(): String? {
-    if (this.length != 13) return null
-    val prefix = this.substring(0, 4)
-    val code = this.substring(4, 6)
-    val start = this.substring(6, 9)
-    val middle = this.substring(9, 11)
-    val end = this.substring(11)
+fun String.convertPhoneNumber(): String {
+    val prefix = "+${this.substring(0, 3)}"
+    val code = this.substring(3, 5)
+    val start = this.substring(5, 8)
+    val middle = this.substring(8, 10)
+    val end = this.substring(10)
     return "$prefix $code $start $middle $end"
 }
 
@@ -549,5 +547,15 @@ fun EditText.addCodeTextWatcher(
                 false
             }
         }
+    }
+}
+
+fun ResponseBody.extractErrorMessage(): String? {
+    return try {
+        val jsonObject = JsonParser().parse(this.string()) as? JsonObject
+        jsonObject?.get("error")?.asString
+    } catch (e: Exception) {
+        // Handle parsing error
+        null
     }
 }

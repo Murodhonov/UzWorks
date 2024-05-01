@@ -10,13 +10,15 @@ import dev.goblingroup.uzworks.models.response.UserUpdateResponse
 import dev.goblingroup.uzworks.repository.ProfileRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val securityRepository: SecurityRepository
+    private val securityRepository: SecurityRepository,
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
     private val _userLiveData = MutableLiveData<ApiStatus<UserResponse>>(ApiStatus.Loading())
@@ -31,14 +33,16 @@ class ProfileViewModel @Inject constructor(
 
     private fun fetchUserData() {
         viewModelScope.launch {
-            val userResponse = profileRepository.getUserById(securityRepository.getUserId())
-            if (userResponse.isSuccessful) {
-                _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
-            } else {
-                _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
-                Log.e(TAG, "fetchUserData: ${userResponse.code()}")
-                Log.e(TAG, "fetchUserData: ${userResponse.message()}")
-                Log.e(TAG, "fetchUserData: ${userResponse.errorBody()}")
+            if (networkHelper.isNetworkConnected()) {
+                val userResponse = profileRepository.getUserById(securityRepository.getUserId())
+                if (userResponse.isSuccessful) {
+                    _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
+                } else {
+                    _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
+                    Log.e(TAG, "fetchUserData: ${userResponse.code()}")
+                    Log.e(TAG, "fetchUserData: ${userResponse.message()}")
+                    Log.e(TAG, "fetchUserData: ${userResponse.errorBody()}")
+                }
             }
         }
     }

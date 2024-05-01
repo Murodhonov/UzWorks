@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -22,14 +21,17 @@ import dev.goblingroup.uzworks.databinding.FragmentPersonalInfoBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.models.response.UserResponse
+import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_BIRTHDAY
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.convertPhoneNumber
 import dev.goblingroup.uzworks.utils.dmyToIso
 import dev.goblingroup.uzworks.utils.isoToDmy
+import dev.goblingroup.uzworks.utils.selectFemale
+import dev.goblingroup.uzworks.utils.selectMale
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.PersonalInfoViewModel
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 
 @AndroidEntryPoint
 class PersonalInfoFragment : Fragment() {
@@ -37,11 +39,9 @@ class PersonalInfoFragment : Fragment() {
     private var _binding: FragmentPersonalInfoBinding? = null
     private val binding get() = _binding!!
 
-    private var userResponse: UserResponse? = null
-
     private val personalInfoViewModel: PersonalInfoViewModel by viewModels()
 
-    private lateinit var dialog: AlertDialog
+    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,38 +57,33 @@ class PersonalInfoFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                userResponse = arguments?.getParcelable("user_response", UserResponse::class.java)
+            cancelBtn.setOnClickListener {
+                findNavController().popBackStack()
             }
-            if (userResponse != null) {
-                setData()
-            } else {
-                personalInfoViewModel.userLiveData.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "failed to load user data",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.e(TAG, "onViewCreated: ${it.error.message}")
-                        }
 
-                        is ApiStatus.Loading -> {
-                            loading()
-                        }
+            personalInfoViewModel.userLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "failed to load user data",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e(TAG, "onViewCreated: ${it.error.message}")
+                    }
 
-                        is ApiStatus.Success -> {
-                            userResponse = it.response
-                            setData()
-                        }
+                    is ApiStatus.Loading -> {
+                        loading()
+                    }
+
+                    is ApiStatus.Success -> {
+                        setData(it.response!!)
                     }
                 }
             }
 
             personalInfoViewModel.controlInput(
-                requireContext(),
-                resources,
+                requireActivity(),
                 firstNameEt,
                 lastNameEt,
                 emailEt,
@@ -96,53 +91,25 @@ class PersonalInfoFragment : Fragment() {
                 genderLayout,
                 birthdayEt
             )
-        }
-    }
-
-    private fun loading() {
-        dialog = AlertDialog.Builder(requireContext()).create()
-        val itemBinding = LoadingDialogBinding.inflate(layoutInflater)
-        dialog.setView(itemBinding.root)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCancelable(false)
-    }
-
-    @SuppressLint("ClickableViewAccessibility", "HardwareIds")
-    private fun setData() {
-        binding.apply {
-            dialog.dismiss()
-
-            firstNameEt.editText?.setText(userResponse?.firstName ?: "")
-            lastNameEt.editText?.setText(userResponse?.lastName ?: "")
-
-            birthdayEt.editText?.setText(
-                if (userResponse?.birthDate?.isoToDmy() == null) resources.getString(R.string.birth_date) else userResponse?.birthDate?.isoToDmy()
-            )
-
-            emailEt.editText?.setText(userResponse?.email ?: "")
-            phoneNumberEt.editText?.setText(
-                userResponse?.phoneNumber?.convertPhoneNumber()
-                    ?: resources.getString(R.string.phone_number_prefix)
-            )
-
-            personalInfoViewModel.selectGender(userResponse?.gender, genderLayout, resources)
 
             saveBtn.setOnClickListener {
                 if (personalInfoViewModel.isFormValid(
                         resources,
                         firstNameEt,
                         lastNameEt,
-                        emailEt,
-                        phoneNumberEt,
-                        birthdayEt
+                        emailEt
                     )
                 ) {
                     lifecycleScope.launch {
                         personalInfoViewModel.updateUser(
                             UserUpdateRequest(
-                                birthDate = birthdayEt.editText?.text.toString().dmyToIso()
-                                    .toString(),
-                                email = emailEt.editText?.text.toString(),
+                                birthDate = if (birthdayEt.editText?.text.toString()
+                                        .isEmpty()
+                                ) DEFAULT_BIRTHDAY else birthdayEt.editText?.text.toString()
+                                    .dmyToIso().toString(),
+                                email = emailEt.editText?.text.toString().ifEmpty {
+                                    null
+                                },
                                 firstName = firstNameEt.editText?.text.toString(),
                                 gender = personalInfoViewModel.selectedGender,
                                 id = personalInfoViewModel.getUserId(),
@@ -150,16 +117,15 @@ class PersonalInfoFragment : Fragment() {
                                 mobileId = Settings.Secure.getString(
                                     requireContext().contentResolver,
                                     Settings.Secure.ANDROID_ID
-                                ),
-                                phoneNumber = phoneNumberEt.editText?.text.toString()
-                                    .filter { !it.isWhitespace() }
+                                )
                             )
                         ).observe(viewLifecycleOwner) {
                             when (it) {
                                 is ApiStatus.Error -> {
+                                    loadingDialog.dismiss()
                                     Toast.makeText(
                                         requireContext(),
-                                        "something went wrong while updating",
+                                        resources.getString(R.string.update_user_failed),
                                         Toast.LENGTH_SHORT
                                     ).show()
 
@@ -170,6 +136,7 @@ class PersonalInfoFragment : Fragment() {
                                 }
 
                                 is ApiStatus.Success -> {
+                                    loadingDialog.dismiss()
                                     Toast.makeText(
                                         requireContext(),
                                         resources.getString(R.string.update_succeeded),
@@ -185,11 +152,47 @@ class PersonalInfoFragment : Fragment() {
         }
     }
 
-    private fun isEmailValid(email: String): Boolean {
-        val emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
-        val pattern = Pattern.compile(emailPattern)
-        val matcher = pattern.matcher(email)
-        return matcher.matches()
+    private fun loading() {
+        try {
+            loadingDialog.show()
+        } catch (e: Exception) {
+            loadingDialog = AlertDialog.Builder(requireContext()).create()
+            loadingDialog.setView(LoadingDialogBinding.inflate(layoutInflater).root)
+            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility", "HardwareIds")
+    private fun setData(response: UserResponse) {
+        binding.apply {
+            loadingDialog.dismiss()
+
+            Log.d(TAG, "setData: $response")
+
+            firstNameEt.editText?.setText(response.firstName)
+            lastNameEt.editText?.setText(response.lastName)
+
+            if (response.birthDate.isoToDmy() != null && response.birthDate != DEFAULT_BIRTHDAY) {
+                birthdayEt.editText?.setText(response.birthDate.isoToDmy())
+            }
+
+            emailEt.editText?.setText(response.email)
+            phoneNumberEt.editText?.setText(
+                response.phoneNumber.convertPhoneNumber()
+            )
+
+            when (response.gender) {
+                GenderEnum.MALE.code -> {
+                    genderLayout.selectMale(resources)
+                }
+
+                GenderEnum.FEMALE.code -> {
+                    genderLayout.selectFemale(resources)
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

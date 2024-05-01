@@ -72,8 +72,8 @@ class StartFragment : Fragment() {
                     }
                     is ApiStatus.Success -> {
                         when (it.response?.gender) {
-                            GenderEnum.MALE.label -> profile.setImageResource(R.drawable.ic_male)
-                            GenderEnum.FEMALE.label -> profile.setImageResource(R.drawable.ic_female)
+                            GenderEnum.MALE.code -> profile.setImageResource(R.drawable.ic_male)
+                            GenderEnum.FEMALE.code -> profile.setImageResource(R.drawable.ic_female)
                         }
                     }
                 }

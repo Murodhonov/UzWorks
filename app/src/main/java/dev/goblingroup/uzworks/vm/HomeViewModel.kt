@@ -9,13 +9,15 @@ import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository,
-    private val securityRepository: SecurityRepository
+    private val securityRepository: SecurityRepository,
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
     private val _workerCountLivedata = MutableLiveData<ApiStatus<Int>>(ApiStatus.Loading())
@@ -45,57 +47,67 @@ class HomeViewModel @Inject constructor(
 
     private fun loadUser() {
         viewModelScope.launch {
-            val response = securityRepository.getUser()
-            if (response.isSuccessful) {
-                fullNameLiveData.postValue(ApiStatus.Success("${response.body()?.firstName} ${response.body()?.lastName}"))
-            } else {
-                fullNameLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+            if (networkHelper.isNetworkConnected()) {
+                val response = securityRepository.getUser()
+                if (response.isSuccessful) {
+                    fullNameLiveData.postValue(ApiStatus.Success("${response.body()?.firstName} ${response.body()?.lastName}"))
+                } else {
+                    fullNameLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
             }
         }
     }
 
     private fun fetchTopJobs() {
         viewModelScope.launch {
-            val response = announcementRepository.getTopJobs()
-            if (response.isSuccessful) {
-                Log.d(ConstValues.TAG, "loadJobs: ${response.body()?.size} jobs got")
-                _announcementLiveData.postValue(ApiStatus.Success(response.body()))
-            } else {
-                _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
+            if (networkHelper.isNetworkConnected()) {
+                val response = announcementRepository.getTopJobs()
+                if (response.isSuccessful) {
+                    Log.d(ConstValues.TAG, "loadJobs: ${response.body()?.size} jobs got")
+                    _announcementLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
+                }
             }
         }
     }
 
     private fun fetchTopWorkers() {
         viewModelScope.launch {
-            val response = announcementRepository.getTopWorkers()
-            if (response.isSuccessful) {
-                Log.d(ConstValues.TAG, "loadWorkers: ${response.body()?.size} workers got")
-                _announcementLiveData.postValue(ApiStatus.Success(response.body()))
-            } else {
-                _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
+            if (networkHelper.isNetworkConnected()) {
+                val response = announcementRepository.getTopWorkers()
+                if (response.isSuccessful) {
+                    Log.d(ConstValues.TAG, "loadWorkers: ${response.body()?.size} workers got")
+                    _announcementLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
+                }
             }
         }
     }
 
     private fun countJobs() {
         viewModelScope.launch {
-            val countJobsResponse = announcementRepository.countJobs()
-            if (countJobsResponse.isSuccessful) {
-                _jobCountLiveData.postValue(ApiStatus.Success(countJobsResponse.body()))
-            } else {
-                _jobCountLiveData.postValue(ApiStatus.Error(Throwable(countJobsResponse.message())))
+            if (networkHelper.isNetworkConnected()) {
+                val countJobsResponse = announcementRepository.countJobs()
+                if (countJobsResponse.isSuccessful) {
+                    _jobCountLiveData.postValue(ApiStatus.Success(countJobsResponse.body()))
+                } else {
+                    _jobCountLiveData.postValue(ApiStatus.Error(Throwable(countJobsResponse.message())))
+                }
             }
         }
     }
 
     private fun countWorkers() {
         viewModelScope.launch {
-            val countWorkersResponse = announcementRepository.countWorkers()
-            if (countWorkersResponse.isSuccessful) {
-                _workerCountLivedata.postValue(ApiStatus.Success(countWorkersResponse.body()))
-            } else {
-                _workerCountLivedata.postValue(ApiStatus.Error(Throwable(countWorkersResponse.message())))
+            if (networkHelper.isNetworkConnected()) {
+                val countWorkersResponse = announcementRepository.countWorkers()
+                if (countWorkersResponse.isSuccessful) {
+                    _workerCountLivedata.postValue(ApiStatus.Success(countWorkersResponse.body()))
+                } else {
+                    _workerCountLivedata.postValue(ApiStatus.Error(Throwable(countWorkersResponse.message())))
+                }
             }
         }
     }
@@ -110,9 +122,4 @@ class HomeViewModel @Inject constructor(
     fun save(announcement: AnnouncementEntity) {
         announcementRepository.saveAnnouncement(announcement)
     }
-
-//    fun getFullName(): String {
-//        return "${securityRepository.getFirstName()} ${securityRepository.getLastName()}"
-//    }
-
 }

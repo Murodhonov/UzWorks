@@ -94,7 +94,7 @@ class WorkerDetailsFragment : Fragment() {
             titleTv.text = workerResponse?.title
             jobCategoryTv.text = workerResponse?.categoryName
             genderTv.text =
-                if (workerResponse?.gender == GenderEnum.MALE.label) resources.getString(R.string.male) else resources.getString(
+                if (workerResponse?.gender == GenderEnum.MALE.code) resources.getString(R.string.male) else resources.getString(
                     R.string.female
                 )
             fullNameTv.text = workerResponse?.fullName

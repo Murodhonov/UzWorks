@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.MyAnnouncementItemBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
+import dev.goblingroup.uzworks.utils.GenderEnum
 
 class MyJobsAdapter(
     private val jobList: List<JobResponse>,
@@ -20,7 +21,23 @@ class MyJobsAdapter(
             itemBinding.apply {
                 titleTv.text = jobResponse.title
                 costTv.text = "${jobResponse.salary} ${resources.getString(R.string.money_unit)}"
-                genderTv.text = jobResponse.gender
+                genderTv.text = when (jobResponse.gender) {
+                    GenderEnum.MALE.code -> {
+                        resources.getString(R.string.male)
+                    }
+
+                    GenderEnum.FEMALE.code -> {
+                        resources.getString(R.string.female)
+                    }
+
+                    GenderEnum.UNKNOWN.code -> {
+                        resources.getString(R.string.unknown)
+                    }
+
+                    else -> {
+                        ""
+                    }
+                }
                 categoryTv.text = jobResponse.categoryName
                 addressTv.text = "${jobResponse.regionName}, ${jobResponse.districtName}"
 

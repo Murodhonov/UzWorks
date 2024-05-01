@@ -12,8 +12,7 @@ import dev.goblingroup.uzworks.databinding.ConfirmDeleteBinding
 import dev.goblingroup.uzworks.databinding.MyAnnouncementBottomBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
-import dev.goblingroup.uzworks.repository.SecuredJobRepository
-import dev.goblingroup.uzworks.repository.SecuredWorkerRepository
+import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import kotlinx.coroutines.launch
@@ -21,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyAnnouncementsViewModel @Inject constructor(
-    private val securedJobRepository: SecuredJobRepository,
-    private val securedWorkerRepository: SecuredWorkerRepository,
+    private val announcementRepository: AnnouncementRepository,
     private val securityRepository: SecurityRepository
 ) : ViewModel() {
 
@@ -47,7 +45,7 @@ class MyAnnouncementsViewModel @Inject constructor(
 
     private fun loadJobs() {
         viewModelScope.launch {
-            val jobsByUserId = securedJobRepository.getJobsByUserId(securityRepository.getUserId())
+            val jobsByUserId = announcementRepository.jobsByUserId(securityRepository.getUserId())
             if (jobsByUserId.isSuccessful) {
                 _jobLiveData.postValue(ApiStatus.Success(jobsByUserId.body()))
             } else {
@@ -62,7 +60,7 @@ class MyAnnouncementsViewModel @Inject constructor(
     private fun loadWorkers() {
         viewModelScope.launch {
                 val workersByUserId =
-                    securedWorkerRepository.getWorkersByUserId(securityRepository.getUserId())
+                    announcementRepository.workersByUserId(securityRepository.getUserId())
                 if (workersByUserId.isSuccessful) {
                     _workerLiveData.postValue(ApiStatus.Success(workersByUserId.body()))
                 } else {

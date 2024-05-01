@@ -5,7 +5,7 @@ data class AnnouncementResponse(
     val categoryName: String,
     val districtName: String,
     val regionName: String,
-    val gender: String,
+    val gender: Int,
     val salary: Int,
     val title: String,
     val announcementType: String,

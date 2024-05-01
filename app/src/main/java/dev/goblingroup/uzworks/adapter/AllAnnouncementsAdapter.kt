@@ -47,11 +47,11 @@ class AllAnnouncementsAdapter(
                         }
 
                         genderTv.text = when (announcement.gender) {
-                            GenderEnum.MALE.label -> {
+                            GenderEnum.MALE.code -> {
                                 resources.getString(R.string.male)
                             }
 
-                            GenderEnum.FEMALE.label -> {
+                            GenderEnum.FEMALE.code -> {
                                 resources.getString(R.string.female)
                             }
 
@@ -74,11 +74,11 @@ class AllAnnouncementsAdapter(
                         iv.setImageResource(getImage(AnnouncementEnum.JOB.announcementType, announcement.gender))
 
                         genderTv.text = when (announcement.gender) {
-                            GenderEnum.MALE.label -> {
+                            GenderEnum.MALE.code -> {
                                 resources.getString(R.string.male)
                             }
 
-                            GenderEnum.FEMALE.label -> {
+                            GenderEnum.FEMALE.code -> {
                                 resources.getString(R.string.female)
                             }
 

@@ -18,6 +18,7 @@
     <string name="gender">Жинс</string>
     <string name="male">Эркак</string>
     <string name="female">Аёл</string>
+    <string name="unknown">Кўрсатилмаган</string>
     <string name="send_message">Хабар ёзиш</string>
     <string name="share">Улашиш</string>
     <string name="see_more">Батафсил кўриш</string>
@@ -125,7 +126,7 @@
     <string name="current_location">Жорий манзил</string>
     <string name="select_map">Харитадан танлаш</string>
     <string name="loading">Юкланмоқда</string>
-    <string name="incorrect_phone_number_password">Телефон рақами ёки пароль нотўғри</string>
+    <string name="user_not_found">Фойдаланувчи топилмади</string>
     <string name="greeting">Ассалому алайкум</string>
     <string name="subscribers_count">Обуначилар сони</string>
     <string name="enter_firstname">Исмингизни киритинг</string>
@@ -185,7 +186,7 @@
     <string name="end_date_error">Тугаган вақтини киритинг</string>
     <string name="address_failed">Манзил юкланмади</string>
     <string name="close">Ёпиш</string>
-    <string name="phone_number_exist">Телефон рақами аллақачон ишлатилган, бошқасини ишлатиб кўринг</string>
+    <string name="user_exist">Бу телефон рақами аллақачон рўйхатдан ўтган, агар бу сизнинг рақамингиз бўлса, ҳисобингизга киришингиз мумкин, акс ҳолда рўйхатдан ўтиш учун бошқа рақамни танлашингиз мумкин.</string>
     <string name="update_succeeded">Муваффақиятли янгиланди</string>
     <string name="current_password_wrong">Жорий пароль нотўғри</string>
     <string name="password_updated">Пароль мувафақиятли ўзгартирилди</string>
@@ -198,4 +199,15 @@
     <string name="verification_subtitle">Илтимос, телефон рақамингизга юборилган тасдиқлаш кодини киритинг</string>
     <string name="set_new_password">Янги пароль ўрнатинг</string>
     <string name="submit">Юбориш</string>
+    <string name="reset_password_title">Тасдиқлаш кодини киритинг ва янги пароль ўрнатинг</string>
+    <string name="verify_set_password">Тасдиқлаш ва сақлаш</string>
+    <string name="verification_code_error">Тасдиқлаш кодини киритинг</string>
+    <string name="verification_code_incorrect">Тасдиқлаш коди нотўғри</string>
+    <string name="password_incorrect">Пароль нотўғри</string>
+    <string name="phone_verified">Рақамингиз тасдиқланди, энди сиз ҳисобингизга киришингиз мумкин</string>
+    <string name="server_problem">Серверда кутилмаган хатолик юз берди, кейинроқ қайта уриниб кўринг</string>
+    <string name="birthdate_requirement">Сиз камида 16 ёшда бўлишингиз керак</string>
+    <string name="phone_number_copied">Телефон рақами нусхаланди</string>
+    <string name="update_user_failed">Нимадир хато кетди, кейинроқ қайта урининг</string>
+    <string name="invalid_deadline">Муддати бугундан олдин бўлиши мумкин эмас</string>
 </resources>

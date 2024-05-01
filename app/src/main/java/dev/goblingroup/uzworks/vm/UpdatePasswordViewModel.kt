@@ -12,30 +12,34 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
 import dev.goblingroup.uzworks.models.response.UpdatePasswordResponse
-import dev.goblingroup.uzworks.networking.SecuredUserService
+import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.repository.SecurityRepository
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.isStrongPassword
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UpdatePasswordViewModel @Inject constructor(
-    private val securedUserService: SecuredUserService,
-    private val securityRepository: SecurityRepository
+    private val userService: UserService,
+    private val securityRepository: SecurityRepository,
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
     private val resetPasswordLiveData = MutableLiveData<ApiStatus<UpdatePasswordResponse>>()
 
     fun updatePassword(updatePasswordRequest: UpdatePasswordRequest): LiveData<ApiStatus<UpdatePasswordResponse>> {
         viewModelScope.launch {
-            if (resetPasswordLiveData.value !is ApiStatus.Loading) {
-                resetPasswordLiveData.postValue(ApiStatus.Loading())
-            }
-            val resetPasswordResponse = securedUserService.resetPassword(updatePasswordRequest)
-            if (resetPasswordResponse.isSuccessful) {
-                resetPasswordLiveData.postValue(ApiStatus.Success(resetPasswordResponse.body()))
-            } else {
-                resetPasswordLiveData.postValue(ApiStatus.Error(Throwable(resetPasswordResponse.message())))
+            if (networkHelper.isNetworkConnected()) {
+                if (resetPasswordLiveData.value !is ApiStatus.Loading) {
+                    resetPasswordLiveData.postValue(ApiStatus.Loading())
+                }
+                val resetPasswordResponse = userService.resetPassword(securityRepository.getToken(), updatePasswordRequest)
+                if (resetPasswordResponse.isSuccessful) {
+                    resetPasswordLiveData.postValue(ApiStatus.Success(resetPasswordResponse.body()))
+                } else {
+                    resetPasswordLiveData.postValue(ApiStatus.Error(Throwable(resetPasswordResponse.message())))
+                }
             }
         }
         return resetPasswordLiveData

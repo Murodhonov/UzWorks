@@ -2,15 +2,18 @@ package dev.goblingroup.uzworks.vm
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Resources
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
-import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,7 +30,9 @@ import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.extractDateValue
+import dev.goblingroup.uzworks.utils.extractErrorMessage
 import dev.goblingroup.uzworks.utils.formatPhoneNumber
 import dev.goblingroup.uzworks.utils.selectFemale
 import dev.goblingroup.uzworks.utils.selectMale
@@ -35,12 +40,14 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 class PersonalInfoViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val securityRepository: SecurityRepository
+    private val securityRepository: SecurityRepository,
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
     private val _userLiveData = MutableLiveData<ApiStatus<UserResponse>>(ApiStatus.Loading())
@@ -49,7 +56,7 @@ class PersonalInfoViewModel @Inject constructor(
     private val updateUserLiveData =
         MutableLiveData<ApiStatus<UserUpdateResponse>>(ApiStatus.Loading())
 
-    var selectedGender: Int? = null
+    var selectedGender: Int = GenderEnum.UNKNOWN.code
 
     init {
         fetchUserData()
@@ -57,40 +64,59 @@ class PersonalInfoViewModel @Inject constructor(
 
     private fun fetchUserData() {
         viewModelScope.launch {
-            val userResponse = profileRepository.getUserById(securityRepository.getUserId())
-            if (userResponse.isSuccessful) {
-                selectedGender = userResponse.body()?.gender
-                _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
-            } else {
-                _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
-                Log.e(TAG, "fetchUserData: ${userResponse.code()}")
-                Log.e(TAG, "fetchUserData: ${userResponse.message()}")
-                Log.e(TAG, "fetchUserData: ${userResponse.errorBody()}")
+            if (networkHelper.isNetworkConnected()) {
+                val userResponse = profileRepository.getUserById(securityRepository.getUserId())
+                if (userResponse.isSuccessful) {
+                    selectedGender = userResponse.body()?.gender!!
+                    _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
+                } else {
+                    _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
+                    Log.e(TAG, "fetchUserData: ${userResponse.code()}")
+                    Log.e(TAG, "fetchUserData: ${userResponse.message()}")
+                    Log.e(TAG, "fetchUserData: ${userResponse.errorBody()}")
+                    Log.e(
+                        TAG,
+                        "fetchUserData: ${
+                            userResponse.errorBody()?.extractErrorMessage().toString()
+                        }"
+                    )
+                }
             }
         }
     }
 
     fun updateUser(userUpdateRequest: UserUpdateRequest): LiveData<ApiStatus<UserUpdateResponse>> {
         viewModelScope.launch {
-            Log.d(TAG, "updateUser: updating user $userUpdateRequest")
-            val updateUserResponse = profileRepository.updateUser(userUpdateRequest)
-            if (updateUserResponse.isSuccessful) {
-                updateUserLiveData.postValue(ApiStatus.Success(updateUserResponse.body()))
-            } else {
-                updateUserLiveData.postValue(ApiStatus.Error(Throwable(updateUserResponse.message())))
-                Log.e(TAG, "updateUser: ${updateUserResponse.code()}")
-                Log.e(TAG, "updateUser: ${updateUserResponse.message()}")
+            if (networkHelper.isNetworkConnected()) {
+                Log.d(TAG, "updateUser: updating user $userUpdateRequest")
+                val updateUserResponse = profileRepository.updateUser(userUpdateRequest)
+                if (updateUserResponse.isSuccessful) {
+                    if (updateInfo(updateUserResponse.body()!!)) {
+                        updateUserLiveData.postValue(ApiStatus.Success(updateUserResponse.body()))
+                    }
+                } else {
+                    updateUserLiveData.postValue(ApiStatus.Error(Throwable(updateUserResponse.message())))
+                    Log.e(
+                        TAG,
+                        "updateUser: ${updateUserResponse.errorBody()?.extractErrorMessage()}",
+                    )
+                }
             }
         }
         return updateUserLiveData
+    }
+
+    private fun updateInfo(userUpdateResponse: UserUpdateResponse): Boolean {
+        return securityRepository.setGender(userUpdateResponse.gender) && securityRepository.setBirthdate(
+            userUpdateResponse.birthDate
+        )
     }
 
     fun getUserId() = securityRepository.getUserId()
 
     @SuppressLint("ClickableViewAccessibility")
     fun controlInput(
-        context: Context,
-        resources: Resources,
+        fragmentActivity: FragmentActivity,
         firstNameEt: TextInputLayout,
         lastNameEt: TextInputLayout,
         emailEt: TextInputLayout,
@@ -117,56 +143,36 @@ class PersonalInfoViewModel @Inject constructor(
         }
 
         genderLayout.apply {
-            when (selectedGender) {
-                GenderEnum.MALE.code -> {
-                    maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                    femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                    maleCircle.visibility = View.VISIBLE
-                    femaleCircle.visibility = View.GONE
-                    maleTv.setTextColor(resources.getColor(R.color.black_blue))
-                    femaleTv.setTextColor(resources.getColor(R.color.text_color))
-                    maleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                    femaleBtn.strokeColor = resources.getColor(R.color.text_color)
-                }
-
-                GenderEnum.FEMALE.code -> {
-                    femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                    maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                    femaleCircle.visibility = View.VISIBLE
-                    maleCircle.visibility = View.GONE
-                    femaleTv.setTextColor(resources.getColor(R.color.black_blue))
-                    maleTv.setTextColor(resources.getColor(R.color.text_color))
-                    femaleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                    maleBtn.strokeColor = resources.getColor(R.color.text_color)
-                }
-
-            }
-
             maleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.FEMALE.code || selectedGender == null) {
+                if (selectedGender == GenderEnum.FEMALE.code || selectedGender == GenderEnum.UNKNOWN.code) {
                     selectedGender = GenderEnum.MALE.code
-                    maleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                    femaleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                    maleCircle.visibility = View.VISIBLE
-                    femaleCircle.visibility = View.GONE
-                    maleTv.setTextColor(resources.getColor(R.color.black_blue))
-                    femaleTv.setTextColor(resources.getColor(R.color.text_color))
-                    maleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                    femaleBtn.strokeColor = resources.getColor(R.color.text_color)
+                    selectMale(fragmentActivity.resources)
                 }
             }
             femaleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.MALE.code || selectedGender == null) {
+                if (selectedGender == GenderEnum.MALE.code || selectedGender == GenderEnum.UNKNOWN.code) {
                     selectedGender = GenderEnum.FEMALE.code
-                    femaleStroke.setBackgroundResource(R.drawable.gender_stroke_selected)
-                    maleStroke.setBackgroundResource(R.drawable.gender_stroke_unselected)
-                    femaleCircle.visibility = View.VISIBLE
-                    maleCircle.visibility = View.GONE
-                    femaleTv.setTextColor(resources.getColor(R.color.black_blue))
-                    maleTv.setTextColor(resources.getColor(R.color.text_color))
-                    femaleBtn.strokeColor = resources.getColor(R.color.black_blue)
-                    maleBtn.strokeColor = resources.getColor(R.color.text_color)
+                    selectFemale(fragmentActivity.resources)
                 }
+            }
+        }
+
+        phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                (fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                    phoneNumberEt.windowToken,
+                    0
+                )
+                val clipboardManager =
+                    fragmentActivity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData =
+                    ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(
+                    fragmentActivity,
+                    fragmentActivity.resources.getString(R.string.phone_number_copied),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -206,6 +212,11 @@ class PersonalInfoViewModel @Inject constructor(
                 phoneNumberEt.editText?.setText(formattedPhone)
                 phoneNumberEt.editText?.setSelection(formattedPhone.length)
                 phoneNumberEt.tag = formattedPhone
+                if (formattedPhone.trim()
+                        .filter { !it.isWhitespace() }.length == 13 && phoneNumberEt.isErrorEnabled
+                ) {
+                    phoneNumberEt.isErrorEnabled = false
+                }
 
                 isFormatting = false
             }
@@ -214,19 +225,20 @@ class PersonalInfoViewModel @Inject constructor(
         birthdayEt.editText?.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 val datePickerDialog = DatePickerDialog(
-                    context,
+                    fragmentActivity,
                     R.style.DatePickerDialogTheme,
                     { _, year, month, dayOfMonth ->
                         val selectedCalendar = Calendar.getInstance().apply {
                             set(year, month, dayOfMonth)
                         }
 
-                        val currentCalendar = Calendar.getInstance()
+                        val minimumCalendar =
+                            Calendar.getInstance().apply { add(Calendar.YEAR, -16) }
 
-                        if (selectedCalendar.after(currentCalendar)) {
+                        if (selectedCalendar.after(minimumCalendar)) {
                             Toast.makeText(
-                                context,
-                                "Cannot select date after current date",
+                                fragmentActivity,
+                                fragmentActivity.resources.getString(R.string.birthdate_requirement),
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
@@ -239,7 +251,7 @@ class PersonalInfoViewModel @Inject constructor(
                     birthdayEt.editText?.text.toString()
                         .extractDateValue(DateEnum.YEAR.dateLabel),
                     birthdayEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.MONTH.dateLabel),
+                        .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
                     birthdayEt.editText?.text.toString()
                         .extractDateValue(DateEnum.DATE.dateLabel),
                 )
@@ -254,9 +266,7 @@ class PersonalInfoViewModel @Inject constructor(
         resources: Resources,
         firstNameEt: TextInputLayout,
         lastNameEt: TextInputLayout,
-        emailEt: TextInputLayout,
-        phoneNumberEt: TextInputLayout,
-        birthdayEt: TextInputLayout
+        emailEt: TextInputLayout
     ): Boolean {
         var result = true
         if (firstNameEt.editText?.text.toString().isEmpty()) {
@@ -269,36 +279,20 @@ class PersonalInfoViewModel @Inject constructor(
             lastNameEt.isErrorEnabled = true
             lastNameEt.error = resources.getString(R.string.enter_lastname)
         }
-        if (emailEt.editText?.text.toString().isEmpty()) {
+        if (!isEmailValid(emailEt.editText?.text.toString())) {
             result = false
             emailEt.isErrorEnabled = true
             emailEt.error = resources.getString(R.string.enter_valid_email)
         }
-        if (phoneNumberEt.editText?.text.toString().trim().filter { !it.isWhitespace() }.length != 13) {
-            result = false
-            phoneNumberEt.isErrorEnabled = true
-            phoneNumberEt.error = resources.getString(R.string.phone_number_error)
-        }
-        if (birthdayEt.editText?.text.toString().isEmpty()) {
-            result = false
-            birthdayEt.isErrorEnabled = true
-            birthdayEt.error = resources.getString(R.string.enter_firstname)
-        }
         return result
     }
 
-    fun selectGender(gender: Int?, genderLayout: GenderChoiceLayoutBinding, resources: Resources) {
-        genderLayout.apply {
-            when (gender) {
-                GenderEnum.MALE.code -> {
-                    selectMale(resources)
-                }
-                GenderEnum.FEMALE.code -> {
-                    selectFemale(resources)
-                }
-                else -> {}
-            }
-        }
+    private fun isEmailValid(email: String): Boolean {
+        if (email.isEmpty()) return true
+        val emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+        val pattern = Pattern.compile(emailPattern)
+        val matcher = pattern.matcher(email)
+        return matcher.matches()
     }
 
 }

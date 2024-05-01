@@ -1,10 +1,10 @@
 package dev.goblingroup.uzworks.di
 
-import android.content.SharedPreferences
-import android.util.Log
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.goblingroup.uzworks.networking.AuthService
 import dev.goblingroup.uzworks.networking.DistrictService
@@ -12,17 +12,14 @@ import dev.goblingroup.uzworks.networking.ExperienceService
 import dev.goblingroup.uzworks.networking.JobCategoryService
 import dev.goblingroup.uzworks.networking.JobService
 import dev.goblingroup.uzworks.networking.RegionService
-import dev.goblingroup.uzworks.networking.SecuredJobService
-import dev.goblingroup.uzworks.networking.SecuredUserService
-import dev.goblingroup.uzworks.networking.SecuredWorkerService
+import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.networking.WorkerService
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import okhttp3.Interceptor
+import dev.goblingroup.uzworks.utils.ConstValues.BASE_URL
+import dev.goblingroup.uzworks.utils.NetworkHelper
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -31,48 +28,11 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBaseUrl(): String = "https://accepted-sole-enough.ngrok-free.app/"
+    fun provideNetworkHelper(@ApplicationContext context: Context) = NetworkHelper(context)
 
     @Provides
     @Singleton
-    @Named(value = "token")
-    fun provideToken(
-        sharedPreferences: SharedPreferences
-    ): String {
-        return sharedPreferences.getString("token", null).toString()
-    }
-
-    @Provides
-    @Singleton
-    fun provideInterceptor(
-        @Named(value = "token") token: String
-    ): Interceptor {
-        Log.d(TAG, "provideInterceptor: $token")
-        return Interceptor { chain ->
-            val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer $token")
-                .build()
-            chain.proceed(request)
-        }
-    }
-
-    @Provides
-    @Singleton
-    @Named(value = "secured_ok_http_client")
-    fun provideSecuredOkHttpClient(
-        interceptor: Interceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    @Named(value = "ok_http_client")
-    fun provideOkHttpClient(
-    ): OkHttpClient {
+    fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(30, TimeUnit.SECONDS)
             .build()
@@ -80,44 +40,20 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideConverterFactory(): GsonConverterFactory {
-        return GsonConverterFactory.create()
-    }
-
-    @Provides
-    @Singleton
-    @Named(value = "secured_retrofit")
-    fun provideSecuredRetrofit(
-        baseUrl: String,
-        @Named(value = "secured_ok_http_client") httpClient: OkHttpClient,
-        converterFactory: GsonConverterFactory
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(converterFactory)
-            .client(httpClient)
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    @Named(value = "retrofit")
     fun provideRetrofit(
-        baseUrl: String,
-        @Named(value = "ok_http_client") httpClient: OkHttpClient,
-        converterFactory: GsonConverterFactory
+        httpClient: OkHttpClient
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(BASE_URL)
             .client(httpClient)
-            .addConverterFactory(converterFactory)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
     @Provides
     @Singleton
     fun provideAuthService(
-        @Named(value = "retrofit") retrofit: Retrofit
+        retrofit: Retrofit
     ): AuthService {
         return retrofit.create(AuthService::class.java)
     }
@@ -125,7 +61,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideDistrictService(
-        @Named(value = "retrofit") retrofit: Retrofit
+        retrofit: Retrofit
     ): DistrictService {
         return retrofit.create(DistrictService::class.java)
     }
@@ -133,7 +69,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideJobService(
-        @Named(value = "retrofit") retrofit: Retrofit
+        retrofit: Retrofit
     ): JobService {
         return retrofit.create(JobService::class.java)
     }
@@ -141,7 +77,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideJobCategoryService(
-        @Named(value = "retrofit") retrofit: Retrofit
+        retrofit: Retrofit
     ): JobCategoryService {
         return retrofit.create(JobCategoryService::class.java)
     }
@@ -149,7 +85,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideRegionService(
-        @Named(value = "retrofit") retrofit: Retrofit
+        retrofit: Retrofit
     ): RegionService {
         return retrofit.create(RegionService::class.java)
     }
@@ -157,39 +93,23 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideWorkerService(
-        @Named(value = "retrofit") retrofit: Retrofit
+        retrofit: Retrofit
     ): WorkerService {
         return retrofit.create(WorkerService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideSecuredJobService(
-        @Named(value = "secured_retrofit") retrofit: Retrofit
-    ): SecuredJobService {
-        return retrofit.create(SecuredJobService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideSecuredWorkerService(
-        @Named(value = "secured_retrofit") retrofit: Retrofit
-    ): SecuredWorkerService {
-        return retrofit.create(SecuredWorkerService::class.java)
-    }
-
-    @Provides
-    @Singleton
     fun provideSecuredUserService(
-        @Named(value = "secured_retrofit") retrofit: Retrofit
-    ): SecuredUserService {
-        return retrofit.create(SecuredUserService::class.java)
+        retrofit: Retrofit
+    ): UserService {
+        return retrofit.create(UserService::class.java)
     }
 
     @Provides
     @Singleton
     fun provideExperience(
-        @Named(value = "secured_retrofit") retrofit: Retrofit
+        retrofit: Retrofit
     ): ExperienceService {
         return retrofit.create(ExperienceService::class.java)
     }
