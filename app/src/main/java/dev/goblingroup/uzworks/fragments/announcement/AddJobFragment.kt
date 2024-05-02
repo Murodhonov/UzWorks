@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,11 +22,11 @@ import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
-import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.convertPhoneNumber
 import dev.goblingroup.uzworks.utils.dmyToIso
 import dev.goblingroup.uzworks.utils.selectFemale
 import dev.goblingroup.uzworks.utils.selectMale
@@ -42,12 +42,13 @@ class AddJobFragment : Fragment() {
     private var _binding: FragmentAddJobBinding? = null
     private val binding get() = _binding!!
 
-    private val addJobViewModel: AddJobViewModel by viewModels()
+    private val addJobViewModel: AddJobViewModel by activityViewModels()
 
     private val addressViewModel: AddressViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
     private lateinit var loadingDialog: AlertDialog
+    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +61,7 @@ class AddJobFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
+
             loadRegions()
             loadDistricts()
             loadCategories()
@@ -68,7 +70,6 @@ class AddJobFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
-
             addJobViewModel.controlInput(
                 requireContext(),
                 topTv,
@@ -76,7 +77,6 @@ class AddJobFragment : Fragment() {
                 minAgeEt,
                 maxAgeEt,
                 salaryEt,
-                phoneNumberEt,
                 tgUserNameEt,
                 genderLayout,
                 titleEt,
@@ -89,6 +89,10 @@ class AddJobFragment : Fragment() {
                 districtLayout
             )
 
+            phoneNumberEt.editText?.setText(
+                addJobViewModel.phoneNumber.value.toString().convertPhoneNumber()
+            )
+
             saveBtn.setOnClickListener {
                 if (addJobViewModel.isFormValid(
                         requireContext(),
@@ -98,7 +102,6 @@ class AddJobFragment : Fragment() {
                         workingTimeEt,
                         workingScheduleEt,
                         tgUserNameEt,
-                        phoneNumberEt,
                         benefitEt,
                         requirementEt,
                         minAgeEt,
@@ -118,27 +121,102 @@ class AddJobFragment : Fragment() {
             }
 
             selectAddressBtn.setOnClickListener {
-                saveState()
-                val bundle = Bundle()
-                addJobViewModel.latitude.observe(viewLifecycleOwner) {
-                    bundle.putDouble("latitude", it)
-                }
-                addJobViewModel.longitude.observe(viewLifecycleOwner) {
-                    bundle.putDouble("longitude", it)
-                }
                 findNavController().navigate(
                     resId = R.id.action_addJobFragment_to_selectJobLocationFragment,
-                    args = bundle
+                    args = null
                 )
             }
+        }
+    }
 
-            setFragmentResultListener("lat_lng") { _, bundle ->
-                val lat = bundle.getDouble("latitude")
-                val lng = bundle.getDouble("longitude")
-                if (lat != 0.0 && lng != 0.0) {
-                    addJobViewModel.setLatitude(bundle.getDouble("latitude"))
-                    addJobViewModel.setLongitude(bundle.getDouble("longitude"))
+    override fun onPause() {
+        super.onPause()
+        binding.apply {
+            addJobViewModel.setTitle(titleEt.editText?.text.toString())
+            addJobViewModel.setSalary(
+                if (salaryEt.editText?.text.toString()
+                        .isNotEmpty()
+                ) salaryEt.editText?.text.toString().filter { !it.isWhitespace() }.toInt() else 0
+            )
+            addJobViewModel.setWorkingTime(workingTimeEt.editText?.text.toString())
+            addJobViewModel.setWorkingSchedule(workingScheduleEt.editText?.text.toString())
+            addJobViewModel.setDeadline(deadlineEt.editText?.text.toString())
+            addJobViewModel.setTgUsername(tgUserNameEt.editText?.text.toString())
+            addJobViewModel.setBenefit(benefitEt.editText?.text.toString())
+            addJobViewModel.setRequirement(requirementEt.editText?.text.toString())
+            addJobViewModel.setMinAge(
+                if (minAgeEt.editText?.text.toString()
+                        .isNotEmpty()
+                ) minAgeEt.editText?.text.toString().toInt() else 0
+            )
+            addJobViewModel.setMaxAge(
+                if (maxAgeEt.editText?.text.toString()
+                        .isNotEmpty()
+                ) maxAgeEt.editText?.text.toString().toInt() else 0
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.apply {
+            addJobViewModel.title.observe(viewLifecycleOwner) {
+                titleEt.editText?.setText(it)
+            }
+            addJobViewModel.salary.observe(viewLifecycleOwner) {
+                if (it == 0)
+                    salaryEt.editText?.setText("")
+                else
+                    salaryEt.editText?.setText(it.toString())
+            }
+            addJobViewModel.gender.observe(viewLifecycleOwner) {
+                if (it == GenderEnum.MALE.code) {
+                    genderLayout.selectMale(resources)
+                } else if (it == GenderEnum.FEMALE.code) {
+                    genderLayout.selectFemale(resources)
                 }
+            }
+            addJobViewModel.workingTime.observe(viewLifecycleOwner) {
+                workingTimeEt.editText?.setText(it)
+            }
+            addJobViewModel.workingSchedule.observe(viewLifecycleOwner) {
+                workingScheduleEt.editText?.setText(it)
+            }
+            addJobViewModel.deadline.observe(viewLifecycleOwner) {
+                deadlineEt.editText?.setText(it)
+            }
+            addJobViewModel.tgUserName.observe(viewLifecycleOwner) {
+                tgUserNameEt.editText?.setText(it)
+            }
+            addJobViewModel.benefit.observe(viewLifecycleOwner) {
+                benefitEt.editText?.setText(it)
+            }
+            addJobViewModel.requirement.observe(viewLifecycleOwner) {
+                requirementEt.editText?.setText(it)
+            }
+            addJobViewModel.minAge.observe(viewLifecycleOwner) {
+                if (it == 0)
+                    minAgeEt.editText?.setText("")
+                else
+                    minAgeEt.editText?.setText(it.toString())
+            }
+            addJobViewModel.maxAge.observe(viewLifecycleOwner) {
+                if (it == 0)
+                    maxAgeEt.editText?.setText("")
+                else
+                    maxAgeEt.editText?.setText(it.toString())
+            }
+            if (addJobViewModel.latitude.value != 0.0 && addJobViewModel.longitude.value != 0.0) {
+                selectAddressTv.text = resources.getString(R.string.location_saved)
+            }
+            addJobViewModel.categoryIndex.observe(viewLifecycleOwner) {
+                jobCategoryChoice.setSelection(it)
+            }
+            addJobViewModel.districtIndex.observe(viewLifecycleOwner) {
+                districtChoice.setSelection(it)
+            }
+            addJobViewModel.regionIndex.observe(viewLifecycleOwner) {
+                regionChoice.setSelection(it)
             }
         }
     }
@@ -151,18 +229,17 @@ class AddJobFragment : Fragment() {
                     categoryId = addJobViewModel.categoryId.value.toString(),
                     deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
                     districtId = addJobViewModel.districtId.value.toString(),
-                    gender = addJobViewModel.selectedGender,
+                    gender = addJobViewModel.gender.value,
                     instagramLink = "test",
                     latitude = addJobViewModel.latitude.value!!,
                     longitude = addJobViewModel.longitude.value!!,
                     maxAge = maxAgeEt.editText?.text.toString().toInt(),
                     minAge = minAgeEt.editText?.text.toString().toInt(),
-                    phoneNumber = phoneNumberEt.editText?.text.toString()
-                        .filter { !it.isWhitespace() },
+                    phoneNumber = addJobViewModel.phoneNumber.value.toString(),
                     requirement = requirementEt.editText?.text.toString(),
-                    salary = salaryEt.editText?.text.toString().toInt(),
+                    salary = salaryEt.editText?.text.toString().trim().filter { !it.isWhitespace() }.toInt(),
                     telegramLink = "test",
-                    tgUserName = tgUserNameEt.editText?.text.toString(),
+                    tgUserName = tgUserNameEt.editText?.text.toString().substring(1),
                     title = titleEt.editText?.text.toString(),
                     workingSchedule = workingScheduleEt.editText?.text.toString(),
                     workingTime = workingTimeEt.editText?.text.toString()
@@ -170,7 +247,7 @@ class AddJobFragment : Fragment() {
             ).observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
-                        error(it.error)
+                        error()
                     }
 
                     is ApiStatus.Loading -> {
@@ -178,137 +255,36 @@ class AddJobFragment : Fragment() {
                     }
 
                     is ApiStatus.Success -> {
-                        success(it.response)
+                        success()
                     }
                 }
             }
         }
     }
 
-    private fun saveState() {
-        binding.apply {
-            addJobViewModel.setBenefit(benefitEt.editText?.text.toString())
-            addJobViewModel.setDeadline(deadlineEt.editText?.text.toString())
-            addJobViewModel.setMaxAge(
-                if (maxAgeEt.editText?.text.toString()
-                        .isNotEmpty()
-                ) maxAgeEt.editText?.text.toString().toInt() else 0
-            )
-            addJobViewModel.setMinAge(
-                if (minAgeEt.editText?.text.toString()
-                        .isNotEmpty()
-                ) minAgeEt.editText?.text.toString().toInt() else 0
-            )
-            addJobViewModel.setPhoneNumber(phoneNumberEt.editText?.text.toString())
-            addJobViewModel.setRequirement(requirementEt.editText?.text.toString())
-            addJobViewModel.setSalary(
-                if (salaryEt.editText?.text.toString()
-                        .isNotEmpty()
-                ) salaryEt.editText?.text.toString().filter { !it.isWhitespace() }.toInt() else 0
-            )
-            addJobViewModel.setTgUsername(tgUserNameEt.editText?.text.toString())
-            addJobViewModel.setTitle(titleEt.editText?.text.toString())
-            addJobViewModel.setWorkingSchedule(workingScheduleEt.editText?.text.toString())
-            addJobViewModel.setWorkingSchedule(workingTimeEt.editText?.text.toString())
-        }
-    }
-
-    private fun error(error: Throwable) {
+    private fun error() {
+        loadingDialog.dismiss()
         Toast.makeText(requireContext(), "failed to create job", Toast.LENGTH_SHORT).show()
-        Log.d(TAG, "error: $error")
-        Log.d(TAG, "error: ${error.message}")
-        Log.d(TAG, "error: ${error.stackTrace}")
     }
 
     private fun loading() {
-        loadingDialog = AlertDialog.Builder(requireContext()).create()
-        val loadingBinding = LoadingDialogBinding.inflate(layoutInflater)
-        loadingDialog.setView(loadingBinding.root)
-        loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        loadingDialog.setCancelable(false)
+        try {
+            loadingDialog.show()
+        } catch (e: Exception) {
+            loadingDialog = AlertDialog.Builder(requireContext()).create()
+            loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+            loadingDialog.setView(loadingDialogItemBinding.root)
+            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
     }
 
-    private fun success(jobCreateResponse: JobCreateResponse?) {
+    private fun success() {
         loadingDialog.dismiss()
         Toast.makeText(requireContext(), "successfully created", Toast.LENGTH_SHORT).show()
+        addJobViewModel.clearLiveData()
         findNavController().popBackStack()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.apply {
-            addJobViewModel.benefit.observe(viewLifecycleOwner) {
-                benefitEt.editText?.setText(it)
-            }
-            addJobViewModel.deadline.observe(viewLifecycleOwner) {
-                deadlineEt.editText?.setText(it)
-            }
-            addJobViewModel.maxAge.observe(viewLifecycleOwner) {
-                if (it == 0)
-                    maxAgeEt.editText?.setText("")
-                else
-                    maxAgeEt.editText?.setText(it.toString())
-            }
-            addJobViewModel.minAge.observe(viewLifecycleOwner) {
-                if (it == 0)
-                    minAgeEt.editText?.setText("")
-                else
-                    minAgeEt.editText?.setText(it.toString())
-            }
-            addJobViewModel.phoneNumber.observe(viewLifecycleOwner) {
-                phoneNumberEt.editText?.setText(it)
-            }
-            addJobViewModel.requirement.observe(viewLifecycleOwner) {
-                requirementEt.editText?.setText(it)
-            }
-            addJobViewModel.salary.observe(viewLifecycleOwner) {
-                if (it == 0)
-                    salaryEt.editText?.setText("")
-                else
-                    salaryEt.editText?.setText(it.toString())
-            }
-            addJobViewModel.tgUserName.observe(viewLifecycleOwner) {
-                tgUserNameEt.editText?.setText(it)
-            }
-            addJobViewModel.title.observe(viewLifecycleOwner) {
-                titleEt.editText?.setText(it)
-            }
-            addJobViewModel.workingSchedule.observe(viewLifecycleOwner) {
-                workingScheduleEt.editText?.setText(it)
-            }
-            addJobViewModel.workingTime.observe(viewLifecycleOwner) {
-                workingTimeEt.editText?.setText(it)
-            }
-
-            addJobViewModel.gender.observe(viewLifecycleOwner) {
-                if (it == GenderEnum.MALE.code) {
-                    genderLayout.selectMale(resources)
-                } else if (it == GenderEnum.FEMALE.code) {
-                    genderLayout.selectFemale(resources)
-                }
-            }
-
-            addJobViewModel.categoryIndex.observe(viewLifecycleOwner) {
-                jobCategoryChoice.setSelection(it)
-            }
-            addJobViewModel.districtIndex.observe(viewLifecycleOwner) {
-                districtChoice.setSelection(it)
-            }
-            addJobViewModel.regionIndex.observe(viewLifecycleOwner) {
-                regionChoice.setSelection(it)
-            }
-
-            var isLocationAvailable = false
-            addJobViewModel.latitude.observe(viewLifecycleOwner) {
-                isLocationAvailable = it != 0.0
-            }
-            addJobViewModel.longitude.observe(viewLifecycleOwner) {
-                isLocationAvailable = it != 0.0
-            }
-            if (isLocationAvailable) selectAddressTv.text =
-                resources.getString(R.string.location_saved)
-        }
-
     }
 
     private fun loadRegions() {
@@ -352,6 +328,8 @@ class AddJobFragment : Fragment() {
             regionChoice.setOnItemClickListener { parent, view, position, id ->
                 districtChoice.text.clear()
                 districtChoice.hint = "Select district"
+                addJobViewModel.setRegionId(regionList[position].id)
+                addJobViewModel.setRegionIndex(position)
                 setDistricts(regionList[position].id)
             }
         }

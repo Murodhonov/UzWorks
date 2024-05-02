@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
@@ -21,16 +22,14 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse
-import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
-import dev.goblingroup.uzworks.utils.ConstValues
+import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.extractErrorMessage
-import dev.goblingroup.uzworks.utils.formatPhoneNumber
 import dev.goblingroup.uzworks.utils.formatSalary
 import dev.goblingroup.uzworks.utils.formatTgUsername
 import dev.goblingroup.uzworks.utils.selectFemale
@@ -44,6 +43,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddJobViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository,
+    private val securityRepository: SecurityRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -52,72 +52,67 @@ class AddJobViewModel @Inject constructor(
     private val createLiveData =
         MutableLiveData<ApiStatus<JobCreateResponse>>(ApiStatus.Loading())
 
-    private val editLiveData =
-        MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
+    private val _title = MutableLiveData("")
+    val title get() = _title
 
-    lateinit var jobId: String
-    var selectedGender: Int? = null
+    private val _salary = MutableLiveData(0)
+    val salary get() = _salary
 
-    private val _jobLiveData = MutableLiveData<ApiStatus<JobResponse>>(ApiStatus.Loading())
+    private val _gender = MutableLiveData(GenderEnum.UNKNOWN.code)
+    val gender get() = _gender
+
+    private val _workingTime = MutableLiveData("")
+    val workingTime get() = _workingTime
+
+    private val _workingSchedule = MutableLiveData("")
+    val workingSchedule get() = _workingSchedule
+
+    private val _deadline = MutableLiveData("")
+    val deadline get() = _deadline
+
+    private val _tgUserName = MutableLiveData("")
+    val tgUserName get() = _tgUserName
+
+    private val _phoneNumber = MutableLiveData(securityRepository.getPhoneNumber())
+    val phoneNumber get() = _phoneNumber
 
     private val _benefit = MutableLiveData("")
-    val benefit: LiveData<String> get() = _benefit
+    val benefit get() = _benefit
 
-    private val _categoryId = MutableLiveData("")
-    val categoryId: LiveData<String> get() = _categoryId
+    private val _requirement = MutableLiveData("")
+    val requirement get() = _requirement
+
+    private val _minAge = MutableLiveData(0)
+    val minAge get() = _minAge
+
+    private val _maxAge = MutableLiveData(0)
+    val maxAge get() = _maxAge
 
     private val _latitude = MutableLiveData(0.0)
 
-    val latitude: LiveData<Double> get() = _latitude
+    val latitude get() = _latitude
 
     private val _longitude = MutableLiveData(0.0)
 
-    val longitude: LiveData<Double> get() = _longitude
+    val longitude get() = _longitude
 
-    private val _deadline = MutableLiveData("")
-    val deadline: LiveData<String> get() = _deadline
+    private val _categoryId = MutableLiveData("")
+    val categoryId get() = _categoryId
 
     private val _districtId = MutableLiveData("")
-    val districtId: LiveData<String> get() = _districtId
+    val districtId get() = _districtId
 
-    private val _gender = MutableLiveData(0)
-    val gender: LiveData<Int> get() = _gender
-
-    private val _maxAge = MutableLiveData(0)
-    val maxAge: LiveData<Int> get() = _maxAge
-
-    private val _minAge = MutableLiveData(0)
-    val minAge: LiveData<Int> get() = _minAge
-
-    private val _phoneNumber = MutableLiveData("")
-    val phoneNumber: LiveData<String> get() = _phoneNumber
-
-    private val _requirement = MutableLiveData("")
-    val requirement: LiveData<String> get() = _requirement
-
-    private val _salary = MutableLiveData(0)
-    val salary: LiveData<Int> get() = _salary
-
-    private val _tgUserName = MutableLiveData("")
-    val tgUserName: LiveData<String> get() = _tgUserName
-
-    private val _title = MutableLiveData("")
-    val title: LiveData<String> get() = _title
-
-    private val _workingSchedule = MutableLiveData("")
-    val workingSchedule: LiveData<String> get() = _workingSchedule
-
-    private val _workingTime = MutableLiveData("")
-    val workingTime: LiveData<String> get() = _workingTime
+    private val _regionId = MutableLiveData("")
+    val regionId get() = _regionId
 
     private val _categoryIndex = MutableLiveData(0)
-    val categoryIndex: LiveData<Int> get() = _categoryIndex
+    val categoryIndex get() = _categoryIndex
 
     private val _regionIndex = MutableLiveData(0)
-    val regionIndex: LiveData<Int> get() = _regionIndex
+    val regionIndex get() = _regionIndex
 
     private val _districtIndex = MutableLiveData(0)
-    val districtIndex: LiveData<Int> get() = _districtIndex
+    val districtIndex get() = _districtIndex
 
     fun createJob(jobCreateRequest: JobCreateRequest): LiveData<ApiStatus<JobCreateResponse>> {
         viewModelScope.launch {
@@ -144,7 +139,6 @@ class AddJobViewModel @Inject constructor(
         minAgeEt: TextInputLayout,
         maxAgeEt: TextInputLayout,
         salaryEt: TextInputLayout,
-        phoneNumberEt: TextInputLayout,
         tgUserNameEt: TextInputLayout,
         genderLayout: GenderChoiceLayoutBinding,
         titleEt: TextInputLayout,
@@ -175,7 +169,7 @@ class AddJobViewModel @Inject constructor(
                         if (selectedCalendar.before(currentCalendar)) {
                             Toast.makeText(
                                 context,
-                                "Cannot select date before current date",
+                                context.resources.getString(R.string.invalid_deadline),
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
@@ -189,7 +183,7 @@ class AddJobViewModel @Inject constructor(
                     deadlineEt.editText?.text.toString()
                         .extractDateValue(DateEnum.YEAR.dateLabel),
                     deadlineEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.MONTH.dateLabel),
+                        .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
                     deadlineEt.editText?.text.toString()
                         .extractDateValue(DateEnum.DATE.dateLabel)
                 )
@@ -282,47 +276,6 @@ class AddJobViewModel @Inject constructor(
 
         })
 
-        phoneNumberEt.editText?.setText(context.resources.getString(R.string.phone_number_prefix))
-        phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
-            private var isFormatting = false
-
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-
-            }
-
-            override fun onTextChanged(
-                s: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (isFormatting)
-                    return
-
-                isFormatting = true
-                val newText = s.toString().filter { !it.isWhitespace() }
-                val oldText =
-                    phoneNumberEt.editText?.tag.toString().filter { !it.isWhitespace() }
-                val formattedPhone =
-                    s?.filter { !it.isWhitespace() }.toString()
-                        .formatPhoneNumber(newText.length < oldText.length)
-                phoneNumberEt.editText?.setText(formattedPhone)
-                phoneNumberEt.editText?.setSelection(formattedPhone.length)
-                phoneNumberEt.tag = formattedPhone
-
-                isFormatting = false
-            }
-        })
-
         tgUserNameEt.editText?.addTextChangedListener(object : TextWatcher {
             var isFormatting = false
 
@@ -349,14 +302,14 @@ class AddJobViewModel @Inject constructor(
 
         genderLayout.apply {
             maleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.FEMALE.code || selectedGender == null) {
-                    selectedGender = GenderEnum.MALE.code
+                if (gender.value?.toInt() != GenderEnum.MALE.code) {
+                    _gender.value = GenderEnum.MALE.code
                     selectMale(context.resources)
                 }
             }
             femaleBtn.setOnClickListener {
-                if (selectedGender == GenderEnum.MALE.code || selectedGender == null) {
-                    selectedGender = GenderEnum.FEMALE.code
+                if (gender.value?.toInt() != GenderEnum.FEMALE.code) {
+                    _gender.value = GenderEnum.FEMALE.code
                     selectFemale(context.resources)
                 }
             }
@@ -389,12 +342,6 @@ class AddJobViewModel @Inject constructor(
         tgUserNameEt.editText?.doAfterTextChanged {
             if (tgUserNameEt.isErrorEnabled && it.toString().isNotEmpty()) {
                 tgUserNameEt.isErrorEnabled = false
-            }
-        }
-
-        phoneNumberEt.editText?.doAfterTextChanged {
-            if (phoneNumberEt.isErrorEnabled && it.toString().isNotEmpty()) {
-                phoneNumberEt.isErrorEnabled = false
             }
         }
 
@@ -442,9 +389,8 @@ class AddJobViewModel @Inject constructor(
         _districtId.value = value
     }
 
-    fun setGender(value: Int) {
-        Log.d(ConstValues.TAG, "setGender: $value")
-        _gender.value = value
+    fun setRegionId(value: String) {
+        _regionId.value = value
     }
 
     fun setMaxAge(value: Int) {
@@ -453,10 +399,6 @@ class AddJobViewModel @Inject constructor(
 
     fun setMinAge(value: Int) {
         _minAge.value = value
-    }
-
-    fun setPhoneNumber(value: String) {
-        _phoneNumber.value = value
     }
 
     fun setRequirement(value: String) {
@@ -483,6 +425,18 @@ class AddJobViewModel @Inject constructor(
         _workingTime.value = value
     }
 
+    fun setCategoryIndex(value: Int) {
+        _categoryIndex.value = value
+    }
+
+    fun setRegionIndex(value: Int) {
+        _regionIndex.value = value
+    }
+
+    fun setDistrictIndex(value: Int) {
+        _districtIndex.value = value
+    }
+
     fun isFormValid(
         context: Context,
         deadlineEt: TextInputLayout,
@@ -491,7 +445,6 @@ class AddJobViewModel @Inject constructor(
         workingTimeEt: TextInputLayout,
         workingScheduleEt: TextInputLayout,
         tgUserNameEt: TextInputLayout,
-        phoneNumberEt: TextInputLayout,
         benefitEt: TextInputLayout,
         requirementEt: TextInputLayout,
         minAgeEt: TextInputLayout,
@@ -527,10 +480,6 @@ class AddJobViewModel @Inject constructor(
             tgUserNameEt.isErrorEnabled = true
             tgUserNameEt.error = context.resources.getString(R.string.tg_username_error)
         }
-        if (phoneNumberEt.editText?.text.toString().filter { !it.isWhitespace() }.length != 13) {
-            phoneNumberEt.isErrorEnabled = true
-            phoneNumberEt.error = context.resources.getString(R.string.phone_number_error)
-        }
         if (benefitEt.editText?.text.toString().isEmpty()) {
             benefitEt.isErrorEnabled = true
             benefitEt.error = context.resources.getString(R.string.benefit_error)
@@ -547,20 +496,11 @@ class AddJobViewModel @Inject constructor(
             maxAgeEt.isErrorEnabled = true
             maxAgeEt.error = context.resources.getString(R.string.benefit_error)
         }
-        if (!districtChoice.isSelected) {
+        if (districtId.value?.isEmpty() == true) {
             districtChoice.error = context.resources.getString(R.string.district_error)
-            districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
         }
-        if (!jobCategoryChoice.isSelected) {
-            jobCategoryChoice.error = context.resources.getString(R.string.district_error)
-            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
-        }
-        if (selectedGender == null) {
-            Toast.makeText(
-                context,
-                context.resources.getString(R.string.confirm_gender),
-                Toast.LENGTH_SHORT
-            ).show()
+        if (categoryId.value?.isEmpty() == true) {
+            jobCategoryChoice.error = context.resources.getString(R.string.job_category_error)
         }
         if (latitude.value == 0.0 && longitude.value == 0.0) {
             Toast.makeText(context, context.getString(R.string.select_location), Toast.LENGTH_SHORT).show()
@@ -568,7 +508,6 @@ class AddJobViewModel @Inject constructor(
         return !deadlineEt.isErrorEnabled &&
                 !titleEt.isErrorEnabled &&
                 !salaryEt.isErrorEnabled &&
-                selectedGender != null &&
                 !workingTimeEt.isErrorEnabled &&
                 !workingScheduleEt.isErrorEnabled &&
                 !tgUserNameEt.isErrorEnabled &&
@@ -579,6 +518,10 @@ class AddJobViewModel @Inject constructor(
                 !jobCategoryLayout.isErrorEnabled &&
                 latitude.value != 0.0 &&
                 longitude.value != 0.0
+    }
+
+    fun clearLiveData() {
+
     }
 
 }

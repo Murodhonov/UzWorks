@@ -209,4 +209,6 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="phone_number_copied">Telefon raqami nusxalandi</string>
     <string name="update_user_failed">Nimadir xato ketdi, keyinroq qayta urining</string>
     <string name="invalid_deadline">Muddati bugundan oldin bo\'lishi mumkin emas</string>
+    <string name="working_time_helper">Masalan: Men ertalab 08:00 dan 18:00 gacha ishlay olaman</string>
+    <string name="working_schedule_helper">Masalan: Dushanbadan jumagacha ishlay olaman</string>
 </resources>

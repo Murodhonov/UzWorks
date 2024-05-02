@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationServices
@@ -26,23 +27,26 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSelectJobLocationBinding
 import dev.goblingroup.uzworks.databinding.JobAddressDialogBinding
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LATITUDE
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LONGITUDE
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.vm.AddJobViewModel
 
+@AndroidEntryPoint
 class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentSelectJobLocationBinding? = null
     private val binding get() = _binding!!
 
+    private val addJobViewModel: AddJobViewModel by activityViewModels()
+
     private lateinit var googleMap: GoogleMap
 
     private var selectedLocation = LatLng(0.0, 0.0)
-
-    private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
     private var previousMarker: Marker? = null
 
@@ -107,7 +111,7 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
     private fun requestLocationPermission() {
         requestPermissions(
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_PERMISSION_REQUEST_CODE
+            1
         )
     }
 
@@ -117,7 +121,7 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+        if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 findUser()
                 updateFindBtn()
@@ -143,10 +147,8 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setLocation() {
-        val bundle = Bundle()
-        bundle.putDouble("latitude", if (selectedLocation.latitude == DEFAULT_LATITUDE) 0.0 else selectedLocation.latitude)
-        bundle.putDouble("longitude", if (selectedLocation.longitude == DEFAULT_LONGITUDE) 0.0 else selectedLocation.longitude)
-        setFragmentResult("lat_lng", bundle)
+        addJobViewModel.setLatitude(selectedLocation.latitude)
+        addJobViewModel.setLongitude(selectedLocation.longitude)
         findNavController().popBackStack()
     }
 

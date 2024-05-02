@@ -210,4 +210,6 @@
     <string name="phone_number_copied">Телефон рақами нусхаланди</string>
     <string name="update_user_failed">Нимадир хато кетди, кейинроқ қайта урининг</string>
     <string name="invalid_deadline">Муддати бугундан олдин бўлиши мумкин эмас</string>
+    <string name="working_time_helper">Масалан: Мен эрталаб 08:00 дан 18:00 гача ишлай оламан</string>
+    <string name="working_schedule_helper">Масалан: Душанбадан жумагача ишлай оламан</string>
 </resources>

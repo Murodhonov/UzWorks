@@ -133,7 +133,6 @@ class AddWorkerFragment : Fragment() {
     private fun createWorker() {
         binding.apply {
             lifecycleScope.launch {
-                Toast.makeText(requireContext(), "creating worker", Toast.LENGTH_SHORT).show()
                 addWorkerViewModel.addWorker(
                     workerCreateRequest = WorkerCreateRequest(
                         birthDate = if (birthdayEt.editText?.text.toString()

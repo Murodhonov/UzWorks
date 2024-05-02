@@ -207,6 +207,8 @@
     <string name="server_problem">Произошла непредвиденная ошибка на сервере. Повторите попытку позже</string>
     <string name="birthdate_requirement">Вам должно быть не менее 16 лет</string>
     <string name="phone_number_copied">Номер телефона скопирован</string>
-    <string name="update_user_failed">Что-то пошло не так, повторите попытку позже.</string>
+    <string name="update_user_failed">Что-то пошло не так, повторите попытку позже</string>
     <string name="invalid_deadline">Крайний срок не может быть раньше сегодняшнего дня</string>
+    <string name="working_time_helper">Например: Я могу работать с 08:00 до 18:00</string>
+    <string name="working_schedule_helper">Например: Я могу работать с понедельника по пятницу</string>
 </resources>

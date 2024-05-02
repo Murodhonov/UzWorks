@@ -209,4 +209,6 @@ The information displayed to you is determined by the role you choose</string>
     <string name="phone_number_copied">Phone number copied</string>
     <string name="update_user_failed">Something went wrong, try again later</string>
     <string name="invalid_deadline">Deadline cannot be before today</string>
+    <string name="working_time_helper">For example: I can work from 08:00 AM until 06:00 PM</string>
+    <string name="working_schedule_helper">For example: I can work from Monday until Friday</string>
 </resources>

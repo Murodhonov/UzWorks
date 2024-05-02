@@ -56,29 +56,6 @@ class AddWorkerViewModel @Inject constructor(
     var birthdate = securityRepository.getBirthdate().toString()
     var phoneNumber = securityRepository.getPhoneNumber().toString()
 
-    /*fun addWorker(workerCreateRequest: WorkerCreateRequest): LiveData<ApiStatus<WorkerCreateResponse>> {
-        viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
-                Log.d(TAG, "addWorker: creating $workerCreateRequest")
-                val addWorkerResponse = announcementRepository.createWorker(workerCreateRequest)
-                if (addWorkerResponse.isSuccessful) {
-                    Log.d(TAG, "addWorker: succeeded")
-                    addLiveData.postValue(ApiStatus.Success(addWorkerResponse.body()))
-                } else {
-                    addLiveData.postValue(ApiStatus.Error(Throwable(addWorkerResponse.message())))
-                    Log.e(TAG, "addWorker: ${addWorkerResponse.code()}")
-                    Log.e(
-                        TAG,
-                        "addWorker: ${
-                            addWorkerResponse.errorBody()?.extractErrorMessage().toString()
-                        }"
-                    )
-                }
-            }
-        }
-        return addLiveData
-    }*/
-
     fun addWorker(workerCreateRequest: WorkerCreateRequest): LiveData<ApiStatus<WorkerCreateResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {

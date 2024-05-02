@@ -67,8 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:hint="@string/title"
-                    android:imeOptions="normal"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:textSize="@dimen/_10ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -97,6 +96,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:helperText="@string/working_time_helper"
+                app:helperTextEnabled="true"
+                app:helperTextTextColor="@color/yellow"
                 android:theme="@style/TextInputEditTextStyle"
                 android:hint="@string/working_time"
                 app:endIconTint="@color/black_blue"
@@ -106,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:textSize="@dimen/_10ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -115,6 +117,9 @@
                 android:id="@+id/working_schedule_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:helperText="@string/working_schedule_helper"
+                app:helperTextEnabled="true"
+                app:helperTextTextColor="@color/yellow"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:theme="@style/TextInputEditTextStyle"
                 android:hint="@string/working_schedule"
@@ -125,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:textSize="@dimen/_10ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -161,7 +166,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:hint="@string/benefit"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:textSize="@dimen/_10ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -179,7 +184,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:hint="@string/requirements"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:textSize="@dimen/_10ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -212,6 +217,7 @@
                         android:layout_height="@dimen/_35sdp"
                         android:digits="1234567890"
                         android:hint="@string/min"
+                        android:maxLength="2"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
                         android:minWidth="@dimen/_70sdp"
@@ -234,6 +240,7 @@
                         android:digits="1234567890"
                         android:hint="@string/max"
                         android:minWidth="@dimen/_100sdp"
+                        android:maxLength="2"
                         android:imeOptions="actionDone"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_10ssp" />
@@ -278,6 +285,9 @@
                 android:layout_width="match_parent"
                 android:theme="@style/TextInputEditTextStyle"
                 android:layout_height="wrap_content"
+                app:endIconDrawable="@drawable/ic_copy"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black_blue"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:errorEnabled="false">
 
@@ -285,8 +295,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:hint="@string/phone_number"
-                    android:imeOptions="actionNext"
-                    android:inputType="phone"
+                    android:editable="false"
+                    android:inputType="none"
                     android:textSize="@dimen/_10ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -339,6 +349,7 @@
                 app:endIconMode="dropdown_menu"
                 android:theme="@style/TextInputEditTextStyle"
                 app:endIconTint="@color/black_blue"
+                app:errorEnabled="false"
                 app:hintEnabled="false">
 
                 <AutoCompleteTextView
@@ -367,6 +378,7 @@
                 app:endIconMode="dropdown_menu"
                 android:theme="@style/TextInputEditTextStyle"
                 app:endIconTint="@color/black_blue"
+                app:errorEnabled="false"
                 app:hintEnabled="false">
 
                 <AutoCompleteTextView
@@ -403,6 +415,7 @@
                 android:id="@+id/job_category_layout"
                 android:theme="@style/TextInputEditTextStyle"
                 app:endIconTint="@color/black_blue"
+                app:errorEnabled="false"
                 app:hintEnabled="false">
 
                 <AutoCompleteTextView
