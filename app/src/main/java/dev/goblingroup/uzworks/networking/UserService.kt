@@ -31,6 +31,6 @@ interface UserService {
     suspend fun resetPassword(
         @Header(AUTH) token: String,
         @Body updatePasswordRequest: UpdatePasswordRequest
-    ): Response<UpdatePasswordResponse>
+    ): Response<Unit>
 
 }

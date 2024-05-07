@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,9 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentUpdatePasswordBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.UpdatePasswordViewModel
 
@@ -30,7 +32,7 @@ class UpdatePasswordFragment : Fragment() {
     private val updatePasswordViewModel: UpdatePasswordViewModel by viewModels()
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogBinding: LoadingDialogBinding
+    private lateinit var loadingDialogBinding: LoadingDialogItemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,12 +45,6 @@ class UpdatePasswordFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            loadingDialog = AlertDialog.Builder(requireContext()).create()
-            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
-            loadingDialog.setView(loadingDialogBinding.root)
-            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            loadingDialog.setCancelable(false)
-
             updateBtn.setOnClickListener {
                 if (updatePasswordViewModel.isFormValid(
                         resources,
@@ -67,18 +63,18 @@ class UpdatePasswordFragment : Fragment() {
                     ).observe(viewLifecycleOwner) {
                         when (it) {
                             is ApiStatus.Error -> {
-                                loadingDialog.dismiss()
+                                hideLoading()
                                 oldPasswordEt.isErrorEnabled = true
                                 oldPasswordEt.error =
                                     resources.getString(R.string.enter_old_password)
                             }
 
                             is ApiStatus.Loading -> {
-                                loadingDialog.show()
+                                loading()
                             }
 
                             is ApiStatus.Success -> {
-                                loadingDialog.dismiss()
+                                hideLoading()
                                 Toast.makeText(requireContext(), resources.getString(R.string.password_updated), Toast.LENGTH_SHORT).show()
                                 findNavController().popBackStack()
                             }
@@ -97,6 +93,27 @@ class UpdatePasswordFragment : Fragment() {
                 confirmNewPasswordEt,
                 root
             )
+        }
+    }
+
+    private fun loading() {
+        try {
+            loadingDialog.show()
+        } catch (e: Exception) {
+            loadingDialog = AlertDialog.Builder(requireContext()).create()
+            loadingDialogBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+            loadingDialog.setView(loadingDialogBinding.root)
+            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
+    }
+
+    private fun hideLoading() {
+        try {
+            loadingDialog.dismiss()
+        } catch (e: Exception) {
+            Log.e(TAG, "hideLoading: ${e.message}")
         }
     }
 

@@ -1,6 +1,7 @@
 package dev.goblingroup.uzworks.vm
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.LiveData
@@ -14,6 +15,7 @@ import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
 import dev.goblingroup.uzworks.models.response.UpdatePasswordResponse
 import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.repository.SecurityRepository
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.isStrongPassword
 import kotlinx.coroutines.launch
@@ -26,14 +28,12 @@ class UpdatePasswordViewModel @Inject constructor(
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    private val resetPasswordLiveData = MutableLiveData<ApiStatus<UpdatePasswordResponse>>()
+    private val resetPasswordLiveData = MutableLiveData<ApiStatus<Unit>>()
 
-    fun updatePassword(updatePasswordRequest: UpdatePasswordRequest): LiveData<ApiStatus<UpdatePasswordResponse>> {
+    fun updatePassword(updatePasswordRequest: UpdatePasswordRequest): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                if (resetPasswordLiveData.value !is ApiStatus.Loading) {
-                    resetPasswordLiveData.postValue(ApiStatus.Loading())
-                }
+                resetPasswordLiveData.postValue(ApiStatus.Loading())
                 val resetPasswordResponse = userService.resetPassword(securityRepository.getToken(), updatePasswordRequest)
                 if (resetPasswordResponse.isSuccessful) {
                     resetPasswordLiveData.postValue(ApiStatus.Success(resetPasswordResponse.body()))
@@ -62,16 +62,14 @@ class UpdatePasswordViewModel @Inject constructor(
             newPasswordEt.isErrorEnabled = true
             newPasswordEt.error = resources.getString(R.string.password_requirements)
         }
-        if (confirmNewPasswordEt.editText?.text.toString().isEmpty()) {
+        if (confirmNewPasswordEt.editText?.text.toString() != newPasswordEt.editText?.text.toString()) {
             confirmNewPasswordEt.isErrorEnabled = true
             confirmNewPasswordEt.error = resources.getString(R.string.confirm_new_password)
         }
         return !oldPasswordEt.isErrorEnabled &&
                 !newPasswordEt.isErrorEnabled &&
-                !confirmNewPasswordEt.isErrorEnabled &&
-                confirmNewPasswordEt.editText?.text.toString() == newPasswordEt.editText?.text.toString()
+                !confirmNewPasswordEt.isErrorEnabled
     }
-
 
     fun getUserId() = securityRepository.getUserId()
 

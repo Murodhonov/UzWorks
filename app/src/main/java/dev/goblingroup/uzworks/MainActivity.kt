@@ -4,7 +4,7 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -12,6 +12,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.databinding.ActivityMainBinding
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.utils.LanguageEnum
 import dev.goblingroup.uzworks.utils.LanguageManager
 import dev.goblingroup.uzworks.vm.MainViewModel
 import dev.goblingroup.uzworks.vm.SecurityViewModel
@@ -24,8 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
-
-    private lateinit var bottomMenu: Menu
 
     private val securityViewModel: SecurityViewModel by viewModels()
 
@@ -42,8 +42,12 @@ class MainActivity : AppCompatActivity() {
                 connectivityReceiver,
                 IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
             )
+
+            Log.d(TAG, "onCreate: ${securityViewModel.getLanguageCode()}")
             if (securityViewModel.getLanguageCode() != null) {
                 LanguageManager.setLanguage(securityViewModel.getLanguageCode().toString(), this@MainActivity)
+            } else {
+                LanguageManager.setLanguage(LanguageEnum.ENGLISH.code, this@MainActivity)
             }
             setContentView(root)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
