@@ -228,7 +228,7 @@ class ForgotPasswordFragment : Fragment() {
                         ).observe(viewLifecycleOwner) {
                             when (it) {
                                 is ApiStatus.Error -> {
-                                    Toast.makeText(requireContext(), "failed", Toast.LENGTH_SHORT)
+                                    Toast.makeText(requireContext(), resources.getString(R.string.verification_code_incorrect), Toast.LENGTH_SHORT)
                                         .show()
                                 }
 

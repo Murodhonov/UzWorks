@@ -77,9 +77,10 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
             .observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
-                        Toast.makeText(requireContext(), "failed to load job", Toast.LENGTH_SHORT)
+                        Toast.makeText(requireContext(), resources.getString(R.string.fetch_job_failed), Toast.LENGTH_SHORT)
                             .show()
                         loadingDialog.dismiss()
+                        findNavController().popBackStack()
                     }
 
                     is ApiStatus.Loading -> {
@@ -192,9 +193,9 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
         try {
             startActivity(intent)
         } catch (e: Exception) {
-            Log.e(ConstValues.TAG, "call: $e")
-            Log.e(ConstValues.TAG, "call: ${e.message}")
-            Log.e(ConstValues.TAG, "call: ${e.printStackTrace()}")
+            Log.e(TAG, "call: $e")
+            Log.e(TAG, "call: ${e.message}")
+            Log.e(TAG, "call: ${e.printStackTrace()}")
         }
     }
 
@@ -229,16 +230,11 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
             mapIntent.setPackage("com.google.android.apps.maps")
 
             try {
-                Toast.makeText(
-                    requireContext(),
-                    "opening $latitude, $longitude",
-                    Toast.LENGTH_SHORT
-                ).show()
                 startActivity(mapIntent)
             } catch (e: Exception) {
                 Toast.makeText(
                     requireContext(),
-                    "failed to open $latitude, $longitude",
+                    resources.getString(R.string.open_location_failed),
                     Toast.LENGTH_SHORT
                 ).show()
             }

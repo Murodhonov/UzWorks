@@ -98,7 +98,7 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "failed to get location", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), resources.getString(R.string.get_location_failed), Toast.LENGTH_SHORT)
                     .show()
                 Log.e(TAG, "findUser: ${it.message}")
             }
@@ -121,8 +121,6 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 findUser()
                 updateFindBtn()
-            } else {
-                Toast.makeText(requireContext(), "denied", Toast.LENGTH_SHORT).show()
             }
         }
     }

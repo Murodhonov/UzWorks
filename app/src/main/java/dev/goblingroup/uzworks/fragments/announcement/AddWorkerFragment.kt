@@ -24,6 +24,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
+import dev.goblingroup.uzworks.databinding.BirthdayGenderExplanationBinding
 import dev.goblingroup.uzworks.databinding.FragmentAddWorkerBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
@@ -55,6 +56,9 @@ class AddWorkerFragment : Fragment() {
     private lateinit var loadingDialog: AlertDialog
     private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
 
+    private lateinit var birthdayGenderExplanationDialog: AlertDialog
+    private lateinit var birthdayGenderExplanationBinding: BirthdayGenderExplanationBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,17 +76,14 @@ class AddWorkerFragment : Fragment() {
 
             topTv.isSelected = true
 
-            loadRegions()
-            loadDistricts()
-            loadCategories()
+            setRegions(addressViewModel.listRegions())
+            setJobCategories(jobCategoryViewModel.listJobCategories())
 
             addWorkerViewModel.controlInput(
                 fragmentActivity = requireActivity(),
                 deadlineEt = deadlineEt,
-                birthdayEt = birthdayEt,
                 titleEt = titleEt,
                 salaryEt = salaryEt,
-                genderLayout = genderLayout,
                 workingTimeEt = workingTimeEt,
                 workingScheduleEt = workingScheduleEt,
                 tgUserNameEt = tgUserNameEt,
@@ -104,6 +105,16 @@ class AddWorkerFragment : Fragment() {
                         requireContext().resources.getString(R.string.phone_number_copied),
                         Toast.LENGTH_SHORT
                     ).show()
+                }
+            }
+
+            genderLayout.root.setOnClickListener {
+                birthdayGenderExplanation(resources.getString(R.string.gender_restriction_explanation))
+            }
+
+            birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    birthdayGenderExplanation(resources.getString(R.string.birthday_restriction_explanation))
                 }
             }
 
@@ -130,7 +141,7 @@ class AddWorkerFragment : Fragment() {
             }
 
             phoneNumberEt.editText?.setText(addWorkerViewModel.phoneNumber.convertPhoneNumber())
-            if (addWorkerViewModel.birthdate != null && addWorkerViewModel.birthdate != DEFAULT_BIRTHDAY) {
+            if (addWorkerViewModel.birthdate != DEFAULT_BIRTHDAY) {
                 birthdayEt.editText?.setText(addWorkerViewModel.birthdate?.isoToDmy())
             }
 
@@ -150,15 +161,31 @@ class AddWorkerFragment : Fragment() {
         }
     }
 
+    private fun birthdayGenderExplanation(explanationMessage: String) {
+        try {
+            birthdayGenderExplanationDialog.show()
+        } catch (e: Exception) {
+            birthdayGenderExplanationDialog = AlertDialog.Builder(requireContext()).create()
+            birthdayGenderExplanationBinding = BirthdayGenderExplanationBinding.inflate(layoutInflater)
+            birthdayGenderExplanationDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            birthdayGenderExplanationDialog.setView(birthdayGenderExplanationBinding.root)
+            birthdayGenderExplanationDialog.show()
+        }
+        birthdayGenderExplanationBinding.apply {
+            explanationTv.text = explanationMessage
+
+            close.setOnClickListener {
+                birthdayGenderExplanationDialog.dismiss()
+            }
+        }
+    }
+
     private fun createWorker() {
         binding.apply {
             lifecycleScope.launch {
                 addWorkerViewModel.addWorker(
                     workerCreateRequest = WorkerCreateRequest(
-                        birthDate = if (birthdayEt.editText?.text.toString()
-                                .isEmpty()
-                        ) DEFAULT_BIRTHDAY else birthdayEt.editText?.text.toString().dmyToIso()
-                            .toString(),
+                        birthDate = addWorkerViewModel.birthdate.toString(),
                         categoryId = addWorkerViewModel.jobCategoryId,
                         deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
                         districtId = addWorkerViewModel.districtId,
@@ -211,36 +238,8 @@ class AddWorkerFragment : Fragment() {
 
     private fun succeeded() {
         loadingDialog.dismiss()
-        Toast.makeText(requireContext(), "succeeded", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.worker_announcement_created), Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_addWorkerFragment_to_myAnnouncementsFragment)
-    }
-
-    private fun loadRegions() {
-        lifecycleScope.launch {
-            addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
-                when (it) {
-                    is ApiStatus.Error -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "some error while loading regions",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.e(TAG, "loadRegions: ${it.error}")
-                        Log.e(TAG, "loadRegions: ${it.error.message}")
-                        Log.e(TAG, "loadRegions: ${it.error.printStackTrace()}")
-                        Log.e(TAG, "loadRegions: ${it.error.stackTrace}")
-                    }
-
-                    is ApiStatus.Loading -> {
-
-                    }
-
-                    is ApiStatus.Success -> {
-                        setRegions(it.response as List<RegionEntity>)
-                    }
-                }
-            }
-        }
     }
 
     private fun setRegions(regionList: List<RegionEntity>) {
@@ -276,64 +275,6 @@ class AddWorkerFragment : Fragment() {
                 districtChoice.setOnItemClickListener { parent, view, position, id ->
                     districtLayout.isErrorEnabled = false
                     addWorkerViewModel.districtId = districtList[position].id
-                }
-            }
-        }
-    }
-
-    private fun loadDistricts() {
-        lifecycleScope.launch {
-            addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
-                when (it) {
-                    is ApiStatus.Error -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "some error while loading districts",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.e(TAG, "loadDistricts: ${it.error}")
-                        Log.e(TAG, "loadDistricts: ${it.error.message}")
-                        Log.e(TAG, "loadDistricts: ${it.error.printStackTrace()}")
-                        Log.e(TAG, "loadDistricts: ${it.error.stackTrace}")
-                    }
-
-                    is ApiStatus.Loading -> {
-
-                    }
-
-                    is ApiStatus.Success -> {
-                        (it.response as List<DistrictEntity>).forEach {
-                            Log.d(TAG, "loadDistricts: succeeded $it")
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun loadCategories() {
-        lifecycleScope.launch {
-            jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
-                when (it) {
-                    is ApiStatus.Error -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "Some error on loading job categories",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.e(TAG, "loadCategories: ${it.error}")
-                        Log.e(TAG, "loadCategories: ${it.error.message}")
-                        Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
-                        Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
-                    }
-
-                    is ApiStatus.Loading -> {
-
-                    }
-
-                    is ApiStatus.Success -> {
-                        setJobCategories(it.response as List<JobCategoryEntity>)
-                    }
                 }
             }
         }

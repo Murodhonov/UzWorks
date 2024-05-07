@@ -217,10 +217,23 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="start_date_end_date_error">Boshlanish sanasi tugash sanasidan oldin bo\'lishi kerak</string>
     <string name="announcement_deleted">E\'lon muvaffaqiyatli o\'chirildi</string>
     <string name="fetch_job_failed">Ish haqidagi e\'lonni olib bo\'lmadi</string>
+    <string name="fetch_worker_failed">Ishchi e\'lonini olib bo\'lmadi</string>
     <string name="edit_job_announcement">Ish e\'lonini tahrirlash</string>
     <string name="job_announcement_created">Ish e\'loni muvaffaqiyatli yaratildi</string>
     <string name="job_announcement_edited">Ish e\'loni muvaffaqiyatli tahrirlandi</string>
     <string name="worker_announcement_created">Ishchi e\'loni yaratildi</string>
     <string name="worker_announcement_edited">Ishchi e\'loni tahrirlandi</string>
     <string name="edit_worker_announcement">Ishchi e\'lonini tahrirlash</string>
+    <string name="birthday_restriction_explanation">Tug\'ilgan kuningizni faqat "Shaxsiy ma\'lumotlar" sahifasida tanlashingiz mumkin</string>
+    <string name="gender_restriction_explanation">Siz jinsni faqat "Shaxsiy ma\'lumotlar" sahifasida saqlashingiz mumkin</string>
+    <string name="create_job_failed">Ish e\'lonini yaratish muvaffaqiyatsiz tugadi</string>
+    <string name="fetch_workers_failed">Ishchilarni olib bo\'lmadi</string>
+    <string name="fetch_jobs_failed">Ishlarni olib bo\'lmadi</string>
+    <string name="get_location_failed">Joylashuvni olish muvaffaqiyatsiz tugadi</string>
+    <string name="open_location_failed">Joylashuvni ochib bo\'lmadi</string>
+    <string name="edit_job_announcement_failed">Ish e\'lonini tahrirlab bo\'lmadi</string>
+    <string name="edit_worker_announcement_failed">Ishchi e\'lonini tahrirlab bo\'lmadi</string>
+    <string name="load_user_failed">Foydalanuvchi ma\'lumotlarini yuklab bo\'lmadi</string>
+    <string name="add_experience_failed">Tajriba qo\'shib bo\'lmadi</string>
+    <string name="edit_experience_failed">Tajribani tahrirlab bo\'lmadi</string>
 </resources>

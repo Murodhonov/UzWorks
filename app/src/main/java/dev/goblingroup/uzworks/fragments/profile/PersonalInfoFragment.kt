@@ -66,7 +66,7 @@ class PersonalInfoFragment : Fragment() {
                     is ApiStatus.Error -> {
                         Toast.makeText(
                             requireContext(),
-                            "failed to load user data",
+                            resources.getString(R.string.load_user_failed),
                             Toast.LENGTH_SHORT
                         ).show()
                         Log.e(TAG, "onViewCreated: ${it.error.message}")

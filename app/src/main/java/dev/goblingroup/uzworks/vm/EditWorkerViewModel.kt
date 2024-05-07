@@ -16,26 +16,20 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
-import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
 import dev.goblingroup.uzworks.models.response.WorkerEditResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
-import dev.goblingroup.uzworks.repository.ProfileRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_BIRTHDAY
 import dev.goblingroup.uzworks.utils.DateEnum
-import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.dmyToIso
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.extractErrorMessage
 import dev.goblingroup.uzworks.utils.formatSalary
 import dev.goblingroup.uzworks.utils.formatTgUsername
-import dev.goblingroup.uzworks.utils.selectFemale
-import dev.goblingroup.uzworks.utils.selectMale
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -45,7 +39,6 @@ import javax.inject.Inject
 @HiltViewModel
 class EditWorkerViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository,
-    private val profileRepository: ProfileRepository,
     private val securityRepository: SecurityRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
@@ -59,7 +52,8 @@ class EditWorkerViewModel @Inject constructor(
     lateinit var regionId: String
     lateinit var districtId: String
     lateinit var categoryId: String
-    var gender = securityRepository.getGender()
+    val birthdate = securityRepository.getBirthdate()
+    val gender = securityRepository.getGender()
     val phoneNumber = securityRepository.getPhoneNumber().toString()
 
     fun fetchWorker(): LiveData<ApiStatus<WorkerResponse>> {
@@ -68,12 +62,6 @@ class EditWorkerViewModel @Inject constructor(
                 val response = announcementRepository.getWorkerById(workerId)
                 if (response.isSuccessful) {
                     workerResponse = response.body()!!
-                    gender = when (workerResponse.gender) {
-                        GenderEnum.UNKNOWN.label -> GenderEnum.UNKNOWN.code
-                        GenderEnum.MALE.label -> GenderEnum.MALE.code
-                        GenderEnum.FEMALE.label -> GenderEnum.FEMALE.code
-                        else -> -1
-                    }
                     workerLiveData.postValue(ApiStatus.Success(response.body()))
                 } else {
                     workerLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
@@ -164,28 +152,7 @@ class EditWorkerViewModel @Inject constructor(
                         )
                     )
                     if (response.isSuccessful) {
-                        val userResponse =
-                            profileRepository.getUserById(securityRepository.getUserId())
-                        if (userResponse.isSuccessful) {
-                            val userUpdateResponse = profileRepository.updateUser(
-                                UserUpdateRequest(
-                                    birthDate = response.body()?.birthDate.toString(),
-                                    email = userResponse.body()?.email,
-                                    firstName = userResponse.body()?.firstName.toString(),
-                                    gender = gender,
-                                    id = securityRepository.getUserId(),
-                                    lastName = userResponse.body()?.lastName.toString(),
-                                    mobileId = ""
-                                )
-                            )
-                            if (userUpdateResponse.isSuccessful) {
-                                if (birthdayEt.editText?.text.toString().isNotEmpty())
-                                    securityRepository.setBirthdate(birthdayEt.editText?.text.toString())
-                                securityRepository.setGender(gender)
-                                editLiveData.postValue(ApiStatus.Success(response.body()))
-                            }
-                        }
-
+                        editLiveData.postValue(ApiStatus.Success(response.body()))
                     } else {
                         editLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
                         Log.e(ConstValues.TAG, "editJob: ${response.code()}")
@@ -208,9 +175,7 @@ class EditWorkerViewModel @Inject constructor(
         workingTimeEt: TextInputLayout,
         workingScheduleEt: TextInputLayout,
         tgUserNameEt: TextInputLayout,
-        deadlineEt: TextInputLayout,
-        birthdayEt: TextInputLayout,
-        genderLayout: GenderChoiceLayoutBinding
+        deadlineEt: TextInputLayout
     ) {
         topTv.isSelected = true
 
@@ -306,21 +271,6 @@ class EditWorkerViewModel @Inject constructor(
 
         })
 
-        genderLayout.apply {
-            maleBtn.setOnClickListener {
-                if (gender != GenderEnum.MALE.code) {
-                    gender = GenderEnum.MALE.code
-                    selectMale(fragmentActivity.resources)
-                }
-            }
-            femaleBtn.setOnClickListener {
-                if (gender != GenderEnum.FEMALE.code) {
-                    gender = GenderEnum.FEMALE.code
-                    selectFemale(fragmentActivity.resources)
-                }
-            }
-        }
-
         titleEt.editText?.doAfterTextChanged {
             if (titleEt.isErrorEnabled && it.toString().isNotEmpty()) {
                 titleEt.isErrorEnabled = false
@@ -348,48 +298,6 @@ class EditWorkerViewModel @Inject constructor(
         tgUserNameEt.editText?.doAfterTextChanged {
             if (tgUserNameEt.isErrorEnabled && it.toString().isNotEmpty()) {
                 tgUserNameEt.isErrorEnabled = false
-            }
-        }
-
-        birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                val datePickerDialog = DatePickerDialog(
-                    fragmentActivity,
-                    R.style.DatePickerDialogTheme,
-                    { _, year, month, dayOfMonth ->
-                        val selectedCalendar = Calendar.getInstance().apply {
-                            set(year, month, dayOfMonth)
-                        }
-
-                        val minimumCalendar =
-                            Calendar.getInstance().apply { add(Calendar.YEAR, -16) }
-
-                        if (selectedCalendar.after(minimumCalendar)) {
-                            Toast.makeText(
-                                fragmentActivity,
-                                fragmentActivity.resources.getString(R.string.birthdate_requirement),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            birthdayEt.editText?.setText(formatter.format(selectedCalendar.time))
-                        }
-                    },
-                    birthdayEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.YEAR.dateLabel),
-                    birthdayEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
-                    birthdayEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.DATE.dateLabel),
-                )
-
-                datePickerDialog.show()
-
-                datePickerDialog.setOnDismissListener {
-                    birthdayEt.clearFocus()
-                }
             }
         }
     }

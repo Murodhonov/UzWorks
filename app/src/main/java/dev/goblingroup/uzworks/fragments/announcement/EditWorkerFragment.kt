@@ -19,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.databinding.BirthdayGenderExplanationBinding
 import dev.goblingroup.uzworks.databinding.FragmentEditWorkerBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.response.WorkerResponse
@@ -52,6 +53,9 @@ class EditWorkerFragment : Fragment() {
 
     private lateinit var regionAdapter: ArrayAdapter<String>
     private lateinit var categoryAdapter: ArrayAdapter<String>
+
+    private lateinit var birthdayGenderExplanationDialog: AlertDialog
+    private lateinit var birthdayGenderExplanationBinding: BirthdayGenderExplanationBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,7 +94,9 @@ class EditWorkerFragment : Fragment() {
     }
 
     private fun failed() {
+        Toast.makeText(requireContext(), resources.getString(R.string.fetch_worker_failed), Toast.LENGTH_SHORT).show()
         hideLoading()
+        findNavController().popBackStack()
     }
 
     private fun loading() {
@@ -116,7 +122,7 @@ class EditWorkerFragment : Fragment() {
             tgUserNameEt.editText?.setText(response.tgUserName.formatTgUsername())
             phoneNumberEt.editText?.setText(editWorkerViewModel.phoneNumber.convertPhoneNumber())
             deadlineEt.editText?.setText(response.deadline.isoToDmy())
-            if (response.birthDate != DEFAULT_BIRTHDAY)
+            if (editWorkerViewModel.birthdate != DEFAULT_BIRTHDAY)
                 birthdayEt.editText?.setText(response.birthDate.isoToDmy())
             genderLayout.apply {
                 when (response.gender) {
@@ -188,9 +194,7 @@ class EditWorkerFragment : Fragment() {
                 workingTimeEt,
                 workingScheduleEt,
                 tgUserNameEt,
-                deadlineEt,
-                birthdayEt,
-                genderLayout
+                deadlineEt
             )
 
             phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
@@ -212,12 +216,42 @@ class EditWorkerFragment : Fragment() {
                 }
             }
 
+            genderLayout.root.setOnClickListener {
+                birthdayGenderExplanation(resources.getString(R.string.gender_restriction_explanation))
+            }
+
+            birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    birthdayGenderExplanation(resources.getString(R.string.birthday_restriction_explanation))
+                }
+            }
+
+
             cancelBtn.setOnClickListener {
                 findNavController().popBackStack()
             }
 
             saveBtn.setOnClickListener {
                 edit()
+            }
+        }
+    }
+
+    private fun birthdayGenderExplanation(explanationMessage: String) {
+        try {
+            birthdayGenderExplanationDialog.show()
+        } catch (e: Exception) {
+            birthdayGenderExplanationDialog = AlertDialog.Builder(requireContext()).create()
+            birthdayGenderExplanationBinding = BirthdayGenderExplanationBinding.inflate(layoutInflater)
+            birthdayGenderExplanationDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            birthdayGenderExplanationDialog.setView(birthdayGenderExplanationBinding.root)
+            birthdayGenderExplanationDialog.show()
+        }
+        birthdayGenderExplanationBinding.apply {
+            explanationTv.text = explanationMessage
+
+            close.setOnClickListener {
+                birthdayGenderExplanationDialog.dismiss()
             }
         }
     }
@@ -238,6 +272,7 @@ class EditWorkerFragment : Fragment() {
             ).observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
+                        Toast.makeText(requireContext(), resources.getString(R.string.edit_worker_announcement_failed), Toast.LENGTH_SHORT).show()
                         hideLoading()
                     }
 

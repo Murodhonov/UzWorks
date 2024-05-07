@@ -20,11 +20,10 @@ import dev.goblingroup.uzworks.databinding.FragmentWorkerDetailsBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.ConstValues
+import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_BIRTHDAY
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.isoToDmy
-import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.WorkerDetailsViewModel
 
 @AndroidEntryPoint
@@ -62,10 +61,11 @@ class WorkerDetailsFragment : Fragment() {
                     is ApiStatus.Error -> {
                         Toast.makeText(
                             requireContext(),
-                            "failed to load worker",
+                            resources.getString(R.string.fetch_worker_failed),
                             Toast.LENGTH_SHORT
                         ).show()
                         loadingDialog.dismiss()
+                        findNavController().popBackStack()
                     }
                     is ApiStatus.Loading -> {
                         loading()
@@ -110,7 +110,15 @@ class WorkerDetailsFragment : Fragment() {
                     }
                 }
             fullNameTv.text = workerResponse?.fullName
-            birthdateTv.text = workerResponse?.birthDate?.isoToDmy()
+            when (workerResponse?.birthDate) {
+                DEFAULT_BIRTHDAY -> {
+                    birthdateTv.text = resources.getString(R.string.unknown)
+                }
+
+                else -> {
+                    birthdateTv.text = workerResponse?.birthDate?.isoToDmy()
+                }
+            }
             addressTv.text = "${workerResponse?.regionName}, ${workerResponse?.districtName}"
             salaryTv.text = workerResponse?.salary.toString()
             workingTimeTv.text = workerResponse?.workingTime

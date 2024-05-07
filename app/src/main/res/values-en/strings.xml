@@ -217,10 +217,23 @@ The information displayed to you is determined by the role you choose</string>
     <string name="start_date_end_date_error">Start date should be one of days before end date</string>
     <string name="announcement_deleted">Announcement has been successfully deleted</string>
     <string name="fetch_job_failed">Failed to fetch job announcement</string>
+    <string name="fetch_worker_failed">Failed to fetch worker announcement</string>
     <string name="edit_job_announcement">Edit job announcement</string>
     <string name="job_announcement_created">Job announcement successfully created</string>
     <string name="job_announcement_edited">Job announcement successfully edited</string>
     <string name="worker_announcement_created">Worker announcement successfully created</string>
     <string name="worker_announcement_edited">Worker announcement successfully edited</string>
     <string name="edit_worker_announcement">Edit worker announcement</string>
+    <string name="birthday_restriction_explanation">You can select your birthdate only on "Personal Information" page</string>
+    <string name="gender_restriction_explanation">You can save gender only on "Personal Information" page</string>
+    <string name="create_job_failed">Failed to create job announcement</string>
+    <string name="fetch_workers_failed">Failed to fetch workers</string>
+    <string name="fetch_jobs_failed">Failed to fetch jobs</string>
+    <string name="get_location_failed">Failed to get location</string>
+    <string name="open_location_failed">Failed to open location</string>
+    <string name="edit_job_announcement_failed">Failed to edit job announcement</string>
+    <string name="edit_worker_announcement_failed">Failed to edit worker announcement</string>
+    <string name="load_user_failed">Failed to load user data</string>
+    <string name="add_experience_failed">Failed to add experience</string>
+    <string name="edit_experience_failed">Failed to edit experience</string>
 </resources>

@@ -218,10 +218,23 @@
     <string name="start_date_end_date_error">Бошланиш санаси тугаш санасидан олдин бўлиши керак</string>
     <string name="announcement_deleted">Эълон муваффақиятли ўчирилди</string>
     <string name="fetch_job_failed">Иш ҳақидаги эълонни олиб бўлмади</string>
+    <string name="fetch_worker_failed">Ишчи эълонини олиб бўлмади</string>
     <string name="edit_job_announcement">Иш эълонини таҳрирлаш</string>
     <string name="job_announcement_created">Иш эълони муваффақиятли яратилди</string>
     <string name="job_announcement_edited">Иш эълони муваффақиятли таҳрирланди</string>
     <string name="worker_announcement_created">Ишчи эълони яратилди</string>
     <string name="worker_announcement_edited">Ишчи эълони таҳрирланди</string>
     <string name="edit_worker_announcement">Ишчи эълонини таҳрирлаш</string>
+    <string name="birthday_restriction_explanation">Туғилган кунингизни фақат «Шахсий маълумотлар» саҳифасида танлашингиз мумкин</string>
+    <string name="gender_restriction_explanation">Сиз жинсни фақат «Шахсий маълумотлар» саҳифасида сақлашингиз мумкин</string>
+    <string name="create_job_failed">Иш эълонини яратиш муваффақиятсиз тугади</string>
+    <string name="fetch_workers_failed">Ишчиларни олиб бўлмади</string>
+    <string name="fetch_jobs_failed">Ишларни олиб бўлмади</string>
+    <string name="get_location_failed">Жойлашувни олиш муваффақиятсиз тугади</string>
+    <string name="open_location_failed">Жойлашувни очиб бўлмади</string>
+    <string name="edit_job_announcement_failed">Иш эълонини таҳрирлаб бўлмади</string>
+    <string name="edit_worker_announcement_failed">Ишчи эълонини таҳрирлаб бўлмади</string>
+    <string name="load_user_failed">Фойдаланувчи маълумотларини юклаб бўлмади</string>
+    <string name="add_experience_failed">Тажриба қўшиб бўлмади</string>
+    <string name="edit_experience_failed">Тажрибани таҳрирлаб бўлмади</string>
 </resources>

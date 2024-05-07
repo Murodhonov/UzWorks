@@ -351,11 +351,11 @@ class ExperienceFragment : Fragment() {
     }
 
     private fun addError() {
-        Toast.makeText(requireContext(), "failed to add experience", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.add_experience_failed), Toast.LENGTH_SHORT).show()
     }
 
     private fun editError() {
-        Toast.makeText(requireContext(), "failed to edit experience", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.edit_experience_failed), Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

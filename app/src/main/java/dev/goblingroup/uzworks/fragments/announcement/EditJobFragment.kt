@@ -350,7 +350,7 @@ class EditJobFragment : Fragment() {
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "failed to get location", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), resources.getString(R.string.get_location_failed), Toast.LENGTH_SHORT)
                     .show()
                 Log.e(TAG, "findUser: ${it.message}")
             }
@@ -373,8 +373,6 @@ class EditJobFragment : Fragment() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 findUser()
                 updateFindBtn()
-            } else {
-                Toast.makeText(requireContext(), "denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -431,7 +429,7 @@ class EditJobFragment : Fragment() {
             ).observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
-                        Toast.makeText(requireContext(), "failed to edit job", Toast.LENGTH_SHORT)
+                        Toast.makeText(requireContext(), resources.getString(R.string.edit_job_announcement_failed), Toast.LENGTH_SHORT)
                             .show()
                     }
 

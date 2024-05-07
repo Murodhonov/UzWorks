@@ -80,7 +80,7 @@ class MyAnnouncementsFragment : Fragment() {
             myAnnouncementsViewModel.loadJobs().observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
-                        Toast.makeText(requireContext(), "failed to fetch jobs", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), resources.getString(R.string.fetch_job_failed), Toast.LENGTH_SHORT).show()
                         binding.progressBar.visibility = View.GONE
                     }
 
@@ -123,7 +123,7 @@ class MyAnnouncementsFragment : Fragment() {
                     is ApiStatus.Error -> {
                         Toast.makeText(
                             requireContext(),
-                            "failed to fetch workers",
+                            resources.getString(R.string.fetch_workers_failed),
                             Toast.LENGTH_SHORT
                         ).show()
                         binding.progressBar.visibility = View.GONE

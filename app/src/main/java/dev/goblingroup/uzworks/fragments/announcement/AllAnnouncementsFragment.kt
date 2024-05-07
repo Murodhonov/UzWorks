@@ -56,11 +56,6 @@ class AllAnnouncementsFragment : Fragment() {
             allAnnouncementsViewModel.announcementLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "failed to load announcements",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         Log.e(TAG, "onViewCreated: ${it.error}")
                         Log.e(TAG, "onViewCreated: ${it.error.printStackTrace()}")
                         Log.e(TAG, "onViewCreated: ${it.error.stackTrace}")
