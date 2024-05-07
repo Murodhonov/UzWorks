@@ -70,7 +70,7 @@ class ForgotPasswordViewModel @Inject constructor(
                 Toast.LENGTH_SHORT
             ).show()
         }
-        if (passwordEt.editText?.text.toString().isStrongPassword()) {
+        if (!passwordEt.editText?.text.toString().isStrongPassword()) {
             passwordEt.isErrorEnabled = true
             passwordEt.error = resources.getString(R.string.password_requirements)
         }
