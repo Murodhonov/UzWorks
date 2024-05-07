@@ -11,7 +11,11 @@ class SavedAnnouncementsViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository
 ) : ViewModel() {
 
-    fun getSavedAnnouncements() = announcementRepository.listSavedAnnouncements()
+    lateinit var savedAnnouncements: ArrayList<AnnouncementEntity>
+
+    fun getSavedAnnouncements() {
+        savedAnnouncements = ArrayList(announcementRepository.listSavedAnnouncements())
+    }
 
     fun countAnnouncements() = announcementRepository.countSavedAnnouncements()
 

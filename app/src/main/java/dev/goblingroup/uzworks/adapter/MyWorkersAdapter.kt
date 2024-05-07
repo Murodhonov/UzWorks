@@ -17,21 +17,23 @@ class MyWorkersAdapter(
 
     inner class MyJobViewHolder(private val itemBinding: MyAnnouncementItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun onBind(workerResponse: WorkerResponse) {
+        fun onBind(workerResponse: WorkerResponse, position: Int) {
             itemBinding.apply {
+                titleTv.isSelected = true
+                addressTv.isSelected = true
                 titleTv.text = workerResponse.title
                 titleTv.text = workerResponse.title
                 costTv.text = "${workerResponse.salary} ${resources.getString(R.string.money_unit)}"
                 genderTv.text = when (workerResponse.gender) {
-                    GenderEnum.MALE.code -> {
+                    GenderEnum.MALE.label -> {
                         resources.getString(R.string.male)
                     }
 
-                    GenderEnum.FEMALE.code -> {
+                    GenderEnum.FEMALE.label -> {
                         resources.getString(R.string.female)
                     }
 
-                    GenderEnum.UNKNOWN.code -> {
+                    GenderEnum.UNKNOWN.label -> {
                         resources.getString(R.string.unknown)
                     }
 
@@ -41,6 +43,12 @@ class MyWorkersAdapter(
                 }
                 categoryTv.text = workerResponse.categoryName
                 addressTv.text = "${workerResponse.regionName}, ${workerResponse.districtName}"
+
+                if (workerResponse.status) {
+                    statusIv.setImageResource(R.drawable.ic_done)
+                } else {
+                    statusIv.setImageResource(R.drawable.ic_pending)
+                }
 
                 root.setOnClickListener {
                     onItemClick.invoke(workerResponse.id)
@@ -62,7 +70,7 @@ class MyWorkersAdapter(
     override fun getItemCount(): Int = jobList.size
 
     override fun onBindViewHolder(holder: MyJobViewHolder, position: Int) {
-        holder.onBind(jobList[position])
+        holder.onBind(jobList[position], position)
     }
 
 }

@@ -2,11 +2,9 @@ package dev.goblingroup.uzworks.fragments.announcement
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,10 +16,6 @@ import dev.goblingroup.uzworks.adapter.SavedAnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentSavedAnnouncementsBinding
 import dev.goblingroup.uzworks.databinding.SavedAnnouncementBottomBinding
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.vm.AddressViewModel
-import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.SavedAnnouncementsViewModel
 import kotlinx.coroutines.launch
 
@@ -36,8 +30,6 @@ class SavedAnnouncementsFragment : Fragment() {
     private lateinit var savedAnnouncementsAdapter: SavedAnnouncementsAdapter
 
     private val savedAnnouncementsViewModel: SavedAnnouncementsViewModel by viewModels()
-    private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
-    private val addressViewModel: AddressViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,76 +41,8 @@ class SavedAnnouncementsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            loadCategories()
             findAnnouncementBtn.setOnClickListener {
                 findAnnouncementClickListener?.onFindAnnouncementClick()
-            }
-        }
-    }
-
-    private fun loadCategories() {
-        binding.apply {
-            lifecycleScope.launch {
-                Log.d(TAG, "loadCategories: started")
-                jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(requireContext(), "some error", Toast.LENGTH_SHORT)
-                                .show()
-                            Log.d(TAG, "loadCategories: failed")
-                            Log.e(TAG, "loadCategories: ${it.error}")
-                            Log.e(TAG, "loadCategories: ${it.error.printStackTrace()}")
-                            Log.e(TAG, "loadCategories: ${it.error.stackTrace}")
-                            Log.e(TAG, "loadCategories: ${it.error.message}")
-                            emptyLayout.visibility = View.VISIBLE
-                        }
-
-                        is ApiStatus.Loading -> {
-                            Log.d(TAG, "loadCategories: loading")
-                            emptyLayout.visibility = View.GONE
-                        }
-
-                        is ApiStatus.Success -> {
-                            Log.d(TAG, "loadCategories: succeeded <${it.response?.size}>")
-                            loadAddresses()
-                        }
-
-                        else -> {
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun loadAddresses() {
-        binding.apply {
-            lifecycleScope.launch {
-                Log.d(TAG, "loadAddresses: started")
-                addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "some error while loading regions or districts",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.e(TAG, "loadAddresses: failed")
-                            emptyLayout.visibility = View.VISIBLE
-                        }
-
-                        is ApiStatus.Loading -> {
-                            Log.d(TAG, "loadAddresses: loading")
-                            emptyLayout.visibility = View.GONE
-                        }
-
-                        is ApiStatus.Success -> {
-                            Log.d(TAG, "loadAddresses: succeeded <${it.response?.size}>")
-                            loadSavedAnnouncements()
-                        }
-                    }
-                }
             }
         }
     }
@@ -126,15 +50,15 @@ class SavedAnnouncementsFragment : Fragment() {
     private fun loadSavedAnnouncements() {
         lifecycleScope.launch {
             binding.apply {
+                savedAnnouncementsViewModel.getSavedAnnouncements()
                 savedAnnouncementsAdapter = SavedAnnouncementsAdapter(
-                    savedAnnouncementsViewModel,
-                    savedAnnouncementsViewModel.getSavedAnnouncements(),
+                    savedAnnouncementsViewModel.savedAnnouncements,
                     resources,
-                    { announcementId, announcementType ->
-                        showBottom(announcementId, announcementType)
+                    { announcementId, announcementType, positioon ->
+                        showBottom(announcementId, announcementType, positioon)
                     }
-                ) { isEmpty, announcementId ->
-                    notifyUnSave(isEmpty, announcementId)
+                ) { announcementId, position ->
+                    unSave(announcementId, position)
                 }
                 recommendedWorkAnnouncementsRv.adapter = savedAnnouncementsAdapter
                 if (savedAnnouncementsViewModel.countAnnouncements() == 0) {
@@ -146,7 +70,18 @@ class SavedAnnouncementsFragment : Fragment() {
         }
     }
 
-    private fun showBottom(announcementId: String, announcementType: String) {
+    private fun unSave(announcementId: String, position: Int) {
+        binding.apply {
+            savedAnnouncementsViewModel.unSave(announcementId)
+            savedAnnouncementsViewModel.savedAnnouncements.removeAt(position)
+            savedAnnouncementsAdapter.notifyItemRemoved(position)
+            if (savedAnnouncementsAdapter.itemCount == 0) {
+                emptyLayout.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun showBottom(announcementId: String, announcementType: String, position: Int) {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val savedAnnouncementBottomBinding = SavedAnnouncementBottomBinding.inflate(layoutInflater)
         savedAnnouncementBottomBinding.apply {
@@ -173,20 +108,11 @@ class SavedAnnouncementsFragment : Fragment() {
                 )
             }
             deleteBtn.setOnClickListener {
-                Toast.makeText(
-                    requireContext(),
-                    "delete job from saved is in progress",
-                    Toast.LENGTH_SHORT
-                ).show()
+                bottomSheetDialog.dismiss()
+                unSave(announcementId, position)
             }
         }
         bottomSheetDialog.show()
-    }
-
-    private fun notifyUnSave(isEmpty: Boolean, announcementId: String) {
-        binding.apply {
-            if (isEmpty) emptyLayout.visibility = View.VISIBLE
-        }
     }
 
     interface FindAnnouncementClickListener {

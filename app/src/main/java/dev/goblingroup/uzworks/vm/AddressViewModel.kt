@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
+import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.repository.AddressRepository
@@ -27,6 +28,8 @@ class AddressViewModel @Inject constructor(
     private val _districtLiveData =
         MutableLiveData<ApiStatus<List<DistrictEntity>>>(ApiStatus.Loading())
     val districtLiveData get() = _districtLiveData
+
+    lateinit var districtList: ArrayList<DistrictEntity>
 
     init {
         fetchRegions()
@@ -109,5 +112,9 @@ class AddressViewModel @Inject constructor(
 
     fun listDistrictsByRegionId(regionId: String) =
         addressRepository.listDistrictsByRegionId(regionId)
+
+    fun listRegions() = addressRepository.listRegions()
+
+    fun listDistricts() = addressRepository.listDistricts()
 
 }

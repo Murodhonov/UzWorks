@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.text.Editable
-import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
@@ -24,10 +22,10 @@ import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.models.response.JobCreateResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.extractErrorMessage
 import dev.goblingroup.uzworks.utils.formatSalary
@@ -46,8 +44,6 @@ class AddJobViewModel @Inject constructor(
     private val securityRepository: SecurityRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
-
-    private val TAG = "SecuredDistrictViewMode"
 
     private val createLiveData =
         MutableLiveData<ApiStatus<JobCreateResponse>>(ApiStatus.Loading())
@@ -105,18 +101,10 @@ class AddJobViewModel @Inject constructor(
     private val _regionId = MutableLiveData("")
     val regionId get() = _regionId
 
-    private val _categoryIndex = MutableLiveData(0)
-    val categoryIndex get() = _categoryIndex
-
-    private val _regionIndex = MutableLiveData(0)
-    val regionIndex get() = _regionIndex
-
-    private val _districtIndex = MutableLiveData(0)
-    val districtIndex get() = _districtIndex
-
     fun createJob(jobCreateRequest: JobCreateRequest): LiveData<ApiStatus<JobCreateResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                createLiveData.postValue(ApiStatus.Loading())
                 Log.d(TAG, "createJob: creating job $jobCreateRequest")
                 val response = announcementRepository.createJob(jobCreateRequest)
                 if (response.isSuccessful) {
@@ -136,6 +124,8 @@ class AddJobViewModel @Inject constructor(
         context: Context,
         topTv: TextView,
         deadlineEt: TextInputLayout,
+        benefitEt: TextInputLayout,
+        requirementEt: TextInputLayout,
         minAgeEt: TextInputLayout,
         maxAgeEt: TextInputLayout,
         salaryEt: TextInputLayout,
@@ -143,19 +133,12 @@ class AddJobViewModel @Inject constructor(
         genderLayout: GenderChoiceLayoutBinding,
         titleEt: TextInputLayout,
         workingTimeEt: TextInputLayout,
-        workingScheduleEt: TextInputLayout,
-        regionChoice: AutoCompleteTextView,
-        jobCategoryChoice: AutoCompleteTextView,
-        jobCategoryLayout: TextInputLayout,
-        districtChoice: AutoCompleteTextView,
-        districtLayout: TextInputLayout
+        workingScheduleEt: TextInputLayout
     ) {
         topTv.isSelected = true
 
-        deadlineEt.clear()
-
-        deadlineEt.editText?.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
+        deadlineEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
                 val datePickerDialog = DatePickerDialog(
                     context,
                     R.style.DatePickerDialogTheme,
@@ -189,8 +172,11 @@ class AddJobViewModel @Inject constructor(
                 )
 
                 datePickerDialog.show()
+
+                datePickerDialog.setOnDismissListener {
+                    deadlineEt.clearFocus()
+                }
             }
-            true
         }
 
         minAgeEt.editText?.addTextChangedListener(object : TextWatcher {
@@ -216,6 +202,7 @@ class AddJobViewModel @Inject constructor(
                     minAgeEt.editText?.setText(s.toString().substring(0, 2))
                     minAgeEt.editText?.setSelection(2)
                 }
+                if (s.toString().isNotEmpty()) minAgeEt.isErrorEnabled = false
 
                 isFormatting = false
             }
@@ -245,6 +232,7 @@ class AddJobViewModel @Inject constructor(
                     maxAgeEt.editText?.setText(s.toString().substring(0, 2))
                     maxAgeEt.editText?.setSelection(2)
                 }
+                if (s.toString().isNotEmpty()) maxAgeEt.isErrorEnabled = false
 
                 isFormatting = false
             }
@@ -294,6 +282,7 @@ class AddJobViewModel @Inject constructor(
                 val formattedTgUsername = s.toString().formatTgUsername()
                 tgUserNameEt.editText?.setText(formattedTgUsername)
                 tgUserNameEt.editText?.setSelection(formattedTgUsername.length)
+                if (formattedTgUsername.isNotEmpty()) tgUserNameEt.isErrorEnabled = false
 
                 isFormatting = false
             }
@@ -345,22 +334,16 @@ class AddJobViewModel @Inject constructor(
             }
         }
 
-        regionChoice.setOnItemClickListener { adapterView, view, i, l ->
-            if (districtLayout.isErrorEnabled) {
-                districtLayout.isErrorEnabled = false
-                districtLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+        benefitEt.editText?.doAfterTextChanged {
+            if (benefitEt.isErrorEnabled && it.toString().isNotEmpty()) {
+                benefitEt.isErrorEnabled = false
             }
         }
 
-        jobCategoryChoice.setOnClickListener {
-            jobCategoryLayout.isErrorEnabled = false
-            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-        }
-
-        districtChoice.setOnClickListener {
-            districtLayout.isErrorEnabled = false
-            districtLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-
+        requirementEt.editText?.doAfterTextChanged {
+            if (requirementEt.isErrorEnabled && it.toString().isNotEmpty()) {
+                requirementEt.isErrorEnabled = false
+            }
         }
     }
 
@@ -425,18 +408,6 @@ class AddJobViewModel @Inject constructor(
         _workingTime.value = value
     }
 
-    fun setCategoryIndex(value: Int) {
-        _categoryIndex.value = value
-    }
-
-    fun setRegionIndex(value: Int) {
-        _regionIndex.value = value
-    }
-
-    fun setDistrictIndex(value: Int) {
-        _districtIndex.value = value
-    }
-
     fun isFormValid(
         context: Context,
         deadlineEt: TextInputLayout,
@@ -449,9 +420,7 @@ class AddJobViewModel @Inject constructor(
         requirementEt: TextInputLayout,
         minAgeEt: TextInputLayout,
         maxAgeEt: TextInputLayout,
-        districtChoice: AutoCompleteTextView,
         districtLayout: TextInputLayout,
-        jobCategoryChoice: AutoCompleteTextView,
         jobCategoryLayout: TextInputLayout
     ): Boolean {
         if (deadlineEt.editText?.text.toString().isEmpty()) {
@@ -497,10 +466,10 @@ class AddJobViewModel @Inject constructor(
             maxAgeEt.error = context.resources.getString(R.string.benefit_error)
         }
         if (districtId.value?.isEmpty() == true) {
-            districtChoice.error = context.resources.getString(R.string.district_error)
+            districtLayout.error = context.resources.getString(R.string.district_error)
         }
         if (categoryId.value?.isEmpty() == true) {
-            jobCategoryChoice.error = context.resources.getString(R.string.job_category_error)
+            jobCategoryLayout.error = context.resources.getString(R.string.job_category_error)
         }
         if (latitude.value == 0.0 && longitude.value == 0.0) {
             Toast.makeText(context, context.getString(R.string.select_location), Toast.LENGTH_SHORT).show()
@@ -521,7 +490,22 @@ class AddJobViewModel @Inject constructor(
     }
 
     fun clearLiveData() {
-
+        _title.value = ""
+        _salary.value = 0
+        _gender.value = GenderEnum.UNKNOWN.code
+        _workingTime.value = ""
+        _workingSchedule.value = ""
+        _deadline.value = ""
+        _tgUserName.value = ""
+        _phoneNumber.value = securityRepository.getPhoneNumber() // Optionally reset to initial value
+        _benefit.value = ""
+        _requirement.value = ""
+        _minAge.value = 0
+        _maxAge.value = 0
+        _latitude.value = 0.0
+        _longitude.value = 0.0
+        _categoryId.value = ""
+        _districtId.value = ""
+        _regionId.value = ""
     }
-
 }

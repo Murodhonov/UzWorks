@@ -44,6 +44,16 @@ class HomeFragment : Fragment() {
                 announcementDetails(announcementId, announcementType)
             }
             homeRv.adapter = homeFragmentAdapter
+
+            homeViewModel.allResponseReceived.observe(viewLifecycleOwner) {
+                if (it) {
+                    swipeRefresh.isRefreshing = false
+                }
+            }
+
+            swipeRefresh.setOnRefreshListener {
+                homeViewModel.fetchData()
+            }
         }
     }
 

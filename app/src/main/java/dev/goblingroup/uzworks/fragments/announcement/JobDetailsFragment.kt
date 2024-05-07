@@ -42,8 +42,6 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
     private val binding get() = _binding!!
 
     private val jobDetailsViewModel: JobDetailsViewModel by viewModels()
-    private val addressViewModel: AddressViewModel by viewModels()
-    private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
     private lateinit var googleMap: GoogleMap
 
@@ -110,9 +108,23 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
             titleTv.text = jobResponse?.title
             jobCategoryTv.text = jobResponse?.categoryName
             genderTv.text =
-                if (jobResponse?.gender == GenderEnum.MALE.code) resources.getString(R.string.male) else resources.getString(
-                    R.string.female
-                )
+                when (jobResponse?.gender) {
+                    GenderEnum.MALE.label -> {
+                        resources.getString(R.string.male)
+                    }
+
+                    GenderEnum.FEMALE.label -> {
+                        resources.getString(R.string.male)
+                    }
+
+                    GenderEnum.UNKNOWN.label -> {
+                        resources.getString(R.string.unknown)
+                    }
+
+                    else -> {
+                        ""
+                    }
+                }
             addressTv.text = "${jobResponse?.regionName}, ${jobResponse?.districtName}"
             salaryTv.text = jobResponse?.salary.toString()
             workingTimeTv.text = jobResponse?.workingTime

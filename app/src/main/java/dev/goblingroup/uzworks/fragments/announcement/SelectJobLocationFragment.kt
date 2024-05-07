@@ -4,10 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.RenderEffect
-import android.graphics.Shader
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,7 +14,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -162,14 +158,14 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
 
         googleMap = map
 
-        if (arguments?.getDouble("latitude") != null && arguments?.getDouble("longitude") != null) {
-            selectedLocation = LatLng(arguments?.getDouble("latitude")!!, arguments?.getDouble("longitude")!!)
-        }
-
-        if (selectedLocation.latitude == 0.0 && selectedLocation.longitude == 0.0) {
+        if (addJobViewModel.latitude.value == 0.0 && addJobViewModel.longitude.value == 0.0) {
             selectedLocation = LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation, 4f))
         } else {
+            selectedLocation = LatLng(
+                addJobViewModel.latitude.value!!.toDouble(),
+                addJobViewModel.longitude.value!!.toDouble()
+            )
             previousMarker = googleMap.addMarker(MarkerOptions().position(selectedLocation))
             binding.setLocationBtn.visibility = View.VISIBLE
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation, 15f))

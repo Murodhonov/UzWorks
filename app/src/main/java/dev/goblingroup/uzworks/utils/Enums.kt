@@ -1,11 +1,9 @@
 package dev.goblingroup.uzworks.utils
 
-import java.util.StringTokenizer
-
-enum class GenderEnum(val code: Int) {
-    MALE(0),
-    FEMALE(1),
-    UNKNOWN(2)
+enum class GenderEnum(val code: Int, val label: String) {
+    MALE(0, "Male"),
+    FEMALE(1, "Female"),
+    UNKNOWN(2, "Unknown")
 }
 
 enum class UserRole(val roleName: String) {

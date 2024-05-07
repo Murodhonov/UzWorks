@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AllAnnouncementsViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository,
-    securityRepository: SecurityRepository,
+    private val securityRepository: SecurityRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -22,6 +22,10 @@ class AllAnnouncementsViewModel @Inject constructor(
     val announcementLiveData get() = _announcementLiveData
 
     init {
+        fetchData()
+    }
+
+    fun fetchData() {
         if (securityRepository.isEmployer()) {
             loadWorkers()
         } else if (securityRepository.isEmployee()) {
@@ -32,6 +36,7 @@ class AllAnnouncementsViewModel @Inject constructor(
     private fun loadWorkers() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                _announcementLiveData.postValue(ApiStatus.Loading())
                 val response = announcementRepository.getAllWorkers()
                 if (response.isSuccessful) {
                     _announcementLiveData.postValue(ApiStatus.Success(response.body()))
@@ -45,6 +50,7 @@ class AllAnnouncementsViewModel @Inject constructor(
     private fun loadJobs() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                _announcementLiveData.postValue(ApiStatus.Loading())
                 val response = announcementRepository.getAllJobs()
                 if (response.isSuccessful) {
                     _announcementLiveData.postValue(ApiStatus.Success(response.body()))

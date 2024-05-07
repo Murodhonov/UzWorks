@@ -12,11 +12,10 @@ import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.vm.SavedAnnouncementsViewModel
 
 class SavedAnnouncementsAdapter(
-    private val savedAnnouncementsViewModel: SavedAnnouncementsViewModel,
     private val savedAnnouncements: List<AnnouncementEntity>,
     private val resources: Resources,
-    private val onItemClick: (String, String) -> Unit,
-    private val onSaveClick: (Boolean, String) -> Unit
+    private val onItemClick: (String, String, Int) -> Unit,
+    private val onSaveClick: (String, Int) -> Unit
     /**
      * boolean parameter:
      * true -> just saved
@@ -29,6 +28,9 @@ class SavedAnnouncementsAdapter(
         RecyclerView.ViewHolder(announcementItemBinding.root) {
         fun bindAnnouncement(announcement: AnnouncementEntity, position: Int) {
             announcementItemBinding.apply {
+                titleTv.isSelected = true
+                addressTv.isSelected = true
+
                 titleTv.text = announcement.title
                 costTv.text = "${announcement.salary} ${resources.getString(R.string.money_unit)}"
                 saveIv.setImageResource(R.drawable.ic_saved)
@@ -40,12 +42,16 @@ class SavedAnnouncementsAdapter(
                 }
 
                 genderTv.text = when (announcement.gender) {
-                    GenderEnum.MALE.code -> {
+                    GenderEnum.MALE.label -> {
                         resources.getString(R.string.male)
                     }
 
-                    GenderEnum.FEMALE.code -> {
+                    GenderEnum.FEMALE.label -> {
                         resources.getString(R.string.female)
+                    }
+
+                    GenderEnum.UNKNOWN.label -> {
+                        resources.getString(R.string.unknown)
                     }
 
                     else -> {
@@ -54,14 +60,11 @@ class SavedAnnouncementsAdapter(
                 }
 
                 saveIv.setOnClickListener {
-                    savedAnnouncementsViewModel.unSave(announcement.id)
-                    onSaveClick.invoke(savedAnnouncementsViewModel.countAnnouncements() == 0, announcement.id)
-                    notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, savedAnnouncementsViewModel.countAnnouncements() - position)
+                    onSaveClick.invoke(announcement.id, position)
                 }
 
                 root.setOnClickListener {
-                    onItemClick.invoke(announcement.id, announcement.announcementType)
+                    onItemClick.invoke(announcement.id, announcement.announcementType, position)
                 }
             }
         }

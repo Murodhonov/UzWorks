@@ -28,7 +28,6 @@
         android:background="@drawable/enabled_button_background"
         android:text="@string/set_location"
         android:layout_width="0dp"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:theme="@style/ButtonStyle"
         app:layout_constraintRight_toLeftOf="@id/find_me_btn"

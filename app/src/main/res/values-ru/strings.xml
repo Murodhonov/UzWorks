@@ -141,7 +141,7 @@
     <string name="instagram">Инстаграм</string>
     <string name="about_worker">Полная информация о сотруднике</string>
     <string name="job_address_dialog_message">Укажите адрес рабочего места</string>
-    <string name="location_saved">Местоположение сохранено</string>
+    <string name="change_location">Изменить местоположение</string>
     <string name="no_experience">Нет опыта</string>
     <string name="position">Позиция</string>
     <string name="company_name">Название компании</string>
@@ -211,4 +211,16 @@
     <string name="invalid_deadline">Крайний срок не может быть раньше сегодняшнего дня</string>
     <string name="working_time_helper">Например: Я могу работать с 08:00 до 18:00</string>
     <string name="working_schedule_helper">Например: Я могу работать с понедельника по пятницу</string>
+    <string name="load_experience_failed">Что-то пошло не так при загрузке опыта</string>
+    <string name="invalid_start_date">Вы можете выбрать только один из дней до вчерашнего дня</string>
+    <string name="invalid_end_date">Вы можете выбрать только один из дней до сегодняшнего дня</string>
+    <string name="start_date_end_date_error">Дата начала должна быть за один день до даты окончания</string>
+    <string name="announcement_deleted">Объявление успешно удалено</string>
+    <string name="fetch_job_failed">Не удалось получить объявление о вакансии</string>
+    <string name="edit_job_announcement">Редактировать объявление о вакансии</string>
+    <string name="job_announcement_created">Объявление о вакансии успешно создано</string>
+    <string name="job_announcement_edited">Объявление о вакансии успешно отредактировано</string>
+    <string name="worker_announcement_created">Объявление работника успешно создано</string>
+    <string name="worker_announcement_edited">Объявление работника успешно изменено</string>
+    <string name="edit_worker_announcement">Изменить объявление сотрудника</string>
 </resources>

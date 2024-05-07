@@ -266,6 +266,8 @@ class ForgotPasswordFragment : Fragment() {
                 }
 
                 is AuthApiStatus.Success -> {
+                    forgotPasswordDialog.dismiss()
+                    loadingDialog.dismiss()
                     findNavController().navigate(
                         resId = R.id.action_forgotPasswordFragment_to_startFragment,
                         args = null

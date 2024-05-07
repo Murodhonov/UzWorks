@@ -34,8 +34,6 @@ class WorkerDetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val workerDetailsViewModel: WorkerDetailsViewModel by viewModels()
-    private val addressViewModel: AddressViewModel by viewModels()
-    private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
     private lateinit var loadingDialog: AlertDialog
 
@@ -94,9 +92,23 @@ class WorkerDetailsFragment : Fragment() {
             titleTv.text = workerResponse?.title
             jobCategoryTv.text = workerResponse?.categoryName
             genderTv.text =
-                if (workerResponse?.gender == GenderEnum.MALE.code) resources.getString(R.string.male) else resources.getString(
-                    R.string.female
-                )
+                when (workerResponse?.gender) {
+                    GenderEnum.MALE.label -> {
+                        resources.getString(R.string.male)
+                    }
+
+                    GenderEnum.FEMALE.label -> {
+                        resources.getString(R.string.male)
+                    }
+
+                    GenderEnum.UNKNOWN.label -> {
+                        resources.getString(R.string.unknown)
+                    }
+
+                    else -> {
+                        ""
+                    }
+                }
             fullNameTv.text = workerResponse?.fullName
             birthdateTv.text = workerResponse?.birthDate?.isoToDmy()
             addressTv.text = "${workerResponse?.regionName}, ${workerResponse?.districtName}"

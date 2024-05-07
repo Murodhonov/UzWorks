@@ -5,7 +5,7 @@ data class JobEditRequest(
     val categoryId: String,
     val deadline: String,
     val districtId: String,
-    val gender: Int?,
+    val gender: Int,
     val id: String,
     val instagramLink: String,
     val latitude: Double,

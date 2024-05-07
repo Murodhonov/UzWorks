@@ -76,7 +76,6 @@ class SecurityRepository @Inject constructor(
 
     fun getGender() = sharedPreferences.getInt("gender", GenderEnum.UNKNOWN.code)
 
-
     fun setBirthdate(birthDate: String) =
         sharedPreferences.edit().putString("birthdate", birthDate).commit()
 

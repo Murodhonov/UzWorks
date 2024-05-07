@@ -121,7 +121,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="select_job_category">Ish turini tanlang</string>
     <string name="min">Min</string>
     <string name="max">Max</string>
-    <string name="select_location">Xarita uchun manzil tanlang</string>
+    <string name="select_location">Xaritadan manzil tanlang</string>
     <string name="current_location">Joriy manzil</string>
     <string name="select_map">Xaritadan tanlash</string>
     <string name="loading">Yuklanmoqda</string>
@@ -141,7 +141,7 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="instagram">Instagram</string>
     <string name="about_worker">Ishchi haqida to\'liq ma\'lumotlar</string>
     <string name="job_address_dialog_message">Ish joy manzilini belgilang</string>
-    <string name="location_saved">Manzil saqlandi</string>
+    <string name="change_location">Manzilni o\'zgartirish</string>
     <string name="no_experience">Tajriba yo\'q</string>
     <string name="position">Lavozim</string>
     <string name="company_name">Kompaniya nomi</string>
@@ -211,4 +211,16 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="invalid_deadline">Muddati bugundan oldin bo\'lishi mumkin emas</string>
     <string name="working_time_helper">Masalan: Men ertalab 08:00 dan 18:00 gacha ishlay olaman</string>
     <string name="working_schedule_helper">Masalan: Dushanbadan jumagacha ishlay olaman</string>
+    <string name="load_experience_failed">Tajribani yuklashda xatolik yuz berdi</string>
+    <string name="invalid_start_date">Siz faqat kechagacha bo\'lgan kunlardan birini tanlashingiz mumkin</string>
+    <string name="invalid_end_date">Siz faqat bugungacha bo\'lgan kunlardan birini tanlashingiz mumkin</string>
+    <string name="start_date_end_date_error">Boshlanish sanasi tugash sanasidan oldin bo\'lishi kerak</string>
+    <string name="announcement_deleted">E\'lon muvaffaqiyatli o\'chirildi</string>
+    <string name="fetch_job_failed">Ish haqidagi e\'lonni olib bo\'lmadi</string>
+    <string name="edit_job_announcement">Ish e\'lonini tahrirlash</string>
+    <string name="job_announcement_created">Ish e\'loni muvaffaqiyatli yaratildi</string>
+    <string name="job_announcement_edited">Ish e\'loni muvaffaqiyatli tahrirlandi</string>
+    <string name="worker_announcement_created">Ishchi e\'loni yaratildi</string>
+    <string name="worker_announcement_edited">Ishchi e\'loni tahrirlandi</string>
+    <string name="edit_worker_announcement">Ishchi e\'lonini tahrirlash</string>
 </resources>

@@ -2,13 +2,14 @@ package dev.goblingroup.uzworks.fragments.profile
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,7 +19,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.ExperienceAdapter
 import dev.goblingroup.uzworks.databinding.AddEditExperienceDialogItemBinding
 import dev.goblingroup.uzworks.databinding.FragmentExperienceBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.ExperienceCreateRequest
 import dev.goblingroup.uzworks.models.request.ExperienceEditRequest
 import dev.goblingroup.uzworks.models.response.ExperienceResponse
@@ -41,7 +42,7 @@ class ExperienceFragment : Fragment() {
     private lateinit var addEditExperienceDialogBinding: AddEditExperienceDialogItemBinding
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogBinding: LoadingDialogBinding
+    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
 
     private lateinit var experienceAdapter: ExperienceAdapter
 
@@ -59,57 +60,113 @@ class ExperienceFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
-            addEditExperienceDialog = AlertDialog.Builder(requireContext()).create()
-            addEditExperienceDialogBinding =
-                AddEditExperienceDialogItemBinding.inflate(layoutInflater)
-            addEditExperienceDialog.setView(addEditExperienceDialogBinding.root)
-            addEditExperienceDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
             addExperienceBtn.setOnClickListener {
                 addExperience()
+            }
+
+            experienceViewModel.experienceLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        error()
+                    }
+
+                    is ApiStatus.Loading -> {
+                        loading()
+                    }
+
+                    is ApiStatus.Success -> {
+                        succeeded()
+                    }
+                }
+            }
+
+            swipeRefresh.setOnRefreshListener {
+                experienceViewModel.fetchExperiences()
             }
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause: ")
+    private fun error() {
+        binding.apply {
+            try {
+                loadingDialog.hide()
+            } catch (e: Exception) {
+                loadingDialog = AlertDialog.Builder(requireContext()).create()
+                loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+                loadingDialog.setView(loadingDialogItemBinding.root)
+                loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                loadingDialog.setCancelable(false)
+            }
 
+            noExperienceTv.visibility = View.VISIBLE
+            noExperienceTv.text = resources.getString(R.string.load_experience_failed)
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun loading() {
+        try {
+            loadingDialog.show()
+        } catch (e: Exception) {
+            loadingDialog = AlertDialog.Builder(requireContext()).create()
+            loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+            loadingDialog.setView(loadingDialogItemBinding.root)
+            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
+    }
+
+    private fun succeeded() {
         binding.apply {
-            experienceViewModel.experienceLiveData.observe(viewLifecycleOwner) {
-                when (it) {
-                    is ApiStatus.Error -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "failed to load experiences",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        progressBar.visibility = View.GONE
-                        noExperienceTv.text = it.error.message
-                        noExperienceTv.visibility = View.VISIBLE
-                    }
+            swipeRefresh.isRefreshing = false
+            try {
+                loadingDialog.hide()
+            } catch (e: Exception) {
+                loadingDialog = AlertDialog.Builder(requireContext()).create()
+                loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+                loadingDialog.setView(loadingDialogItemBinding.root)
+                loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                loadingDialog.setCancelable(false)
+            }
 
-                    is ApiStatus.Loading -> {
-                        progressBar.visibility = View.VISIBLE
-                    }
-
-                    is ApiStatus.Success -> {
-                        progressBar.visibility = View.GONE
-                        setExperiences()
-                    }
+            experienceAdapter =
+                ExperienceAdapter(experienceViewModel.experienceList) { experienceResponse, position ->
+                    updateExperience(experienceResponse, position)
                 }
+            experienceRv.adapter = experienceAdapter
+            if (experienceAdapter.itemCount == 0) {
+                noExperienceTv.text = resources.getString(R.string.no_experience)
+                noExperienceTv.visibility = View.VISIBLE
+            } else {
+                noExperienceTv.visibility = View.GONE
             }
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun addExperience() {
-        addEditExperienceDialogBinding.apply {
+        try {
             addEditExperienceDialog.show()
+        } catch (e: Exception) {
+            addEditExperienceDialog = AlertDialog.Builder(requireContext()).create()
+            addEditExperienceDialogBinding =
+                AddEditExperienceDialogItemBinding.inflate(layoutInflater)
+            addEditExperienceDialog.setView(addEditExperienceDialogBinding.root)
+            addEditExperienceDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            addEditExperienceDialog.show()
+        }
+
+        addEditExperienceDialogBinding.apply {
+            try {
+                addEditExperienceDialog.show()
+            } catch (e: Exception) {
+                addEditExperienceDialog = AlertDialog.Builder(requireContext()).create()
+                addEditExperienceDialogBinding =
+                    AddEditExperienceDialogItemBinding.inflate(layoutInflater)
+                addEditExperienceDialog.setView(addEditExperienceDialogBinding.root)
+                addEditExperienceDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                addEditExperienceDialog.show()
+            }
 
             positionEt.editText?.setText("")
             companyNameEt.editText?.setText("")
@@ -144,23 +201,14 @@ class ExperienceFragment : Fragment() {
                     ).observe(viewLifecycleOwner) {
                         when (it) {
                             is ApiStatus.Error -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "something went wrong while creating experience",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                addError()
                             }
 
                             is ApiStatus.Loading -> {
-                                addEditExperienceLoading()
+                                loading()
                             }
 
                             is ApiStatus.Success -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "add experience succeeded",
-                                    Toast.LENGTH_SHORT
-                                ).show()
                                 loadingDialog.dismiss()
                                 experienceViewModel.experienceList.add(
                                     ExperienceResponse(
@@ -175,7 +223,7 @@ class ExperienceFragment : Fragment() {
                                 experienceAdapter.notifyItemInserted(experienceViewModel.experienceList.size - 1)
                                 addEditExperienceDialog.dismiss()
                                 if (experienceAdapter.itemCount != 0) {
-                                    binding.noExperienceTv.visibility = View.VISIBLE
+                                    binding.noExperienceTv.visibility = View.GONE
                                 }
                             }
                         }
@@ -184,13 +232,40 @@ class ExperienceFragment : Fragment() {
             }
 
             cancelBtn.setOnClickListener {
+                val inputMethodManager =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(
+                    addEditExperienceDialog.window?.decorView?.windowToken,
+                    0
+                )
                 addEditExperienceDialog.dismiss()
             }
+        }
+
+        addEditExperienceDialog.setOnDismissListener {
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(
+                addEditExperienceDialog.window?.decorView?.windowToken,
+                0
+            )
+            addEditExperienceDialog.dismiss()
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun updateExperience(experience: ExperienceResponse, position: Int) {
+        try {
+            addEditExperienceDialog.show()
+        } catch (e: Exception) {
+            addEditExperienceDialog = AlertDialog.Builder(requireContext()).create()
+            addEditExperienceDialogBinding =
+                AddEditExperienceDialogItemBinding.inflate(layoutInflater)
+            addEditExperienceDialog.setView(addEditExperienceDialogBinding.root)
+            addEditExperienceDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            addEditExperienceDialog.show()
+        }
+
         addEditExperienceDialogBinding.apply {
             addEditExperienceDialog.show()
 
@@ -208,7 +283,14 @@ class ExperienceFragment : Fragment() {
             endDateEt.editText?.setText(experience.endDate.isoToDmy())
 
             saveBtn.setOnClickListener {
-                if (isFormValid(addEditExperienceDialogBinding)) {
+                if (experienceViewModel.isFormValid(
+                        resources,
+                        positionEt,
+                        companyNameEt,
+                        startDateEt,
+                        endDateEt
+                    )
+                ) {
                     experienceViewModel.editExperience(
                         ExperienceEditRequest(
                             companyName = companyNameEt.editText?.text.toString(),
@@ -221,15 +303,11 @@ class ExperienceFragment : Fragment() {
                     ).observe(viewLifecycleOwner) {
                         when (it) {
                             is ApiStatus.Error -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "something went wrong while editing experience",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                editError()
                             }
 
                             is ApiStatus.Loading -> {
-                                addEditExperienceLoading()
+                                loading()
                             }
 
                             is ApiStatus.Success -> {
@@ -251,65 +329,33 @@ class ExperienceFragment : Fragment() {
             }
 
             cancelBtn.setOnClickListener {
+                val inputMethodManager =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(
+                    addEditExperienceDialog.window?.decorView?.windowToken,
+                    0
+                )
                 addEditExperienceDialog.dismiss()
             }
         }
-    }
 
-    private fun isFormValid(dialogItemBinding: AddEditExperienceDialogItemBinding): Boolean {
-        var result = true
-        dialogItemBinding.apply {
-            if (companyNameEt.editText?.text.toString().isEmpty()) {
-                result = false
-                companyNameEt.isErrorEnabled = true
-                companyNameEt.error = resources.getString(R.string.company_name_error)
-            }
-            if (positionEt.editText?.text.toString().isEmpty()) {
-                result = false
-                positionEt.isErrorEnabled = true
-                positionEt.error = resources.getString(R.string.position_error)
-            }
-            if (startDateEt.editText?.text.toString().isEmpty()) {
-                result = false
-                startDateEt.isErrorEnabled = true
-                startDateEt.error = resources.getString(R.string.start_date_error)
-            }
-            if (endDateEt.editText?.text.toString().isEmpty()) {
-                result = false
-                endDateEt.isErrorEnabled = true
-                endDateEt.error = resources.getString(R.string.end_date_error)
-            }
-            return result
+        addEditExperienceDialog.setOnDismissListener {
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(
+                addEditExperienceDialog.window?.decorView?.windowToken,
+                0
+            )
+            addEditExperienceDialog.dismiss()
         }
     }
 
-    private fun addEditExperienceLoading() {
-        try {
-            loadingDialog.show()
-        } catch (e: Exception) {
-            loadingDialog = AlertDialog.Builder(requireContext()).create()
-            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
-            loadingDialog.setView(loadingDialogBinding.root)
-            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            loadingDialog.setCancelable(false)
-            loadingDialog.show()
-        }
+    private fun addError() {
+        Toast.makeText(requireContext(), "failed to add experience", Toast.LENGTH_SHORT).show()
     }
 
-    private fun setExperiences() {
-        binding.apply {
-            experienceAdapter =
-                ExperienceAdapter(experienceViewModel.experienceList) { experienceResponse, position ->
-                    updateExperience(experienceResponse, position)
-            }
-            experienceRv.adapter = experienceAdapter
-            if (experienceAdapter.itemCount == 0) {
-                noExperienceTv.text = resources.getString(R.string.no_experience)
-                noExperienceTv.visibility = View.VISIBLE
-            } else {
-                noExperienceTv.visibility = View.GONE
-            }
-        }
+    private fun editError() {
+        Toast.makeText(requireContext(), "failed to edit experience", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

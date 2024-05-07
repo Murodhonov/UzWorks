@@ -29,8 +29,12 @@ import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_BIRTHDAY
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.convertPhoneNumber
 import dev.goblingroup.uzworks.utils.dmyToIso
+import dev.goblingroup.uzworks.utils.isoToDmy
+import dev.goblingroup.uzworks.utils.selectFemale
+import dev.goblingroup.uzworks.utils.selectMale
 import dev.goblingroup.uzworks.vm.AddWorkerViewModel
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
@@ -107,7 +111,6 @@ class AddWorkerFragment : Fragment() {
                 val isValid = addWorkerViewModel.isFormValid(
                     resources,
                     deadlineEt,
-                    birthdayEt,
                     titleEt,
                     salaryEt,
                     workingTimeEt,
@@ -127,6 +130,23 @@ class AddWorkerFragment : Fragment() {
             }
 
             phoneNumberEt.editText?.setText(addWorkerViewModel.phoneNumber.convertPhoneNumber())
+            if (addWorkerViewModel.birthdate != null && addWorkerViewModel.birthdate != DEFAULT_BIRTHDAY) {
+                birthdayEt.editText?.setText(addWorkerViewModel.birthdate?.isoToDmy())
+            }
+
+            genderLayout.apply {
+                when (addWorkerViewModel.gender) {
+                    GenderEnum.MALE.code -> {
+                        selectMale(resources)
+                    }
+
+                    GenderEnum.FEMALE.code -> {
+                        selectFemale(resources)
+                    }
+
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -192,7 +212,7 @@ class AddWorkerFragment : Fragment() {
     private fun succeeded() {
         loadingDialog.dismiss()
         Toast.makeText(requireContext(), "succeeded", Toast.LENGTH_SHORT).show()
-        findNavController().popBackStack()
+        findNavController().navigate(R.id.action_addWorkerFragment_to_myAnnouncementsFragment)
     }
 
     private fun loadRegions() {

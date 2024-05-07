@@ -2,6 +2,9 @@ package dev.goblingroup.uzworks.fragments.announcement
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -24,6 +28,8 @@ import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
+import dev.goblingroup.uzworks.utils.ConstValues.JOB_ADDING
+import dev.goblingroup.uzworks.utils.ConstValues.JOB_LOCATION_STATUS
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.convertPhoneNumber
@@ -74,6 +80,8 @@ class AddJobFragment : Fragment() {
                 requireContext(),
                 topTv,
                 deadlineEt,
+                benefitEt,
+                requirementEt,
                 minAgeEt,
                 maxAgeEt,
                 salaryEt,
@@ -82,16 +90,30 @@ class AddJobFragment : Fragment() {
                 titleEt,
                 workingTimeEt,
                 workingScheduleEt,
-                regionChoice,
-                jobCategoryChoice,
-                jobCategoryLayout,
-                districtChoice,
-                districtLayout
             )
 
             phoneNumberEt.editText?.setText(
                 addJobViewModel.phoneNumber.value.toString().convertPhoneNumber()
             )
+
+            phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                        phoneNumberEt.windowToken,
+                        0
+                    )
+                    val clipboardManager =
+                        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clipData =
+                        ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
+                    clipboardManager.setPrimaryClip(clipData)
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().resources.getString(R.string.phone_number_copied),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
 
             saveBtn.setOnClickListener {
                 if (addJobViewModel.isFormValid(
@@ -106,9 +128,7 @@ class AddJobFragment : Fragment() {
                         requirementEt,
                         minAgeEt,
                         maxAgeEt,
-                        districtChoice,
                         districtLayout,
-                        jobCategoryChoice,
                         jobCategoryLayout
                     )
                 ) {
@@ -121,9 +141,11 @@ class AddJobFragment : Fragment() {
             }
 
             selectAddressBtn.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putString(JOB_LOCATION_STATUS, JOB_ADDING)
                 findNavController().navigate(
                     resId = R.id.action_addJobFragment_to_selectJobLocationFragment,
-                    args = null
+                    args = bundle
                 )
             }
         }
@@ -160,63 +182,28 @@ class AddJobFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.apply {
-            addJobViewModel.title.observe(viewLifecycleOwner) {
-                titleEt.editText?.setText(it)
+            titleEt.editText?.setText(addJobViewModel.title.value)
+            if (addJobViewModel.salary.value == 0) {
+                salaryEt.editText?.setText("")
+            } else salaryEt.editText?.setText(addJobViewModel.salary.value.toString())
+            when (addJobViewModel.gender.value) {
+                GenderEnum.MALE.code -> genderLayout.selectMale(resources)
+                GenderEnum.FEMALE.code -> genderLayout.selectFemale(resources)
             }
-            addJobViewModel.salary.observe(viewLifecycleOwner) {
-                if (it == 0)
-                    salaryEt.editText?.setText("")
-                else
-                    salaryEt.editText?.setText(it.toString())
-            }
-            addJobViewModel.gender.observe(viewLifecycleOwner) {
-                if (it == GenderEnum.MALE.code) {
-                    genderLayout.selectMale(resources)
-                } else if (it == GenderEnum.FEMALE.code) {
-                    genderLayout.selectFemale(resources)
-                }
-            }
-            addJobViewModel.workingTime.observe(viewLifecycleOwner) {
-                workingTimeEt.editText?.setText(it)
-            }
-            addJobViewModel.workingSchedule.observe(viewLifecycleOwner) {
-                workingScheduleEt.editText?.setText(it)
-            }
-            addJobViewModel.deadline.observe(viewLifecycleOwner) {
-                deadlineEt.editText?.setText(it)
-            }
-            addJobViewModel.tgUserName.observe(viewLifecycleOwner) {
-                tgUserNameEt.editText?.setText(it)
-            }
-            addJobViewModel.benefit.observe(viewLifecycleOwner) {
-                benefitEt.editText?.setText(it)
-            }
-            addJobViewModel.requirement.observe(viewLifecycleOwner) {
-                requirementEt.editText?.setText(it)
-            }
-            addJobViewModel.minAge.observe(viewLifecycleOwner) {
-                if (it == 0)
-                    minAgeEt.editText?.setText("")
-                else
-                    minAgeEt.editText?.setText(it.toString())
-            }
-            addJobViewModel.maxAge.observe(viewLifecycleOwner) {
-                if (it == 0)
-                    maxAgeEt.editText?.setText("")
-                else
-                    maxAgeEt.editText?.setText(it.toString())
-            }
+            workingTimeEt.editText?.setText(addJobViewModel.workingTime.value)
+            workingScheduleEt.editText?.setText(addJobViewModel.workingSchedule.value)
+            deadlineEt.editText?.setText(addJobViewModel.deadline.value)
+            tgUserNameEt.editText?.setText(addJobViewModel.tgUserName.value)
+            benefitEt.editText?.setText(addJobViewModel.benefit.value)
+            requirementEt.editText?.setText(addJobViewModel.requirement.value)
+            if (addJobViewModel.minAge.value == 0) {
+                minAgeEt.editText?.setText("")
+            } else minAgeEt.editText?.setText(addJobViewModel.minAge.value.toString())
+            if (addJobViewModel.maxAge.value == 0) {
+                maxAgeEt.editText?.setText("")
+            } else maxAgeEt.editText?.setText(addJobViewModel.maxAge.value.toString())
             if (addJobViewModel.latitude.value != 0.0 && addJobViewModel.longitude.value != 0.0) {
-                selectAddressTv.text = resources.getString(R.string.location_saved)
-            }
-            addJobViewModel.categoryIndex.observe(viewLifecycleOwner) {
-                jobCategoryChoice.setSelection(it)
-            }
-            addJobViewModel.districtIndex.observe(viewLifecycleOwner) {
-                districtChoice.setSelection(it)
-            }
-            addJobViewModel.regionIndex.observe(viewLifecycleOwner) {
-                regionChoice.setSelection(it)
+                selectAddressTv.text = resources.getString(R.string.change_location)
             }
         }
     }
@@ -282,9 +269,9 @@ class AddJobFragment : Fragment() {
 
     private fun success() {
         loadingDialog.dismiss()
-        Toast.makeText(requireContext(), "successfully created", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.job_announcement_created), Toast.LENGTH_SHORT).show()
         addJobViewModel.clearLiveData()
-        findNavController().popBackStack()
+        findNavController().navigate(R.id.action_addJobFragment_to_myAnnouncementsFragment)
     }
 
     private fun loadRegions() {
@@ -327,9 +314,11 @@ class AddJobFragment : Fragment() {
 
             regionChoice.setOnItemClickListener { parent, view, position, id ->
                 districtChoice.text.clear()
-                districtChoice.hint = "Select district"
+                districtChoice.hint = resources.getString(R.string.select_district)
+                addJobViewModel.setDistrictId("")
+//                addJobViewModel.setDistrictIndex(-1)
                 addJobViewModel.setRegionId(regionList[position].id)
-                addJobViewModel.setRegionIndex(position)
+//                addJobViewModel.setRegionIndex(position)
                 setDistricts(regionList[position].id)
             }
         }
@@ -346,7 +335,9 @@ class AddJobFragment : Fragment() {
                 )
                 districtChoice.setAdapter(districtAdapter)
                 districtChoice.setOnItemClickListener { parent, view, position, id ->
+                    if (districtLayout.isErrorEnabled) districtLayout.isErrorEnabled = false
                     addJobViewModel.setDistrictId(districtList[position].id)
+//                    addJobViewModel.setDistrictIndex(position)
                 }
             }
         }
@@ -419,6 +410,7 @@ class AddJobFragment : Fragment() {
             )
             jobCategoryChoice.setAdapter(jobCategoryAdapter)
             jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
+                if (jobCategoryLayout.isErrorEnabled) jobCategoryLayout.isErrorEnabled = false
                 addJobViewModel.setCategoryId(jobCategoryList[position].id)
             }
         }

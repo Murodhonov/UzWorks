@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
@@ -19,16 +18,17 @@ import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
+import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.models.response.WorkerCreateResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
+import dev.goblingroup.uzworks.repository.ProfileRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_BIRTHDAY
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.extractErrorMessage
 import dev.goblingroup.uzworks.utils.formatSalary
@@ -44,8 +44,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AddWorkerViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository,
+    private val profileRepository: ProfileRepository,
+    private val securityRepository: SecurityRepository,
     private val networkHelper: NetworkHelper,
-    securityRepository: SecurityRepository
 ) : ViewModel() {
 
     private val addLiveData = MutableLiveData<ApiStatus<WorkerCreateResponse>>(ApiStatus.Loading())
@@ -53,15 +54,33 @@ class AddWorkerViewModel @Inject constructor(
     var districtId = ""
     var jobCategoryId = ""
     var gender = securityRepository.getGender()
-    var birthdate = securityRepository.getBirthdate().toString()
-    var phoneNumber = securityRepository.getPhoneNumber().toString()
+    var birthdate = securityRepository.getBirthdate()
+    val phoneNumber = securityRepository.getPhoneNumber().toString()
 
     fun addWorker(workerCreateRequest: WorkerCreateRequest): LiveData<ApiStatus<WorkerCreateResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 val createWorker = announcementRepository.createWorker(workerCreateRequest)
                 if (createWorker.isSuccessful) {
-                    addLiveData.postValue(ApiStatus.Success(createWorker.body()))
+                    val userResponse = profileRepository.getUserById(securityRepository.getUserId())
+                    if (userResponse.isSuccessful) {
+                        val updateResponse = profileRepository.updateUser(
+                            UserUpdateRequest(
+                                birthDate = birthdate.toString(),
+                                email = userResponse.body()?.email,
+                                firstName = userResponse.body()?.firstName.toString(),
+                                gender = gender,
+                                id = userResponse.body()?.id.toString(),
+                                lastName = userResponse.body()?.lastName.toString(),
+                                mobileId = ""
+                            )
+                        )
+                        if (updateResponse.isSuccessful) {
+                            securityRepository.setBirthdate(workerCreateRequest.birthDate)
+                            securityRepository.setGender(gender)
+                            addLiveData.postValue(ApiStatus.Success(createWorker.body()))
+                        }
+                    }
                 } else {
                     addLiveData.postValue(ApiStatus.Error(Throwable(createWorker.message())))
                     Log.e(TAG, "addWorker: ${createWorker.errorBody()?.extractErrorMessage()}")
@@ -84,20 +103,8 @@ class AddWorkerViewModel @Inject constructor(
         workingScheduleEt: TextInputLayout,
         tgUserNameEt: TextInputLayout
     ) {
-        deadlineEt.clear()
-        birthdayEt.clear()
-
-        if (gender != GenderEnum.UNKNOWN.code) {
-            genderLayout.root.visibility = View.GONE
-        }
-
-        if (birthdate != DEFAULT_BIRTHDAY) {
-            birthdayEt.visibility = View.GONE
-            birthdayEt.isErrorEnabled = false
-        }
-
-        deadlineEt.editText?.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+        deadlineEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
                 val datePickerDialog = DatePickerDialog(
                     fragmentActivity,
                     R.style.DatePickerDialogTheme,
@@ -132,12 +139,15 @@ class AddWorkerViewModel @Inject constructor(
                 )
 
                 datePickerDialog.show()
+
+                datePickerDialog.setOnDismissListener {
+                    deadlineEt.clearFocus()
+                }
             }
-            true
         }
 
-        birthdayEt.editText?.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
+        birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
                 val datePickerDialog = DatePickerDialog(
                     fragmentActivity,
                     R.style.DatePickerDialogTheme,
@@ -145,19 +155,22 @@ class AddWorkerViewModel @Inject constructor(
                         val selectedCalendar = Calendar.getInstance().apply {
                             set(year, month, dayOfMonth)
                         }
-                        if (checkBirthdate(selectedCalendar)) {
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            birthdayEt.isErrorEnabled = false
-                            birthdayEt.editText?.setText(formatter.format(selectedCalendar.time))
-                        } else {
+
+                        val minimumCalendar =
+                            Calendar.getInstance().apply { add(Calendar.YEAR, -16) }
+
+                        if (selectedCalendar.after(minimumCalendar)) {
                             Toast.makeText(
                                 fragmentActivity,
                                 fragmentActivity.resources.getString(R.string.birthdate_requirement),
                                 Toast.LENGTH_SHORT
                             ).show()
-                            birthdayEt.isErrorEnabled = true
+                        } else {
+                            val formatter = SimpleDateFormat(
+                                "dd.MM.yyyy", Locale.getDefault()
+                            )
+                            birthdayEt.editText?.setText(formatter.format(selectedCalendar.time))
+                            birthdate = birthdayEt.editText?.text.toString()
                         }
                     },
                     birthdayEt.editText?.text.toString()
@@ -165,12 +178,15 @@ class AddWorkerViewModel @Inject constructor(
                     birthdayEt.editText?.text.toString()
                         .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
                     birthdayEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.DATE.dateLabel)
+                        .extractDateValue(DateEnum.DATE.dateLabel),
                 )
 
                 datePickerDialog.show()
+
+                datePickerDialog.setOnDismissListener {
+                    birthdayEt.clearFocus()
+                }
             }
-            true
         }
 
         salaryEt.editText?.addTextChangedListener(object : TextWatcher {
@@ -270,17 +286,9 @@ class AddWorkerViewModel @Inject constructor(
         }
     }
 
-    private fun checkBirthdate(selectedCalendar: Calendar): Boolean {
-        val minimumAge = 16
-        val minimumCalendar = Calendar.getInstance().clone() as Calendar
-        minimumCalendar.add(Calendar.YEAR, -minimumAge)
-        return selectedCalendar.after(minimumCalendar)
-    }
-
     fun isFormValid(
         resources: Resources,
         deadlineEt: TextInputLayout,
-        birthdayEt: TextInputLayout,
         titleEt: TextInputLayout,
         salaryEt: TextInputLayout,
         workingTimeEt: TextInputLayout,
@@ -292,14 +300,6 @@ class AddWorkerViewModel @Inject constructor(
         if (deadlineEt.editText?.text.toString().isEmpty()) {
             deadlineEt.error = resources.getString(R.string.deadline_error)
             deadlineEt.isErrorEnabled = true
-        }
-        if (birthdayEt.visibility == View.VISIBLE && birthdayEt.editText?.text.toString()
-                .isEmpty()
-        ) {
-            birthdayEt.error = resources.getString(R.string.birthday_error)
-            birthdayEt.isErrorEnabled = true
-        } else {
-            birthdayEt.isErrorEnabled = false
         }
         if (titleEt.editText?.text.toString().isEmpty()) {
             titleEt.error = resources.getString(R.string.title_error)
@@ -330,7 +330,6 @@ class AddWorkerViewModel @Inject constructor(
             jobCategoryLayout.isErrorEnabled = true
         }
         return !deadlineEt.isErrorEnabled &&
-                !birthdayEt.isErrorEnabled &&
                 !titleEt.isErrorEnabled &&
                 !salaryEt.isErrorEnabled &&
                 !workingTimeEt.isErrorEnabled &&

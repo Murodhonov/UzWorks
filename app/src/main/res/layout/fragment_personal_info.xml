@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:imeOptions="actionNext"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapWords"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:imeOptions="actionNext"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapWords"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -137,13 +137,15 @@
             app:endIconMode="custom"
             app:endIconTint="@color/black_blue"
             android:layout_marginHorizontal="@dimen/_20sdp"
-            android:theme="@style/TextInputEditTextStyle"
             app:errorEnabled="false"
+            android:theme="@style/TextInputEditTextStyle"
             app:layout_constraintTop_toBottomOf="@id/gender_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
+                android:inputType="none"
+                android:editable="false"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>

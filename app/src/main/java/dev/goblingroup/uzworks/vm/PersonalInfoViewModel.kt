@@ -6,10 +6,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Resources
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -33,7 +30,6 @@ import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.extractErrorMessage
-import dev.goblingroup.uzworks.utils.formatPhoneNumber
 import dev.goblingroup.uzworks.utils.selectFemale
 import dev.goblingroup.uzworks.utils.selectMale
 import kotlinx.coroutines.launch
@@ -68,6 +64,7 @@ class PersonalInfoViewModel @Inject constructor(
                 val userResponse = profileRepository.getUserById(securityRepository.getUserId())
                 if (userResponse.isSuccessful) {
                     selectedGender = userResponse.body()?.gender!!
+                    Log.d(TAG, "fetchUserData: ${userResponse.body()}")
                     _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
                 } else {
                     _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
@@ -176,54 +173,8 @@ class PersonalInfoViewModel @Inject constructor(
             }
         }
 
-        phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
-            private var isFormatting = false
-
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-
-            }
-
-            override fun onTextChanged(
-                s: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (isFormatting) {
-                    return
-                }
-
-                isFormatting = true
-                val newText = s.toString().filter { !it.isWhitespace() }
-                val oldText =
-                    phoneNumberEt.editText?.tag.toString().filter { !it.isWhitespace() }
-                val formattedPhone =
-                    s?.filter { !it.isWhitespace() }.toString()
-                        .formatPhoneNumber(newText.length < oldText.length)
-                phoneNumberEt.editText?.setText(formattedPhone)
-                phoneNumberEt.editText?.setSelection(formattedPhone.length)
-                phoneNumberEt.tag = formattedPhone
-                if (formattedPhone.trim()
-                        .filter { !it.isWhitespace() }.length == 13 && phoneNumberEt.isErrorEnabled
-                ) {
-                    phoneNumberEt.isErrorEnabled = false
-                }
-
-                isFormatting = false
-            }
-        })
-
-        birthdayEt.editText?.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
+        birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
                 val datePickerDialog = DatePickerDialog(
                     fragmentActivity,
                     R.style.DatePickerDialogTheme,
@@ -257,8 +208,11 @@ class PersonalInfoViewModel @Inject constructor(
                 )
 
                 datePickerDialog.show()
+
+                datePickerDialog.setOnDismissListener {
+                    birthdayEt.clearFocus()
+                }
             }
-            true
         }
     }
 

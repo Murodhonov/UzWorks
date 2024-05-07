@@ -64,33 +64,3 @@ fun DistrictResponse.mapToEntity(regionId: String): DistrictEntity {
         regionId = regionId
     )
 }
-
-fun JobResponse.map(): AnnouncementResponse {
-    return AnnouncementResponse(
-        id = id,
-        categoryName = categoryName,
-        districtName = districtName,
-        regionName = regionName,
-        gender = gender,
-        salary = salary,
-        title = title,
-        announcementType = AnnouncementEnum.JOB.announcementType,
-        isTop = isTop,
-        pictureResId = getImage(AnnouncementEnum.JOB.announcementType, gender)
-    )
-}
-
-fun WorkerResponse.map(): AnnouncementResponse {
-    return AnnouncementResponse(
-        id = id,
-        categoryName = categoryName,
-        districtName = districtName,
-        regionName = regionName,
-        gender = gender,
-        salary = salary,
-        title = title,
-        announcementType = AnnouncementEnum.JOB.announcementType,
-        isTop = isTop,
-        pictureResId = getImage(AnnouncementEnum.JOB.announcementType, gender)
-    )
-}

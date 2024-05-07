@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:fillViewport="true"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:scrollbars="none"
     tools:context=".fragments.announcement.AddWorkerFragment">
 
@@ -97,6 +97,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:helperText="@string/working_time_helper"
+                app:helperTextEnabled="true"
+                app:helperTextTextColor="@color/yellow"
                 android:theme="@style/TextInputEditTextStyle"
                 android:hint="@string/working_time"
                 app:endIconTint="@color/black_blue"
@@ -116,6 +119,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:helperText="@string/working_schedule_helper"
+                app:helperTextEnabled="true"
+                app:helperTextTextColor="@color/yellow"
                 android:hint="@string/working_schedule"
                 android:theme="@style/TextInputEditTextStyle"
                 app:endIconTint="@color/black_blue"
@@ -190,7 +196,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
                     android:imeOptions="actionNext"
-                    android:inputType="phone"
+                    android:inputType="none"
+                    android:editable="false"
                     android:maxLines="1"
                     android:textSize="@dimen/_10ssp" />
 
@@ -217,7 +224,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
                     android:imeOptions="actionNext"
-                    android:inputType="phone"
+                    android:inputType="none"
+                    android:editable="false"
                     android:maxLines="1"
                     android:textSize="@dimen/_10ssp" />
 

@@ -399,11 +399,12 @@ fun String.formatSalary(): String {
 fun String.formatTgUsername(): String {
     return if (this.isEmpty() || this.length == 1) "@"
     else {
-        "@${this.substring(1)}"
+        if (this.startsWith("@")) "@${this.substring(1)}"
+        else "@$this"
     }
 }
 
-fun getImage(announcementType: String, gender: Int): Int {
+fun getImage(announcementType: String, gender: String): Int {
     val images = mutableListOf(
         R.drawable.ic_logo_1,
         R.drawable.ic_logo_2,
@@ -423,8 +424,8 @@ fun getImage(announcementType: String, gender: Int): Int {
 
         AnnouncementEnum.WORKER.announcementType -> {
             when (gender) {
-                GenderEnum.FEMALE.code -> R.drawable.ic_female
-                GenderEnum.MALE.code -> R.drawable.ic_male
+                GenderEnum.FEMALE.label -> R.drawable.ic_female
+                GenderEnum.MALE.label -> R.drawable.ic_male
                 else -> {
                     R.drawable.uz_works_logo
                 }

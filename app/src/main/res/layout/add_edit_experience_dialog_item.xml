@@ -14,90 +14,82 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/position_et"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/TextInputEditTextStyle"
             app:errorEnabled="false"
-            app:layout_constraintRight_toRightOf="parent"
             android:hint="@string/position"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:imeOptions="actionNext"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:textSize="@dimen/_10ssp" />
+                android:inputType="textCapSentences"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/company_name_et"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorEnabled="false"
+            android:theme="@style/TextInputEditTextStyle"
             android:hint="@string/company_name"
             android:layout_marginTop="@dimen/_10sdp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/position_et">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:textSize="@dimen/_10ssp" />
+                android:imeOptions="actionDone"
+                android:inputType="textCapSentences"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_date_et"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/start_date"
             app:endIconDrawable="@drawable/ic_calendar"
             app:endIconMode="custom"
-            app:layout_constraintRight_toRightOf="parent"
             app:endIconTint="@color/black_blue"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:errorEnabled="false"
+            android:theme="@style/TextInputEditTextStyle"
             app:layout_constraintTop_toBottomOf="@id/company_name_et">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:imeOptions="actionNext"
                 android:inputType="none"
-                android:maxLines="1"
-                android:textSize="@dimen/_10ssp" />
+                android:editable="false"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/end_date_et"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/end_date"
             app:endIconDrawable="@drawable/ic_calendar"
             app:endIconMode="custom"
             app:endIconTint="@color/black_blue"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:theme="@style/TextInputEditTextStyle"
             app:errorEnabled="false"
             app:layout_constraintTop_toBottomOf="@id/start_date_et">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:imeOptions="actionNext"
+                android:editable="false"
                 android:inputType="none"
-                android:maxLines="1"
-                android:textSize="@dimen/_10ssp" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

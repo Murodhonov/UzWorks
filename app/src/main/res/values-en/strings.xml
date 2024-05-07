@@ -141,7 +141,7 @@ The information displayed to you is determined by the role you choose</string>
     <string name="instagram">Instagram</string>
     <string name="about_worker">Full details of worker</string>
     <string name="job_address_dialog_message">Specify the address of the workplace</string>
-    <string name="location_saved">Location saved</string>
+    <string name="change_location">Change location</string>
     <string name="no_experience">No experience</string>
     <string name="position">Position</string>
     <string name="company_name">Company name</string>
@@ -211,4 +211,16 @@ The information displayed to you is determined by the role you choose</string>
     <string name="invalid_deadline">Deadline cannot be before today</string>
     <string name="working_time_helper">For example: I can work from 08:00 AM until 06:00 PM</string>
     <string name="working_schedule_helper">For example: I can work from Monday until Friday</string>
+    <string name="load_experience_failed">Something went wrong while loading experience</string>
+    <string name="invalid_start_date">You can only choose one of the days until yesterday</string>
+    <string name="invalid_end_date">You can only choose one of the days up to today</string>
+    <string name="start_date_end_date_error">Start date should be one of days before end date</string>
+    <string name="announcement_deleted">Announcement has been successfully deleted</string>
+    <string name="fetch_job_failed">Failed to fetch job announcement</string>
+    <string name="edit_job_announcement">Edit job announcement</string>
+    <string name="job_announcement_created">Job announcement successfully created</string>
+    <string name="job_announcement_edited">Job announcement successfully edited</string>
+    <string name="worker_announcement_created">Worker announcement successfully created</string>
+    <string name="worker_announcement_edited">Worker announcement successfully edited</string>
+    <string name="edit_worker_announcement">Edit worker announcement</string>
 </resources>

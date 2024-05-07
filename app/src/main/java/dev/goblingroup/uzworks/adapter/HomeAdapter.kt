@@ -44,12 +44,16 @@ class HomeAdapter(
                         badgeIv.visibility = View.VISIBLE
 
                         genderTv.text = when (announcement.gender) {
-                            GenderEnum.MALE.code -> {
+                            GenderEnum.MALE.label -> {
                                 resources.getString(R.string.male)
                             }
 
-                            GenderEnum.FEMALE.code -> {
+                            GenderEnum.FEMALE.label -> {
                                 resources.getString(R.string.female)
+                            }
+
+                            GenderEnum.UNKNOWN.label -> {
+                                resources.getString(R.string.unknown)
                             }
 
                             else -> {
@@ -70,19 +74,23 @@ class HomeAdapter(
                         addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
                         iv.setImageResource(
                             getImage(
-                                AnnouncementEnum.JOB.announcementType,
+                                AnnouncementEnum.WORKER.announcementType,
                                 announcement.gender
                             )
                         )
                         badgeIv.visibility = View.VISIBLE
 
                         genderTv.text = when (announcement.gender) {
-                            GenderEnum.MALE.code -> {
+                            GenderEnum.MALE.label -> {
                                 resources.getString(R.string.male)
                             }
 
-                            GenderEnum.FEMALE.code -> {
+                            GenderEnum.FEMALE.label -> {
                                 resources.getString(R.string.female)
+                            }
+
+                            GenderEnum.UNKNOWN.label -> {
+                                resources.getString(R.string.unknown)
                             }
 
                             else -> {
@@ -99,12 +107,11 @@ class HomeAdapter(
                     else -> {}
                 }
 
-
                 saveIv.setOnClickListener {
                     when (announcement) {
                         is JobResponse -> {
                             if (homeViewModel.isSaved(announcement.id)) {
-                                homeViewModel.unSave(announcement.mapToEntity())
+                                homeViewModel.unSave(announcement.id)
                                 saveIv.setImageResource(R.drawable.ic_unsaved)
                             } else {
                                 homeViewModel.save(announcement.mapToEntity())
@@ -113,7 +120,7 @@ class HomeAdapter(
                         }
                         is WorkerResponse -> {
                             if (homeViewModel.isSaved(announcement.id)) {
-                                homeViewModel.unSave(announcement.mapToEntity())
+                                homeViewModel.unSave(announcement.id)
                                 saveIv.setImageResource(R.drawable.ic_unsaved)
                             } else {
                                 homeViewModel.save(announcement.mapToEntity())
@@ -121,7 +128,6 @@ class HomeAdapter(
                             }
                         }
                     }
-
                 }
 
                 root.setOnClickListener {

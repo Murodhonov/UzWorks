@@ -156,7 +156,16 @@
         android:id="@+id/addWorkerFragment"
         android:name="dev.goblingroup.uzworks.fragments.announcement.AddWorkerFragment"
         android:label="fragment_add_worker"
-        tools:layout="@layout/fragment_add_worker" />
+        tools:layout="@layout/fragment_add_worker" >
+        <action
+            android:id="@+id/action_addWorkerFragment_to_myAnnouncementsFragment"
+            app:destination="@id/myAnnouncementsFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out"
+            app:popUpTo="@id/startFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addJobFragment"
         android:name="dev.goblingroup.uzworks.fragments.announcement.AddJobFragment"
@@ -169,6 +178,14 @@
             app:exitAnim="@anim/scale_out"
             app:popEnterAnim="@anim/scale_in"
             app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_addJobFragment_to_myAnnouncementsFragment"
+            app:destination="@id/myAnnouncementsFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out"
+            app:popUpTo="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/workerDetailsFragment"
@@ -209,6 +226,20 @@
         <action
             android:id="@+id/action_myAnnouncementsFragment_to_addWorkerFragment"
             app:destination="@id/addWorkerFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_myAnnouncementsFragment_to_editJobFragment"
+            app:destination="@id/editJobFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/scale_in"
+            app:popExitAnim="@anim/scale_out" />
+        <action
+            android:id="@+id/action_myAnnouncementsFragment_to_editWorkerFragment"
+            app:destination="@id/editWorkerFragment"
             app:enterAnim="@anim/scale_in"
             app:exitAnim="@anim/scale_out"
             app:popEnterAnim="@anim/scale_in"

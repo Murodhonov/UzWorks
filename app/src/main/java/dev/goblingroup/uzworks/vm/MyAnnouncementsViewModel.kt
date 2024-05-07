@@ -1,41 +1,39 @@
 package dev.goblingroup.uzworks.vm
 
-import android.content.Context
 import android.util.Log
-import android.view.LayoutInflater
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.goblingroup.uzworks.databinding.ConfirmDeleteBinding
-import dev.goblingroup.uzworks.databinding.MyAnnouncementBottomBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
+import dev.goblingroup.uzworks.utils.NetworkHelper
+import dev.goblingroup.uzworks.utils.extractErrorMessage
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyAnnouncementsViewModel @Inject constructor(
     private val announcementRepository: AnnouncementRepository,
-    private val securityRepository: SecurityRepository
+    private val securityRepository: SecurityRepository,
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    private val _jobLiveData = MutableLiveData<ApiStatus<List<JobResponse>>>(ApiStatus.Loading())
-    val jobLiveData get() = _jobLiveData
+    private val jobLiveData = MutableLiveData<ApiStatus<List<JobResponse>>>(ApiStatus.Loading())
 
-    private val _workerLiveData = MutableLiveData<ApiStatus<List<WorkerResponse>>>(ApiStatus.Loading())
-    val workerLiveData get() = _workerLiveData
+    private val workerLiveData =
+        MutableLiveData<ApiStatus<List<WorkerResponse>>>(ApiStatus.Loading())
 
-    private lateinit var bottomSheet: BottomSheetDialog
-    private lateinit var bottomBinding: MyAnnouncementBottomBinding
-    private lateinit var confirmDeleteBottomSheet: BottomSheetDialog
-    private lateinit var confirmDeleteBinding: ConfirmDeleteBinding
+    private val deleteLiveData = MutableLiveData<ApiStatus<Int>>(ApiStatus.Loading())
 
-    init {
+    lateinit var jobList: ArrayList<JobResponse>
+    lateinit var workerList: ArrayList<WorkerResponse>
+
+    fun fetchAnnouncements() {
         if (securityRepository.isEmployer()) {
             loadJobs()
         } else if (securityRepository.isEmployee()) {
@@ -43,102 +41,107 @@ class MyAnnouncementsViewModel @Inject constructor(
         }
     }
 
-    private fun loadJobs() {
+    fun loadJobs(): LiveData<ApiStatus<List<JobResponse>>> {
         viewModelScope.launch {
-            val jobsByUserId = announcementRepository.jobsByUserId(securityRepository.getUserId())
-            if (jobsByUserId.isSuccessful) {
-                _jobLiveData.postValue(ApiStatus.Success(jobsByUserId.body()))
-            } else {
-                Log.e(TAG, "loadJobs: ${jobsByUserId.code()}")
-                Log.e(TAG, "loadJobs: ${jobsByUserId.errorBody()}")
-                Log.e(TAG, "loadJobs: ${jobsByUserId.message()}")
-                _jobLiveData.postValue(ApiStatus.Error(Throwable(jobsByUserId.message())))
+            if (networkHelper.isNetworkConnected()) {
+                val jobsByUserId =
+                    announcementRepository.jobsByUserId(securityRepository.getUserId())
+                if (jobsByUserId.isSuccessful) {
+                    jobList = ArrayList(jobsByUserId.body()!!)
+                    jobLiveData.postValue(ApiStatus.Success(jobsByUserId.body()))
+                } else {
+                    Log.e(TAG, "loadJobs: ${jobsByUserId.code()}")
+                    Log.e(TAG, "loadJobs: ${jobsByUserId.errorBody()}")
+                    Log.e(TAG, "loadJobs: ${jobsByUserId.message()}")
+                    jobLiveData.postValue(ApiStatus.Error(Throwable(jobsByUserId.message())))
+                }
             }
         }
+        return jobLiveData
     }
 
-    private fun loadWorkers() {
+    fun loadWorkers(): LiveData<ApiStatus<List<WorkerResponse>>> {
         viewModelScope.launch {
+            if (networkHelper.isNetworkConnected()) {
                 val workersByUserId =
                     announcementRepository.workersByUserId(securityRepository.getUserId())
                 if (workersByUserId.isSuccessful) {
-                    _workerLiveData.postValue(ApiStatus.Success(workersByUserId.body()))
+                    workerList = ArrayList(workersByUserId.body()!!)
+                    workerLiveData.postValue(ApiStatus.Success(workersByUserId.body()))
                 } else {
                     Log.e(TAG, "loadWorkers: ${workersByUserId.code()}")
                     Log.e(TAG, "loadWorkers: ${workersByUserId.errorBody()}")
                     Log.e(TAG, "loadWorkers: ${workersByUserId.message()}")
-                    _workerLiveData.postValue(ApiStatus.Error(Throwable(workersByUserId.message())))
+                    workerLiveData.postValue(ApiStatus.Error(Throwable(workersByUserId.message())))
                 }
+            }
+        }
+        return workerLiveData
+    }
+
+    fun deleteAnnouncement(announcementId: String): LiveData<ApiStatus<Int>> {
+        viewModelScope.launch {
+            if (networkHelper.isNetworkConnected()) {
+                deleteLiveData.postValue(ApiStatus.Loading())
+                if (securityRepository.isEmployee()) {
+                    Log.d(TAG, "deleteAnnouncement: deleting worker with $announcementId")
+                    val deleteResponse = announcementRepository.deleteWorker(announcementId)
+                    if (deleteResponse.isSuccessful) {
+                        val index = workerList.indexOfFirst { it.id == announcementId }
+                        workerList.removeAt(index)
+                        deleteLiveData.postValue(ApiStatus.Success(index))
+                    } else {
+                        deleteLiveData.postValue(ApiStatus.Error(Throwable(deleteResponse.message())))
+                        Log.e(TAG, "deleteAnnouncement: ${deleteResponse.code()}")
+                        Log.e(
+                            TAG,
+                            "deleteAnnouncement: ${
+                                deleteResponse.errorBody()?.extractErrorMessage()
+                            }"
+                        )
+                    }
+                } else if (securityRepository.isEmployer()) {
+                    Log.d(
+                        TAG,
+                        "deleteAnnouncement: checking delete job progress id $announcementId"
+                    )
+                    val deleteResponse = announcementRepository.deleteJob(announcementId)
+                    Log.d(
+                        TAG,
+                        "deleteAnnouncement: checking delete job progress; result of deleting job with id $announcementId position ${deleteResponse.isSuccessful}"
+                    )
+                    if (deleteResponse.isSuccessful) {
+                        Log.d(TAG, "checking list: jobList before deleting")
+                        print()
+                        val index = jobList.indexOfFirst { it.id == announcementId }
+                        jobList.removeAt(index)
+                        Log.d(TAG, "checking list: jobList after deleting")
+                        print()
+                        deleteLiveData.postValue(ApiStatus.Success(index))
+                    } else {
+                        deleteLiveData.postValue(ApiStatus.Error(Throwable(deleteResponse.message())))
+                        Log.e(TAG, "deleteAnnouncement: ${deleteResponse.code()}")
+                        Log.e(
+                            TAG,
+                            "deleteAnnouncement: ${
+                                deleteResponse.errorBody()?.extractErrorMessage()
+                            }"
+                        )
+                    }
+                }
+            }
+        }
+        return deleteLiveData
+    }
+
+    private fun print() {
+        for (index in jobList.indices) {
+            Log.d(TAG, "checking list: jobList[$index] = ${jobList[index].title}")
         }
     }
 
     fun isEmployee() = securityRepository.isEmployee()
 
     fun isEmployer() = securityRepository.isEmployer()
-
-    fun showBottom(
-        context: Context,
-        onMoreClick: () -> Unit,
-        onEditClick: () -> Unit,
-        onDeleteClick: () -> Unit
-    ) {
-        try {
-            if (!bottomSheet.isShowing) {
-                bottomSheet.show()
-            }
-        } catch (e: Exception) {
-            bottomSheet = BottomSheetDialog(context)
-            bottomBinding = MyAnnouncementBottomBinding.inflate(LayoutInflater.from(context))
-            bottomBinding.apply {
-                bottomSheet.setContentView(root)
-                seeMoreBtn.setOnClickListener {
-                    onMoreClick.invoke()
-                    bottomSheet.dismiss()
-                }
-
-                editBtn.setOnClickListener {
-                    onEditClick.invoke()
-                    bottomSheet.dismiss()
-                }
-                deleteBtn.setOnClickListener {
-                    confirmDelete(context) {
-                        onDeleteClick.invoke()
-                        bottomSheet.dismiss()
-                    }
-                }
-            }
-            if (!bottomSheet.isShowing) {
-                bottomSheet.show()
-            }
-        }
-    }
-
-    private fun confirmDelete(
-        context: Context,
-        onDeleteClick: () -> Unit
-    ) {
-        try {
-            if (!confirmDeleteBottomSheet.isShowing) {
-                confirmDeleteBottomSheet.show()
-            }
-        } catch (e: Exception) {
-            confirmDeleteBottomSheet = BottomSheetDialog(context)
-            confirmDeleteBinding = ConfirmDeleteBinding.inflate(LayoutInflater.from(context))
-            confirmDeleteBinding.apply {
-                confirmDeleteBottomSheet.setContentView(root)
-                yesBtn.setOnClickListener {
-                    onDeleteClick.invoke()
-                    confirmDeleteBottomSheet.dismiss()
-                }
-                cancelBtn.setOnClickListener {
-                    confirmDeleteBottomSheet.dismiss()
-                    bottomSheet.show()
-                }
-            }
-            if (!confirmDeleteBottomSheet.isShowing) {
-                confirmDeleteBottomSheet.show()
-            }
-        }
-    }
 
 }

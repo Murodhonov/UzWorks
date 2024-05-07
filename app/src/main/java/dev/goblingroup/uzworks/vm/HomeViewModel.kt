@@ -9,6 +9,7 @@ import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues
+import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +20,14 @@ class HomeViewModel @Inject constructor(
     private val securityRepository: SecurityRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
+
+    val TAG = "HomeViewModel"
+
+    private val TOTAL_COUNT = 4
+    private var responseCount = 0
+
+    private val _allResponseReceived = MutableLiveData(false)
+    val allResponseReceived get() = _allResponseReceived
 
     private val _workerCountLivedata = MutableLiveData<ApiStatus<Int>>(ApiStatus.Loading())
     val workerCountLivedata get() =  _workerCountLivedata
@@ -33,7 +42,8 @@ class HomeViewModel @Inject constructor(
     private val _fullNameLiveData = MutableLiveData<ApiStatus<String>>(ApiStatus.Loading())
     val fullNameLiveData get() = _fullNameLiveData
 
-    init {
+    fun fetchData() {
+        responseCount = 0
         loadUser()
         countJobs()
         countWorkers()
@@ -45,14 +55,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    init {
+        fetchData()
+    }
+
     private fun loadUser() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                _fullNameLiveData.postValue(ApiStatus.Loading())
                 val response = securityRepository.getUser()
                 if (response.isSuccessful) {
-                    fullNameLiveData.postValue(ApiStatus.Success("${response.body()?.firstName} ${response.body()?.lastName}"))
+                    _fullNameLiveData.postValue(ApiStatus.Success("${response.body()?.firstName} ${response.body()?.lastName}"))
+                    responseCount++
+                    if (responseCount == TOTAL_COUNT) {
+                        _allResponseReceived.postValue(true)
+                    }
                 } else {
-                    fullNameLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                    _fullNameLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
                 }
             }
         }
@@ -61,10 +80,15 @@ class HomeViewModel @Inject constructor(
     private fun fetchTopJobs() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                _announcementLiveData.postValue(ApiStatus.Loading())
                 val response = announcementRepository.getTopJobs()
                 if (response.isSuccessful) {
                     Log.d(ConstValues.TAG, "loadJobs: ${response.body()?.size} jobs got")
                     _announcementLiveData.postValue(ApiStatus.Success(response.body()))
+                    responseCount++
+                    if (responseCount == TOTAL_COUNT) {
+                        _allResponseReceived.postValue(true)
+                    }
                 } else {
                     _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
                 }
@@ -75,10 +99,15 @@ class HomeViewModel @Inject constructor(
     private fun fetchTopWorkers() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                _announcementLiveData.postValue(ApiStatus.Loading())
                 val response = announcementRepository.getTopWorkers()
                 if (response.isSuccessful) {
                     Log.d(ConstValues.TAG, "loadWorkers: ${response.body()?.size} workers got")
                     _announcementLiveData.postValue(ApiStatus.Success(response.body()))
+                    responseCount++
+                    if (responseCount == TOTAL_COUNT) {
+                        _allResponseReceived.postValue(true)
+                    }
                 } else {
                     _announcementLiveData.value = ApiStatus.Error(Throwable(response.message()))
                 }
@@ -89,9 +118,14 @@ class HomeViewModel @Inject constructor(
     private fun countJobs() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                _jobCountLiveData.postValue(ApiStatus.Loading())
                 val countJobsResponse = announcementRepository.countJobs()
                 if (countJobsResponse.isSuccessful) {
                     _jobCountLiveData.postValue(ApiStatus.Success(countJobsResponse.body()))
+                    responseCount++
+                    if (responseCount == TOTAL_COUNT) {
+                        _allResponseReceived.postValue(true)
+                    }
                 } else {
                     _jobCountLiveData.postValue(ApiStatus.Error(Throwable(countJobsResponse.message())))
                 }
@@ -102,9 +136,14 @@ class HomeViewModel @Inject constructor(
     private fun countWorkers() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                _workerCountLivedata.postValue(ApiStatus.Loading())
                 val countWorkersResponse = announcementRepository.countWorkers()
                 if (countWorkersResponse.isSuccessful) {
                     _workerCountLivedata.postValue(ApiStatus.Success(countWorkersResponse.body()))
+                    responseCount++
+                    if (responseCount == TOTAL_COUNT) {
+                        _allResponseReceived.postValue(true)
+                    }
                 } else {
                     _workerCountLivedata.postValue(ApiStatus.Error(Throwable(countWorkersResponse.message())))
                 }
@@ -115,8 +154,8 @@ class HomeViewModel @Inject constructor(
     fun isSaved(announcementId: String): Boolean =
         announcementRepository.isAnnouncementSaved(announcementId)
 
-    fun unSave(announcement: AnnouncementEntity) {
-        announcementRepository.saveAnnouncement(announcement)
+    fun unSave(announcementId: String) {
+        announcementRepository.unSaveAnnouncement(announcementId)
     }
 
     fun save(announcement: AnnouncementEntity) {

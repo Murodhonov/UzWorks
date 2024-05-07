@@ -86,7 +86,7 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        profileViewModel.userLiveData.observe(viewLifecycleOwner) {
+        profileViewModel.fetchUserData().observe(viewLifecycleOwner) {
             when (it) {
                 is ApiStatus.Error -> {
 
