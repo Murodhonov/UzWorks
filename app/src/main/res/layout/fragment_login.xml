@@ -156,9 +156,10 @@
     <TextView
         android:id="@+id/language_tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
         android:layout_gravity="bottom"
-        android:layout_marginStart="@dimen/_7sdp"
+        android:paddingStart="@dimen/_7sdp"
         android:textSize="@dimen/_15ssp"
         app:layout_constraintBottom_toBottomOf="@id/language_btn"
         app:layout_constraintLeft_toRightOf="@id/language_btn"

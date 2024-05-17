@@ -106,6 +106,10 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
 
     private fun setJobDetails(jobResponse: JobResponse?) {
         binding.apply {
+            titleTv.isSelected = true
+            genderTv.isSelected = true
+            jobCategoryTv.isSelected = true
+
             titleTv.text = jobResponse?.title
             jobCategoryTv.text = jobResponse?.categoryName
             genderTv.text =

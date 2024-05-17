@@ -43,12 +43,10 @@ class MainActivity : AppCompatActivity() {
                 IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
             )
 
-            Log.d(TAG, "onCreate: ${securityViewModel.getLanguageCode()}")
             if (securityViewModel.getLanguageCode() != null) {
                 LanguageManager.setLanguage(securityViewModel.getLanguageCode().toString(), this@MainActivity)
-            } else {
-                LanguageManager.setLanguage(LanguageEnum.ENGLISH.code, this@MainActivity)
             }
+
             setContentView(root)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 window.statusBarColor = getColor(R.color.black_blue)
