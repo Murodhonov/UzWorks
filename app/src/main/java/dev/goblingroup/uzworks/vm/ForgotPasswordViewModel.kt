@@ -2,6 +2,8 @@ package dev.goblingroup.uzworks.vm
 
 import android.content.Context
 import android.content.res.Resources
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -14,6 +16,7 @@ import dev.goblingroup.uzworks.models.request.ForgotPasswordRequest
 import dev.goblingroup.uzworks.models.request.ResetPasswordRequest
 import dev.goblingroup.uzworks.repository.AuthRepository
 import dev.goblingroup.uzworks.utils.NetworkHelper
+import dev.goblingroup.uzworks.utils.formatPhoneNumber
 import dev.goblingroup.uzworks.utils.isStrongPassword
 import javax.inject.Inject
 
@@ -82,5 +85,53 @@ class ForgotPasswordViewModel @Inject constructor(
             .isNotEmpty() && code3.text.toString().isNotEmpty() && code4.text.toString()
             .isNotEmpty() && passwordEt.editText?.text.toString()
             .isStrongPassword() && confirmPasswordEt.editText?.text.toString() == passwordEt.editText?.text.toString()
+    }
+
+    fun controlPhoneNumber(phoneNumberEt: TextInputLayout) {
+        phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
+            private var isFormatting = false
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isFormatting) {
+                    return
+                }
+
+                isFormatting = true
+                val newText = s.toString().filter { !it.isWhitespace() }
+                val oldText =
+                    phoneNumberEt.editText?.tag.toString().filter { !it.isWhitespace() }
+                val formattedPhone =
+                    s?.filter { !it.isWhitespace() }.toString()
+                        .formatPhoneNumber(newText.length < oldText.length)
+                phoneNumberEt.editText?.setText(formattedPhone)
+                phoneNumberEt.editText?.setSelection(formattedPhone.length)
+                phoneNumberEt.tag = formattedPhone
+                if (formattedPhone.trim()
+                        .filter { !it.isWhitespace() }.length == 13 && phoneNumberEt.isErrorEnabled
+                ) {
+                    phoneNumberEt.isErrorEnabled = false
+                }
+
+                isFormatting = false
+            }
+        })
     }
 }

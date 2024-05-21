@@ -14,7 +14,10 @@
 
         <TextView
             android:id="@+id/position_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintRight_toLeftOf="@id/edit_experience_btn"
+            app:layout_constraintWidth_percent="0.8"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dm_sans_bold"
             android:textColor="@color/black_blue"
@@ -23,32 +26,57 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:contentDescription="@string/content_description"
             android:id="@+id/edit_experience_btn"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:contentDescription="@string/content_description"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintWidth_percent="0.1"
             android:src="@drawable/ic_edit"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/delete_experience_btn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/content_description"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/ic_delete_red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/edit_experience_btn"
+            app:layout_constraintRight_toRightOf="@id/edit_experience_btn"
+            app:layout_constraintTop_toBottomOf="@id/edit_experience_btn" />
+
         <TextView
             android:id="@+id/company_name_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
             android:layout_marginTop="@dimen/_10sdp"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            app:layout_constraintLeft_toLeftOf="@id/position_tv"
             android:textSize="@dimen/_12ssp"
             android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="@id/position_tv"
             android:theme="@style/SecondaryTextStyle"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/position_tv" />
 
         <TextView
             android:id="@+id/duration_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintLeft_toLeftOf="@id/position_tv"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_height="wrap_content"
             android:theme="@style/SecondaryTextStyle"
             android:textSize="@dimen/_11ssp"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/position_tv"
             app:layout_constraintTop_toBottomOf="@id/company_name_tv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

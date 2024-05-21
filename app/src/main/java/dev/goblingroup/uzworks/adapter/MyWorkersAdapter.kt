@@ -8,6 +8,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.MyAnnouncementItemBinding
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.formatSalary
 
 class MyWorkersAdapter(
     private val jobList: List<WorkerResponse>,
@@ -21,9 +22,11 @@ class MyWorkersAdapter(
             itemBinding.apply {
                 titleTv.isSelected = true
                 addressTv.isSelected = true
+                categoryTv.isSelected = true
+
                 titleTv.text = workerResponse.title
                 titleTv.text = workerResponse.title
-                costTv.text = "${workerResponse.salary} ${resources.getString(R.string.money_unit)}"
+                costTv.text = "${workerResponse.salary.toString().formatSalary()} ${resources.getString(R.string.money_unit)}"
                 genderTv.text = when (workerResponse.gender) {
                     GenderEnum.MALE.label -> {
                         resources.getString(R.string.male)

@@ -191,7 +191,7 @@
     <string name="current_password_wrong">Жорий пароль нотўғри</string>
     <string name="password_updated">Пароль мувафақиятли ўзгартирилди</string>
     <string name="edit">Таҳрирлаш</string>
-    <string name="confirm_delete">Ҳақиқатдан ушбу эълонни ўчирмоқчимисиз ?</string>
+    <string name="confirm_delete_announcement">Ҳақиқатдан ушбу эълонни ўчирмоқчимисиз ?</string>
     <string name="money_unit">сўм</string>
     <string name="forgot_password">Паролни унутдингизми ?</string>
     <string name="forgot_password_explanation">Тасдиқлаш кодини олиш ва паролни тиклаш учун пастга телефон рақамингизни киритинг</string>
@@ -237,4 +237,7 @@
     <string name="load_user_failed">Фойдаланувчи маълумотларини юклаб бўлмади</string>
     <string name="add_experience_failed">Тажриба қўшиб бўлмади</string>
     <string name="edit_experience_failed">Тажрибани таҳрирлаб бўлмади</string>
+    <string name="date_range_format" translatable="false">%1$s - %2$s</string>
+    <string name="confirm_delete_experience">Ҳақиқатан ҳам тажрибани ўчирмоқчимисиз?</string>
+    <string name="delete_experience_failed">Тажрибани ўчириб бўлмади</string>
 </resources>

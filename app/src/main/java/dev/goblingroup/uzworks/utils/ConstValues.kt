@@ -1,7 +1,7 @@
 package dev.goblingroup.uzworks.utils
 
 object ConstValues {
-    const val BASE_URL = "https://accepted-sole-enough.ngrok-free.app/"
+    const val BASE_URL = "https://visually-informed-manatee.ngrok-free.app/"
     const val AUTH = "Authorization"
     const val BEARER = "Bearer"
     const val TAG = "UzWorksLogTag"

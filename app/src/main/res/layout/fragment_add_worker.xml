@@ -246,34 +246,55 @@
                 android:fontFamily="@font/dm_sans_medium"
                 android:text="@string/address" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:id="@+id/region_layout"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/create_worker_edit_text_background"
-                android:backgroundTint="@android:color/transparent"
-                app:endIconMode="dropdown_menu"
-                android:theme="@style/TextInputEditTextStyle"
-                app:endIconTint="@color/black_blue"
-                app:errorEnabled="false"
-                app:hintEnabled="false">
+                android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
-                    android:id="@+id/region_choice"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/region_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/create_worker_edit_text_background"
-                    android:ellipsize="end"
-                    android:hint="@string/select_region"
-                    android:inputType="none"
-                    android:maxLines="1"
-                    android:textColor="@color/black_blue"
-                    android:textColorHint="@color/text_color"
-                    android:textSize="@dimen/_10ssp" />
+                    android:backgroundTint="@android:color/transparent"
+                    android:theme="@style/TextInputEditTextStyle"
+                    app:endIconMode="dropdown_menu"
+                    app:endIconTint="@color/black_blue"
+                    app:errorEnabled="false"
+                    app:hintEnabled="false"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <AutoCompleteTextView
+                        android:id="@+id/region_choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/create_worker_edit_text_background"
+                        android:ellipsize="end"
+                        android:hint="@string/select_region"
+                        android:inputType="none"
+                        android:maxLines="1"
+                        android:textColor="@color/black_blue"
+                        android:textColorHint="@color/text_color"
+                        android:textSize="@dimen/_10ssp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ProgressBar
+                    android:id="@+id/region_progress"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="@id/region_layout"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintHorizontal_bias="0.97"
+                    app:layout_constraintLeft_toLeftOf="@id/region_layout"
+                    app:layout_constraintRight_toRightOf="@id/region_layout"
+                    app:layout_constraintTop_toTopOf="@id/region_layout"
+                    app:layout_constraintWidth_percent="0.07" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/district_layout"

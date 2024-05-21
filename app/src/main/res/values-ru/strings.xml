@@ -190,7 +190,7 @@
     <string name="current_password_wrong">Текущий пароль неверен</string>
     <string name="password_updated">Пароль успешно обновлен</string>
     <string name="edit">Редактировать</string>
-    <string name="confirm_delete">Вы уверены, что хотите удалить это объявление?</string>
+    <string name="confirm_delete_announcement">Вы уверены, что хотите удалить это объявление?</string>
     <string name="money_unit">сўм</string>
     <string name="forgot_password">Забыли пароль ?</string>
     <string name="forgot_password_explanation">Введите свой номер телефона ниже, чтобы получить код подтверждения и сбросить пароль</string>
@@ -236,4 +236,6 @@
     <string name="load_user_failed">Не удалось загрузить пользовательские данные</string>
     <string name="add_experience_failed">Не удалось добавить опыт</string>
     <string name="edit_experience_failed">Не удалось изменить опыт</string>
+    <string name="confirm_delete_experience">Вы уверены, что хотите удалить опыт?</string>
+    <string name="delete_experience_failed">Не удалось удалить опыт</string>
 </resources>

@@ -14,10 +14,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.adapter.ExperienceAdapter
 import dev.goblingroup.uzworks.databinding.AddEditExperienceDialogItemBinding
+import dev.goblingroup.uzworks.databinding.DeleteExperienceDialogBinding
 import dev.goblingroup.uzworks.databinding.FragmentExperienceBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.ExperienceCreateRequest
@@ -43,6 +45,9 @@ class ExperienceFragment : Fragment() {
 
     private lateinit var loadingDialog: AlertDialog
     private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
+
+    private lateinit var deleteDialog: BottomSheetDialog
+    private lateinit var deleteExperienceDialogBinding: DeleteExperienceDialogBinding
 
     private lateinit var experienceAdapter: ExperienceAdapter
 
@@ -129,10 +134,15 @@ class ExperienceFragment : Fragment() {
                 loadingDialog.setCancelable(false)
             }
 
-            experienceAdapter =
-                ExperienceAdapter(experienceViewModel.experienceList) { experienceResponse, position ->
+            experienceAdapter = ExperienceAdapter(
+                experienceViewModel.experienceList,
+                resources,
+                { experienceResponse, position ->
                     updateExperience(experienceResponse, position)
+                }, { experienceId, position ->
+                    deleteExperience(experienceId, position)
                 }
+            )
             experienceRv.adapter = experienceAdapter
             if (experienceAdapter.itemCount == 0) {
                 noExperienceTv.text = resources.getString(R.string.no_experience)
@@ -350,12 +360,61 @@ class ExperienceFragment : Fragment() {
         }
     }
 
+    private fun deleteExperience(experienceId: String, position: Int) {
+        try {
+            deleteDialog.show()
+        } catch (e: Exception) {
+            deleteDialog = BottomSheetDialog(requireContext())
+            deleteExperienceDialogBinding = DeleteExperienceDialogBinding.inflate(layoutInflater)
+            deleteDialog.setContentView(deleteExperienceDialogBinding.root)
+            deleteDialog.show()
+        }
+        deleteExperienceDialogBinding.apply {
+            yesBtn.setOnClickListener {
+                experienceViewModel.deleteExperience(experienceId).observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            deleteDialog.dismiss()
+                            loadingDialog.dismiss()
+                        }
+
+                        is ApiStatus.Loading -> {
+                            loading()
+                        }
+
+                        is ApiStatus.Success -> {
+                            deleteDialog.dismiss()
+                            loadingDialog.dismiss()
+                            experienceViewModel.experienceList.removeAt(position)
+                            experienceAdapter.notifyItemRemoved(position)
+                            if (experienceAdapter.itemCount == 0) {
+                                binding.noExperienceTv.text =
+                                    resources.getString(R.string.no_experience)
+                                binding.noExperienceTv.visibility = View.VISIBLE
+                            } else {
+                                binding.noExperienceTv.visibility = View.GONE
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun addError() {
         Toast.makeText(requireContext(), resources.getString(R.string.add_experience_failed), Toast.LENGTH_SHORT).show()
     }
 
     private fun editError() {
         Toast.makeText(requireContext(), resources.getString(R.string.edit_experience_failed), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun deleteError() {
+        Toast.makeText(
+            requireContext(),
+            resources.getString(R.string.delete_experience_failed),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     override fun onDestroyView() {

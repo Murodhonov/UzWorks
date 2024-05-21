@@ -1,25 +1,38 @@
 package dev.goblingroup.uzworks.adapter
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.ExperienceItemBinding
 import dev.goblingroup.uzworks.models.response.ExperienceResponse
+import dev.goblingroup.uzworks.utils.isoToDmy
 
 class ExperienceAdapter(
     private val experienceList: List<ExperienceResponse>,
-    private val editClick: (ExperienceResponse, Int) -> Unit
+    private val resources: Resources,
+    private val editClick: (ExperienceResponse, Int) -> Unit,
+    private val deleteClick: (String, Int) -> Unit
 ) : RecyclerView.Adapter<ExperienceAdapter.ExperienceViewHolder>() {
 
     inner class ExperienceViewHolder(private val itemBinding: ExperienceItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun onBind(experienceResponse: ExperienceResponse, position: Int) {
             itemBinding.apply {
+                positionTv.isSelected = true
+                companyNameTv.isSelected = true
+                durationTv.isSelected = true
+
                 positionTv.text = experienceResponse.position
                 companyNameTv.text = experienceResponse.companyName
-                durationTv.text = "${experienceResponse.startDate} ${experienceResponse.endDate}"
+                durationTv.text = resources.getString(R.string.date_range_format, experienceResponse.startDate, experienceResponse.endDate)
                 editExperienceBtn.setOnClickListener {
                     editClick.invoke(experienceResponse, position)
+                }
+
+                deleteExperienceBtn.setOnClickListener {
+                    deleteClick.invoke(experienceResponse.id, position)
                 }
             }
         }

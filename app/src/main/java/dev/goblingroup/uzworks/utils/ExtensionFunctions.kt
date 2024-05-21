@@ -404,22 +404,21 @@ fun String.formatTgUsername(): String {
     }
 }
 
-fun getImage(announcementType: String, gender: String): Int {
-    val images = mutableListOf(
-        R.drawable.ic_logo_1,
-        R.drawable.ic_logo_2,
-        R.drawable.ic_logo_3,
-        R.drawable.ic_logo_4,
-        R.drawable.ic_logo_5,
-        R.drawable.ic_logo_6,
-        R.drawable.ic_logo_7,
-        R.drawable.ic_logo_8,
-        R.drawable.ic_logo_9,
-        R.drawable.ic_logo_10,
-    )
+fun getImage(announcementType: String, gender: String, position: Int): Int {
     return when (announcementType) {
         AnnouncementEnum.JOB.announcementType -> {
-            images[(0 until 10).random()]
+            mutableListOf(
+                R.drawable.ic_logo_1,
+                R.drawable.ic_logo_2,
+                R.drawable.ic_logo_3,
+                R.drawable.ic_logo_4,
+                R.drawable.ic_logo_5,
+                R.drawable.ic_logo_6,
+                R.drawable.ic_logo_7,
+                R.drawable.ic_logo_8,
+                R.drawable.ic_logo_9,
+                R.drawable.ic_logo_10,
+            )[position]
         }
 
         AnnouncementEnum.WORKER.announcementType -> {

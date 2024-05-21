@@ -30,8 +30,6 @@ class SplashFragment : Fragment() {
     private var expandLogo: Animation? = null
 
     private val splashViewModel: SplashViewModel by viewModels()
-    private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
-    private val addressViewModel: AddressViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +50,7 @@ class SplashFragment : Fragment() {
                 }
 
                 override fun onAnimationEnd(animation: Animation?) {
-                    loadCategories()
+                    login()
                 }
 
                 override fun onAnimationRepeat(animation: Animation?) {
@@ -60,38 +58,6 @@ class SplashFragment : Fragment() {
                 }
 
             })
-        }
-    }
-
-    private fun loadCategories() {
-        jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
-            when (it) {
-                is ApiStatus.Error -> {
-
-                }
-                is ApiStatus.Loading -> {
-
-                }
-                is ApiStatus.Success -> {
-                    loadAddresses()
-                }
-            }
-        }
-    }
-
-    private fun loadAddresses() {
-        addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
-            when (it) {
-                is ApiStatus.Error -> {
-
-                }
-                is ApiStatus.Loading -> {
-
-                }
-                is ApiStatus.Success -> {
-                    login()
-                }
-            }
         }
     }
 

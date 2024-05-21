@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
@@ -76,7 +77,7 @@ class AddWorkerFragment : Fragment() {
 
             topTv.isSelected = true
 
-            setRegions(addressViewModel.listRegions())
+//            setRegions(addressViewModel.listRegions())
             setJobCategories(jobCategoryViewModel.listJobCategories())
 
             addWorkerViewModel.controlInput(
@@ -158,6 +159,37 @@ class AddWorkerFragment : Fragment() {
                     else -> {}
                 }
             }
+
+            regionChoice.setOnClickListener {
+                addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load regions",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        is ApiStatus.Loading -> {
+                            regionProgress.visibility = View.VISIBLE
+                            regionLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                        }
+                        is ApiStatus.Success -> {
+                            regionProgress.visibility = View.GONE
+                            regionLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+                            setRegions(it.response!!)
+                            Toast.makeText(
+                                requireContext(),
+                                "${regionChoice.isPopupShowing}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            if (!regionChoice.isPopupShowing) {
+                                regionChoice.showDropDown()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -213,6 +245,8 @@ class AddWorkerFragment : Fragment() {
                         is ApiStatus.Success -> {
                             succeeded()
                         }
+
+                        else -> {}
                     }
                 }
             }

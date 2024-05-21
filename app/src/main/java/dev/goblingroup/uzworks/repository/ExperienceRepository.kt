@@ -27,4 +27,7 @@ class ExperienceRepository @Inject constructor(
             securityRepository.getToken(),
             userId
         )
+
+    suspend fun deleteExperience(experienceId: String) =
+        experienceService.deleteExperience(securityRepository.getToken(), experienceId)
 }

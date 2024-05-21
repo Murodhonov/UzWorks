@@ -4,7 +4,6 @@ import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
-import dev.goblingroup.uzworks.models.response.AnnouncementResponse
 import dev.goblingroup.uzworks.models.response.DistrictResponse
 import dev.goblingroup.uzworks.models.response.JobCategoryResponse
 import dev.goblingroup.uzworks.models.response.JobResponse
@@ -13,7 +12,7 @@ import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.getImage
 
-fun JobResponse.mapToEntity(): AnnouncementEntity {
+fun JobResponse.mapToEntity(position: Int): AnnouncementEntity {
     return AnnouncementEntity(
         id = id,
         categoryName = categoryName,
@@ -23,7 +22,7 @@ fun JobResponse.mapToEntity(): AnnouncementEntity {
         title = title,
         announcementType = AnnouncementEnum.JOB.announcementType,
         isTop = isTop,
-        pictureResId = getImage(AnnouncementEnum.JOB.announcementType, gender),
+        pictureResId = getImage(AnnouncementEnum.JOB.announcementType, gender, position),
     )
 }
 
@@ -38,7 +37,7 @@ fun WorkerResponse.mapToEntity(): AnnouncementEntity {
         title = title,
         announcementType = AnnouncementEnum.WORKER.announcementType,
         isTop = isTop,
-        pictureResId = getImage(AnnouncementEnum.WORKER.announcementType, gender),
+        pictureResId = getImage(AnnouncementEnum.WORKER.announcementType, gender, -1),
     )
 }
 
