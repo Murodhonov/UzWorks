@@ -223,9 +223,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
+                    android:editable="false"
                     android:imeOptions="actionNext"
                     android:inputType="none"
-                    android:editable="false"
                     android:maxLines="1"
                     android:textSize="@dimen/_10ssp" />
 

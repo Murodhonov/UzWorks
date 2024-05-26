@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,10 +15,8 @@ import dev.goblingroup.uzworks.adapter.AllAnnouncementsAdapter
 import dev.goblingroup.uzworks.databinding.FragmentAllAnnouncementsBinding
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
-import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.AllAnnouncementsViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

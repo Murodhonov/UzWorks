@@ -25,7 +25,9 @@
 
         <Constraint
             android:id="@+id/bottom_bar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_8sdp"
@@ -50,7 +52,9 @@
 
         <Constraint
             android:id="@+id/bottom_bar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_8sdp"

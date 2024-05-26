@@ -70,12 +70,14 @@
 
     <me.ibrahimsn.lib.SmoothBottomBar
         android:id="@+id/bottom_bar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_height="@dimen/_40sdp"
+        android:layout_marginHorizontal="@dimen/_20sdp"
         app:backgroundColor="@color/white"
         app:cornerRadius="@dimen/_8sdp"
         app:corners="all"
-        android:layout_marginHorizontal="@dimen/_15sdp"
         app:iconSize="@dimen/_17sdp"
         app:iconTint="@color/black_blue"
         app:iconTintActive="@color/black_blue"

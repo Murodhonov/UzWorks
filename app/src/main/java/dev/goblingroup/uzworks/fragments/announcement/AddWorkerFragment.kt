@@ -70,127 +70,120 @@ class AddWorkerFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.apply {
-            back.setOnClickListener {
-                findNavController().popBackStack()
-            }
-
-            topTv.isSelected = true
-
-//            setRegions(addressViewModel.listRegions())
-            setJobCategories(jobCategoryViewModel.listJobCategories())
-
-            addWorkerViewModel.controlInput(
-                fragmentActivity = requireActivity(),
-                deadlineEt = deadlineEt,
-                titleEt = titleEt,
-                salaryEt = salaryEt,
-                workingTimeEt = workingTimeEt,
-                workingScheduleEt = workingScheduleEt,
-                tgUserNameEt = tgUserNameEt,
-            )
-
-            phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-                if (hasFocus) {
-                    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                        phoneNumberEt.windowToken,
-                        0
-                    )
-                    val clipboardManager =
-                        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clipData =
-                        ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
-                    clipboardManager.setPrimaryClip(clipData)
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().resources.getString(R.string.phone_number_copied),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-            genderLayout.root.setOnClickListener {
-                birthdayGenderExplanation(resources.getString(R.string.gender_restriction_explanation))
-            }
-
-            birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-                if (hasFocus) {
-                    birthdayGenderExplanation(resources.getString(R.string.birthday_restriction_explanation))
-                }
-            }
-
-            saveBtn.setOnClickListener {
-                val isValid = addWorkerViewModel.isFormValid(
-                    resources,
-                    deadlineEt,
-                    titleEt,
-                    salaryEt,
-                    workingTimeEt,
-                    workingScheduleEt,
-                    tgUserNameEt,
-                    districtLayout,
-                    jobCategoryLayout
-                )
-                Log.d(TAG, "onViewCreated: adding worker $isValid")
-                if (isValid) {
-                    createWorker()
-                }
-            }
-
-            cancelBtn.setOnClickListener {
-                findNavController().popBackStack()
-            }
-
-            phoneNumberEt.editText?.setText(addWorkerViewModel.phoneNumber.convertPhoneNumber())
-            if (addWorkerViewModel.birthdate != DEFAULT_BIRTHDAY) {
-                birthdayEt.editText?.setText(addWorkerViewModel.birthdate?.isoToDmy())
-            }
-
-            genderLayout.apply {
-                when (addWorkerViewModel.gender) {
-                    GenderEnum.MALE.code -> {
-                        selectMale(resources)
-                    }
-
-                    GenderEnum.FEMALE.code -> {
-                        selectFemale(resources)
-                    }
-
-                    else -> {}
-                }
-            }
-
-            regionChoice.setOnClickListener {
-                addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "failed to load regions",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        is ApiStatus.Loading -> {
-                            regionProgress.visibility = View.VISIBLE
-                            regionLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                        }
-                        is ApiStatus.Success -> {
-                            regionProgress.visibility = View.GONE
-                            regionLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                            setRegions(it.response!!)
-                            Toast.makeText(
-                                requireContext(),
-                                "${regionChoice.isPopupShowing}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            if (!regionChoice.isPopupShowing) {
-                                regionChoice.showDropDown()
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        binding.apply {
+//            back.setOnClickListener {
+//                findNavController().popBackStack()
+//            }
+//
+//            topTv.isSelected = true
+//
+////            setRegions(addressViewModel.listRegions())
+//            setJobCategories(jobCategoryViewModel.listJobCategories())
+//
+//            addWorkerViewModel.controlInput(
+//                fragmentActivity = requireActivity(),
+//                deadlineEt = deadlineEt,
+//                titleEt = titleEt,
+//                salaryEt = salaryEt,
+//                workingTimeEt = workingTimeEt,
+//                workingScheduleEt = workingScheduleEt,
+//                tgUserNameEt = tgUserNameEt,
+//            )
+//
+//            phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+//                if (hasFocus) {
+//                    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+//                        phoneNumberEt.windowToken,
+//                        0
+//                    )
+//                    val clipboardManager =
+//                        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//                    val clipData =
+//                        ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
+//                    clipboardManager.setPrimaryClip(clipData)
+//                    Toast.makeText(
+//                        requireContext(),
+//                        requireContext().resources.getString(R.string.phone_number_copied),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//
+//            genderLayout.root.setOnClickListener {
+//                birthdayGenderExplanation(resources.getString(R.string.gender_restriction_explanation))
+//            }
+//
+//            birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+//                if (hasFocus) {
+//                    birthdayGenderExplanation(resources.getString(R.string.birthday_restriction_explanation))
+//                }
+//            }
+//
+//            saveBtn.setOnClickListener {
+//                val isValid = addWorkerViewModel.isFormValid(
+//                    resources,
+//                    deadlineEt,
+//                    titleEt,
+//                    salaryEt,
+//                    workingTimeEt,
+//                    workingScheduleEt,
+//                    tgUserNameEt,
+//                    districtLayout,
+//                    jobCategoryLayout
+//                )
+//                Log.d(TAG, "onViewCreated: adding worker $isValid")
+//                if (isValid) {
+//                    createWorker()
+//                }
+//            }
+//
+//            cancelBtn.setOnClickListener {
+//                findNavController().popBackStack()
+//            }
+//
+//            phoneNumberEt.editText?.setText(addWorkerViewModel.phoneNumber.convertPhoneNumber())
+//            if (addWorkerViewModel.birthdate != DEFAULT_BIRTHDAY) {
+//                birthdayEt.editText?.setText(addWorkerViewModel.birthdate?.isoToDmy())
+//            }
+//
+//            genderLayout.apply {
+//                when (addWorkerViewModel.gender) {
+//                    GenderEnum.MALE.code -> {
+//                        selectMale(resources)
+//                    }
+//
+//                    GenderEnum.FEMALE.code -> {
+//                        selectFemale(resources)
+//                    }
+//
+//                    else -> {}
+//                }
+//            }
+//
+//            regionChoice.setOnClickListener {
+//                addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
+//                    when (it) {
+//                        is ApiStatus.Error -> {
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "failed to load regions",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                        is ApiStatus.Loading -> {
+//                            regionProgress.visibility = View.VISIBLE
+//                            regionLayout.endIconMode = TextInputLayout.END_ICON_NONE
+//                        }
+//                        is ApiStatus.Success -> {
+//                            regionProgress.visibility = View.GONE
+//                            regionLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+//                            setRegions(it.response!!)
+//                            Log.d(TAG, "onViewCreated: drop down ${regionChoice.isPopupShowing}")
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun birthdayGenderExplanation(explanationMessage: String) {
