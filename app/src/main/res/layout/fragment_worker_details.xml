@@ -85,35 +85,32 @@
         android:textAlignment="center"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintBottom_toTopOf="@id/job_category_btn"
+        app:layout_constraintBottom_toTopOf="@id/job_category_tv"
         app:layout_constraintLeft_toRightOf="@id/announcement_iv"
         app:layout_constraintRight_toLeftOf="@id/vertical_line"
         app:layout_constraintTop_toBottomOf="@id/title_tv"
         app:layout_constraintVertical_bias="0.8" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/job_category_btn"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/job_category_tv"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        app:cardCornerRadius="@dimen/_3sdp"
-        app:cardElevation="0dp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:background="@drawable/text_background"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_4sdp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textSize="@dimen/_10ssp"
+        android:theme="@style/SecondaryTextStyle"
         app:layout_constraintBottom_toBottomOf="@id/announcement_iv"
         app:layout_constraintLeft_toRightOf="@id/announcement_iv"
-        app:layout_constraintRight_toLeftOf="@id/vertical_line">
-
-        <TextView
-            android:id="@+id/job_category_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_7sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_7sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
-            android:text="@string/job_category"
-            android:textSize="@dimen/_10ssp" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintRight_toLeftOf="@id/vertical_line" />
 
     <TextView
         android:id="@+id/gender_title_tv"
@@ -124,35 +121,30 @@
         android:textAlignment="center"
         android:textColor="@color/black_blue"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintBottom_toTopOf="@id/gender_btn"
+        app:layout_constraintBottom_toTopOf="@id/gender_tv"
         app:layout_constraintLeft_toRightOf="@id/vertical_line"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_tv"
         app:layout_constraintVertical_bias="0.8" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/gender_btn"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/gender_tv"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        app:cardCornerRadius="@dimen/_3sdp"
-        app:cardElevation="0dp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:background="@drawable/text_background"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:paddingVertical="@dimen/_4sdp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textSize="@dimen/_10ssp"
+        android:theme="@style/SecondaryTextStyle"
         app:layout_constraintBottom_toBottomOf="@id/announcement_iv"
         app:layout_constraintLeft_toRightOf="@id/vertical_line"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <TextView
-            android:id="@+id/gender_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_7sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_7sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
-            android:text="@string/job_category"
-            android:textSize="@dimen/_10ssp" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"

@@ -25,13 +25,10 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentJobDetailsBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
-import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.LanguageEnum
-import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.JobDetailsViewModel
 
 @AndroidEntryPoint
@@ -106,6 +103,9 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
 
     private fun setJobDetails(jobResponse: JobResponse?) {
         binding.apply {
+            titleTv.isSelected = true
+            jobCategoryTv.isSelected = true
+
             titleTv.text = jobResponse?.title
             jobCategoryTv.text = jobResponse?.categoryName
             genderTv.text =

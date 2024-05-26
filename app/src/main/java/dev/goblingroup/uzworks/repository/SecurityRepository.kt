@@ -3,6 +3,8 @@ package dev.goblingroup.uzworks.repository
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import dev.goblingroup.uzworks.database.dao.AnnouncementDao
+import dev.goblingroup.uzworks.database.dao.DistrictDao
+import dev.goblingroup.uzworks.database.dao.RegionDao
 import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.utils.ConstValues.BEARER
 import dev.goblingroup.uzworks.utils.GenderEnum
@@ -15,6 +17,8 @@ class SecurityRepository @Inject constructor(
     private val gson: Gson,
     private val type: Type,
     private val announcementDao: AnnouncementDao,
+    private val districtDao: DistrictDao,
+    private val regionDao: RegionDao,
     private val userService: UserService
 ) {
 

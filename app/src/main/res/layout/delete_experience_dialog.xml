@@ -22,7 +22,7 @@
         android:textSize="@dimen/_12ssp"
         android:layout_marginTop="@dimen/_7sdp"
         android:fontFamily="@font/dm_sans_regular"
-        android:text="@string/confirm_delete_announcement"
+        android:text="@string/confirm_delete_experience"
         android:textColor="@color/text_color"
         android:theme="@style/SecondaryTextStyle" />
 

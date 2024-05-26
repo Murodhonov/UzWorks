@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
-import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.repository.AddressRepository
@@ -60,7 +59,7 @@ class AddressViewModel @Inject constructor(
                 } else {
                     Log.d(TAG, "fetchRegions: there's something in region table")
                     _regionLiveData.postValue(ApiStatus.Success(addressRepository.listRegions()))
-                    fetchDistricts(addressRepository.listDistricts().map { it.id })
+                    fetchDistricts(addressRepository.listRegions().map { it.id })
                 }
             }
         }

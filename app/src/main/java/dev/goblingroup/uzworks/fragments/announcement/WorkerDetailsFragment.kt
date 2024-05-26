@@ -89,6 +89,10 @@ class WorkerDetailsFragment : Fragment() {
 
     private fun setWorkerDetails(workerResponse: WorkerResponse?) {
         binding.apply {
+            titleTv.isSelected = true
+            jobCategoryTv.isSelected = true
+
+
             titleTv.text = workerResponse?.title
             jobCategoryTv.text = workerResponse?.categoryName
             genderTv.text =

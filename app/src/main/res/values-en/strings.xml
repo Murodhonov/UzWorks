@@ -190,7 +190,7 @@ The information displayed to you is determined by the role you choose</string>
     <string name="current_password_wrong">Current password is wrong</string>
     <string name="password_updated">Password successfully updated</string>
     <string name="edit">Edit</string>
-    <string name="confirm_delete">Are you sure you want to delete this announcement ?</string>
+    <string name="confirm_delete_announcement">Are you sure you want to delete this announcement ?</string>
     <string name="money_unit">UZS</string>
     <string name="forgot_password">Forgot password ?</string>
     <string name="forgot_password_explanation">Enter your phone number below to receive a verification code and reset your password</string>
@@ -236,4 +236,6 @@ The information displayed to you is determined by the role you choose</string>
     <string name="load_user_failed">Failed to load user data</string>
     <string name="add_experience_failed">Failed to add experience</string>
     <string name="edit_experience_failed">Failed to edit experience</string>
+    <string name="confirm_delete_experience">Are you sure you want to delete experience?</string>
+    <string name="delete_experience_failed">Failed to delete experience</string>
 </resources>

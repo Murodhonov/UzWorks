@@ -95,46 +95,7 @@ class ForgotPasswordFragment : Fragment() {
                 }
             }
 
-            phoneNumberEt.editText?.addTextChangedListener(object : TextWatcher {
-                private var isFormatting = false
-
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-
-                }
-
-                override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int
-                ) {
-
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    if (isFormatting) {
-                        return
-                    }
-
-                    isFormatting = true
-                    val newText = s.toString().filter { !it.isWhitespace() }
-                    val oldText =
-                        phoneNumberEt.editText?.tag.toString().filter { !it.isWhitespace() }
-                    val formattedPhone =
-                        s?.filter { !it.isWhitespace() }.toString()
-                            .formatPhoneNumber(newText.length < oldText.length)
-                    phoneNumberEt.editText?.setText(formattedPhone)
-                    phoneNumberEt.editText?.setSelection(formattedPhone.length)
-                    phoneNumberEt.tag = formattedPhone
-
-                    isFormatting = false
-                }
-            })
+            forgotPasswordViewModel.controlPhoneNumber(phoneNumberEt)
 
             back.setOnClickListener {
                 findNavController().popBackStack()

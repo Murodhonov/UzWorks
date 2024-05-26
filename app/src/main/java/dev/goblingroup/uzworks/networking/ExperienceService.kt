@@ -6,8 +6,10 @@ import dev.goblingroup.uzworks.models.response.ExperienceCreateResponse
 import dev.goblingroup.uzworks.models.response.ExperienceEditResponse
 import dev.goblingroup.uzworks.models.response.ExperienceResponse
 import dev.goblingroup.uzworks.utils.ConstValues
+import dev.goblingroup.uzworks.utils.ConstValues.AUTH
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -33,5 +35,11 @@ interface ExperienceService {
         @Header(ConstValues.AUTH) token: String,
         @Path("id") userId: String
     ): Response<List<ExperienceResponse>>
+
+    @DELETE("api/Experience/Delete/{id}")
+    suspend fun deleteExperience(
+        @Header(AUTH) token: String,
+        @Path("id") experienceId: String
+    ): Response<Unit>
 
 }

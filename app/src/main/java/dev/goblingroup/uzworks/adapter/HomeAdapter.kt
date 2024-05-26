@@ -12,6 +12,7 @@ import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.formatSalary
 import dev.goblingroup.uzworks.utils.getImage
 import dev.goblingroup.uzworks.vm.HomeViewModel
 
@@ -24,21 +25,25 @@ class HomeAdapter(
 
     inner class AnnouncementsViewHolder(private val announcementItemBinding: AnnouncementItemBinding) :
         RecyclerView.ViewHolder(announcementItemBinding.root) {
-        fun bindAnnouncement(announcement: Any) {
+        fun bindAnnouncement(announcement: Any, position: Int) {
             announcementItemBinding.apply {
                 titleTv.isSelected = true
                 addressTv.isSelected = true
+                categoryTv.isSelected = true
 
                 when (announcement) {
                     is JobResponse -> {
                         titleTv.text = announcement.title
-                        costTv.text = "${announcement.salary} ${resources.getString(R.string.money_unit)}"
+                        costTv.text = "${announcement.salary.toString().formatSalary()} ${
+                            resources.getString(R.string.money_unit)
+                        }"
                         categoryTv.text = announcement.categoryName
                         addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
                         iv.setImageResource(
                             getImage(
                                 AnnouncementEnum.JOB.announcementType,
-                                announcement.gender
+                                announcement.gender,
+                                position
                             )
                         )
                         badgeIv.visibility = View.VISIBLE
@@ -69,13 +74,16 @@ class HomeAdapter(
                     }
                     is WorkerResponse -> {
                         titleTv.text = announcement.title
-                        costTv.text = "${announcement.salary} ${resources.getString(R.string.money_unit)}"
+                        costTv.text = "${announcement.salary.toString().formatSalary()} ${
+                            resources.getString(R.string.money_unit)
+                        }"
                         categoryTv.text = announcement.categoryName
                         addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
                         iv.setImageResource(
                             getImage(
                                 AnnouncementEnum.WORKER.announcementType,
-                                announcement.gender
+                                announcement.gender,
+                                position
                             )
                         )
                         badgeIv.visibility = View.VISIBLE
@@ -114,7 +122,7 @@ class HomeAdapter(
                                 homeViewModel.unSave(announcement.id)
                                 saveIv.setImageResource(R.drawable.ic_unsaved)
                             } else {
-                                homeViewModel.save(announcement.mapToEntity())
+                                homeViewModel.save(announcement.mapToEntity(position))
                                 saveIv.setImageResource(R.drawable.ic_saved)
                             }
                         }
@@ -158,6 +166,6 @@ class HomeAdapter(
     override fun getItemCount(): Int = announcementList.size
 
     override fun onBindViewHolder(holder: AnnouncementsViewHolder, position: Int) {
-        holder.bindAnnouncement(announcementList[position])
+        holder.bindAnnouncement(announcementList[position], position)
     }
 }

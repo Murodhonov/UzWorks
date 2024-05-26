@@ -10,15 +10,11 @@ import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSplashBinding
-import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
-import dev.goblingroup.uzworks.vm.JobCategoryViewModel
 import dev.goblingroup.uzworks.vm.SplashViewModel
 import kotlinx.coroutines.launch
 
@@ -30,8 +26,6 @@ class SplashFragment : Fragment() {
     private var expandLogo: Animation? = null
 
     private val splashViewModel: SplashViewModel by viewModels()
-    private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
-    private val addressViewModel: AddressViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +46,7 @@ class SplashFragment : Fragment() {
                 }
 
                 override fun onAnimationEnd(animation: Animation?) {
-                    loadCategories()
+                    login()
                 }
 
                 override fun onAnimationRepeat(animation: Animation?) {
@@ -60,38 +54,6 @@ class SplashFragment : Fragment() {
                 }
 
             })
-        }
-    }
-
-    private fun loadCategories() {
-        jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
-            when (it) {
-                is ApiStatus.Error -> {
-
-                }
-                is ApiStatus.Loading -> {
-
-                }
-                is ApiStatus.Success -> {
-                    loadAddresses()
-                }
-            }
-        }
-    }
-
-    private fun loadAddresses() {
-        addressViewModel.districtLiveData.observe(viewLifecycleOwner) {
-            when (it) {
-                is ApiStatus.Error -> {
-
-                }
-                is ApiStatus.Loading -> {
-
-                }
-                is ApiStatus.Success -> {
-                    login()
-                }
-            }
         }
     }
 

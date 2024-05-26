@@ -24,7 +24,6 @@ import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
 import dev.goblingroup.uzworks.utils.NetworkHelper
-import dev.goblingroup.uzworks.utils.clear
 import dev.goblingroup.uzworks.utils.extractDateValue
 import dev.goblingroup.uzworks.utils.extractErrorMessage
 import kotlinx.coroutines.launch
@@ -49,6 +48,8 @@ class ExperienceViewModel @Inject constructor(
 
     private val editExperienceLiveData =
         MutableLiveData<ApiStatus<ExperienceEditResponse>>(ApiStatus.Loading())
+
+    private val deleteExperienceLiveData = MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
     lateinit var experienceList: ArrayList<ExperienceResponse>
 
@@ -113,6 +114,20 @@ class ExperienceViewModel @Inject constructor(
             }
         }
         return editExperienceLiveData
+    }
+
+    fun deleteExperience(experienceId: String): LiveData<ApiStatus<Unit>> {
+        viewModelScope.launch {
+            if (networkHelper.isNetworkConnected()) {
+                val response = experienceRepository.deleteExperience(experienceId)
+                if (response.isSuccessful) {
+                    deleteExperienceLiveData.postValue(ApiStatus.Success(response.body()))
+                } else {
+                    deleteExperienceLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                }
+            }
+        }
+        return deleteExperienceLiveData
     }
 
     @SuppressLint("ClickableViewAccessibility")

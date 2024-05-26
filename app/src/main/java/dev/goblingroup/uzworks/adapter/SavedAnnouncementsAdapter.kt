@@ -9,6 +9,7 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.databinding.AnnouncementItemBinding
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.formatSalary
 import dev.goblingroup.uzworks.vm.SavedAnnouncementsViewModel
 
 class SavedAnnouncementsAdapter(
@@ -30,9 +31,10 @@ class SavedAnnouncementsAdapter(
             announcementItemBinding.apply {
                 titleTv.isSelected = true
                 addressTv.isSelected = true
+                categoryTv.isSelected = true
 
                 titleTv.text = announcement.title
-                costTv.text = "${announcement.salary} ${resources.getString(R.string.money_unit)}"
+                costTv.text = "${announcement.salary.toString().formatSalary()} ${resources.getString(R.string.money_unit)}"
                 saveIv.setImageResource(R.drawable.ic_saved)
                 categoryTv.text = announcement.categoryName
                 addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
