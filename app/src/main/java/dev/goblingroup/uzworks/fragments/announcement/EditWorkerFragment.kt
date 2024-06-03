@@ -16,9 +16,13 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
+import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.BirthdayGenderExplanationBinding
 import dev.goblingroup.uzworks.databinding.FragmentEditWorkerBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
@@ -36,6 +40,7 @@ import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.EditWorkerViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class EditWorkerFragment : Fragment() {
@@ -51,11 +56,12 @@ class EditWorkerFragment : Fragment() {
     private lateinit var loadingDialog: AlertDialog
     private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
 
-    private lateinit var regionAdapter: ArrayAdapter<String>
-    private lateinit var categoryAdapter: ArrayAdapter<String>
-
     private lateinit var birthdayGenderExplanationDialog: AlertDialog
     private lateinit var birthdayGenderExplanationBinding: BirthdayGenderExplanationBinding
+
+    private lateinit var regionAdapter: ArrayAdapter<String>
+    private lateinit var districtAdapter: ArrayAdapter<String>
+    private lateinit var categoryAdapter: ArrayAdapter<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +71,8 @@ class EditWorkerFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding.apply {
             editWorkerViewModel.workerId = arguments?.getString("announcement_id").toString()
 
@@ -138,44 +145,58 @@ class EditWorkerFragment : Fragment() {
             regionChoice.setText(response.regionName)
             districtChoice.setText(response.districtName)
             jobCategoryChoice.setText(response.categoryName)
-            editWorkerViewModel.regionId =
-                addressViewModel.listRegions().find { it.name == response.regionName }!!.id
-            editWorkerViewModel.districtId =
-                addressViewModel.listDistrictsByRegionId(editWorkerViewModel.regionId)
-                    .find { it.name == response.districtName }!!.id
-            editWorkerViewModel.categoryId =
-                jobCategoryViewModel.listJobCategories()
-                    .find { it.title == response.categoryName }!!.id
 
-            setDistricts(response.regionName)
+            regionChoice.setOnClickListener {
+                addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load regions",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        is ApiStatus.Loading -> {
+                            regionProgress.visibility = View.VISIBLE
+                            regionLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                        }
+                        is ApiStatus.Success -> {
+                            regionProgress.visibility = View.GONE
+                            regionLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+                            setRegions(it.response!!)
+                        }
+                    }
+                }
+            }
 
-            regionAdapter = ArrayAdapter(
-                requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                addressViewModel.listRegions().map { it.name }
-            )
-            regionChoice.setAdapter(regionAdapter)
-
-            categoryAdapter = ArrayAdapter(
-                requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                jobCategoryViewModel.listJobCategories().map { it.title }
-            )
-            jobCategoryChoice.setAdapter(categoryAdapter)
-
-            regionChoice.setOnItemClickListener { parent, view, position, id ->
-                districtChoice.text.clear()
-                districtChoice.hint = resources.getString(R.string.select_district)
-                editWorkerViewModel.regionId = addressViewModel.listRegions()[position].id
-                setDistricts(regionAdapter.getItem(position).toString())
+            jobCategoryChoice.setOnClickListener {
+                jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load categories",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        is ApiStatus.Loading -> {
+                            categoryProgress.visibility = View.VISIBLE
+                            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                        }
+                        is ApiStatus.Success -> {
+                            categoryProgress.visibility = View.GONE
+                            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+                            setJobCategories(it.response!!)
+                        }
+                    }
+                }
             }
 
             districtChoice.setOnItemClickListener { parent, view, position, id ->
                 if (districtLayout.isErrorEnabled) {
                     districtLayout.isErrorEnabled = false
                 }
-                editWorkerViewModel.districtId =
-                    addressViewModel.listDistrictsByRegionId(editWorkerViewModel.regionId)[position].id
+                editWorkerViewModel.districtId = addressViewModel.districtsByRegionName(regionChoice.text.toString())[position].id
             }
 
             jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
@@ -237,6 +258,45 @@ class EditWorkerFragment : Fragment() {
         }
     }
 
+    private fun setJobCategories(jobCategoryList: List<JobCategoryEntity>) {
+        binding.apply {
+            categoryAdapter =
+                ArrayAdapter(
+                    requireContext(),
+                    androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                    jobCategoryList.map { it.title }
+                )
+            jobCategoryChoice.threshold = 1
+            jobCategoryChoice.setAdapter(categoryAdapter)
+            jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
+                if (jobCategoryLayout.isErrorEnabled) {
+                    jobCategoryLayout.isErrorEnabled = false
+                }
+                editWorkerViewModel.categoryId = jobCategoryList[position].id
+            }
+        }
+    }
+
+    private fun setRegions(response: List<RegionEntity>) {
+        binding.apply {
+            regionAdapter = ArrayAdapter(
+                requireContext(),
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                response.map { it.name }
+            )
+            regionChoice.threshold = 1
+            regionChoice.setAdapter(regionAdapter)
+
+            regionChoice.setOnItemClickListener { parent, view, position, id ->
+                districtChoice.text.clear()
+                districtChoice.hint = getString(R.string.select_district)
+                setDistricts(response[position].id)
+            }
+        }
+    }
+
+
+
     private fun birthdayGenderExplanation(explanationMessage: String) {
         try {
             birthdayGenderExplanationDialog.show()
@@ -294,21 +354,35 @@ class EditWorkerFragment : Fragment() {
         }
     }
 
-    private fun setDistricts(regionName: String) {
+    private fun setDistricts(regionId: String) {
         binding.apply {
-            val districtList = ArrayList(
-                addressViewModel.listDistrictsByRegionId(
-                    addressViewModel.listRegions().find { it.name == regionName }!!.id
-                )
-            )
-            Log.d(TAG, "setDistricts: setting districts in $regionName")
-            Log.d(TAG, "setDistricts: ${districtList.toArray()}")
-            val districtAdapter = ArrayAdapter(
-                requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                districtList.map { it.name }
-            )
-            districtChoice.setAdapter(districtAdapter)
+            lifecycleScope.launch {
+                addressViewModel.districtsByRegionId(regionId).observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load districts",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        is ApiStatus.Loading -> {
+                            districtProgress.visibility = View.VISIBLE
+                            districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                        }
+                        is ApiStatus.Success -> {
+                            districtProgress.visibility = View.GONE
+                            districtLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+                            districtAdapter = ArrayAdapter(
+                                requireContext(),
+                                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                                it.response!!.map { it.name }
+                            )
+                            districtChoice.setAdapter(districtAdapter)
+                        }
+                    }
+                }
+            }
         }
     }
 

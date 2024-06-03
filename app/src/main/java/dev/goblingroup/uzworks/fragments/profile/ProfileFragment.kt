@@ -114,17 +114,13 @@ class ProfileFragment : Fragment() {
     }
 
     private fun addAnnouncement() {
-        /*val direction = if (profileViewModel.isEmployee()) {
+        val direction = if (profileViewModel.isEmployee()) {
             R.id.action_startFragment_to_addWorkerFragment
         } else {
             R.id.action_startFragment_to_addJobFragment
         }
         findNavController().navigate(
             resId = direction,
-            args = null
-        )*/
-        findNavController().navigate(
-            resId = R.id.action_startFragment_to_addWorkerFragment,
             args = null
         )
     }

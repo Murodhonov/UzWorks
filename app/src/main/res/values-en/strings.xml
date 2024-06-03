@@ -238,4 +238,6 @@ The information displayed to you is determined by the role you choose</string>
     <string name="edit_experience_failed">Failed to edit experience</string>
     <string name="confirm_delete_experience">Are you sure you want to delete experience?</string>
     <string name="delete_experience_failed">Failed to delete experience</string>
+    <string name="all">All</string>
+    <string name="saved">Saved</string>
 </resources>

@@ -130,6 +130,7 @@
 
             <TextView
                 android:id="@+id/category_tv"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:layout_width="0dp"
                 android:layout_marginHorizontal="@dimen/_15sdp"
                 android:layout_weight="1"

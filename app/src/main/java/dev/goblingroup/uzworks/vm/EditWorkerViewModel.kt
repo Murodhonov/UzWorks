@@ -49,7 +49,6 @@ class EditWorkerViewModel @Inject constructor(
 
     lateinit var workerId: String
     lateinit var workerResponse: WorkerResponse
-    lateinit var regionId: String
     lateinit var districtId: String
     lateinit var categoryId: String
     val birthdate = securityRepository.getBirthdate()

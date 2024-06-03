@@ -238,4 +238,6 @@
     <string name="edit_experience_failed">Не удалось изменить опыт</string>
     <string name="confirm_delete_experience">Вы уверены, что хотите удалить опыт?</string>
     <string name="delete_experience_failed">Не удалось удалить опыт</string>
+    <string name="all">Все</string>
+    <string name="saved">Сохранено</string>
 </resources>

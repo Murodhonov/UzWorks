@@ -240,4 +240,6 @@
     <string name="date_range_format" translatable="false">%1$s - %2$s</string>
     <string name="confirm_delete_experience">Ҳақиқатан ҳам тажрибани ўчирмоқчимисиз?</string>
     <string name="delete_experience_failed">Тажрибани ўчириб бўлмади</string>
+    <string name="all">Барча</string>
+    <string name="saved">Сақланганлар</string>
 </resources>

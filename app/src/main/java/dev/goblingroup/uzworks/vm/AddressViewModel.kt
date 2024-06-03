@@ -1,16 +1,17 @@
 package dev.goblingroup.uzworks.vm
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
-import dev.goblingroup.uzworks.mapper.mapToEntity
 import dev.goblingroup.uzworks.repository.AddressRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
+import dev.goblingroup.uzworks.utils.extractErrorMessage
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,15 +21,14 @@ class AddressViewModel @Inject constructor(
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
+    private val TAG = "AddressViewModel"
+
     private val _regionLiveData =
-        MutableLiveData<ApiStatus<List<RegionEntity>>>(ApiStatus.Loading())
+        MutableLiveData<ApiStatus<List<RegionEntity>>>()
     val regionLiveData get() = _regionLiveData
 
     private val _districtLiveData =
-        MutableLiveData<ApiStatus<List<DistrictEntity>>>(ApiStatus.Loading())
-    val districtLiveData get() = _districtLiveData
-
-    lateinit var districtList: ArrayList<DistrictEntity>
+        MutableLiveData<ApiStatus<List<DistrictEntity>>>()
 
     init {
         fetchRegions()
@@ -38,79 +38,80 @@ class AddressViewModel @Inject constructor(
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 if (addressRepository.listRegions().isEmpty()) {
+                    Log.d(TAG, "fetchRegions: room is empty")
+                    Log.d(TAG, "fetchRegions: requesting to server")
                     val regionResponse = addressRepository.getAllRegions()
                     if (regionResponse.isSuccessful) {
-                        val regionIdList = ArrayList<String>()
-                        val emptyRegionList = ArrayList<RegionEntity>()
-                        regionResponse.body()?.forEach {
-                            emptyRegionList.add(it.mapToEntity())
-                            regionIdList.add(it.id)
-                        }
-                        if (addressRepository.addRegions(emptyRegionList)) {
+                        Log.d(TAG, "fetchRegions: ${regionResponse.body()} response has came successfully")
+                        if (addressRepository.addRegions(regionResponse.body()!!)) {
+                            Log.d(TAG, "fetchRegions: regions added to room")
                             _regionLiveData.postValue(ApiStatus.Success(addressRepository.listRegions()))
-                            fetchDistricts(regionIdList)
+                        } else {
+                            Log.d(TAG, "fetchRegions: regions couldn't be added to room")
                         }
                     } else {
                         _regionLiveData.postValue(ApiStatus.Error(Throwable(regionResponse.message())))
-                        Log.e(TAG, "fetchRegions: ${regionResponse.code()}")
+                        Log.e(TAG, "fetchRegions: Failed to fetch regions with code ${regionResponse.code()}")
                         Log.e(TAG, "fetchRegions: ${regionResponse.message()}")
                         Log.e(TAG, "fetchRegions: ${regionResponse.errorBody()}")
                     }
                 } else {
-                    Log.d(TAG, "fetchRegions: there's something in region table")
+                    Log.d(TAG, "fetchRegions: room isn't empty")
                     _regionLiveData.postValue(ApiStatus.Success(addressRepository.listRegions()))
-                    fetchDistricts(addressRepository.listRegions().map { it.id })
                 }
             }
         }
     }
 
-    private fun fetchDistricts(regionIdList: List<String>) {
+    fun districtsByRegionId(regionId: String): LiveData<ApiStatus<List<DistrictEntity>>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                if (addressRepository.listDistricts().isEmpty()) {
-                    val emptyDistrictList = ArrayList<DistrictEntity>()
-                    var error = ""
-                    regionIdList.forEach { regionId ->
-                        var index = 0
-                        val districtsByRegionIdResponse =
-                            addressRepository.getDistrictsByRegionId(regionId)
-                        if (districtsByRegionIdResponse.isSuccessful) {
-                            districtsByRegionIdResponse.body()?.forEach { districtResponse ->
-                                index++
-                                emptyDistrictList.add(districtResponse.mapToEntity(regionId))
-                            }
-                            Log.d(TAG, "fetchDistricts: $index districts added by $regionId")
-                        } else {
-                            error = districtsByRegionIdResponse.message()
-                            Log.e(TAG, "fetchDistricts: ${districtsByRegionIdResponse.code()}")
-                            Log.e(TAG, "fetchDistricts: ${districtsByRegionIdResponse.message()}")
-                            Log.e(TAG, "fetchDistricts: ${districtsByRegionIdResponse.errorBody()}")
-                        }
-                    }
-                    Log.d(TAG, "fetchDistricts: error variable -> $error")
-                    if (error.isEmpty() && addressRepository.addDistricts(emptyDistrictList)) {
-                        _districtLiveData.postValue(ApiStatus.Success(addressRepository.listDistricts()))
-                    } else {
-                        _districtLiveData.postValue(ApiStatus.Error(Throwable(error)))
-                    }
+                Log.d(TAG, "districtsByRegionId: searching districts by regionId: $regionId")
+                if (addressRepository.listDistrictsByRegionId(regionId).isNotEmpty()) {
+                    Log.d(TAG, "districtsByRegionId: found in room")
+                    _districtLiveData.postValue(
+                        ApiStatus.Success(
+                            addressRepository.listDistrictsByRegionId(
+                                regionId
+                            )
+                        )
+                    )
                 } else {
-                    Log.d(TAG, "fetchDistricts: there's something in district table")
-                    _districtLiveData.postValue(ApiStatus.Success(addressRepository.listDistricts()))
+                    Log.d(TAG, "districtsByRegionId: not found in room fetching from server")
+                    _districtLiveData.postValue(ApiStatus.Loading())
+                    val response = addressRepository.getDistrictsByRegionId(regionId)
+                    if (response.isSuccessful) {
+                        Log.d(TAG, "districtsByRegionId: ${response.body()!!} response has came successfully")
+                        if (addressRepository.addDistricts(response.body()!!, regionId)) {
+                            Log.d(TAG, "districtsByRegionId: districts added to room")
+                            _districtLiveData.postValue(
+                                ApiStatus.Success(
+                                    addressRepository.listDistrictsByRegionId(
+                                        regionId
+                                    )
+                                )
+                            )
+                        } else {
+                            Log.d(TAG, "districtsByRegionId: districts couldn't be added to room")
+                        }
+                    } else {
+                        _districtLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                        Log.e(
+                            TAG,
+                            "districtsByRegionId: Failed to fetch districts with code ${response.errorBody()?.extractErrorMessage()}",
+                        )
+                        Log.e(TAG, "districtsByRegionId: ${response.code()}")
+                    }
                 }
             }
         }
+        return _districtLiveData
     }
-
-    fun findRegion(regionId: String) = addressRepository.findRegion(regionId)
-
-    fun findDistrict(districtId: String) = addressRepository.findDistrict(districtId)
-
-    fun findRegionByDistrictId(districtId: String) =
-        addressRepository.findRegionByDistrictId(districtId)
 
     fun listDistrictsByRegionId(regionId: String) =
         addressRepository.listDistrictsByRegionId(regionId)
+
+    fun districtsByRegionName(regionName: String) = addressRepository.districtsByRegionName(regionName)
 
     fun listRegions() = addressRepository.listRegions()
 
