@@ -12,6 +12,9 @@ interface DistrictDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addDistricts(districtList: List<DistrictEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addDistrict(district: DistrictEntity)
+
     @Query("SELECT * FROM district_table WHERE district_id = :districtId")
     fun findDistrict(districtId: String): DistrictEntity
 

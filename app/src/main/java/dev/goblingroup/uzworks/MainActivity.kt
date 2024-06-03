@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         when (navController.currentDestination?.id) {
-            R.id.noInternetFragment, R.id.selectJobLocationFragment -> {}
+            R.id.selectJobLocationFragment -> {}
             else -> {
                 super.onBackPressed()
             }

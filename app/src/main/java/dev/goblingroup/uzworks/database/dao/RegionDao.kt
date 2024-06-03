@@ -12,6 +12,9 @@ interface RegionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addRegions(regionList: List<RegionEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addRegion(region: RegionEntity)
+
     @Query("SELECT * FROM region_table WHERE region_id = :regionId")
     fun findRegion(regionId: String): RegionEntity
 

@@ -1,6 +1,5 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -22,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.BirthdayGenderExplanationBinding
@@ -60,6 +58,10 @@ class AddWorkerFragment : Fragment() {
     private lateinit var birthdayGenderExplanationDialog: AlertDialog
     private lateinit var birthdayGenderExplanationBinding: BirthdayGenderExplanationBinding
 
+    private lateinit var regionAdapter: ArrayAdapter<String>
+    private lateinit var districtAdapter: ArrayAdapter<String>
+    private lateinit var categoryAdapter: ArrayAdapter<String>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,122 +70,143 @@ class AddWorkerFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        binding.apply {
-//            back.setOnClickListener {
-//                findNavController().popBackStack()
-//            }
-//
-//            topTv.isSelected = true
-//
-////            setRegions(addressViewModel.listRegions())
-//            setJobCategories(jobCategoryViewModel.listJobCategories())
-//
-//            addWorkerViewModel.controlInput(
-//                fragmentActivity = requireActivity(),
-//                deadlineEt = deadlineEt,
-//                titleEt = titleEt,
-//                salaryEt = salaryEt,
-//                workingTimeEt = workingTimeEt,
-//                workingScheduleEt = workingScheduleEt,
-//                tgUserNameEt = tgUserNameEt,
-//            )
-//
-//            phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-//                if (hasFocus) {
-//                    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-//                        phoneNumberEt.windowToken,
-//                        0
-//                    )
-//                    val clipboardManager =
-//                        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-//                    val clipData =
-//                        ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
-//                    clipboardManager.setPrimaryClip(clipData)
-//                    Toast.makeText(
-//                        requireContext(),
-//                        requireContext().resources.getString(R.string.phone_number_copied),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//
-//            genderLayout.root.setOnClickListener {
-//                birthdayGenderExplanation(resources.getString(R.string.gender_restriction_explanation))
-//            }
-//
-//            birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-//                if (hasFocus) {
-//                    birthdayGenderExplanation(resources.getString(R.string.birthday_restriction_explanation))
-//                }
-//            }
-//
-//            saveBtn.setOnClickListener {
-//                val isValid = addWorkerViewModel.isFormValid(
-//                    resources,
-//                    deadlineEt,
-//                    titleEt,
-//                    salaryEt,
-//                    workingTimeEt,
-//                    workingScheduleEt,
-//                    tgUserNameEt,
-//                    districtLayout,
-//                    jobCategoryLayout
-//                )
-//                Log.d(TAG, "onViewCreated: adding worker $isValid")
-//                if (isValid) {
-//                    createWorker()
-//                }
-//            }
-//
-//            cancelBtn.setOnClickListener {
-//                findNavController().popBackStack()
-//            }
-//
-//            phoneNumberEt.editText?.setText(addWorkerViewModel.phoneNumber.convertPhoneNumber())
-//            if (addWorkerViewModel.birthdate != DEFAULT_BIRTHDAY) {
-//                birthdayEt.editText?.setText(addWorkerViewModel.birthdate?.isoToDmy())
-//            }
-//
-//            genderLayout.apply {
-//                when (addWorkerViewModel.gender) {
-//                    GenderEnum.MALE.code -> {
-//                        selectMale(resources)
-//                    }
-//
-//                    GenderEnum.FEMALE.code -> {
-//                        selectFemale(resources)
-//                    }
-//
-//                    else -> {}
-//                }
-//            }
-//
-//            regionChoice.setOnClickListener {
-//                addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
-//                    when (it) {
-//                        is ApiStatus.Error -> {
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "failed to load regions",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        }
-//                        is ApiStatus.Loading -> {
-//                            regionProgress.visibility = View.VISIBLE
-//                            regionLayout.endIconMode = TextInputLayout.END_ICON_NONE
-//                        }
-//                        is ApiStatus.Success -> {
-//                            regionProgress.visibility = View.GONE
-//                            regionLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-//                            setRegions(it.response!!)
-//                            Log.d(TAG, "onViewCreated: drop down ${regionChoice.isPopupShowing}")
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        binding.apply {
+            back.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
+            topTv.isSelected = true
+
+            addWorkerViewModel.controlInput(
+                fragmentActivity = requireActivity(),
+                deadlineEt = deadlineEt,
+                titleEt = titleEt,
+                salaryEt = salaryEt,
+                workingTimeEt = workingTimeEt,
+                workingScheduleEt = workingScheduleEt,
+                tgUserNameEt = tgUserNameEt,
+            )
+
+            phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                        phoneNumberEt.windowToken,
+                        0
+                    )
+                    val clipboardManager =
+                        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clipData =
+                        ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
+                    clipboardManager.setPrimaryClip(clipData)
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().resources.getString(R.string.phone_number_copied),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            genderLayout.root.setOnClickListener {
+                birthdayGenderExplanation(resources.getString(R.string.gender_restriction_explanation))
+            }
+
+            birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    birthdayGenderExplanation(resources.getString(R.string.birthday_restriction_explanation))
+                }
+            }
+
+            saveBtn.setOnClickListener {
+                val isValid = addWorkerViewModel.isFormValid(
+                    resources,
+                    deadlineEt,
+                    titleEt,
+                    salaryEt,
+                    workingTimeEt,
+                    workingScheduleEt,
+                    tgUserNameEt,
+                    districtLayout,
+                    jobCategoryLayout
+                )
+                Log.d(TAG, "onViewCreated: adding worker $isValid")
+                if (isValid) {
+                    createWorker()
+                }
+            }
+
+            cancelBtn.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
+            phoneNumberEt.editText?.setText(addWorkerViewModel.phoneNumber.convertPhoneNumber())
+            if (addWorkerViewModel.birthdate != DEFAULT_BIRTHDAY) {
+                birthdayEt.editText?.setText(addWorkerViewModel.birthdate?.isoToDmy())
+            }
+
+            genderLayout.apply {
+                when (addWorkerViewModel.gender) {
+                    GenderEnum.MALE.code -> {
+                        selectMale(resources)
+                    }
+
+                    GenderEnum.FEMALE.code -> {
+                        selectFemale(resources)
+                    }
+
+                    else -> {}
+                }
+            }
+
+            regionChoice.setOnClickListener {
+                addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load regions",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        is ApiStatus.Loading -> {
+                            regionProgress.visibility = View.VISIBLE
+                            regionLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                        }
+
+                        is ApiStatus.Success -> {
+                            regionProgress.visibility = View.GONE
+                            regionLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+                            setRegions(it.response!!)
+                            Log.d(TAG, "onViewCreated: drop down ${regionChoice.isPopupShowing}")
+                        }
+                    }
+                }
+            }
+
+            jobCategoryChoice.setOnClickListener {
+                jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load categories",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        is ApiStatus.Loading -> {
+                            categoryProgress.visibility = View.VISIBLE
+                            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                        }
+                        is ApiStatus.Success -> {
+                            categoryProgress.visibility = View.GONE
+                            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+                            setJobCategories(it.response!!)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun birthdayGenderExplanation(explanationMessage: String) {
@@ -271,7 +294,7 @@ class AddWorkerFragment : Fragment() {
 
     private fun setRegions(regionList: List<RegionEntity>) {
         binding.apply {
-            val regionAdapter = ArrayAdapter(
+            regionAdapter = ArrayAdapter(
                 requireContext(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 regionList.map { it.name }
@@ -282,7 +305,6 @@ class AddWorkerFragment : Fragment() {
             regionChoice.setOnItemClickListener { parent, view, position, id ->
                 districtChoice.text.clear()
                 districtChoice.hint = getString(R.string.select_district)
-                districtLayout.isErrorEnabled = false
                 setDistricts(regionList[position].id)
             }
         }
@@ -291,17 +313,37 @@ class AddWorkerFragment : Fragment() {
     private fun setDistricts(regionId: String) {
         binding.apply {
             lifecycleScope.launch {
-                val districtList = addressViewModel.listDistrictsByRegionId(regionId)
-                val districtAdapter = ArrayAdapter(
-                    requireContext(),
-                    androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                    districtList.map { it.name }
-                )
-                districtChoice.threshold = 1
-                districtChoice.setAdapter(districtAdapter)
-                districtChoice.setOnItemClickListener { parent, view, position, id ->
-                    districtLayout.isErrorEnabled = false
-                    addWorkerViewModel.districtId = districtList[position].id
+                addressViewModel.districtsByRegionId(regionId).observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load districts",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        is ApiStatus.Loading -> {
+                            districtProgress.visibility = View.VISIBLE
+                            districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                        }
+
+                        is ApiStatus.Success -> {
+                            districtProgress.visibility = View.GONE
+                            districtLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+                            districtAdapter = ArrayAdapter(
+                                requireContext(),
+                                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                                it.response!!.map { it.name }
+                            )
+                            districtChoice.threshold = 1
+                            districtChoice.setAdapter(districtAdapter)
+                            districtChoice.setOnItemClickListener { parent, view, position, id ->
+                                districtLayout.isErrorEnabled = false
+                                addWorkerViewModel.districtId = it.response[position].id
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -309,14 +351,14 @@ class AddWorkerFragment : Fragment() {
 
     private fun setJobCategories(jobCategoryList: List<JobCategoryEntity>) {
         binding.apply {
-            val jobCategoryAdapter =
+            categoryAdapter =
                 ArrayAdapter(
                     requireContext(),
                     androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                     jobCategoryList.map { it.title }
                 )
             jobCategoryChoice.threshold = 1
-            jobCategoryChoice.setAdapter(jobCategoryAdapter)
+            jobCategoryChoice.setAdapter(categoryAdapter)
             jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
                 if (jobCategoryLayout.isErrorEnabled) {
                     jobCategoryLayout.isErrorEnabled = false

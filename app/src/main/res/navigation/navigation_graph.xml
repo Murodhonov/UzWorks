@@ -256,11 +256,6 @@
         android:label="fragment_experience"
         tools:layout="@layout/fragment_experience" />
     <fragment
-        android:id="@+id/noInternetFragment"
-        android:name="dev.goblingroup.uzworks.fragments.NoInternetFragment"
-        android:label="fragment_no_internet"
-        tools:layout="@layout/fragment_no_internet" />
-    <fragment
         android:id="@+id/startFragment"
         android:name="dev.goblingroup.uzworks.fragments.StartFragment"
         android:label="fragment_start"

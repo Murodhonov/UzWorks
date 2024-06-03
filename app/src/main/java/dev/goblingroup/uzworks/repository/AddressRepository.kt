@@ -3,7 +3,9 @@ package dev.goblingroup.uzworks.repository
 import dev.goblingroup.uzworks.database.dao.DistrictDao
 import dev.goblingroup.uzworks.database.dao.RegionDao
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
-import dev.goblingroup.uzworks.database.entity.RegionEntity
+import dev.goblingroup.uzworks.mapper.mapToEntity
+import dev.goblingroup.uzworks.models.response.DistrictResponse
+import dev.goblingroup.uzworks.models.response.RegionResponse
 import dev.goblingroup.uzworks.networking.DistrictService
 import dev.goblingroup.uzworks.networking.RegionService
 import javax.inject.Inject
@@ -17,8 +19,10 @@ class AddressRepository @Inject constructor(
 
     suspend fun getAllRegions() = regionService.getAllRegions()
 
-    fun addRegions(regionList: List<RegionEntity>): Boolean {
-        regionDao.addRegions(regionList)
+    fun addRegions(regionList: List<RegionResponse>): Boolean {
+        regionList.forEach { regionResponse ->
+            regionDao.addRegion(regionResponse.mapToEntity())
+        }
         return regionDao.countRegions() == regionList.size
     }
 
@@ -31,9 +35,11 @@ class AddressRepository @Inject constructor(
     suspend fun getDistrictsByRegionId(regionId: String) =
         districtService.getDistrictsByRegionId(regionId)
 
-    fun addDistricts(districtList: List<DistrictEntity>): Boolean {
-        districtDao.addDistricts(districtList)
-        return districtDao.countDistricts() == districtList.size
+    fun addDistricts(districtList: List<DistrictResponse>, regionId: String): Boolean {
+        districtList.forEach { districtResponse ->
+            districtDao.addDistrict(districtResponse.mapToEntity(regionId))
+        }
+        return districtDao.listDistrictsByRegionId(regionId).size == districtList.size
     }
 
     fun findDistrict(districtId: String) = districtDao.findDistrict(districtId)
@@ -43,5 +49,10 @@ class AddressRepository @Inject constructor(
     fun listDistrictsByRegionId(regionId: String) = districtDao.listDistrictsByRegionId(regionId)
 
     fun findRegionByDistrictId(districtId: String) = districtDao.findRegionByDistrictId(districtId)
+
+    fun districtsByRegionName(regionName: String): List<DistrictEntity> {
+        return districtDao.listDistrictsByRegionId(
+            regionDao.listRegions().find { it.name == regionName }!!.id)
+    }
 
 }

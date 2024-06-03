@@ -52,7 +52,10 @@ class AnnouncementsFragment : Fragment() {
             TabLayoutMediator(
                 tabLayout, viewPager
             ) { tab, position ->
-                tab.text = arrayListOf("Barcha", "Saqlanganlar")[position]
+                tab.text = arrayListOf(
+                    resources.getString(R.string.all),
+                    resources.getString(R.string.saved)
+                )[position]
             }.attach()
 
             tabLayout.post {

@@ -238,4 +238,6 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="edit_experience_failed">Tajribani tahrirlab bo\'lmadi</string>
     <string name="confirm_delete_experience">Haqiqatan ham tajribani o\'chirmoqchimisiz?</string>
     <string name="delete_experience_failed">Tajribani o\'chirib bo\'lmadi</string>
+    <string name="all">Barcha</string>
+    <string name="saved">Saqlanganlar</string>
 </resources>
