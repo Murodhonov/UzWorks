@@ -6,7 +6,6 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged

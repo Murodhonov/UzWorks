@@ -26,4 +26,7 @@ interface RegionDao {
 
     @Query("SELECT COUNT(*) FROM region_table")
     fun countRegions(): Int
+
+    @Query("DELETE FROM region_table")
+    fun clearTable()
 }

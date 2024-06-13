@@ -2,8 +2,10 @@ package dev.goblingroup.uzworks.repository
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import dev.goblingroup.uzworks.database.AppDatabase
 import dev.goblingroup.uzworks.database.dao.AnnouncementDao
 import dev.goblingroup.uzworks.database.dao.DistrictDao
+import dev.goblingroup.uzworks.database.dao.JobCategoryDao
 import dev.goblingroup.uzworks.database.dao.RegionDao
 import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.utils.ConstValues.BEARER
@@ -19,6 +21,7 @@ class SecurityRepository @Inject constructor(
     private val announcementDao: AnnouncementDao,
     private val districtDao: DistrictDao,
     private val regionDao: RegionDao,
+    private val jobCategoryDao: JobCategoryDao,
     private val userService: UserService
 ) {
 
@@ -57,6 +60,9 @@ class SecurityRepository @Inject constructor(
 
     fun logout(): Boolean {
         announcementDao.clearTable()
+        districtDao.clearTable()
+        regionDao.clearTable()
+        jobCategoryDao.clearTable()
         return sharedPreferences.edit().clear().commit()
     }
 

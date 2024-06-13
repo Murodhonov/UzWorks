@@ -9,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.database.entity.DistrictEntity
 import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.repository.AddressRepository
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import dev.goblingroup.uzworks.utils.extractErrorMessage
 import kotlinx.coroutines.launch
@@ -40,6 +39,7 @@ class AddressViewModel @Inject constructor(
                 if (addressRepository.listRegions().isEmpty()) {
                     Log.d(TAG, "fetchRegions: room is empty")
                     Log.d(TAG, "fetchRegions: requesting to server")
+                    _regionLiveData.postValue(ApiStatus.Loading())
                     val regionResponse = addressRepository.getAllRegions()
                     if (regionResponse.isSuccessful) {
                         Log.d(TAG, "fetchRegions: ${regionResponse.body()} response has came successfully")
@@ -110,6 +110,59 @@ class AddressViewModel @Inject constructor(
 
     fun listDistrictsByRegionId(regionId: String) =
         addressRepository.listDistrictsByRegionId(regionId)
+
+    fun districtByRegionName(regionName: String): LiveData<ApiStatus<List<DistrictEntity>>> {
+        viewModelScope.launch {
+            if (addressRepository.districtsByRegionName(regionName).isNotEmpty()) {
+                _districtLiveData.postValue(
+                    ApiStatus.Success(
+                        addressRepository.districtsByRegionName(
+                            regionName
+                        )
+                    )
+                )
+            } else {
+                if (networkHelper.isNetworkConnected()) {
+                    _districtLiveData.postValue(ApiStatus.Loading())
+                    val regionResponse = addressRepository.getAllRegions()
+                    if (regionResponse.isSuccessful) {
+                        addressRepository.addRegions(regionResponse.body()!!)
+                    }
+                    if (addressRepository.districtsByRegionName(regionName).isNotEmpty()) {
+                        _districtLiveData.postValue(
+                            ApiStatus.Success(
+                                addressRepository.districtsByRegionName(
+                                    regionName
+                                )
+                            )
+                        )
+                    } else {
+                        val regionId =
+                            addressRepository.listRegions().find { it.name == regionName }?.id
+                        val districtsByRegionIdResponse =
+                            addressRepository.getDistrictsByRegionId(regionId.toString())
+
+                        if (districtsByRegionIdResponse.isSuccessful) {
+                            if (addressRepository.addDistricts(
+                                    districtsByRegionIdResponse.body()!!,
+                                    regionId.toString()
+                                )
+                            ) {
+                                _districtLiveData.postValue(
+                                    ApiStatus.Success(
+                                        addressRepository.listDistrictsByRegionId(
+                                            regionId.toString()
+                                        )
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return _districtLiveData
+    }
 
     fun districtsByRegionName(regionName: String) = addressRepository.districtsByRegionName(regionName)
 

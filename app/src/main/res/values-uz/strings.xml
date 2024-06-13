@@ -240,4 +240,9 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="delete_experience_failed">Tajribani o\'chirib bo\'lmadi</string>
     <string name="all">Barcha</string>
     <string name="saved">Saqlanganlar</string>
+    <string name="address_unknown">Manzil noma\'lum, tanlash uchun bosing</string>
+    <string name="location_explanation">"Meni top" tugmasini bosganingizda xaritadagi joriy joylashuvingizni ko\'rsatish uchun bizga joylashuvingizga ruxsat kerak.
+Siz tanlagan koordinatalarni faqat "Tayyor" tugmasini bosganingizdan keyin saqlaymiz. Biz sizning joylashuvingiz haqidagi aniq ma\'lumotlarni boshqalarga ko\'rsatmaymiz. Sizning maxfiyligingiz biz uchun muhim va biz joylashuvdan faqat ish joylarini xaritada ko\'rsatish uchun foydalanamiz va bu joylashuv siz tanlagan oxirgi joy bo\'ladi</string>
+    <string name="allow">Ruxsat berish</string>
+    <string name="deny">Rad etish</string>
 </resources>

@@ -1,5 +1,6 @@
 package dev.goblingroup.uzworks.fragments.profile
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -57,6 +58,13 @@ class ProfileFragment : Fragment() {
                 )
             }
 
+            addressTv.setOnClickListener {
+                if (addressTv.text == resources.getString(R.string.address_unknown)) findNavController().navigate(
+                    resId = R.id.action_startFragment_to_personalInfoFragment,
+                    args = null
+                )
+            }
+
             experienceBtn.setOnClickListener {
                 if (profileViewModel.isEmployee())
                     findNavController().navigate(
@@ -103,10 +111,26 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun succeeded(response: UserResponse) {
         binding.apply {
-            userNameTv.text = "${response?.firstName} ${response?.lastName}"
-            when (response.gender ?: "") {
+            Log.d(TAG, "succeeded: $response")
+            userNameTv.text = "${response.firstName} ${response.lastName}"
+            when {
+                response.regionName == null && response.districtName == null -> {
+                    addressTv.text = resources.getString(R.string.address_unknown)
+                    addressTv.setTextColor(resources.getColor(R.color.yellow))
+                }
+                response.regionName != null && response.districtName == null -> {
+                    addressTv.text = "${response.regionName}"
+                    addressTv.setTextColor(resources.getColor(R.color.white))
+                }
+                response.regionName != null && response.districtName != null -> {
+                    addressTv.text = "${response.regionName}, ${response.districtName}"
+                    addressTv.setTextColor(resources.getColor(R.color.white))
+                }
+            }
+            when (response.gender) {
                 GenderEnum.MALE.code -> avatarIv.setImageResource(R.drawable.ic_male)
                 GenderEnum.FEMALE.code -> avatarIv.setImageResource(R.drawable.ic_female)
             }

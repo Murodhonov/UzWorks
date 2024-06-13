@@ -18,4 +18,7 @@ interface JobCategoryDao {
     @Query("SELECT * FROM job_category_table")
     fun listJobCategories(): List<JobCategoryEntity>
 
+    @Query("DELETE FROM job_category_table")
+    fun clearTable()
+
 }

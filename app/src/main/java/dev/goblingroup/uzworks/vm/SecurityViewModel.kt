@@ -11,8 +11,6 @@ class SecurityViewModel @Inject constructor(
     private val securityRepository: SecurityRepository
 ) : ViewModel() {
 
-    fun getUserRoles() = securityRepository.getUserRoles()
-
     fun logout() = securityRepository.logout()
 
     fun getLanguageCode() = securityRepository.getLanguageCode()

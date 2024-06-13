@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.databinding.ExplainLocationPermissionBinding
 import dev.goblingroup.uzworks.databinding.FragmentSelectJobLocationBinding
 import dev.goblingroup.uzworks.databinding.JobAddressDialogBinding
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LATITUDE
@@ -75,10 +76,27 @@ class SelectJobLocationFragment : Fragment(), OnMapReadyCallback {
                 if (checkLocationPermission()) {
                     findUser()
                 } else {
-                    requestLocationPermission()
+                    explain()
                 }
             }
         }
+    }
+
+    private fun explain() {
+        val explanationDialog = AlertDialog.Builder(requireContext()).create()
+        val explanationBinding = ExplainLocationPermissionBinding.inflate(layoutInflater)
+        explanationDialog.setView(explanationBinding.root)
+        explanationDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        explanationBinding.apply {
+            allowBtn.setOnClickListener {
+                explanationDialog.dismiss()
+                requestLocationPermission()
+            }
+            denyBtn.setOnClickListener {
+                explanationDialog.dismiss()
+            }
+        }
+        explanationDialog.show()
     }
 
     private fun findUser() {

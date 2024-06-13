@@ -240,4 +240,9 @@ The information displayed to you is determined by the role you choose</string>
     <string name="delete_experience_failed">Failed to delete experience</string>
     <string name="all">All</string>
     <string name="saved">Saved</string>
+    <string name="address_unknown">Address unknown, tap to select</string>
+    <string name="location_explanation">We need access to your location to show your current position on the map when you click the "Find me" button.
+        We only save the coordinates you choose after you clicked the "Ready" button. We don\'t share your exact location data with others. Your privacy is important to us, and we only use location to show job locations on the map and that location is the last one which you selected</string>
+    <string name="allow">Allow</string>
+    <string name="deny">Deny</string>
 </resources>

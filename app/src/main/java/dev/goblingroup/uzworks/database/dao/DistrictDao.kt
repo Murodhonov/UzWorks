@@ -33,4 +33,7 @@ interface DistrictDao {
     @Query("SELECT COUNT(*) FROM district_table")
     fun countDistricts(): Int
 
+    @Query("DELETE FROM district_table")
+    fun clearTable()
+
 }
