@@ -23,12 +23,10 @@ class ProfileViewModel @Inject constructor(
 
     private val userLiveData = MutableLiveData<ApiStatus<UserResponse>>(ApiStatus.Loading())
 
-    val districtLiveData = MutableLiveData<String>()
-    val regionLiveData = MutableLiveData<String>()
-
     fun fetchUserData(): LiveData<ApiStatus<UserResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
+                userLiveData.postValue(ApiStatus.Loading())
                 val userResponse = profileRepository.getUserById(securityRepository.getUserId())
                 if (userResponse.isSuccessful) {
                     userLiveData.postValue(ApiStatus.Success(userResponse.body()))

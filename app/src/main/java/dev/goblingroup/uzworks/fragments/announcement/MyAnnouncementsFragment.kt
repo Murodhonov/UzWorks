@@ -20,6 +20,7 @@ import dev.goblingroup.uzworks.adapter.MyJobsAdapter
 import dev.goblingroup.uzworks.adapter.MyWorkersAdapter
 import dev.goblingroup.uzworks.databinding.ConfirmDeleteBinding
 import dev.goblingroup.uzworks.databinding.FragmentMyAnnouncementsBinding
+import dev.goblingroup.uzworks.databinding.IconsExplanationDialogBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.databinding.MyAnnouncementBottomBinding
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
@@ -44,6 +45,9 @@ class MyAnnouncementsFragment : Fragment() {
     private lateinit var confirmDeleteBottomSheet: BottomSheetDialog
     private lateinit var confirmDeleteBinding: ConfirmDeleteBinding
 
+    private lateinit var iconsExplanationBottomDialog: BottomSheetDialog
+    private lateinit var iconsExplanationDialogBinding: IconsExplanationDialogBinding
+
     private lateinit var myJobsAdapter: MyJobsAdapter
     private lateinit var myWorkersAdapter: MyWorkersAdapter
 
@@ -53,6 +57,18 @@ class MyAnnouncementsFragment : Fragment() {
     ): View {
         _binding = FragmentMyAnnouncementsBinding.inflate(layoutInflater)
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        iconsExplanationBottomDialog = BottomSheetDialog(requireContext())
+        iconsExplanationBottomDialog = BottomSheetDialog(requireContext())
+        iconsExplanationDialogBinding = IconsExplanationDialogBinding.inflate(layoutInflater)
+        iconsExplanationBottomDialog.setContentView(iconsExplanationDialogBinding.root)
+        iconsExplanationBottomDialog.show()
+        iconsExplanationDialogBinding.cloBtn.setOnClickListener {
+            iconsExplanationBottomDialog.dismiss()
+        }
     }
 
     override fun onResume() {

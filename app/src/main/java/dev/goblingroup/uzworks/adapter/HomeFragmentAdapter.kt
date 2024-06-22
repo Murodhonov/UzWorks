@@ -48,8 +48,6 @@ class HomeFragmentAdapter(
         RecyclerView.ViewHolder(homeStatisticsBinding.root) {
         fun onBind() {
             homeStatisticsBinding.apply {
-                var usersCount = 0
-                var loaded = -1
                 homeViewModel.jobCountLiveData.observe(fragmentLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
@@ -65,12 +63,6 @@ class HomeFragmentAdapter(
                             jobsCountProgress.visibility = View.INVISIBLE
                             jobsCountTv.visibility = View.VISIBLE
                             jobsCountTv.text = it.response.toString()
-                            usersCount += it.response ?: 0
-                            loaded++
-                            if (loaded == 1) {
-                                usersCountTv.text = usersCount.toString()
-                                usersCountProgress.visibility = View.INVISIBLE
-                            }
                         }
                     }
                 }
@@ -90,12 +82,23 @@ class HomeFragmentAdapter(
                             workersCountProgress.visibility = View.INVISIBLE
                             workersCountTv.visibility = View.VISIBLE
                             workersCountTv.text = it.response.toString()
-                            usersCount += it.response ?: 0
-                            loaded++
-                            if (loaded == 1) {
-                                usersCountTv.text = usersCount.toString()
-                                usersCountProgress.visibility = View.INVISIBLE
-                            }
+                        }
+                    }
+                }
+
+                homeViewModel.userCountLiveData.observe(fragmentLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+
+                        }
+                        is ApiStatus.Loading -> {
+                           usersCountProgress.visibility = View.VISIBLE
+                           usersCountTv.visibility = View.INVISIBLE
+                        }
+                        is ApiStatus.Success -> {
+                            usersCountProgress.visibility = View.INVISIBLE
+                            usersCountTv.visibility = View.VISIBLE
+                            usersCountTv.text = it.response.toString()
                         }
                     }
                 }

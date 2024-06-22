@@ -89,6 +89,24 @@ class ProfileFragment : Fragment() {
             } else if (profileViewModel.isEmployee()) {
                 experienceLayout.visibility = View.VISIBLE
             }
+
+            swipeRefresh.setOnRefreshListener {
+                profileViewModel.fetchUserData().observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+
+                        }
+
+                        is ApiStatus.Loading -> {
+
+                        }
+
+                        is ApiStatus.Success -> {
+                            succeeded(it.response!!)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -114,6 +132,7 @@ class ProfileFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun succeeded(response: UserResponse) {
         binding.apply {
+            swipeRefresh.isRefreshing = false
             Log.d(TAG, "succeeded: $response")
             userNameTv.text = "${response.firstName} ${response.lastName}"
             when {

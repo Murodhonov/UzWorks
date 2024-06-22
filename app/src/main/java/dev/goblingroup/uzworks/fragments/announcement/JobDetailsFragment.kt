@@ -115,7 +115,7 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
                     }
 
                     GenderEnum.FEMALE.label -> {
-                        resources.getString(R.string.male)
+                        resources.getString(R.string.female)
                     }
 
                     GenderEnum.UNKNOWN.label -> {

@@ -2,7 +2,6 @@ package dev.goblingroup.uzworks.networking
 
 import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
-import dev.goblingroup.uzworks.models.response.UpdatePasswordResponse
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.models.response.UserUpdateResponse
 import dev.goblingroup.uzworks.utils.ConstValues.AUTH
@@ -32,5 +31,10 @@ interface UserService {
         @Header(AUTH) token: String,
         @Body updatePasswordRequest: UpdatePasswordRequest
     ): Response<Unit>
+
+    @GET("api/User/GetCount")
+    suspend fun countUsers(
+        @Header(AUTH) token: String
+    ): Response<Int>
 
 }

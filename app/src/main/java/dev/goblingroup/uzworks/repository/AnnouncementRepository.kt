@@ -7,12 +7,14 @@ import dev.goblingroup.uzworks.models.request.JobEditRequest
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
 import dev.goblingroup.uzworks.networking.JobService
+import dev.goblingroup.uzworks.networking.UserService
 import dev.goblingroup.uzworks.networking.WorkerService
 import javax.inject.Inject
 
 class AnnouncementRepository @Inject constructor(
     private val jobService: JobService,
     private val workerService: WorkerService,
+    private val userService: UserService,
     private val securityRepository: SecurityRepository,
     private val announcementDao: AnnouncementDao
 ){
@@ -63,4 +65,6 @@ class AnnouncementRepository @Inject constructor(
     suspend fun deleteWorker(workerId: String) = workerService.deleteWorker(securityRepository.getToken(), workerId)
 
     suspend fun workersByUserId(userId: String) = workerService.getWorkersByUserId(securityRepository.getToken(), userId)
+
+    suspend fun countUsers() = userService.countUsers(securityRepository.getToken())
 }

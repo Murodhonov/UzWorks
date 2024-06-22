@@ -9,7 +9,6 @@ import dev.goblingroup.uzworks.database.entity.AnnouncementEntity
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues
-import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.NetworkHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +22,7 @@ class HomeViewModel @Inject constructor(
 
     val TAG = "HomeViewModel"
 
-    private val TOTAL_COUNT = 4
+    private val TOTAL_COUNT = 5
     private var responseCount = 0
 
     private val _allResponseReceived = MutableLiveData(false)
@@ -34,6 +33,9 @@ class HomeViewModel @Inject constructor(
 
     private val _jobCountLiveData = MutableLiveData<ApiStatus<Int>>(ApiStatus.Loading())
     val jobCountLiveData get() =  _jobCountLiveData
+
+    private val _userCountLiveData = MutableLiveData<ApiStatus<Int>>(ApiStatus.Loading())
+    val userCountLiveData get() = _userCountLiveData
 
     private val _announcementLiveData =
         MutableLiveData<ApiStatus<List<Any>>>(ApiStatus.Loading())
@@ -47,6 +49,7 @@ class HomeViewModel @Inject constructor(
         loadUser()
         countJobs()
         countWorkers()
+        countUsers()
 
         if (securityRepository.isEmployee()) {
             fetchTopJobs()
@@ -146,6 +149,24 @@ class HomeViewModel @Inject constructor(
                     }
                 } else {
                     _workerCountLivedata.postValue(ApiStatus.Error(Throwable(countWorkersResponse.message())))
+                }
+            }
+        }
+    }
+
+    private fun countUsers() {
+        viewModelScope.launch {
+            if (networkHelper.isNetworkConnected()) {
+                _userCountLiveData.postValue(ApiStatus.Loading())
+                val countUsersResponse = announcementRepository.countUsers()
+                if (countUsersResponse.isSuccessful) {
+                    _userCountLiveData.postValue(ApiStatus.Success(countUsersResponse.body()))
+                    responseCount++
+                    if (responseCount == TOTAL_COUNT) {
+                        _allResponseReceived.postValue(true)
+                    }
+                } else {
+                    _userCountLiveData.postValue(ApiStatus.Error(Throwable(countUsersResponse.message())))
                 }
             }
         }

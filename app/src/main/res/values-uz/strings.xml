@@ -245,4 +245,6 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
 Siz tanlagan koordinatalarni faqat "Tayyor" tugmasini bosganingizdan keyin saqlaymiz. Biz sizning joylashuvingiz haqidagi aniq ma\'lumotlarni boshqalarga ko\'rsatmaymiz. Sizning maxfiyligingiz biz uchun muhim va biz joylashuvdan faqat ish joylarini xaritada ko\'rsatish uchun foydalanamiz va bu joylashuv siz tanlagan oxirgi joy bo\'ladi</string>
     <string name="allow">Ruxsat berish</string>
     <string name="deny">Rad etish</string>
+    <string name="pending_explanation">Bu belgi sizning e\'loningiz yuborilganligini va hozirda administratordan ma\'qullashni kutayotganini bildiradi. Tasdiqlangandan so\'ng, u barcha foydalanuvchilarga ko\'rinadi. Iltimos, sabr qiling, chunki bu jarayon barcha e\'lonlar bizning hamjamiyat qoidalari va standartlarimizga mos kelishini ta\'minlaydi</string>
+    <string name="done_explanation">Ushbu belgi sizning e\'loningiz administrator tomonidan ko\'rib chiqilgan va ma\'qullanganligini bildiradi. Endi u barcha foydalanuvchilar uchun ko\'rinadi. Jamiyatimizga hissa qo\'shganingiz uchun tashakkur</string>
 </resources>

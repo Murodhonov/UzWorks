@@ -245,4 +245,6 @@ The information displayed to you is determined by the role you choose</string>
         We only save the coordinates you choose after you clicked the "Ready" button. We don\'t share your exact location data with others. Your privacy is important to us, and we only use location to show job locations on the map and that location is the last one which you selected</string>
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
+    <string name="pending_explanation">This icon indicates that your announcement has been submitted and is currently awaiting approval from the admin. Once approved, it will be visible to all users. Please be patient, as this process ensures that all announcements meet our community guidelines and standards</string>
+    <string name="done_explanation">This icon indicates that your announcement has been reviewed and approved by the admin. It is now visible to all users. Thank you for contributing to our community</string>
 </resources>
