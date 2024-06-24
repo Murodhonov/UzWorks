@@ -121,7 +121,6 @@ class AddJobViewModel @Inject constructor(
     @SuppressLint("ClickableViewAccessibility")
     fun controlInput(
         context: Context,
-        topTv: TextView,
         deadlineEt: TextInputLayout,
         benefitEt: TextInputLayout,
         requirementEt: TextInputLayout,
@@ -134,7 +133,6 @@ class AddJobViewModel @Inject constructor(
         workingTimeEt: TextInputLayout,
         workingScheduleEt: TextInputLayout
     ) {
-        topTv.isSelected = true
 
         deadlineEt.editText?.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
@@ -419,8 +417,8 @@ class AddJobViewModel @Inject constructor(
         requirementEt: TextInputLayout,
         minAgeEt: TextInputLayout,
         maxAgeEt: TextInputLayout,
-        districtLayout: TextInputLayout,
-        jobCategoryLayout: TextInputLayout
+        district: TextView,
+        category: TextView
     ): Boolean {
         if (deadlineEt.editText?.text.toString().isEmpty()) {
             deadlineEt.isErrorEnabled = true
@@ -464,12 +462,12 @@ class AddJobViewModel @Inject constructor(
             maxAgeEt.isErrorEnabled = true
             maxAgeEt.error = context.resources.getString(R.string.benefit_error)
         }
-        if (districtId.value?.isEmpty() == true) {
+        /*if (districtId.value?.isEmpty() == true) {
             districtLayout.error = context.resources.getString(R.string.district_error)
         }
         if (categoryId.value?.isEmpty() == true) {
             jobCategoryLayout.error = context.resources.getString(R.string.job_category_error)
-        }
+        }*/
         if (latitude.value == 0.0 && longitude.value == 0.0) {
             Toast.makeText(context, context.getString(R.string.select_location), Toast.LENGTH_SHORT).show()
         }
@@ -482,8 +480,8 @@ class AddJobViewModel @Inject constructor(
                 !benefitEt.isErrorEnabled &&
                 !minAgeEt.isErrorEnabled &&
                 !maxAgeEt.isErrorEnabled &&
-                !districtLayout.isErrorEnabled &&
-                !jobCategoryLayout.isErrorEnabled &&
+                /*!districtLayout.isErrorEnabled &&
+                !jobCategoryLayout.isErrorEnabled &&*/
                 latitude.value != 0.0 &&
                 longitude.value != 0.0
     }
