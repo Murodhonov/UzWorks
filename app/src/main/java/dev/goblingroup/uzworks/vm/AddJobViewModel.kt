@@ -100,6 +100,15 @@ class AddJobViewModel @Inject constructor(
     private val _regionId = MutableLiveData("")
     val regionId get() = _regionId
 
+    private val _regionName = MutableLiveData("")
+    val regionName get() = _regionName
+
+    private val _districtName = MutableLiveData("")
+    val districtName get() = _districtName
+
+    private val _categoryName = MutableLiveData("")
+    val categoryName get() = _categoryName
+
     fun createJob(jobCreateRequest: JobCreateRequest): LiveData<ApiStatus<JobCreateResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
@@ -348,10 +357,6 @@ class AddJobViewModel @Inject constructor(
         _benefit.value = value
     }
 
-    fun setCategoryId(value: String) {
-        _categoryId.value = value
-    }
-
 
     fun setLatitude(value: Double) {
         _latitude.value = value
@@ -365,12 +370,16 @@ class AddJobViewModel @Inject constructor(
         _deadline.value = value
     }
 
-    fun setDistrictId(value: String) {
-        _districtId.value = value
+    fun setDistrictName(value: String) {
+        _districtName.value = value
     }
 
-    fun setRegionId(value: String) {
-        _regionId.value = value
+    fun setRegionName(value: String) {
+        _regionName.value = value
+    }
+
+    fun setCategoryName(value: String) {
+        _categoryName.value = value
     }
 
     fun setMaxAge(value: Int) {

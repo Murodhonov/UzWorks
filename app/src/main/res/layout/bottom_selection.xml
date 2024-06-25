@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bottom_dialog_background"
-    android:padding="@dimen/_10sdp">
+    android:background="@drawable/bottom_dialog_background">
 
     <ProgressBar
         android:id="@+id/progress"
         android:indeterminateTint="@color/black_blue"
         android:layout_width="0dp"
+        android:layout_margin="@dimen/_10sdp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
@@ -22,23 +22,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/selection_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/close_btn"
         tools:listitem="@layout/bottom_selection_item" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/close_btn"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_35sdp"
-        android:layout_marginStart="@dimen/_30sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:layout_marginEnd="@dimen/_30sdp"
-        android:background="@drawable/enabled_button_background"
-        android:backgroundTint="@color/red"
-        android:text="@string/close"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

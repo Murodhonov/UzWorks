@@ -24,5 +24,4 @@ data class JobResponse(
     val title: String,
     val workingSchedule: String,
     val workingTime: String
-
 )

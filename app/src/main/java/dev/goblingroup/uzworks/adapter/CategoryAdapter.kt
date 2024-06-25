@@ -7,7 +7,7 @@ import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
 import dev.goblingroup.uzworks.databinding.BottomSelectionItemBinding
 
 class CategoryAdapter(
-    private val regionList: List<JobCategoryEntity>,
+    private val categoryList: List<JobCategoryEntity>,
     private val onItemSelected: (String, String) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
@@ -34,10 +34,10 @@ class CategoryAdapter(
         )
     }
 
-    override fun getItemCount() = regionList.size
+    override fun getItemCount() = categoryList.size
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        holder.onBind(regionList[position])
+        holder.onBind(categoryList[position])
     }
 
 }

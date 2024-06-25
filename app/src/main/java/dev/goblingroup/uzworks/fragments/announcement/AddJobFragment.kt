@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -183,10 +184,6 @@ class AddJobFragment : Fragment() {
         }
         regionDialogItemBinding.apply {
 
-            closeBtn.setOnClickListener {
-                regionDialog.dismiss()
-            }
-
             addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
@@ -200,12 +197,10 @@ class AddJobFragment : Fragment() {
 
                     is ApiStatus.Loading -> {
                         progress.visibility = View.VISIBLE
-                        closeBtn.visibility = View.GONE
                     }
 
                     is ApiStatus.Success -> {
                         progress.visibility = View.GONE
-                        closeBtn.visibility = View.VISIBLE
                         val regionAdapter = RegionAdapter(
                             it.response!!
                         ) { regionId, regionName ->
@@ -234,9 +229,6 @@ class AddJobFragment : Fragment() {
             districtDialog.show()
         }
         districtDialogItemBinding.apply {
-            closeBtn.setOnClickListener {
-                districtDialog.dismiss()
-            }
 
             addressViewModel.districtsByRegionId(addJobViewModel.regionId.value.toString())
                 .observe(viewLifecycleOwner) {
@@ -252,13 +244,11 @@ class AddJobFragment : Fragment() {
 
                         is ApiStatus.Loading -> {
                             progress.visibility = View.VISIBLE
-                            closeBtn.visibility = View.GONE
                             selectionRv.visibility = View.GONE
                         }
 
                         is ApiStatus.Success -> {
                             progress.visibility = View.GONE
-                            closeBtn.visibility = View.VISIBLE
                             selectionRv.visibility = View.VISIBLE
                             val districtAdapter = DistrictAdapter(
                                 it.response!!
@@ -284,10 +274,6 @@ class AddJobFragment : Fragment() {
             categoryDialog.show()
         }
         categoryDialogItemBinding.apply {
-            closeBtn.setOnClickListener {
-                categoryDialog.dismiss()
-            }
-
             jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
@@ -300,14 +286,14 @@ class AddJobFragment : Fragment() {
 
                     is ApiStatus.Loading -> {
                         progress.visibility = View.VISIBLE
-                        closeBtn.visibility = View.GONE
                     }
 
                     is ApiStatus.Success -> {
                         progress.visibility = View.GONE
-                        closeBtn.visibility = View.VISIBLE
+                        Log.d("TAG", "showCategory: ${it.response!!.size}")
+                        Log.d("TAG", "showCategory: ${it.response.map { it.title }}")
                         val categoryAdapter =
-                            CategoryAdapter(it.response!!) { categoryId, categoryName ->
+                            CategoryAdapter(it.response) { categoryId, categoryName ->
                                 binding.category.text = categoryName
                                 addJobViewModel.categoryId.postValue(categoryId)
                                 categoryDialog.dismiss()
@@ -344,6 +330,9 @@ class AddJobFragment : Fragment() {
                         .isNotEmpty()
                 ) maxAgeEt.editText?.text.toString().toInt() else 0
             )
+            addJobViewModel.setRegionName(region.text.toString())
+            addJobViewModel.setDistrictName(district.text.toString())
+            addJobViewModel.setCategoryName(category.text.toString())
         }
     }
 
@@ -372,6 +361,15 @@ class AddJobFragment : Fragment() {
             } else maxAgeEt.editText?.setText(addJobViewModel.maxAge.value.toString())
             if (addJobViewModel.latitude.value != 0.0 && addJobViewModel.longitude.value != 0.0) {
                 selectAddressTv.text = resources.getString(R.string.change_location)
+            }
+            if (addJobViewModel.regionName.value!!.isNotEmpty()) {
+                region.text = addJobViewModel.regionName.value
+            }
+            if (addJobViewModel.districtName.value!!.isNotEmpty()) {
+                district.text = addJobViewModel.districtName.value
+            }
+            if (addJobViewModel.categoryName.value!!.isNotEmpty()) {
+                category.text = addJobViewModel.categoryName.value
             }
         }
     }
