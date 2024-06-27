@@ -1,10 +1,12 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,12 +14,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
@@ -27,9 +36,9 @@ import dev.goblingroup.uzworks.adapter.RegionAdapter
 import dev.goblingroup.uzworks.databinding.BottomSelectionBinding
 import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.SelectJobLocationDialogBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
-import dev.goblingroup.uzworks.utils.ConstValues.JOB_ADDING
-import dev.goblingroup.uzworks.utils.ConstValues.JOB_LOCATION_STATUS
+import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.convertPhoneNumber
 import dev.goblingroup.uzworks.utils.dmyToIso
@@ -54,6 +63,9 @@ class AddJobFragment : Fragment() {
     private lateinit var loadingDialog: AlertDialog
     private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
 
+    private lateinit var locationDialog: BottomSheetDialog
+    private lateinit var locationBinding: SelectJobLocationDialogBinding
+
     private lateinit var regionDialog: BottomSheetDialog
     private lateinit var regionDialogItemBinding: BottomSelectionBinding
 
@@ -62,6 +74,9 @@ class AddJobFragment : Fragment() {
 
     private lateinit var categoryDialog: BottomSheetDialog
     private lateinit var categoryDialogItemBinding: BottomSelectionBinding
+
+    private var previousMarker: Marker? = null
+    private lateinit var googleMap: GoogleMap
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,7 +100,7 @@ class AddJobFragment : Fragment() {
 
             addJobViewModel.controlInput(
                 requireContext(),
-                deadlineEt,
+                deadline,
                 benefitEt,
                 requirementEt,
                 minAgeEt,
@@ -98,33 +113,25 @@ class AddJobFragment : Fragment() {
                 workingScheduleEt,
             )
 
-            phoneNumberEt.editText?.setText(
-                addJobViewModel.phoneNumber.value.toString().convertPhoneNumber()
-            )
+            phoneNumber.text = addJobViewModel.phoneNumber.value.toString().convertPhoneNumber()
 
-            phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-                if (hasFocus) {
-                    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                        phoneNumberEt.windowToken,
-                        0
-                    )
-                    val clipboardManager =
-                        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clipData =
-                        ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
-                    clipboardManager.setPrimaryClip(clipData)
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().resources.getString(R.string.phone_number_copied),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            phoneNumber.setOnClickListener {
+                val clipboardManager =
+                    requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData =
+                    ClipData.newPlainText("label", phoneNumber.text.toString())
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(
+                    requireContext(),
+                    requireContext().resources.getString(R.string.phone_number_copied),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             saveBtn.setOnClickListener {
                 if (addJobViewModel.isFormValid(
                         requireContext(),
-                        deadlineEt,
+                        deadline,
                         titleEt,
                         salaryEt,
                         workingTimeEt,
@@ -142,13 +149,14 @@ class AddJobFragment : Fragment() {
                 }
             }
 
-            selectAddressBtn.setOnClickListener {
-                val bundle = Bundle()
+            selectAddress.setOnClickListener {
+                showLocationDialog()
+                /*val bundle = Bundle()
                 bundle.putString(JOB_LOCATION_STATUS, JOB_ADDING)
                 findNavController().navigate(
                     resId = R.id.action_addJobFragment_to_selectJobLocationFragment,
                     args = bundle
-                )
+                )*/
             }
 
             region.setOnClickListener {
@@ -170,6 +178,153 @@ class AddJobFragment : Fragment() {
             category.setOnClickListener {
                 showCategory()
             }
+        }
+    }
+
+    private fun showLocationDialog() {
+        try {
+            locationDialog.show()
+        } catch (e: Exception) {
+            locationDialog = BottomSheetDialog(requireContext())
+            locationBinding = SelectJobLocationDialogBinding.inflate(layoutInflater)
+            locationDialog.setContentView(locationBinding.root)
+            locationDialog.setCancelable(false)
+            locationDialog.show()
+        }
+
+        locationBinding.apply {
+            var selectedLocation =
+                LatLng(
+                    addJobViewModel.latitude.value ?: 0.0,
+                    addJobViewModel.longitude.value ?: 0.0
+                )
+            val mapFragment =
+                childFragmentManager.findFragmentById(R.id.select_job_map) as SupportMapFragment
+            mapFragment.getMapAsync { map ->
+                updateFindBtn()
+                cancelBtn.visibility = View.VISIBLE
+                setLocationBtn.visibility = View.VISIBLE
+                findMeBtn.visibility = View.VISIBLE
+
+                googleMap = map
+
+                previousMarker =
+                    googleMap.addMarker(MarkerOptions().position(selectedLocation))
+                googleMap.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        selectedLocation,
+                        15f
+                    )
+                )
+
+                googleMap.setOnMapClickListener {
+                    previousMarker?.remove()
+                    val newMarker = googleMap.addMarker(MarkerOptions().position(it))
+                    previousMarker = newMarker
+                    selectedLocation = it
+                }
+            }
+            cancelBtn.setOnClickListener {
+                locationDialog.dismiss()
+            }
+
+            setLocationBtn.setOnClickListener {
+                binding.apply {
+                    selectAddress.text = resources.getString(R.string.change_location)
+                }
+                addJobViewModel.setLatitude(selectedLocation.latitude)
+                addJobViewModel.setLongitude(selectedLocation.longitude)
+                locationDialog.dismiss()
+            }
+
+            locationDialog.setOnDismissListener {
+                previousMarker?.remove()
+            }
+
+            findMeBtn.setOnClickListener {
+                if (checkLocationPermission()) {
+                    findUser()
+                } else {
+                    requestLocationPermission()
+                }
+            }
+        }
+    }
+
+    private fun findUser() {
+        if (!checkLocationPermission())
+            return
+        LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation
+            .addOnSuccessListener {
+                if (it != null) {
+                    addJobViewModel.setLatitude(it.latitude)
+                    addJobViewModel.setLongitude(it.longitude)
+                    previousMarker?.remove()
+                    val cameraUpdate =
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                addJobViewModel.latitude.value!!,
+                                addJobViewModel.longitude.value!!
+                            ), 15f
+                        )
+                    googleMap.animateCamera(cameraUpdate, 1000, null)
+                    previousMarker =
+                        googleMap.addMarker(
+                            MarkerOptions().position(
+                                LatLng(
+                                    addJobViewModel.latitude.value!!,
+                                    addJobViewModel.longitude.value!!
+                                )
+                            )
+                        )
+                } else {
+                    Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(
+                    requireContext(),
+                    resources.getString(R.string.get_location_failed),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                Log.e(ConstValues.TAG, "findUser: ${it.message}")
+            }
+    }
+
+    private fun requestLocationPermission() {
+        requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            1
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                findUser()
+                updateFindBtn()
+            }
+        }
+    }
+
+    private fun checkLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun updateFindBtn() {
+        if (checkLocationPermission()) {
+            locationBinding.findMeBtn.setImageResource(R.drawable.ic_find_me)
+        } else {
+            locationBinding.findMeBtn.setImageResource(R.drawable.ic_location_permission_required)
         }
     }
 
@@ -254,6 +409,7 @@ class AddJobFragment : Fragment() {
                                 it.response!!
                             ) { districtId, districtName ->
                                 binding.district.text = districtName
+                                binding.district.setBackgroundResource(R.drawable.enabled_tv_background)
                                 addJobViewModel.districtId.postValue(districtId)
                                 districtDialog.dismiss()
                             }
@@ -295,6 +451,7 @@ class AddJobFragment : Fragment() {
                         val categoryAdapter =
                             CategoryAdapter(it.response) { categoryId, categoryName ->
                                 binding.category.text = categoryName
+                                binding.category.setBackgroundResource(R.drawable.enabled_tv_background)
                                 addJobViewModel.categoryId.postValue(categoryId)
                                 categoryDialog.dismiss()
                             }
@@ -316,7 +473,7 @@ class AddJobFragment : Fragment() {
             )
             addJobViewModel.setWorkingTime(workingTimeEt.editText?.text.toString())
             addJobViewModel.setWorkingSchedule(workingScheduleEt.editText?.text.toString())
-            addJobViewModel.setDeadline(deadlineEt.editText?.text.toString())
+            addJobViewModel.setDeadline(deadline.text.toString())
             addJobViewModel.setTgUsername(tgUserNameEt.editText?.text.toString())
             addJobViewModel.setBenefit(benefitEt.editText?.text.toString())
             addJobViewModel.setRequirement(requirementEt.editText?.text.toString())
@@ -349,7 +506,6 @@ class AddJobFragment : Fragment() {
             }
             workingTimeEt.editText?.setText(addJobViewModel.workingTime.value)
             workingScheduleEt.editText?.setText(addJobViewModel.workingSchedule.value)
-            deadlineEt.editText?.setText(addJobViewModel.deadline.value)
             tgUserNameEt.editText?.setText(addJobViewModel.tgUserName.value)
             benefitEt.editText?.setText(addJobViewModel.benefit.value)
             requirementEt.editText?.setText(addJobViewModel.requirement.value)
@@ -360,7 +516,7 @@ class AddJobFragment : Fragment() {
                 maxAgeEt.editText?.setText("")
             } else maxAgeEt.editText?.setText(addJobViewModel.maxAge.value.toString())
             if (addJobViewModel.latitude.value != 0.0 && addJobViewModel.longitude.value != 0.0) {
-                selectAddressTv.text = resources.getString(R.string.change_location)
+                selectAddress.text = resources.getString(R.string.change_location)
             }
             if (addJobViewModel.regionName.value!!.isNotEmpty()) {
                 region.text = addJobViewModel.regionName.value
@@ -371,6 +527,9 @@ class AddJobFragment : Fragment() {
             if (addJobViewModel.categoryName.value!!.isNotEmpty()) {
                 category.text = addJobViewModel.categoryName.value
             }
+            if (addJobViewModel.deadline.value!!.isNotEmpty()) {
+                deadline.text = addJobViewModel.deadline.value
+            }
         }
     }
 
@@ -380,7 +539,7 @@ class AddJobFragment : Fragment() {
                 JobCreateRequest(
                     benefit = benefitEt.editText?.text.toString(),
                     categoryId = addJobViewModel.categoryId.value.toString(),
-                    deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
+                    deadline = deadline.text.toString().dmyToIso().toString(),
                     districtId = addJobViewModel.districtId.value.toString(),
                     gender = addJobViewModel.gender.value,
                     instagramLink = "test",

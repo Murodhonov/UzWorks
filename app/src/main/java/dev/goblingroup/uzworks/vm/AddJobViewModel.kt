@@ -130,7 +130,7 @@ class AddJobViewModel @Inject constructor(
     @SuppressLint("ClickableViewAccessibility")
     fun controlInput(
         context: Context,
-        deadlineEt: TextInputLayout,
+        deadline: TextView,
         benefitEt: TextInputLayout,
         requirementEt: TextInputLayout,
         minAgeEt: TextInputLayout,
@@ -143,46 +143,40 @@ class AddJobViewModel @Inject constructor(
         workingScheduleEt: TextInputLayout
     ) {
 
-        deadlineEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                val datePickerDialog = DatePickerDialog(
-                    context,
-                    R.style.DatePickerDialogTheme,
-                    { _, year, month, dayOfMonth ->
-                        val selectedCalendar = Calendar.getInstance().apply {
-                            set(year, month, dayOfMonth)
-                        }
+        deadline.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                context,
+                R.style.DatePickerDialogTheme,
+                { _, year, month, dayOfMonth ->
+                    val selectedCalendar = Calendar.getInstance().apply {
+                        set(year, month, dayOfMonth)
+                    }
 
-                        val currentCalendar = Calendar.getInstance()
+                    val currentCalendar = Calendar.getInstance()
 
-                        if (selectedCalendar.before(currentCalendar)) {
-                            Toast.makeText(
-                                context,
-                                context.resources.getString(R.string.invalid_deadline),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            deadlineEt.isErrorEnabled = false
-                            deadlineEt.editText?.setText(formatter.format(selectedCalendar.time))
-                        }
-                    },
-                    deadlineEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.YEAR.dateLabel),
-                    deadlineEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
-                    deadlineEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.DATE.dateLabel)
-                )
+                    if (selectedCalendar.before(currentCalendar)) {
+                        Toast.makeText(
+                            context,
+                            context.resources.getString(R.string.invalid_deadline),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        val formatter = SimpleDateFormat(
+                            "dd.MM.yyyy", Locale.getDefault()
+                        )
+                        deadline.setBackgroundResource(R.drawable.enabled_tv_background)
+                        deadline.text = formatter.format(selectedCalendar.time)
+                    }
+                },
+                deadline.text.toString()
+                    .extractDateValue(DateEnum.YEAR.dateLabel),
+                deadline.text.toString()
+                    .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
+                deadline.text.toString()
+                    .extractDateValue(DateEnum.DATE.dateLabel)
+            )
 
-                datePickerDialog.show()
-
-                datePickerDialog.setOnDismissListener {
-                    deadlineEt.clearFocus()
-                }
-            }
+            datePickerDialog.show()
         }
 
         minAgeEt.editText?.addTextChangedListener(object : TextWatcher {
@@ -416,7 +410,7 @@ class AddJobViewModel @Inject constructor(
 
     fun isFormValid(
         context: Context,
-        deadlineEt: TextInputLayout,
+        deadlineInput: TextView,
         titleEt: TextInputLayout,
         salaryEt: TextInputLayout,
         workingTimeEt: TextInputLayout,
@@ -429,9 +423,9 @@ class AddJobViewModel @Inject constructor(
         district: TextView,
         category: TextView
     ): Boolean {
-        if (deadlineEt.editText?.text.toString().isEmpty()) {
-            deadlineEt.isErrorEnabled = true
-            deadlineEt.error = context.resources.getString(R.string.deadline_error)
+        if (deadlineInput.text.toString() == context.resources.getString(R.string.deadline)) {
+            deadlineInput.setBackgroundResource(R.drawable.disabled_tv_background)
+            deadlineInput.error = context.resources.getString(R.string.deadline_error)
         }
         if (titleEt.editText?.text.toString().isEmpty()) {
             titleEt.isErrorEnabled = true
@@ -471,16 +465,16 @@ class AddJobViewModel @Inject constructor(
             maxAgeEt.isErrorEnabled = true
             maxAgeEt.error = context.resources.getString(R.string.benefit_error)
         }
-        /*if (districtId.value?.isEmpty() == true) {
-            districtLayout.error = context.resources.getString(R.string.district_error)
+        if (districtId.value?.isEmpty() == true) {
+            district.setBackgroundResource(R.drawable.disabled_tv_background)
         }
         if (categoryId.value?.isEmpty() == true) {
-            jobCategoryLayout.error = context.resources.getString(R.string.job_category_error)
-        }*/
+            category.setBackgroundResource(R.drawable.disabled_tv_background)
+        }
         if (latitude.value == 0.0 && longitude.value == 0.0) {
             Toast.makeText(context, context.getString(R.string.select_location), Toast.LENGTH_SHORT).show()
         }
-        return !deadlineEt.isErrorEnabled &&
+        return deadlineInput.text.toString() != context.resources.getString(R.string.deadline) &&
                 !titleEt.isErrorEnabled &&
                 !salaryEt.isErrorEnabled &&
                 !workingTimeEt.isErrorEnabled &&
@@ -489,8 +483,8 @@ class AddJobViewModel @Inject constructor(
                 !benefitEt.isErrorEnabled &&
                 !minAgeEt.isErrorEnabled &&
                 !maxAgeEt.isErrorEnabled &&
-                /*!districtLayout.isErrorEnabled &&
-                !jobCategoryLayout.isErrorEnabled &&*/
+                districtId.value.toString().isNotEmpty() &&
+                categoryId.value.toString().isNotEmpty() &&
                 latitude.value != 0.0 &&
                 longitude.value != 0.0
     }

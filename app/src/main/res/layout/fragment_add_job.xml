@@ -241,71 +241,39 @@
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_12ssp" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/select_address_btn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/black_blue"
-                app:strokeWidth="@dimen/_1sdp">
-
-                <TextView
-                    android:id="@+id/select_address_tv"
-                    android:layout_width="wrap_content"
-                    android:theme="@style/SecondaryTextStyle"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/select_map"
-                    android:textColor="@color/black_blue" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phone_number_et"
-                android:layout_width="match_parent"
-                android:theme="@style/TextInputEditTextStyle"
-                android:layout_height="wrap_content"
-                app:endIconDrawable="@drawable/ic_copy"
-                app:endIconMode="custom"
-                app:endIconTint="@color/black_blue"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:hint="@string/phone_number"
-                    android:editable="false"
-                    android:inputType="none"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/deadline_et"
+            <TextView
+                android:id="@+id/select_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:hint="@string/deadline"
-                android:theme="@style/TextInputEditTextStyle"
-                app:endIconDrawable="@drawable/ic_calendar"
-                app:endIconMode="custom"
-                app:endIconTint="@color/black_blue"
-                app:errorEnabled="false"
-                app:layout_constraintTop_toBottomOf="@id/gender_layout">
+                android:background="@drawable/enabled_tv_background"
+                android:fontFamily="@font/dm_sans_regular"
+                android:gravity="center"
+                android:paddingVertical="@dimen/_12sdp"
+                android:text="@string/select_map" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
-                    android:inputType="none"
-                    android:editable="false"
-                    android:maxLines="1"
-                    android:textSize="@dimen/_10ssp" />
+            <TextView
+                android:id="@+id/phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/enabled_tv_background"
+                android:fontFamily="@font/dm_sans_regular"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10sdp"
+                app:drawableEndCompat="@drawable/ic_copy" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/deadline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/enabled_tv_background"
+                android:fontFamily="@font/dm_sans_regular"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/deadline"
+                app:drawableEndCompat="@drawable/ic_calendar" />
 
             <include
                 android:id="@+id/gender_layout"
@@ -327,7 +295,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/bordered_button_background"
+                android:background="@drawable/enabled_tv_background"
                 android:fontFamily="@font/dm_sans_regular"
                 android:gravity="center_vertical"
                 android:padding="@dimen/_10sdp"
@@ -339,7 +307,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/bordered_button_background"
+                android:background="@drawable/enabled_tv_background"
                 android:fontFamily="@font/dm_sans_regular"
                 android:gravity="center_vertical"
                 android:padding="@dimen/_10sdp"
@@ -359,7 +327,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/bordered_button_background"
+                android:background="@drawable/enabled_tv_background"
                 android:fontFamily="@font/dm_sans_regular"
                 android:gravity="center_vertical"
                 android:padding="@dimen/_10sdp"
