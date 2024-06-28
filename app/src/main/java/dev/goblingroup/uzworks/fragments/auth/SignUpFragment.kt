@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentSignUpBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.databinding.PhoneVerificationDialogBinding
 import dev.goblingroup.uzworks.databinding.ServerErrorDialogBinding
 import dev.goblingroup.uzworks.databinding.UserExistsDialogBinding
@@ -51,7 +51,7 @@ class SignUpFragment : Fragment() {
     private val sharedSignUpViewModel: SharedSignUpViewModel by activityViewModels()
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
+    private lateinit var loadingDialogBinding: LoadingDialogBinding
 
     private lateinit var serverErrorDialog: AlertDialog
     private lateinit var serverErrorDialogBinding: ServerErrorDialogBinding
@@ -206,10 +206,10 @@ class SignUpFragment : Fragment() {
             loadingDialog.show()
         } catch (e: java.lang.Exception) {
             loadingDialog = AlertDialog.Builder(requireContext()).create()
-            loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
             loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             loadingDialog.setCancelable(false)
-            loadingDialog.setView(loadingDialogItemBinding.root)
+            loadingDialog.setView(loadingDialogBinding.root)
             loadingDialog.show()
         }
     }

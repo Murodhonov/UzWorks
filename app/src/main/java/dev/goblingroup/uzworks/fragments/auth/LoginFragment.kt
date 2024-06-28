@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentLoginBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.databinding.NotFoundDialogBinding
 import dev.goblingroup.uzworks.databinding.PhoneVerificationDialogBinding
 import dev.goblingroup.uzworks.models.request.LoginRequest
@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
     private val loginViewModel: LoginViewModel by activityViewModels()
 
     private lateinit var loginLoading: AlertDialog
-    private lateinit var loginLoadingDialogBinding: LoadingDialogItemBinding
+    private lateinit var loginLoadingDialogBinding: LoadingDialogBinding
 
     private lateinit var notFoundDialog: AlertDialog
     private lateinit var notFoundDialogBinding: NotFoundDialogBinding
@@ -242,7 +242,7 @@ class LoginFragment : Fragment() {
             loginLoading.show()
         } catch (e: Exception) {
             loginLoading = AlertDialog.Builder(requireContext()).create()
-            loginLoadingDialogBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+            loginLoadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
             loginLoading.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             loginLoading.setCancelable(false)
             loginLoading.setView(loginLoadingDialogBinding.root)

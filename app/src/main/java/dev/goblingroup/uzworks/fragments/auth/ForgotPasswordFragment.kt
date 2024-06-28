@@ -5,8 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,13 +18,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.ForgotPasswordDialogBinding
 import dev.goblingroup.uzworks.databinding.FragmentForgotPasswordBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.databinding.NotFoundDialogBinding
 import dev.goblingroup.uzworks.models.request.ForgotPasswordRequest
 import dev.goblingroup.uzworks.models.request.LoginRequest
 import dev.goblingroup.uzworks.models.request.ResetPasswordRequest
 import dev.goblingroup.uzworks.utils.addCodeTextWatcher
-import dev.goblingroup.uzworks.utils.formatPhoneNumber
 import dev.goblingroup.uzworks.utils.setFocus
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.AuthApiStatus
@@ -45,7 +42,7 @@ class ForgotPasswordFragment : Fragment() {
     private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
+    private lateinit var loadingDialogBinding: LoadingDialogBinding
 
     private lateinit var notFoundDialog: AlertDialog
     private lateinit var notFoundDialogBinding: NotFoundDialogBinding
@@ -128,8 +125,8 @@ class ForgotPasswordFragment : Fragment() {
             loadingDialog.show()
         } catch (e: Exception) {
             loadingDialog = AlertDialog.Builder(requireContext()).create()
-            loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
-            loadingDialog.setView(loadingDialogItemBinding.root)
+            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
+            loadingDialog.setView(loadingDialogBinding.root)
             loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             loadingDialog.setCancelable(false)
             loadingDialog.show()

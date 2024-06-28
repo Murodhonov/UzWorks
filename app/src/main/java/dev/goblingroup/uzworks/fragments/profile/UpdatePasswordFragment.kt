@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.databinding.FragmentUpdatePasswordBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.UpdatePasswordRequest
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.vm.ApiStatus
@@ -32,7 +32,7 @@ class UpdatePasswordFragment : Fragment() {
     private val updatePasswordViewModel: UpdatePasswordViewModel by viewModels()
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogBinding: LoadingDialogItemBinding
+    private lateinit var loadingDialogBinding: LoadingDialogBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,7 +101,7 @@ class UpdatePasswordFragment : Fragment() {
             loadingDialog.show()
         } catch (e: Exception) {
             loadingDialog = AlertDialog.Builder(requireContext()).create()
-            loadingDialogBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
             loadingDialog.setView(loadingDialogBinding.root)
             loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             loadingDialog.setCancelable(false)

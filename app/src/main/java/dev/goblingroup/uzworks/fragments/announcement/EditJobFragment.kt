@@ -33,7 +33,7 @@ import dev.goblingroup.uzworks.adapter.DistrictAdapter
 import dev.goblingroup.uzworks.adapter.RegionAdapter
 import dev.goblingroup.uzworks.databinding.BottomSelectionBinding
 import dev.goblingroup.uzworks.databinding.FragmentEditJobBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.databinding.MapFailedDialogBinding
 import dev.goblingroup.uzworks.databinding.SelectJobLocationDialogBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
@@ -62,7 +62,7 @@ class EditJobFragment : Fragment() {
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingBinding: LoadingDialogItemBinding
+    private lateinit var loadingBinding: LoadingDialogBinding
 
     private lateinit var locationDialog: BottomSheetDialog
     private lateinit var locationBinding: SelectJobLocationDialogBinding
@@ -129,7 +129,7 @@ class EditJobFragment : Fragment() {
             loadingDialog.show()
         } catch (e: Exception) {
             loadingDialog = AlertDialog.Builder(requireContext()).create()
-            loadingBinding = LoadingDialogItemBinding.inflate(layoutInflater)
+            loadingBinding = LoadingDialogBinding.inflate(layoutInflater)
             loadingDialog.setView(loadingBinding.root)
             loadingDialog.setCancelable(false)
             loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

@@ -25,7 +25,7 @@ import dev.goblingroup.uzworks.adapter.RegionAdapter
 import dev.goblingroup.uzworks.databinding.BirthdayGenderExplanationBinding
 import dev.goblingroup.uzworks.databinding.BottomSelectionBinding
 import dev.goblingroup.uzworks.databinding.FragmentAddWorkerBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_BIRTHDAY
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -53,7 +53,7 @@ class AddWorkerFragment : Fragment() {
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
+    private lateinit var loadingDialogBinding: LoadingDialogBinding
 
     private lateinit var birthdayGenderExplanationDialog: AlertDialog
     private lateinit var birthdayGenderExplanationBinding: BirthdayGenderExplanationBinding
@@ -372,8 +372,8 @@ class AddWorkerFragment : Fragment() {
             loadingDialog.show()
         } catch (e: Exception) {
             loadingDialog = AlertDialog.Builder(requireContext()).create()
-            loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
-            loadingDialog.setView(loadingDialogItemBinding.root)
+            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
+            loadingDialog.setView(loadingDialogBinding.root)
             loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             loadingDialog.setCancelable(false)
             loadingDialog.show()

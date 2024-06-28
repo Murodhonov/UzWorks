@@ -21,7 +21,7 @@ import dev.goblingroup.uzworks.adapter.MyWorkersAdapter
 import dev.goblingroup.uzworks.databinding.ConfirmDeleteBinding
 import dev.goblingroup.uzworks.databinding.FragmentMyAnnouncementsBinding
 import dev.goblingroup.uzworks.databinding.IconsExplanationDialogBinding
-import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.LoadingDialogBinding
 import dev.goblingroup.uzworks.databinding.MyAnnouncementBottomBinding
 import dev.goblingroup.uzworks.utils.AnnouncementEnum
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -38,7 +38,7 @@ class MyAnnouncementsFragment : Fragment() {
     private val myAnnouncementsViewModel: MyAnnouncementsViewModel by activityViewModels()
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var loadingDialogItemBinding: LoadingDialogItemBinding
+    private lateinit var loadingDialogBinding: LoadingDialogBinding
 
     private lateinit var myAnnouncementBottomDialog: BottomSheetDialog
     private lateinit var myAnnouncementBottomBinding: MyAnnouncementBottomBinding
@@ -286,8 +286,8 @@ class MyAnnouncementsFragment : Fragment() {
             loadingDialog.show()
         } catch (e: Exception) {
             loadingDialog = AlertDialog.Builder(requireContext()).create()
-            loadingDialogItemBinding = LoadingDialogItemBinding.inflate(layoutInflater)
-            loadingDialog.setView(loadingDialogItemBinding.root)
+            loadingDialogBinding = LoadingDialogBinding.inflate(layoutInflater)
+            loadingDialog.setView(loadingDialogBinding.root)
             loadingDialog.setCancelable(true)
             loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             loadingDialog.show()
