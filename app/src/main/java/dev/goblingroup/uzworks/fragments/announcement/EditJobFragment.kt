@@ -1,11 +1,9 @@
 package dev.goblingroup.uzworks.fragments.announcement
 
-import android.Manifest
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -14,11 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -149,9 +145,6 @@ class EditJobFragment : Fragment() {
             requirementEt.editText?.setText(jobResponse.requirement)
             minAgeEt.editText?.setText(jobResponse.minAge.toString())
             maxAgeEt.editText?.setText(jobResponse.maxAge.toString())
-            if (editJobViewModel.latLng.latitude != 0.0 && editJobViewModel.latLng.longitude != 0.0) {
-                selectAddress.text = resources.getString(R.string.select_location)
-            }
             phoneNumber.text = jobResponse.phoneNumber.convertPhoneNumber()
             deadlineEt.editText?.setText(jobResponse.deadline.isoToDmy())
             genderLayout.apply {
@@ -263,10 +256,8 @@ class EditJobFragment : Fragment() {
                 val mapFragment =
                     childFragmentManager.findFragmentById(R.id.select_job_map) as SupportMapFragment
                 mapFragment.getMapAsync { map ->
-                    updateFindBtn()
                     cancelBtn.visibility = View.VISIBLE
                     setLocationBtn.visibility = View.VISIBLE
-                    findMeBtn.visibility = View.VISIBLE
 
                     googleMap = map
 
@@ -306,14 +297,6 @@ class EditJobFragment : Fragment() {
             locationDialog.setOnDismissListener {
                 previousMarker?.remove()
             }
-
-            findMeBtn.setOnClickListener {
-                if (checkLocationPermission()) {
-                    findUser()
-                } else {
-                    requestLocationPermission()
-                }
-            }
         }
     }
 
@@ -331,66 +314,6 @@ class EditJobFragment : Fragment() {
         mapFailedDialogBinding.close.setOnClickListener {
             openMapFailedDialog.dismiss()
             locationDialog.dismiss()
-        }
-    }
-
-    private fun findUser() {
-        if (!checkLocationPermission())
-            return
-        LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation
-            .addOnSuccessListener {
-                if (it != null) {
-                    editJobViewModel.latLng = LatLng(it.latitude, it.longitude)
-                    previousMarker?.remove()
-                    val cameraUpdate =
-                        CameraUpdateFactory.newLatLngZoom(editJobViewModel.latLng, 15f)
-                    googleMap.animateCamera(cameraUpdate, 1000, null)
-                    previousMarker =
-                        googleMap.addMarker(MarkerOptions().position(editJobViewModel.latLng))
-                } else {
-                    Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), resources.getString(R.string.get_location_failed), Toast.LENGTH_SHORT)
-                    .show()
-                Log.e(TAG, "findUser: ${it.message}")
-            }
-    }
-
-    private fun requestLocationPermission() {
-        requestPermissions(
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            1
-        )
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                findUser()
-                updateFindBtn()
-            }
-        }
-    }
-
-    private fun checkLocationPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun updateFindBtn() {
-        if (checkLocationPermission()) {
-            locationBinding.findMeBtn.setImageResource(R.drawable.ic_find_me)
-        } else {
-            locationBinding.findMeBtn.setImageResource(R.drawable.ic_location_permission_required)
         }
     }
 
