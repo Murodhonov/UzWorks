@@ -96,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:helperText="@string/working_time_helper"
+                app:helperText="@string/job_working_time_helper"
                 app:helperTextEnabled="true"
                 app:helperTextTextColor="@color/yellow"
                 android:theme="@style/TextInputEditTextStyle"
@@ -117,7 +117,7 @@
                 android:id="@+id/working_schedule_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:helperText="@string/working_schedule_helper"
+                app:helperText="@string/job_working_schedule_helper"
                 app:helperTextEnabled="true"
                 app:helperTextTextColor="@color/yellow"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -258,41 +258,27 @@
                 android:textColor="@color/black_blue"
                 android:textSize="@dimen/_12ssp" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/select_address_btn"
+            <TextView
+                android:id="@+id/select_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_10sdp"
-                android:fontFamily="@font/dm_sans_bold"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:cardElevation="0dp"
-                android:text="@string/select_location"
-                app:cardCornerRadius="@dimen/_6sdp"
-                android:background="@drawable/bordered_button_background"
-                android:textColor="@color/black_blue"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:background="@drawable/enabled_tv_background"
+                android:fontFamily="@font/dm_sans_regular"
+                android:gravity="center"
+                android:paddingVertical="@dimen/_12sdp"
+                android:text="@string/select_map" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phone_number_et"
+            <TextView
+                android:id="@+id/phone_number"
                 android:layout_width="match_parent"
-                android:theme="@style/TextInputEditTextStyle"
                 android:layout_height="wrap_content"
-                app:endIconDrawable="@drawable/ic_copy"
-                app:endIconMode="custom"
-                app:endIconTint="@color/black_blue"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:hint="@string/phone_number"
-                    android:editable="false"
-                    android:inputType="none"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:background="@drawable/enabled_tv_background"
+                android:fontFamily="@font/dm_sans_regular"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10sdp"
+                app:drawableEndCompat="@drawable/ic_copy" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/deadline_et"
@@ -300,16 +286,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:hint="@string/deadline"
-                android:theme="@style/TextInputEditTextStyle"
+                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:endIconDrawable="@drawable/ic_calendar"
                 app:endIconMode="custom"
                 app:endIconTint="@color/black_blue"
-                app:errorEnabled="false"
-                app:layout_constraintTop_toBottomOf="@id/gender_layout">
+                android:theme="@style/TextInputEditTextStyle"
+                app:errorEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
+                    android:imeOptions="actionNext"
                     android:inputType="none"
                     android:editable="false"
                     android:maxLines="1"
@@ -332,63 +322,29 @@
                 android:fontFamily="@font/dm_sans_medium"
                 android:text="@string/address" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:id="@+id/region_layout"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/create_worker_edit_text_background"
-                android:backgroundTint="@android:color/transparent"
-                app:endIconMode="dropdown_menu"
-                android:theme="@style/TextInputEditTextStyle"
-                app:endIconTint="@color/black_blue"
-                app:errorEnabled="false"
-                app:hintEnabled="false">
-
-                <AutoCompleteTextView
-                    android:id="@+id/region_choice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/create_worker_edit_text_background"
-                    android:ellipsize="end"
-                    android:hint="@string/select_region"
-                    android:inputType="none"
-                    android:maxLines="1"
-                    android:textColor="@color/black_blue"
-                    android:textColorHint="@color/text_color"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/district_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            <TextView
+                android:id="@+id/region"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/create_worker_edit_text_background"
-                android:backgroundTint="@android:color/transparent"
-                app:endIconMode="dropdown_menu"
-                android:theme="@style/TextInputEditTextStyle"
-                app:endIconTint="@color/black_blue"
-                app:errorEnabled="false"
-                app:hintEnabled="false">
+                android:background="@drawable/enabled_tv_background"
+                android:fontFamily="@font/dm_sans_regular"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/select_region"
+                app:drawableEndCompat="@drawable/ic_down_arrow" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/district_choice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/create_worker_edit_text_background"
-                    android:ellipsize="end"
-                    android:hint="@string/select_region_first"
-                    android:inputType="none"
-                    android:maxLines="1"
-                    android:textColor="@color/black_blue"
-                    android:textColorHint="@color/text_color"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/district"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/enabled_tv_background"
+                android:fontFamily="@font/dm_sans_regular"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/select_region_first"
+                app:drawableEndCompat="@drawable/ic_down_arrow" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -398,34 +354,17 @@
                 android:fontFamily="@font/dm_sans_medium"
                 android:text="@string/job_category" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            <TextView
+                android:id="@+id/category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/create_worker_edit_text_background"
-                android:backgroundTint="@android:color/transparent"
-                app:endIconMode="dropdown_menu"
-                android:id="@+id/job_category_layout"
-                android:theme="@style/TextInputEditTextStyle"
-                app:endIconTint="@color/black_blue"
-                app:errorEnabled="false"
-                app:hintEnabled="false">
-
-                <AutoCompleteTextView
-                    android:id="@+id/job_category_choice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/create_worker_edit_text_background"
-                    android:ellipsize="end"
-                    android:hint="@string/select_job_category"
-                    android:inputType="none"
-                    android:textColorHint="@color/text_color"
-                    android:maxLines="1"
-                    android:textColor="@color/black_blue"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/enabled_tv_background"
+                android:fontFamily="@font/dm_sans_regular"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/select_job_category"
+                app:drawableEndCompat="@drawable/ic_down_arrow" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

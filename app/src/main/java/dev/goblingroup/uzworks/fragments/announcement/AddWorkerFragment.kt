@@ -11,19 +11,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
-import dev.goblingroup.uzworks.database.entity.RegionEntity
+import dev.goblingroup.uzworks.adapter.CategoryAdapter
+import dev.goblingroup.uzworks.adapter.DistrictAdapter
+import dev.goblingroup.uzworks.adapter.RegionAdapter
 import dev.goblingroup.uzworks.databinding.BirthdayGenderExplanationBinding
+import dev.goblingroup.uzworks.databinding.BottomSelectionBinding
 import dev.goblingroup.uzworks.databinding.FragmentAddWorkerBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
@@ -58,9 +58,14 @@ class AddWorkerFragment : Fragment() {
     private lateinit var birthdayGenderExplanationDialog: AlertDialog
     private lateinit var birthdayGenderExplanationBinding: BirthdayGenderExplanationBinding
 
-    private lateinit var regionAdapter: ArrayAdapter<String>
-    private lateinit var districtAdapter: ArrayAdapter<String>
-    private lateinit var categoryAdapter: ArrayAdapter<String>
+    private lateinit var regionDialog: BottomSheetDialog
+    private lateinit var regionDialogItemBinding: BottomSelectionBinding
+
+    private lateinit var districtDialog: BottomSheetDialog
+    private lateinit var districtDialogItemBinding: BottomSelectionBinding
+
+    private lateinit var categoryDialog: BottomSheetDialog
+    private lateinit var categoryDialogItemBinding: BottomSelectionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,11 +77,9 @@ class AddWorkerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            back.setOnClickListener {
+            toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
-
-            topTv.isSelected = true
 
             addWorkerViewModel.controlInput(
                 fragmentActivity = requireActivity(),
@@ -88,23 +91,17 @@ class AddWorkerFragment : Fragment() {
                 tgUserNameEt = tgUserNameEt,
             )
 
-            phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-                if (hasFocus) {
-                    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                        phoneNumberEt.windowToken,
-                        0
-                    )
-                    val clipboardManager =
-                        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clipData =
-                        ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
-                    clipboardManager.setPrimaryClip(clipData)
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().resources.getString(R.string.phone_number_copied),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            phoneNumber.setOnClickListener {
+                val clipboardManager =
+                    requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData =
+                    ClipData.newPlainText("label", phoneNumber.text.toString())
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(
+                    requireContext(),
+                    requireContext().resources.getString(R.string.phone_number_copied),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             genderLayout.root.setOnClickListener {
@@ -126,8 +123,8 @@ class AddWorkerFragment : Fragment() {
                     workingTimeEt,
                     workingScheduleEt,
                     tgUserNameEt,
-                    districtLayout,
-                    jobCategoryLayout
+                    district,
+                    category
                 )
                 Log.d(TAG, "onViewCreated: adding worker $isValid")
                 if (isValid) {
@@ -139,7 +136,7 @@ class AddWorkerFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
-            phoneNumberEt.editText?.setText(addWorkerViewModel.phoneNumber.convertPhoneNumber())
+            phoneNumber.text = addWorkerViewModel.phoneNumber.convertPhoneNumber()
             if (addWorkerViewModel.birthdate != DEFAULT_BIRTHDAY) {
                 birthdayEt.editText?.setText(addWorkerViewModel.birthdate?.isoToDmy())
             }
@@ -158,51 +155,148 @@ class AddWorkerFragment : Fragment() {
                 }
             }
 
-            regionChoice.setOnClickListener {
-                addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "failed to load regions",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+            region.setOnClickListener {
+                showRegion()
+            }
 
-                        is ApiStatus.Loading -> {
-                            regionProgress.visibility = View.VISIBLE
-                            regionLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                        }
+            district.setOnClickListener {
+                showDistrict()
+            }
 
-                        is ApiStatus.Success -> {
-                            regionProgress.visibility = View.GONE
-                            regionLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                            setRegions(it.response!!)
-                            Log.d(TAG, "onViewCreated: drop down ${regionChoice.isPopupShowing}")
+            category.setOnClickListener {
+                showCategory()
+            }
+        }
+    }
+
+    private fun showRegion() {
+        try {
+            regionDialog.show()
+        } catch (e: Exception) {
+            regionDialog = BottomSheetDialog(requireContext())
+            regionDialogItemBinding = BottomSelectionBinding.inflate(layoutInflater)
+            regionDialog.setContentView(regionDialogItemBinding.root)
+            regionDialog.show()
+        }
+        regionDialogItemBinding.apply {
+
+            addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "failed to load regions",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+
+                    is ApiStatus.Loading -> {
+                        progress.visibility = View.VISIBLE
+                    }
+
+                    is ApiStatus.Success -> {
+                        progress.visibility = View.GONE
+                        val regionAdapter = RegionAdapter(
+                            it.response!!
+                        ) { regionId, regionName ->
+                            if (regionName != binding.region.text.toString()) {
+                                binding.region.text = regionName
+                                addWorkerViewModel.regionId = regionId
+                                addWorkerViewModel.districtId = ""
+                                binding.district.text = resources.getString(R.string.select_region)
+                            }
+                            regionDialog.dismiss()
                         }
+                        selectionRv.adapter = regionAdapter
                     }
                 }
             }
+        }
+    }
 
-            jobCategoryChoice.setOnClickListener {
-                jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+    private fun showDistrict() {
+        try {
+            districtDialog.show()
+        } catch (e: Exception) {
+            districtDialog = BottomSheetDialog(requireContext())
+            districtDialogItemBinding = BottomSelectionBinding.inflate(layoutInflater)
+            districtDialog.setContentView(districtDialogItemBinding.root)
+            districtDialog.show()
+        }
+        districtDialogItemBinding.apply {
+
+            addressViewModel.districtsByRegionId(addWorkerViewModel.regionId)
+                .observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiStatus.Error -> {
                             Toast.makeText(
                                 requireContext(),
-                                "failed to load categories",
+                                "failed to load districts",
                                 Toast.LENGTH_SHORT
-                            ).show()
+                            )
+                                .show()
                         }
+
                         is ApiStatus.Loading -> {
-                            categoryProgress.visibility = View.VISIBLE
-                            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                            progress.visibility = View.VISIBLE
+                            selectionRv.visibility = View.GONE
                         }
+
                         is ApiStatus.Success -> {
-                            categoryProgress.visibility = View.GONE
-                            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                            setJobCategories(it.response!!)
+                            progress.visibility = View.GONE
+                            selectionRv.visibility = View.VISIBLE
+                            val districtAdapter = DistrictAdapter(
+                                it.response!!
+                            ) { districtId, districtName ->
+                                binding.district.text = districtName
+                                binding.district.setBackgroundResource(R.drawable.enabled_tv_background)
+                                addWorkerViewModel.districtId = districtId
+                                districtDialog.dismiss()
+                            }
+                            selectionRv.adapter = districtAdapter
                         }
+                    }
+                }
+        }
+    }
+
+    private fun showCategory() {
+        try {
+            categoryDialog.show()
+        } catch (e: Exception) {
+            categoryDialog = BottomSheetDialog(requireContext())
+            categoryDialogItemBinding = BottomSelectionBinding.inflate(layoutInflater)
+            categoryDialog.setContentView(categoryDialogItemBinding.root)
+            categoryDialog.show()
+        }
+        categoryDialogItemBinding.apply {
+            jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "failed to load categories",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    is ApiStatus.Loading -> {
+                        progress.visibility = View.VISIBLE
+                    }
+
+                    is ApiStatus.Success -> {
+                        progress.visibility = View.GONE
+                        Log.d("TAG", "showCategory: ${it.response!!.size}")
+                        Log.d("TAG", "showCategory: ${it.response.map { it.title }}")
+                        val categoryAdapter =
+                            CategoryAdapter(it.response) { categoryId, categoryName ->
+                                binding.category.text = categoryName
+                                binding.category.setBackgroundResource(R.drawable.enabled_tv_background)
+                                addWorkerViewModel.jobCategoryId = categoryId
+                                categoryDialog.dismiss()
+                            }
+                        selectionRv.adapter = categoryAdapter
                     }
                 }
             }
@@ -290,82 +384,6 @@ class AddWorkerFragment : Fragment() {
         loadingDialog.dismiss()
         Toast.makeText(requireContext(), resources.getString(R.string.worker_announcement_created), Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_addWorkerFragment_to_myAnnouncementsFragment)
-    }
-
-    private fun setRegions(regionList: List<RegionEntity>) {
-        binding.apply {
-            regionAdapter = ArrayAdapter(
-                requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                regionList.map { it.name }
-            )
-            regionChoice.threshold = 1
-            regionChoice.setAdapter(regionAdapter)
-
-            regionChoice.setOnItemClickListener { parent, view, position, id ->
-                districtChoice.text.clear()
-                districtChoice.hint = getString(R.string.select_district)
-                setDistricts(regionList[position].id)
-            }
-        }
-    }
-
-    private fun setDistricts(regionId: String) {
-        binding.apply {
-            lifecycleScope.launch {
-                addressViewModel.districtsByRegionId(regionId).observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "failed to load districts",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        is ApiStatus.Loading -> {
-                            districtProgress.visibility = View.VISIBLE
-                            districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                        }
-
-                        is ApiStatus.Success -> {
-                            districtProgress.visibility = View.GONE
-                            districtLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                            districtAdapter = ArrayAdapter(
-                                requireContext(),
-                                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                                it.response!!.map { it.name }
-                            )
-                            districtChoice.threshold = 1
-                            districtChoice.setAdapter(districtAdapter)
-                            districtChoice.setOnItemClickListener { parent, view, position, id ->
-                                districtLayout.isErrorEnabled = false
-                                addWorkerViewModel.districtId = it.response[position].id
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setJobCategories(jobCategoryList: List<JobCategoryEntity>) {
-        binding.apply {
-            categoryAdapter =
-                ArrayAdapter(
-                    requireContext(),
-                    androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                    jobCategoryList.map { it.title }
-                )
-            jobCategoryChoice.threshold = 1
-            jobCategoryChoice.setAdapter(categoryAdapter)
-            jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
-                if (jobCategoryLayout.isErrorEnabled) {
-                    jobCategoryLayout.isErrorEnabled = false
-                }
-                addWorkerViewModel.jobCategoryId = jobCategoryList[position].id
-            }
-        }
     }
 
     override fun onDestroyView() {

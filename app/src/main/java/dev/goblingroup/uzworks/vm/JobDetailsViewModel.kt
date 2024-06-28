@@ -48,6 +48,8 @@ class JobDetailsViewModel @Inject constructor(
 
     fun getTimeAgo(time: String, resources: Resources): String {
         val (period, timeUnit) = time.timeAgo()
+        Log.d(TAG, "getTimeAgo: $period")
+        Log.d(TAG, "getTimeAgo: $timeUnit")
         return when (timeUnit) {
             PeriodEnum.SECONDS.label -> {
                 "$period ${if (period == 1) resources.getString(R.string.second) else resources.getString(R.string.seconds)} ago"

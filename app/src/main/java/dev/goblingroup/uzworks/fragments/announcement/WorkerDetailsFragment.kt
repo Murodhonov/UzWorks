@@ -22,6 +22,7 @@ import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_BIRTHDAY
 import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.formatSalary
 import dev.goblingroup.uzworks.utils.isoToDmy
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.WorkerDetailsViewModel
@@ -94,7 +95,7 @@ class WorkerDetailsFragment : Fragment() {
 
 
             titleTv.text = workerResponse?.title
-            jobCategoryTv.text = workerResponse?.categoryName
+            jobCategoryTv.text = workerResponse?.jobCategory?.title
             genderTv.text =
                 when (workerResponse?.gender) {
                     GenderEnum.MALE.label -> {
@@ -123,8 +124,8 @@ class WorkerDetailsFragment : Fragment() {
                     birthdateTv.text = workerResponse?.birthDate?.isoToDmy()
                 }
             }
-            addressTv.text = "${workerResponse?.regionName}, ${workerResponse?.districtName}"
-            salaryTv.text = workerResponse?.salary.toString()
+            addressTv.text = "${workerResponse?.district?.region?.name}, ${workerResponse?.district?.name}"
+            salaryTv.text = workerResponse?.salary.toString().formatSalary()
             workingTimeTv.text = workerResponse?.workingTime
             workingScheduleTv.text = workerResponse?.workingSchedule
 

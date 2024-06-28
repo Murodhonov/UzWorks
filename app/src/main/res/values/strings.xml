@@ -210,8 +210,10 @@
     <string name="phone_number_copied">Телефон рақами нусхаланди</string>
     <string name="update_user_failed">Нимадир хато кетди, кейинроқ қайта урининг</string>
     <string name="invalid_deadline">Муддати бугундан олдин бўлиши мумкин эмас</string>
-    <string name="working_time_helper">Масалан: Мен эрталаб 08:00 дан 18:00 гача ишлай оламан</string>
-    <string name="working_schedule_helper">Масалан: Душанбадан жумагача ишлай оламан</string>
+    <string name="worker_working_time_helper">Масалан: Мен эрталаб 08:00 дан 18:00 гача ишлай оламан</string>
+    <string name="worker_working_schedule_helper">Масалан: Душанбадан жумагача ишлай оламан</string>
+    <string name="job_working_time_helper">Масалан: 9:00 дан 17:00 гача сменалар мавжуд</string>
+    <string name="job_working_schedule_helper">Масалан: Иш кунлари душанбадан жумагача</string>
     <string name="load_experience_failed">Тажрибани юклашда хатолик юз берди</string>
     <string name="invalid_start_date">Сиз фақат кечагача бўлган кунлардан бирини танлашингиз мумкин</string>
     <string name="invalid_end_date">Сиз фақат бугунгача бўлган кунлардан бирини танлашингиз мумкин</string>
@@ -249,4 +251,6 @@
     <string name="deny">Рад этиш</string>
     <string name="pending_explanation">Бу белги сизнинг эълонингиз юборилганлигини ва ҳозирда администратордан маъқуллашни кутаётганини билдиради. Тасдиқлангандан сўнг, у барча фойдаланувчиларга кўринади. Илтимос, сабр қилинг, чунки бу жараён барча эълонлар бизнинг ҳамжамият қоидалари ва стандартларимизга мос келишини таъминлайди</string>
     <string name="done_explanation">Ушбу белги сизнинг эълонингиз администратор томонидан кўриб чиқилган ва маъқулланганлигини билдиради. Энди у барча фойдаланувчилар учун кўринади. Жамиятимизга ҳисса қўшганингиз учун ташаккур</string>
+    <string name="open_map_failed">Харитани очишда нимадир хатолик юз берди, уни очиш учун қуйидаги харита расмини босинг</string>
+    <string name="could_not_open_map">Харитани очиб бўлмади, кейинроқ қайта уриниб кўринг</string>
 </resources>

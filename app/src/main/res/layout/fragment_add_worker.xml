@@ -14,31 +14,14 @@
         android:background="@color/white"
         android:padding="@dimen/_10sdp">
 
-        <ImageView
-            android:contentDescription="@string/content_description"
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:src="@drawable/ic_left_arrow"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/top_tv"
-            android:layout_width="0dp"
-            android:ellipsize="marquee"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:fontFamily="@font/dm_sans_medium"
-            android:textSize="@dimen/_16ssp"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:singleLine="true"
-            app:layout_constraintRight_toRightOf="parent"
-            android:text="@string/add_worker_announcement"
-            app:layout_constraintLeft_toLeftOf="@id/back"
-            app:layout_constraintTop_toBottomOf="@id/back" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/add_worker_announcement"
+            android:id="@+id/toolbar"
+            app:titleTextColor="@color/black_blue"
+            app:navigationIcon="@drawable/ic_left_arrow"/>
 
         <View
             android:id="@+id/stretcher"
@@ -46,7 +29,7 @@
             android:layout_height="@dimen/_1sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@color/black_blue"
-            app:layout_constraintTop_toBottomOf="@id/top_tv" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <LinearLayout
             android:id="@+id/announcement_layout"
@@ -97,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:helperText="@string/working_time_helper"
+                app:helperText="@string/worker_working_time_helper"
                 app:helperTextEnabled="true"
                 app:helperTextTextColor="@color/yellow"
                 android:theme="@style/TextInputEditTextStyle"
@@ -119,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:helperText="@string/working_schedule_helper"
+                app:helperText="@string/worker_working_schedule_helper"
                 app:helperTextEnabled="true"
                 app:helperTextTextColor="@color/yellow"
                 android:hint="@string/working_schedule"
@@ -154,26 +137,16 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phone_number_et"
+            <TextView
+                android:id="@+id/phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:endIconDrawable="@drawable/ic_copy"
-                app:endIconMode="custom"
-                app:endIconTint="@color/black_blue"
-                android:theme="@style/TextInputEditTextStyle"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:errorEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:hint="@string/phone_number"
-                    android:editable="false"
-                    android:inputType="none"
-                    android:textSize="@dimen/_10ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:background="@drawable/enabled_tv_background"
+                android:fontFamily="@font/dm_sans_regular"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10sdp"
+                app:drawableEndCompat="@drawable/ic_copy" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/deadline_et"
@@ -253,91 +226,31 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/region_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                <TextView
+                    android:id="@+id/region"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/address_tv"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/enabled_tv_background"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/_10sdp"
+                    android:text="@string/select_region"
+                    app:drawableEndCompat="@drawable/ic_down_arrow" />
+
+                <TextView
+                    android:id="@+id/district"
+                    app:layout_constraintTop_toBottomOf="@id/region"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/create_worker_edit_text_background"
-                    android:backgroundTint="@android:color/transparent"
-                    android:theme="@style/TextInputEditTextStyle"
-                    app:endIconMode="dropdown_menu"
-                    app:hintEnabled="false"
-                    app:endIconTint="@color/black_blue"
-                    app:errorEnabled="false"
-                    app:layout_constraintTop_toBottomOf="@id/address_tv">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/region_choice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/create_worker_edit_text_background"
-                        android:ellipsize="end"
-                        android:hint="@string/select_region"
-                        android:inputType="none"
-                        android:maxLines="1"
-                        android:textColor="@color/black_blue"
-                        android:textColorHint="@color/text_color"
-                        android:textSize="@dimen/_10ssp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <ProgressBar
-                    android:id="@+id/region_progress"
-                    android:visibility="gone"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="@id/region_layout"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintHorizontal_bias="0.97"
-                    app:layout_constraintLeft_toLeftOf="@id/region_layout"
-                    app:layout_constraintRight_toRightOf="@id/region_layout"
-                    app:layout_constraintTop_toTopOf="@id/region_layout"
-                    app:layout_constraintWidth_percent="0.07" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/district_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/create_worker_edit_text_background"
-                    android:backgroundTint="@android:color/transparent"
-                    android:theme="@style/TextInputEditTextStyle"
-                    app:endIconMode="dropdown_menu"
-                    app:endIconTint="@color/black_blue"
-                    app:errorEnabled="false"
-                    app:hintEnabled="false"
-                    app:layout_constraintTop_toBottomOf="@id/region_layout">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/district_choice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/create_worker_edit_text_background"
-                        android:ellipsize="end"
-                        android:hint="@string/select_region_first"
-                        android:inputType="none"
-                        android:maxLines="1"
-                        android:textColor="@color/black_blue"
-                        android:textColorHint="@color/text_color"
-                        android:textSize="@dimen/_10ssp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <ProgressBar
-                    android:id="@+id/district_progress"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@id/district_layout"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintHorizontal_bias="0.97"
-                    app:layout_constraintLeft_toLeftOf="@id/district_layout"
-                    app:layout_constraintRight_toRightOf="@id/district_layout"
-                    app:layout_constraintTop_toTopOf="@id/district_layout"
-                    app:layout_constraintWidth_percent="0.07" />
+                    android:background="@drawable/enabled_tv_background"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/_10sdp"
+                    android:text="@string/select_region_first"
+                    app:drawableEndCompat="@drawable/ic_down_arrow" />
 
                 <TextView
                     android:id="@+id/category_tv"
@@ -348,50 +261,20 @@
                     android:text="@string/job_category"
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/district_layout" />
+                    app:layout_constraintTop_toBottomOf="@id/district" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/job_category_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                <TextView
+                    android:id="@+id/category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/create_worker_edit_text_background"
-                    android:backgroundTint="@android:color/transparent"
-                    android:theme="@style/TextInputEditTextStyle"
-                    app:endIconMode="dropdown_menu"
-                    app:endIconTint="@color/black_blue"
-                    app:errorEnabled="false"
-                    app:hintEnabled="false"
-                    app:layout_constraintTop_toBottomOf="@+id/category_tv">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/job_category_choice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/create_worker_edit_text_background"
-                        android:ellipsize="end"
-                        android:hint="@string/select_job_category"
-                        android:inputType="none"
-                        android:maxLines="1"
-                        android:textColor="@color/black_blue"
-                        android:textColorHint="@color/text_color"
-                        android:textSize="@dimen/_10ssp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <ProgressBar
-                    android:id="@+id/category_progress"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@id/job_category_layout"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintHorizontal_bias="0.97"
-                    app:layout_constraintLeft_toLeftOf="@id/job_category_layout"
-                    app:layout_constraintRight_toRightOf="@id/job_category_layout"
-                    app:layout_constraintTop_toTopOf="@id/job_category_layout"
-                    app:layout_constraintWidth_percent="0.07" />
+                    app:layout_constraintTop_toBottomOf="@id/category_tv"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/enabled_tv_background"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/_10sdp"
+                    android:text="@string/select_job_category"
+                    app:drawableEndCompat="@drawable/ic_down_arrow" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

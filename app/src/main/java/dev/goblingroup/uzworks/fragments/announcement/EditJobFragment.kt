@@ -13,8 +13,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -30,8 +28,13 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.adapter.CategoryAdapter
+import dev.goblingroup.uzworks.adapter.DistrictAdapter
+import dev.goblingroup.uzworks.adapter.RegionAdapter
+import dev.goblingroup.uzworks.databinding.BottomSelectionBinding
 import dev.goblingroup.uzworks.databinding.FragmentEditJobBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.MapFailedDialogBinding
 import dev.goblingroup.uzworks.databinding.SelectJobLocationDialogBinding
 import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -61,14 +64,24 @@ class EditJobFragment : Fragment() {
     private lateinit var loadingDialog: AlertDialog
     private lateinit var loadingBinding: LoadingDialogItemBinding
 
-    private lateinit var regionAdapter: ArrayAdapter<String>
-    private lateinit var categoryAdapter: ArrayAdapter<String>
-
     private lateinit var locationDialog: BottomSheetDialog
     private lateinit var locationBinding: SelectJobLocationDialogBinding
 
+    private lateinit var regionDialog: BottomSheetDialog
+    private lateinit var regionDialogItemBinding: BottomSelectionBinding
+
+    private lateinit var districtDialog: BottomSheetDialog
+    private lateinit var districtDialogItemBinding: BottomSelectionBinding
+
+    private lateinit var categoryDialog: BottomSheetDialog
+    private lateinit var categoryDialogItemBinding: BottomSelectionBinding
+
+    private lateinit var openMapFailedDialog: AlertDialog
+    private lateinit var mapFailedDialogBinding: MapFailedDialogBinding
+
     private var previousMarker: Marker? = null
     private lateinit var googleMap: GoogleMap
+    private var selectedLocation = LatLng(0.0, 0.0)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -137,9 +150,9 @@ class EditJobFragment : Fragment() {
             minAgeEt.editText?.setText(jobResponse.minAge.toString())
             maxAgeEt.editText?.setText(jobResponse.maxAge.toString())
             if (editJobViewModel.latLng.latitude != 0.0 && editJobViewModel.latLng.longitude != 0.0) {
-                selectAddressBtn.text = resources.getString(R.string.select_location)
+                selectAddress.text = resources.getString(R.string.select_location)
             }
-            phoneNumberEt.editText?.setText(jobResponse.phoneNumber.convertPhoneNumber())
+            phoneNumber.text = jobResponse.phoneNumber.convertPhoneNumber()
             deadlineEt.editText?.setText(jobResponse.deadline.isoToDmy())
             genderLayout.apply {
                 when (jobResponse.gender) {
@@ -155,61 +168,14 @@ class EditJobFragment : Fragment() {
                 }
             }
             if (jobResponse.latitude != 0.0 && jobResponse.longitude != 0.0) {
-                selectAddressBtn.text = resources.getString(R.string.change_location)
-                selectAddressBtn.setTextColor(resources.getColor(R.color.white))
-                selectAddressBtn.setBackgroundResource(R.drawable.enabled_button_background)
+                selectAddress.text = resources.getString(R.string.change_location)
+                selectAddress.setTextColor(resources.getColor(R.color.white))
+                selectAddress.setBackgroundResource(R.drawable.enabled_button_background)
             }
 
-            regionChoice.setText(jobResponse.regionName)
-            districtChoice.setText(jobResponse.districtName)
-            jobCategoryChoice.setText(jobResponse.categoryName)
-            editJobViewModel.regionId =
-                addressViewModel.listRegions().find { it.name == jobResponse.regionName }!!.id
-            editJobViewModel.districtId =
-                addressViewModel.listDistrictsByRegionId(editJobViewModel.regionId)
-                    .find { it.name == jobResponse.districtName }!!.id
-            editJobViewModel.categoryId = jobCategoryViewModel.listJobCategories()
-                .find { it.title == jobResponse.categoryName }!!.id
-
-            setDistricts(jobResponse.regionName)
-
-            regionAdapter = ArrayAdapter(
-                requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                addressViewModel.listRegions().map { it.name }
-            )
-            regionChoice.setAdapter(regionAdapter)
-
-            categoryAdapter = ArrayAdapter(
-                requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                jobCategoryViewModel.listJobCategories().map { it.title }
-            )
-            jobCategoryChoice.setAdapter(categoryAdapter)
-
-            regionChoice.setOnItemClickListener { parent, view, position, id ->
-                districtChoice.text.clear()
-                districtChoice.hint = resources.getString(R.string.select_district)
-                editJobViewModel.regionId = addressViewModel.listRegions()[position].id
-                setDistricts(regionAdapter.getItem(position).toString())
-            }
-
-            districtChoice.setOnItemClickListener { parent, view, position, id ->
-                if (districtLayout.isErrorEnabled) {
-                    districtLayout.isErrorEnabled = false
-                }
-                editJobViewModel.districtId =
-                    addressViewModel.listDistrictsByRegionId(
-                        editJobViewModel.regionId
-                    )[position].id
-            }
-
-            jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
-                if (jobCategoryLayout.isErrorEnabled) {
-                    jobCategoryLayout.isErrorEnabled = false
-                }
-                editJobViewModel.categoryId = jobCategoryViewModel.listJobCategories()[position].id
-            }
+            region.text = jobResponse.district.region.name
+            district.text = jobResponse.district.name
+            category.text = jobResponse.jobCategory.title
 
             back.setOnClickListener {
                 findNavController().popBackStack()
@@ -231,35 +197,49 @@ class EditJobFragment : Fragment() {
                 genderLayout
             )
 
-            phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-                if (hasFocus) {
-                    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                        phoneNumberEt.windowToken,
-                        0
-                    )
-                    val clipboardManager =
-                        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clipData =
-                        ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
-                    clipboardManager.setPrimaryClip(clipData)
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().resources.getString(R.string.phone_number_copied),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            phoneNumber.setOnClickListener {
+                val clipboardManager =
+                    requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData =
+                    ClipData.newPlainText("label", phoneNumber.text.toString())
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(
+                    requireContext(),
+                    requireContext().resources.getString(R.string.phone_number_copied),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             cancelBtn.setOnClickListener {
                 findNavController().popBackStack()
             }
 
-            selectAddressBtn.setOnClickListener {
+            selectAddress.setOnClickListener {
                 showLocationDialog()
             }
 
             saveBtn.setOnClickListener {
                 edit()
+            }
+
+            region.setOnClickListener {
+                showRegion()
+            }
+
+            district.setOnClickListener {
+                if (region.text.toString() == resources.getString(R.string.select_region)) {
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(R.string.select_region_first),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    showDistrict()
+                }
+            }
+
+            category.setOnClickListener {
+                showCategory()
             }
         }
     }
@@ -278,41 +258,46 @@ class EditJobFragment : Fragment() {
         Log.d(TAG, "showLocationDialog: ${editJobViewModel.latLng}")
 
         locationBinding.apply {
-            var selectedLocation = editJobViewModel.latLng
-            val mapFragment =
-                childFragmentManager.findFragmentById(R.id.select_job_map) as SupportMapFragment
-            mapFragment.getMapAsync { map ->
-                updateFindBtn()
-                cancelBtn.visibility = View.VISIBLE
-                setLocationBtn.visibility = View.VISIBLE
-                findMeBtn.visibility = View.VISIBLE
+            selectedLocation = editJobViewModel.latLng
+            try {
+                val mapFragment =
+                    childFragmentManager.findFragmentById(R.id.select_job_map) as SupportMapFragment
+                mapFragment.getMapAsync { map ->
+                    updateFindBtn()
+                    cancelBtn.visibility = View.VISIBLE
+                    setLocationBtn.visibility = View.VISIBLE
+                    findMeBtn.visibility = View.VISIBLE
 
-                googleMap = map
+                    googleMap = map
 
-                previousMarker =
-                    googleMap.addMarker(MarkerOptions().position(selectedLocation))
-                googleMap.moveCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        selectedLocation,
-                        15f
+                    previousMarker =
+                        googleMap.addMarker(MarkerOptions().position(selectedLocation))
+                    googleMap.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            selectedLocation,
+                            15f
+                        )
                     )
-                )
 
-                googleMap.setOnMapClickListener {
-                    previousMarker?.remove()
-                    val newMarker = googleMap.addMarker(MarkerOptions().position(it))
-                    previousMarker = newMarker
-                    selectedLocation = it
+                    googleMap.setOnMapClickListener {
+                        previousMarker?.remove()
+                        val newMarker = googleMap.addMarker(MarkerOptions().position(it))
+                        previousMarker = newMarker
+                        selectedLocation = it
+                    }
                 }
+            } catch (e: Exception) {
+                openMapFailed()
             }
+
             cancelBtn.setOnClickListener {
                 locationDialog.dismiss()
             }
 
             setLocationBtn.setOnClickListener {
                 binding.apply {
-                    selectAddressBtn.setBackgroundResource(R.drawable.enabled_button_background)
-                    selectAddressBtn.setTextColor(resources.getColor(R.color.white))
+                    selectAddress.setBackgroundResource(R.drawable.enabled_button_background)
+                    selectAddress.setTextColor(resources.getColor(R.color.white))
                 }
                 editJobViewModel.latLng = selectedLocation
                 locationDialog.dismiss()
@@ -329,6 +314,23 @@ class EditJobFragment : Fragment() {
                     requestLocationPermission()
                 }
             }
+        }
+    }
+
+    private fun openMapFailed() {
+        try {
+            openMapFailedDialog.show()
+        } catch (e: Exception) {
+            openMapFailedDialog = AlertDialog.Builder(requireContext()).create()
+            mapFailedDialogBinding = MapFailedDialogBinding.inflate(layoutInflater)
+            openMapFailedDialog.setView(mapFailedDialogBinding.root)
+            openMapFailedDialog.setCancelable(false)
+            openMapFailedDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            openMapFailedDialog.show()
+        }
+        mapFailedDialogBinding.close.setOnClickListener {
+            openMapFailedDialog.dismiss()
+            locationDialog.dismiss()
         }
     }
 
@@ -392,21 +394,137 @@ class EditJobFragment : Fragment() {
         }
     }
 
-    private fun setDistricts(regionName: String) {
-        binding.apply {
-            val districtList = ArrayList(
-                addressViewModel.listDistrictsByRegionId(
-                    addressViewModel.listRegions().find { it.name == regionName }!!.id
-                )
-            )
-            Log.d(TAG, "setDistricts: setting districts in $regionName")
-            Log.d(TAG, "setDistricts: ${districtList.toArray()}")
-            val districtAdapter = ArrayAdapter(
-                requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                districtList.map { it.name }
-            )
-            districtChoice.setAdapter(districtAdapter)
+    private fun showRegion() {
+        try {
+            regionDialog.show()
+        } catch (e: Exception) {
+            regionDialog = BottomSheetDialog(requireContext())
+            regionDialogItemBinding = BottomSelectionBinding.inflate(layoutInflater)
+            regionDialog.setContentView(regionDialogItemBinding.root)
+            regionDialog.show()
+        }
+        regionDialogItemBinding.apply {
+
+            addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "failed to load regions",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+
+                    is ApiStatus.Loading -> {
+                        progress.visibility = View.VISIBLE
+                    }
+
+                    is ApiStatus.Success -> {
+                        progress.visibility = View.GONE
+                        val regionAdapter = RegionAdapter(
+                            it.response!!
+                        ) { regionId, regionName ->
+                            if (regionName != binding.region.text.toString()) {
+                                binding.region.text = regionName
+                                editJobViewModel.regionId = regionId
+                                editJobViewModel.districtId = ""
+                                binding.district.text = resources.getString(R.string.select_region)
+                            }
+                            regionDialog.dismiss()
+                        }
+                        selectionRv.adapter = regionAdapter
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showDistrict() {
+        try {
+            districtDialog.show()
+        } catch (e: Exception) {
+            districtDialog = BottomSheetDialog(requireContext())
+            districtDialogItemBinding = BottomSelectionBinding.inflate(layoutInflater)
+            districtDialog.setContentView(districtDialogItemBinding.root)
+            districtDialog.show()
+        }
+        districtDialogItemBinding.apply {
+
+            addressViewModel.districtsByRegionId(editJobViewModel.regionId.toString())
+                .observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load districts",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+
+                        is ApiStatus.Loading -> {
+                            progress.visibility = View.VISIBLE
+                            selectionRv.visibility = View.GONE
+                        }
+
+                        is ApiStatus.Success -> {
+                            progress.visibility = View.GONE
+                            selectionRv.visibility = View.VISIBLE
+                            val districtAdapter = DistrictAdapter(
+                                it.response!!
+                            ) { districtId, districtName ->
+                                binding.district.text = districtName
+                                binding.district.setBackgroundResource(R.drawable.enabled_tv_background)
+                                editJobViewModel.districtId = districtId
+                                districtDialog.dismiss()
+                            }
+                            selectionRv.adapter = districtAdapter
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun showCategory() {
+        try {
+            categoryDialog.show()
+        } catch (e: Exception) {
+            categoryDialog = BottomSheetDialog(requireContext())
+            categoryDialogItemBinding = BottomSelectionBinding.inflate(layoutInflater)
+            categoryDialog.setContentView(categoryDialogItemBinding.root)
+            categoryDialog.show()
+        }
+        categoryDialogItemBinding.apply {
+            jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "failed to load categories",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    is ApiStatus.Loading -> {
+                        progress.visibility = View.VISIBLE
+                    }
+
+                    is ApiStatus.Success -> {
+                        progress.visibility = View.GONE
+                        Log.d("TAG", "showCategory: ${it.response!!.size}")
+                        Log.d("TAG", "showCategory: ${it.response.map { it.title }}")
+                        val categoryAdapter =
+                            CategoryAdapter(it.response) { categoryId, categoryName ->
+                                binding.category.text = categoryName
+                                binding.category.setBackgroundResource(R.drawable.enabled_tv_background)
+                                editJobViewModel.categoryId = categoryId
+                                categoryDialog.dismiss()
+                            }
+                        selectionRv.adapter = categoryAdapter
+                    }
+                }
+            }
         }
     }
 
@@ -424,8 +542,8 @@ class EditJobFragment : Fragment() {
                 minAgeEt = minAgeEt,
                 maxAgeEt = maxAgeEt,
                 deadlineEt = deadlineEt,
-                districtLayout = districtLayout,
-                categoryLayout = jobCategoryLayout
+                district = district,
+                category = category
             ).observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {

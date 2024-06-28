@@ -1,7 +1,9 @@
 package dev.goblingroup.uzworks.adapter
 
 import android.content.res.Resources
+import android.text.TextUtils
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +17,7 @@ import dev.goblingroup.uzworks.utils.formatSalary
 class MyJobsAdapter(
     private val jobList: List<JobResponse>,
     private val resources: Resources,
-    private val onItemClick: (String) -> Unit
+    private val onItemClick: (String, String) -> Unit
 ) : RecyclerView.Adapter<MyJobsAdapter.MyJobViewHolder>() {
 
     inner class MyJobViewHolder(private val itemBinding: MyAnnouncementItemBinding) :
@@ -24,10 +26,11 @@ class MyJobsAdapter(
             itemBinding.apply {
                 titleTv.isSelected = true
                 addressTv.isSelected = true
-                categoryTv.isSelected = true
 
                 titleTv.text = jobResponse.title
                 costTv.text = "${jobResponse.salary.toString().formatSalary()} ${resources.getString(R.string.money_unit)}"
+                addressTv.text = "${jobResponse.district.region.name}, ${jobResponse.district.name}"
+
                 genderTv.text = when (jobResponse.gender) {
                     GenderEnum.MALE.label -> {
                         resources.getString(R.string.male)
@@ -45,8 +48,52 @@ class MyJobsAdapter(
                         ""
                     }
                 }
-                categoryTv.text = jobResponse.categoryName
-                addressTv.text = "${jobResponse.regionName}, ${jobResponse.districtName}"
+                genderTv.post {
+                    val availableWidth = genderTv.width
+                    val textWidth = genderTv.paint.measureText(jobResponse.gender)
+
+                    if (textWidth > availableWidth) {
+                        genderTv.apply {
+                            isSingleLine = true
+                            ellipsize = TextUtils.TruncateAt.MARQUEE
+                            marqueeRepeatLimit = -1
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                            isSelected = true
+                            gravity = Gravity.START
+                        }
+                    } else {
+                        genderTv.apply {
+                            isSingleLine = true
+                            ellipsize = null
+                            gravity = Gravity.CENTER
+                        }
+                    }
+                }
+
+                categoryTv.text = jobResponse.jobCategory.title
+                categoryTv.post {
+                    val availableWidth = categoryTv.width
+                    val textWidth = categoryTv.paint.measureText(jobResponse.jobCategory.title)
+
+                    if (textWidth > availableWidth) {
+                        categoryTv.apply {
+                            isSingleLine = true
+                            ellipsize = TextUtils.TruncateAt.MARQUEE
+                            marqueeRepeatLimit = -1
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                            isSelected = true
+                            gravity = Gravity.START
+                        }
+                    } else {
+                        categoryTv.apply {
+                            isSingleLine = true
+                            ellipsize = null
+                            gravity = Gravity.CENTER
+                        }
+                    }
+                }
 
                 if (jobResponse.status) {
                     statusIv.setImageResource(R.drawable.ic_done)
@@ -56,7 +103,7 @@ class MyJobsAdapter(
 
                 root.setOnClickListener {
                     Log.d(TAG, "onBind: checking delete job progress ${jobResponse.id} clicked on position $position")
-                    onItemClick.invoke(jobResponse.id)
+                    onItemClick.invoke(jobResponse.title, jobResponse.id)
                 }
             }
         }

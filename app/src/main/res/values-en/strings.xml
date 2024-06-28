@@ -209,8 +209,10 @@ The information displayed to you is determined by the role you choose</string>
     <string name="phone_number_copied">Phone number copied</string>
     <string name="update_user_failed">Something went wrong, try again later</string>
     <string name="invalid_deadline">Deadline cannot be before today</string>
-    <string name="working_time_helper">For example: I can work from 08:00 AM until 06:00 PM</string>
-    <string name="working_schedule_helper">For example: I can work from Monday until Friday</string>
+    <string name="worker_working_time_helper">For example: I can work from 08:00 AM until 06:00 PM</string>
+    <string name="worker_working_schedule_helper">For example: I can work from Monday until Friday</string>
+    <string name="job_working_time_helper">For example: Shifts available from 08:00 AM to 06:00 PM</string>
+    <string name="job_working_schedule_helper">For example: Workdays are Monday to Friday</string>
     <string name="load_experience_failed">Something went wrong while loading experience</string>
     <string name="invalid_start_date">You can only choose one of the days until yesterday</string>
     <string name="invalid_end_date">You can only choose one of the days up to today</string>
@@ -247,4 +249,6 @@ The information displayed to you is determined by the role you choose</string>
     <string name="deny">Deny</string>
     <string name="pending_explanation">This icon indicates that your announcement has been submitted and is currently awaiting approval from the admin. Once approved, it will be visible to all users. Please be patient, as this process ensures that all announcements meet our community guidelines and standards</string>
     <string name="done_explanation">This icon indicates that your announcement has been reviewed and approved by the admin. It is now visible to all users. Thank you for contributing to our community</string>
+    <string name="open_map_failed">Something went wrong with opening map, click on map image below to open it</string>
+    <string name="could_not_open_map">Couldn\'t open map, please try again later</string>
 </resources>

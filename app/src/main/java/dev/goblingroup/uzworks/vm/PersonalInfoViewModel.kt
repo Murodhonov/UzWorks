@@ -7,7 +7,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Resources
 import android.util.Log
-import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
@@ -18,10 +18,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
+import dev.goblingroup.uzworks.database.entity.DistrictEntity
+import dev.goblingroup.uzworks.database.entity.RegionEntity
 import dev.goblingroup.uzworks.databinding.GenderChoiceLayoutBinding
 import dev.goblingroup.uzworks.models.request.UserUpdateRequest
 import dev.goblingroup.uzworks.models.response.UserResponse
 import dev.goblingroup.uzworks.models.response.UserUpdateResponse
+import dev.goblingroup.uzworks.repository.AddressRepository
 import dev.goblingroup.uzworks.repository.ProfileRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
@@ -43,6 +46,7 @@ import javax.inject.Inject
 class PersonalInfoViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val securityRepository: SecurityRepository,
+    private val addressRepository: AddressRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
@@ -52,7 +56,16 @@ class PersonalInfoViewModel @Inject constructor(
     private val updateUserLiveData =
         MutableLiveData<ApiStatus<UserUpdateResponse>>(ApiStatus.Loading())
 
+    private val _regionLiveData =
+        MutableLiveData<ApiStatus<List<RegionEntity>>>()
+
+    private val _districtLiveData =
+        MutableLiveData<ApiStatus<List<DistrictEntity>>>()
+
+    private lateinit var userResponse: UserResponse
     var selectedGender: Int = GenderEnum.UNKNOWN.code
+    var districtId: String? = null
+    var regionId: String? = null
 
     init {
         fetchUserData()
@@ -61,20 +74,22 @@ class PersonalInfoViewModel @Inject constructor(
     private fun fetchUserData() {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                val userResponse = profileRepository.getUserById(securityRepository.getUserId())
-                if (userResponse.isSuccessful) {
-                    selectedGender = userResponse.body()?.gender!!
-                    Log.d(TAG, "fetchUserData: ${userResponse.body()}")
-                    _userLiveData.postValue(ApiStatus.Success(userResponse.body()))
+                val response = profileRepository.getUserById(securityRepository.getUserId())
+                if (response.isSuccessful) {
+                    userResponse = response.body()!!
+                    selectedGender = userResponse.gender
+                    districtId = userResponse.districtId
+                    Log.d(TAG, "fetchUserData: ${response.body()}")
+                    _userLiveData.postValue(ApiStatus.Success(userResponse))
                 } else {
-                    _userLiveData.postValue(ApiStatus.Error(Throwable(userResponse.message())))
-                    Log.e(TAG, "fetchUserData: ${userResponse.code()}")
-                    Log.e(TAG, "fetchUserData: ${userResponse.message()}")
-                    Log.e(TAG, "fetchUserData: ${userResponse.errorBody()}")
+                    _userLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
+                    Log.e(TAG, "fetchUserData: ${response.code()}")
+                    Log.e(TAG, "fetchUserData: ${response.message()}")
+                    Log.e(TAG, "fetchUserData: ${response.errorBody()}")
                     Log.e(
                         TAG,
                         "fetchUserData: ${
-                            userResponse.errorBody()?.extractErrorMessage().toString()
+                            response.errorBody()?.extractErrorMessage().toString()
                         }"
                     )
                 }
@@ -103,6 +118,106 @@ class PersonalInfoViewModel @Inject constructor(
         return updateUserLiveData
     }
 
+    fun fetchRegions(): LiveData<ApiStatus<List<RegionEntity>>> {
+        viewModelScope.launch {
+            if (networkHelper.isNetworkConnected()) {
+                if (addressRepository.listRegions().isEmpty()) {
+                    _regionLiveData.postValue(ApiStatus.Loading())
+                    val regionResponse = addressRepository.getAllRegions()
+                    if (regionResponse.isSuccessful) {
+                        if (addressRepository.addRegions(regionResponse.body()!!)) {
+                            if (userResponse.regionName != null) {
+                                regionId = addressRepository.listRegions()
+                                    .find { it.name == userResponse.regionName }?.id
+                            }
+                            _regionLiveData.postValue(ApiStatus.Success(addressRepository.listRegions()))
+                        }
+                    } else {
+                        _regionLiveData.postValue(ApiStatus.Error(Throwable(regionResponse.message())))
+                    }
+                } else {
+                    if (userResponse.regionName != null) {
+                        regionId = addressRepository.listRegions()
+                            .find { it.name == userResponse.regionName }?.id
+                    }
+                    _regionLiveData.postValue(ApiStatus.Success(addressRepository.listRegions()))
+                }
+            }
+        }
+        return _regionLiveData
+    }
+
+    fun fetchDistrictsByRegionId(): LiveData<ApiStatus<List<DistrictEntity>>> {
+        viewModelScope.launch {
+            if (networkHelper.isNetworkConnected()) {
+                if (regionId != null) {
+                    if (addressRepository.listDistrictsByRegionId(regionId.toString())
+                            .isNotEmpty()
+                    ) {
+                        _districtLiveData.postValue(
+                            ApiStatus.Success(
+                                addressRepository.listDistrictsByRegionId(
+                                    regionId.toString()
+                                )
+                            )
+                        )
+                    } else {
+                        _districtLiveData.postValue(ApiStatus.Loading())
+                        val districtResponse =
+                            addressRepository.getDistrictsByRegionId(regionId.toString())
+                        if (districtResponse.isSuccessful) {
+                            if (addressRepository.addDistricts(
+                                    districtResponse.body()!!,
+                                    regionId.toString()
+                                )
+                            ) {
+                                _districtLiveData.postValue(
+                                    ApiStatus.Success(
+                                        addressRepository.listDistrictsByRegionId(
+                                            regionId.toString()
+                                        )
+                                    )
+                                )
+                            }
+                        } else {
+                            _districtLiveData.postValue(ApiStatus.Error(Throwable(districtResponse.message())))
+                        }
+                    }
+                } else {
+                    val regionResponse = addressRepository.getAllRegions()
+                    if (regionResponse.isSuccessful) {
+                        if (addressRepository.addRegions(regionResponse.body()!!)) {
+                            regionId =
+                                regionResponse.body()?.find { it.name == userResponse.regionName }?.id
+                            val districtResponse =
+                                addressRepository.getDistrictsByRegionId(regionId.toString())
+                            if (districtResponse.isSuccessful) {
+                                if (addressRepository.addDistricts(
+                                        districtResponse.body()!!,
+                                        regionId.toString()
+                                    )
+                                ) {
+                                    _districtLiveData.postValue(
+                                        ApiStatus.Success(
+                                            addressRepository.listDistrictsByRegionId(
+                                                regionId.toString()
+                                            )
+                                        )
+                                    )
+                                }
+                            } else {
+                                _districtLiveData.postValue(ApiStatus.Error(Throwable(districtResponse.message())))
+                            }
+                        }
+                    } else {
+                        _districtLiveData.postValue(ApiStatus.Error(Throwable(regionResponse.message())))
+                    }
+                }
+            }
+        }
+        return _districtLiveData
+    }
+
     private fun updateInfo(userUpdateResponse: UserUpdateResponse): Boolean {
         return securityRepository.setGender(userUpdateResponse.gender) && securityRepository.setBirthdate(
             userUpdateResponse.birthDate
@@ -117,9 +232,9 @@ class PersonalInfoViewModel @Inject constructor(
         firstNameEt: TextInputLayout,
         lastNameEt: TextInputLayout,
         emailEt: TextInputLayout,
-        phoneNumberEt: TextInputLayout,
+        phoneNumber: TextView,
         genderLayout: GenderChoiceLayoutBinding,
-        birthdayEt: TextInputLayout
+        birthday: TextView
     ) {
         firstNameEt.editText?.addTextChangedListener {
             if (it.toString().isNotEmpty()) {
@@ -154,64 +269,56 @@ class PersonalInfoViewModel @Inject constructor(
             }
         }
 
-        phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                (fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                    phoneNumberEt.windowToken,
-                    0
-                )
-                val clipboardManager =
-                    fragmentActivity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clipData =
-                    ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
-                clipboardManager.setPrimaryClip(clipData)
-                Toast.makeText(
-                    fragmentActivity,
-                    fragmentActivity.resources.getString(R.string.phone_number_copied),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        phoneNumber.setOnClickListener {
+            val clipboardManager =
+                fragmentActivity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipData =
+                ClipData.newPlainText("label", phoneNumber.text.toString())
+            clipboardManager.setPrimaryClip(clipData)
+            Toast.makeText(
+                fragmentActivity,
+                fragmentActivity.resources.getString(R.string.phone_number_copied),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
-        birthdayEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                val datePickerDialog = DatePickerDialog(
-                    fragmentActivity,
-                    R.style.DatePickerDialogTheme,
-                    { _, year, month, dayOfMonth ->
-                        val selectedCalendar = Calendar.getInstance().apply {
-                            set(year, month, dayOfMonth)
-                        }
+        birthday.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                fragmentActivity,
+                R.style.DatePickerDialogTheme,
+                { _, year, month, dayOfMonth ->
+                    val selectedCalendar = Calendar.getInstance().apply {
+                        set(year, month, dayOfMonth)
+                    }
 
-                        val minimumCalendar =
-                            Calendar.getInstance().apply { add(Calendar.YEAR, -16) }
+                    val minimumCalendar =
+                        Calendar.getInstance().apply { add(Calendar.YEAR, -16) }
 
-                        if (selectedCalendar.after(minimumCalendar)) {
-                            Toast.makeText(
-                                fragmentActivity,
-                                fragmentActivity.resources.getString(R.string.birthdate_requirement),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            val formatter = SimpleDateFormat(
-                                "dd.MM.yyyy", Locale.getDefault()
-                            )
-                            birthdayEt.editText?.setText(formatter.format(selectedCalendar.time))
-                        }
-                    },
-                    birthdayEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.YEAR.dateLabel),
-                    birthdayEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
-                    birthdayEt.editText?.text.toString()
-                        .extractDateValue(DateEnum.DATE.dateLabel),
-                )
+                    if (selectedCalendar.after(minimumCalendar)) {
+                        Toast.makeText(
+                            fragmentActivity,
+                            fragmentActivity.resources.getString(R.string.birthdate_requirement),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        val formatter = SimpleDateFormat(
+                            "dd.MM.yyyy", Locale.getDefault()
+                        )
+                        birthday.text = formatter.format(selectedCalendar.time)
+                    }
+                },
+                birthday.text.toString()
+                    .extractDateValue(DateEnum.YEAR.dateLabel),
+                birthday.text.toString()
+                    .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
+                birthday.text.toString()
+                    .extractDateValue(DateEnum.DATE.dateLabel),
+            )
 
-                datePickerDialog.show()
+            datePickerDialog.show()
 
-                datePickerDialog.setOnDismissListener {
-                    birthdayEt.clearFocus()
-                }
+            datePickerDialog.setOnDismissListener {
+                birthday.clearFocus()
             }
         }
     }

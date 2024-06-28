@@ -172,13 +172,6 @@
         android:label="fragment_add_job"
         tools:layout="@layout/fragment_add_job" >
         <action
-            android:id="@+id/action_addJobFragment_to_selectJobLocationFragment"
-            app:destination="@id/selectJobLocationFragment"
-            app:enterAnim="@anim/scale_in"
-            app:exitAnim="@anim/scale_out"
-            app:popEnterAnim="@anim/scale_in"
-            app:popExitAnim="@anim/scale_out" />
-        <action
             android:id="@+id/action_addJobFragment_to_myAnnouncementsFragment"
             app:destination="@id/myAnnouncementsFragment"
             app:enterAnim="@anim/scale_in"
@@ -245,11 +238,6 @@
             app:popEnterAnim="@anim/scale_in"
             app:popExitAnim="@anim/scale_out" />
     </fragment>
-    <fragment
-        android:id="@+id/selectJobLocationFragment"
-        android:name="dev.goblingroup.uzworks.fragments.announcement.SelectJobLocationFragment"
-        android:label="fragment_job_address"
-        tools:layout="@layout/fragment_select_job_location" />
     <fragment
         android:id="@+id/experienceFragment"
         android:name="dev.goblingroup.uzworks.fragments.profile.ExperienceFragment"
@@ -357,12 +345,5 @@
         android:name="dev.goblingroup.uzworks.fragments.announcement.EditJobFragment"
         android:label="fragment_edit_job"
         tools:layout="@layout/fragment_edit_job" >
-        <action
-            android:id="@+id/action_editJobFragment_to_selectJobLocationFragment"
-            app:destination="@id/selectJobLocationFragment"
-            app:enterAnim="@anim/scale_in"
-            app:exitAnim="@anim/scale_out"
-            app:popEnterAnim="@anim/scale_in"
-            app:popExitAnim="@anim/scale_out" />
     </fragment>
 </navigation>

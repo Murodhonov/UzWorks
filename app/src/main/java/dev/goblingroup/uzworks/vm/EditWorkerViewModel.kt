@@ -17,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.models.request.WorkerEditRequest
+import dev.goblingroup.uzworks.models.response.District
 import dev.goblingroup.uzworks.models.response.WorkerEditResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
@@ -48,9 +49,10 @@ class EditWorkerViewModel @Inject constructor(
     private val editLiveData = MutableLiveData<ApiStatus<WorkerEditResponse>>(ApiStatus.Loading())
 
     lateinit var workerId: String
-    lateinit var workerResponse: WorkerResponse
-    lateinit var districtId: String
-    lateinit var categoryId: String
+    private lateinit var workerResponse: WorkerResponse
+    var regionId: String? = null
+    var districtId: String? = null
+    var categoryId: String? = null
     val birthdate = securityRepository.getBirthdate()
     val gender = securityRepository.getGender()
     val phoneNumber = securityRepository.getPhoneNumber().toString()
@@ -61,6 +63,9 @@ class EditWorkerViewModel @Inject constructor(
                 val response = announcementRepository.getWorkerById(workerId)
                 if (response.isSuccessful) {
                     workerResponse = response.body()!!
+                    regionId = workerResponse.district.region.id
+                    districtId = workerResponse.district.id
+                    categoryId = workerResponse.jobCategory.id
                     workerLiveData.postValue(ApiStatus.Success(response.body()))
                 } else {
                     workerLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
@@ -79,8 +84,8 @@ class EditWorkerViewModel @Inject constructor(
         tgUserNameEt: TextInputLayout,
         deadlineEt: TextInputLayout,
         birthdayEt: TextInputLayout,
-        districtLayout: TextInputLayout,
-        categoryLayout: TextInputLayout
+        district: TextView,
+        category: TextView,
     ): LiveData<ApiStatus<WorkerEditResponse>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
@@ -111,11 +116,11 @@ class EditWorkerViewModel @Inject constructor(
                     tgUserNameEt.isErrorEnabled = true
                     tgUserNameEt.error = context.resources.getString(R.string.tg_username_error)
                 }
-                if (districtId.isEmpty()) {
-                    districtLayout.error = context.resources.getString(R.string.district_error)
+                if (districtId == null) {
+                    district.setBackgroundResource(R.drawable.disabled_tv_background)
                 }
-                if (categoryId.isEmpty()) {
-                    categoryLayout.error = context.resources.getString(R.string.job_category_error)
+                if (categoryId == null) {
+                    category.setBackgroundResource(R.drawable.disabled_tv_background)
                 }
                 if (deadlineEt.isErrorEnabled ||
                     titleEt.isErrorEnabled ||
@@ -123,16 +128,16 @@ class EditWorkerViewModel @Inject constructor(
                     workingTimeEt.isErrorEnabled ||
                     workingScheduleEt.isErrorEnabled ||
                     tgUserNameEt.isErrorEnabled ||
-                    districtLayout.isErrorEnabled ||
-                    categoryLayout.isErrorEnabled
+                    districtId == null ||
+                    categoryId == null
                 ) {
                     editLiveData.postValue(ApiStatus.Error(Throwable(ConstValues.INPUT_ERROR)))
                 } else {
                     val response = announcementRepository.editWorker(
                         WorkerEditRequest(
-                            categoryId = categoryId,
+                            categoryId = categoryId.toString(),
                             deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
-                            districtId = districtId,
+                            districtId = districtId.toString(),
                             gender = gender,
                             id = workerId,
                             instagramLink = workerResponse.instagramLink,
@@ -168,7 +173,6 @@ class EditWorkerViewModel @Inject constructor(
 
     fun controlInput(
         fragmentActivity: FragmentActivity,
-        topTv: TextView,
         titleEt: TextInputLayout,
         salaryEt: TextInputLayout,
         workingTimeEt: TextInputLayout,
@@ -176,8 +180,6 @@ class EditWorkerViewModel @Inject constructor(
         tgUserNameEt: TextInputLayout,
         deadlineEt: TextInputLayout
     ) {
-        topTv.isSelected = true
-
         deadlineEt.editText?.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 val datePickerDialog = DatePickerDialog(

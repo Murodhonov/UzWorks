@@ -74,7 +74,7 @@ class MyAnnouncementsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.apply {
-            back.setOnClickListener {
+            toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
             myAnnouncementsViewModel.fetchAnnouncements()
@@ -120,8 +120,8 @@ class MyAnnouncementsFragment : Fragment() {
             myJobsAdapter = MyJobsAdapter(
                 jobList = myAnnouncementsViewModel.jobList,
                 resources = resources,
-            ) { jobId ->
-                showBottom(jobId, AnnouncementEnum.JOB.announcementType)
+            ) { announcementTitle, jobId ->
+                showBottom(announcementTitle, jobId, AnnouncementEnum.JOB.announcementType)
             }
             myAnnouncementsRv.adapter = myJobsAdapter
             if (myJobsAdapter.itemCount == 0) {
@@ -165,8 +165,8 @@ class MyAnnouncementsFragment : Fragment() {
             myWorkersAdapter = MyWorkersAdapter(
                 jobList = myAnnouncementsViewModel.workerList,
                 resources = resources,
-            ) { jobId ->
-                showBottom(jobId, AnnouncementEnum.WORKER.announcementType)
+            ) { announcementTitle, jobId ->
+                showBottom(announcementTitle, jobId, AnnouncementEnum.WORKER.announcementType)
             }
             myAnnouncementsRv.adapter = myWorkersAdapter
             if (myWorkersAdapter.itemCount == 0) {
@@ -177,7 +177,11 @@ class MyAnnouncementsFragment : Fragment() {
         }
     }
 
-    private fun showBottom(announcementId: String, announcementType: String) {
+    private fun showBottom(
+        announcementTitle: String,
+        announcementId: String,
+        announcementType: String
+    ) {
         val bundle = Bundle()
         bundle.putString("announcement_id", announcementId)
         try {
@@ -189,6 +193,9 @@ class MyAnnouncementsFragment : Fragment() {
             myAnnouncementBottomDialog.show()
         }
         myAnnouncementBottomBinding.apply {
+            announcementTitleTv.text = announcementTitle
+            announcementTitleTv.isSelected = true
+
             seeMoreBtn.setOnClickListener {
                 val direction = when (announcementType) {
                     AnnouncementEnum.JOB.announcementType -> {

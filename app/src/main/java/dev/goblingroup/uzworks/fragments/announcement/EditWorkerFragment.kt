@@ -11,19 +11,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import dev.goblingroup.uzworks.R
-import dev.goblingroup.uzworks.database.entity.JobCategoryEntity
-import dev.goblingroup.uzworks.database.entity.RegionEntity
+import dev.goblingroup.uzworks.adapter.CategoryAdapter
+import dev.goblingroup.uzworks.adapter.DistrictAdapter
+import dev.goblingroup.uzworks.adapter.RegionAdapter
 import dev.goblingroup.uzworks.databinding.BirthdayGenderExplanationBinding
+import dev.goblingroup.uzworks.databinding.BottomSelectionBinding
 import dev.goblingroup.uzworks.databinding.FragmentEditWorkerBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
 import dev.goblingroup.uzworks.models.response.WorkerResponse
@@ -40,7 +39,6 @@ import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.EditWorkerViewModel
 import dev.goblingroup.uzworks.vm.JobCategoryViewModel
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class EditWorkerFragment : Fragment() {
@@ -59,9 +57,14 @@ class EditWorkerFragment : Fragment() {
     private lateinit var birthdayGenderExplanationDialog: AlertDialog
     private lateinit var birthdayGenderExplanationBinding: BirthdayGenderExplanationBinding
 
-    private lateinit var regionAdapter: ArrayAdapter<String>
-    private lateinit var districtAdapter: ArrayAdapter<String>
-    private lateinit var categoryAdapter: ArrayAdapter<String>
+    private lateinit var regionDialog: BottomSheetDialog
+    private lateinit var regionDialogItemBinding: BottomSelectionBinding
+
+    private lateinit var districtDialog: BottomSheetDialog
+    private lateinit var districtDialogItemBinding: BottomSelectionBinding
+
+    private lateinit var categoryDialog: BottomSheetDialog
+    private lateinit var categoryDialogItemBinding: BottomSelectionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,7 +78,7 @@ class EditWorkerFragment : Fragment() {
         binding.apply {
             editWorkerViewModel.workerId = arguments?.getString("announcement_id").toString()
 
-            back.setOnClickListener {
+            toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
 
@@ -95,7 +98,151 @@ class EditWorkerFragment : Fragment() {
                 }
             }
 
-            topTv.isSelected = true
+            region.setOnClickListener {
+                showRegion()
+            }
+
+            district.setOnClickListener {
+                showDistrict()
+            }
+
+            category.setOnClickListener {
+                showCategory()
+            }
+        }
+    }
+
+    private fun showRegion() {
+        try {
+            regionDialog.show()
+        } catch (e: Exception) {
+            regionDialog = BottomSheetDialog(requireContext())
+            regionDialogItemBinding = BottomSelectionBinding.inflate(layoutInflater)
+            regionDialog.setContentView(regionDialogItemBinding.root)
+            regionDialog.show()
+        }
+        regionDialogItemBinding.apply {
+
+            addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "failed to load regions",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+
+                    is ApiStatus.Loading -> {
+                        progress.visibility = View.VISIBLE
+                    }
+
+                    is ApiStatus.Success -> {
+                        progress.visibility = View.GONE
+                        val regionAdapter = RegionAdapter(
+                            it.response!!
+                        ) { regionId, regionName ->
+                            if (regionName != binding.region.text.toString()) {
+                                binding.region.text = regionName
+                                editWorkerViewModel.regionId = regionId
+                                editWorkerViewModel.districtId = ""
+                                binding.district.text = resources.getString(R.string.select_region)
+                            }
+                            regionDialog.dismiss()
+                        }
+                        selectionRv.adapter = regionAdapter
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showDistrict() {
+        try {
+            districtDialog.show()
+        } catch (e: Exception) {
+            districtDialog = BottomSheetDialog(requireContext())
+            districtDialogItemBinding = BottomSelectionBinding.inflate(layoutInflater)
+            districtDialog.setContentView(districtDialogItemBinding.root)
+            districtDialog.show()
+        }
+        districtDialogItemBinding.apply {
+
+            addressViewModel.districtsByRegionId(editWorkerViewModel.regionId.toString())
+                .observe(viewLifecycleOwner) {
+                    when (it) {
+                        is ApiStatus.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "failed to load districts",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+
+                        is ApiStatus.Loading -> {
+                            progress.visibility = View.VISIBLE
+                            selectionRv.visibility = View.GONE
+                        }
+
+                        is ApiStatus.Success -> {
+                            progress.visibility = View.GONE
+                            selectionRv.visibility = View.VISIBLE
+                            val districtAdapter = DistrictAdapter(
+                                it.response!!
+                            ) { districtId, districtName ->
+                                binding.district.text = districtName
+                                binding.district.setBackgroundResource(R.drawable.enabled_tv_background)
+                                editWorkerViewModel.districtId = districtId
+                                districtDialog.dismiss()
+                            }
+                            selectionRv.adapter = districtAdapter
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun showCategory() {
+        try {
+            categoryDialog.show()
+        } catch (e: Exception) {
+            categoryDialog = BottomSheetDialog(requireContext())
+            categoryDialogItemBinding = BottomSelectionBinding.inflate(layoutInflater)
+            categoryDialog.setContentView(categoryDialogItemBinding.root)
+            categoryDialog.show()
+        }
+        categoryDialogItemBinding.apply {
+            jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiStatus.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "failed to load categories",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    is ApiStatus.Loading -> {
+                        progress.visibility = View.VISIBLE
+                    }
+
+                    is ApiStatus.Success -> {
+                        progress.visibility = View.GONE
+                        Log.d("TAG", "showCategory: ${it.response!!.size}")
+                        Log.d("TAG", "showCategory: ${it.response.map { it.title }}")
+                        val categoryAdapter =
+                            CategoryAdapter(it.response) { categoryId, categoryName ->
+                                binding.category.text = categoryName
+                                binding.category.setBackgroundResource(R.drawable.enabled_tv_background)
+                                editWorkerViewModel.categoryId = categoryId
+                                categoryDialog.dismiss()
+                            }
+                        selectionRv.adapter = categoryAdapter
+                    }
+                }
+            }
         }
     }
 
@@ -126,7 +273,7 @@ class EditWorkerFragment : Fragment() {
             workingTimeEt.editText?.setText(response.workingTime)
             workingScheduleEt.editText?.setText(response.workingSchedule)
             tgUserNameEt.editText?.setText(response.tgUserName.formatTgUsername())
-            phoneNumberEt.editText?.setText(editWorkerViewModel.phoneNumber.convertPhoneNumber())
+            phoneNumber.text = editWorkerViewModel.phoneNumber.convertPhoneNumber()
             deadlineEt.editText?.setText(response.deadline.isoToDmy())
             if (editWorkerViewModel.birthdate != DEFAULT_BIRTHDAY)
                 birthdayEt.editText?.setText(response.birthDate.isoToDmy())
@@ -141,74 +288,12 @@ class EditWorkerFragment : Fragment() {
                     }
                 }
             }
-            regionChoice.setText(response.regionName)
-            districtChoice.setText(response.districtName)
-            jobCategoryChoice.setText(response.categoryName)
-
-            regionChoice.setOnClickListener {
-                addressViewModel.regionLiveData.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "failed to load regions",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        is ApiStatus.Loading -> {
-                            regionProgress.visibility = View.VISIBLE
-                            regionLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                        }
-                        is ApiStatus.Success -> {
-                            regionProgress.visibility = View.GONE
-                            regionLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                            setRegions(it.response!!)
-                        }
-                    }
-                }
-            }
-
-            jobCategoryChoice.setOnClickListener {
-                jobCategoryViewModel.jobCategoriesLiveData.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "failed to load categories",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        is ApiStatus.Loading -> {
-                            categoryProgress.visibility = View.VISIBLE
-                            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                        }
-                        is ApiStatus.Success -> {
-                            categoryProgress.visibility = View.GONE
-                            jobCategoryLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                            setJobCategories(it.response!!)
-                        }
-                    }
-                }
-            }
-
-            districtChoice.setOnItemClickListener { parent, view, position, id ->
-                if (districtLayout.isErrorEnabled) {
-                    districtLayout.isErrorEnabled = false
-                }
-                editWorkerViewModel.districtId = addressViewModel.districtsByRegionName(regionChoice.text.toString())[position].id
-            }
-
-            jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
-                if (jobCategoryLayout.isErrorEnabled) {
-                    jobCategoryLayout.isErrorEnabled = false
-                }
-                editWorkerViewModel.categoryId =
-                    jobCategoryViewModel.listJobCategories()[position].id
-            }
+            region.text = response.district.region.name
+            district.text = response.district.name
+            category.text = response.jobCategory.title
 
             editWorkerViewModel.controlInput(
                 requireActivity(),
-                topTv,
                 titleEt,
                 salaryEt,
                 workingTimeEt,
@@ -217,23 +302,17 @@ class EditWorkerFragment : Fragment() {
                 deadlineEt
             )
 
-            phoneNumberEt.editText?.setOnFocusChangeListener { view, hasFocus ->
-                if (hasFocus) {
-                    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                        phoneNumberEt.windowToken,
-                        0
-                    )
-                    val clipboardManager =
-                        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clipData =
-                        ClipData.newPlainText("label", phoneNumberEt.editText?.text.toString())
-                    clipboardManager.setPrimaryClip(clipData)
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().resources.getString(R.string.phone_number_copied),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            phoneNumber.setOnClickListener {
+                val clipboardManager =
+                    requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData =
+                    ClipData.newPlainText("label", phoneNumber.text.toString())
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(
+                    requireContext(),
+                    requireContext().resources.getString(R.string.phone_number_copied),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             genderLayout.root.setOnClickListener {
@@ -256,45 +335,6 @@ class EditWorkerFragment : Fragment() {
             }
         }
     }
-
-    private fun setJobCategories(jobCategoryList: List<JobCategoryEntity>) {
-        binding.apply {
-            categoryAdapter =
-                ArrayAdapter(
-                    requireContext(),
-                    androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                    jobCategoryList.map { it.title }
-                )
-            jobCategoryChoice.threshold = 1
-            jobCategoryChoice.setAdapter(categoryAdapter)
-            jobCategoryChoice.setOnItemClickListener { parent, view, position, id ->
-                if (jobCategoryLayout.isErrorEnabled) {
-                    jobCategoryLayout.isErrorEnabled = false
-                }
-                editWorkerViewModel.categoryId = jobCategoryList[position].id
-            }
-        }
-    }
-
-    private fun setRegions(response: List<RegionEntity>) {
-        binding.apply {
-            regionAdapter = ArrayAdapter(
-                requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                response.map { it.name }
-            )
-            regionChoice.threshold = 1
-            regionChoice.setAdapter(regionAdapter)
-
-            regionChoice.setOnItemClickListener { parent, view, position, id ->
-                districtChoice.text.clear()
-                districtChoice.hint = getString(R.string.select_district)
-                setDistricts(response[position].id)
-            }
-        }
-    }
-
-
 
     private fun birthdayGenderExplanation(explanationMessage: String) {
         try {
@@ -326,8 +366,8 @@ class EditWorkerFragment : Fragment() {
                 tgUserNameEt = tgUserNameEt,
                 deadlineEt = deadlineEt,
                 birthdayEt = birthdayEt,
-                districtLayout = districtLayout,
-                categoryLayout = jobCategoryLayout
+                district = district,
+                category = categoryTv
             ).observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiStatus.Error -> {
@@ -347,38 +387,6 @@ class EditWorkerFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                         findNavController().popBackStack()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setDistricts(regionId: String) {
-        binding.apply {
-            lifecycleScope.launch {
-                addressViewModel.districtsByRegionId(regionId).observe(viewLifecycleOwner) {
-                    when (it) {
-                        is ApiStatus.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "failed to load districts",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        is ApiStatus.Loading -> {
-                            districtProgress.visibility = View.VISIBLE
-                            districtLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                        }
-                        is ApiStatus.Success -> {
-                            districtProgress.visibility = View.GONE
-                            districtLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                            districtAdapter = ArrayAdapter(
-                                requireContext(),
-                                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                                it.response!!.map { it.name }
-                            )
-                            districtChoice.setAdapter(districtAdapter)
-                        }
                     }
                 }
             }

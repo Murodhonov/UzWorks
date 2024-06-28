@@ -15,8 +15,9 @@ import dev.goblingroup.uzworks.utils.getImage
 fun JobResponse.mapToEntity(position: Int): AnnouncementEntity {
     return AnnouncementEntity(
         id = id,
-        categoryName = categoryName,
-        districtName = districtName,
+        categoryName = jobCategory.title,
+        districtName = district.name,
+        regionName = district.region.name,
         gender = gender,
         salary = salary,
         title = title,
@@ -29,9 +30,9 @@ fun JobResponse.mapToEntity(position: Int): AnnouncementEntity {
 fun WorkerResponse.mapToEntity(): AnnouncementEntity {
     return AnnouncementEntity(
         id = id,
-        categoryName = categoryName,
-        districtName = districtName,
-        regionName = regionName,
+        categoryName = jobCategory.title,
+        districtName = district.name,
+        regionName = district.region.name,
         gender = gender,
         salary = salary,
         title = title,

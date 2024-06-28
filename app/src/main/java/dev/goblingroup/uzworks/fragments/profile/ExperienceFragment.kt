@@ -33,8 +33,6 @@ import dev.goblingroup.uzworks.vm.ExperienceViewModel
 @AndroidEntryPoint
 class ExperienceFragment : Fragment() {
 
-    private val TAG = "ExperienceFragment"
-
     private var _binding: FragmentExperienceBinding? = null
     private val binding get() = _binding!!
 
@@ -61,12 +59,14 @@ class ExperienceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            backBtn.setOnClickListener {
+            toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
 
-            addExperienceBtn.setOnClickListener {
-                addExperience()
+            toolbar.setOnMenuItemClickListener {
+                if (it.itemId == R.id.add_experience)
+                    addExperience()
+                true
             }
 
             experienceViewModel.experienceLiveData.observe(viewLifecycleOwner) {

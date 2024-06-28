@@ -59,15 +59,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        when (navController.currentDestination?.id) {
-            R.id.selectJobLocationFragment -> {}
-            else -> {
-                super.onBackPressed()
-            }
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(connectivityReceiver)

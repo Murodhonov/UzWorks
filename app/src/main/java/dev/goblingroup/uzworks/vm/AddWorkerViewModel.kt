@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
@@ -19,7 +20,6 @@ import dev.goblingroup.uzworks.R
 import dev.goblingroup.uzworks.models.request.WorkerCreateRequest
 import dev.goblingroup.uzworks.models.response.WorkerCreateResponse
 import dev.goblingroup.uzworks.repository.AnnouncementRepository
-import dev.goblingroup.uzworks.repository.ProfileRepository
 import dev.goblingroup.uzworks.repository.SecurityRepository
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.DateEnum
@@ -43,6 +43,7 @@ class AddWorkerViewModel @Inject constructor(
 
     private val addLiveData = MutableLiveData<ApiStatus<WorkerCreateResponse>>(ApiStatus.Loading())
 
+    var regionId = ""
     var districtId = ""
     var jobCategoryId = ""
     val gender = securityRepository.getGender()
@@ -93,7 +94,6 @@ class AddWorkerViewModel @Inject constructor(
                                 fragmentActivity.resources.getString(R.string.invalid_deadline),
                                 Toast.LENGTH_SHORT
                             ).show()
-                            deadlineEt.isErrorEnabled = true
                         } else {
                             val formatter = SimpleDateFormat(
                                 "dd.MM.yyyy", Locale.getDefault()
@@ -208,8 +208,8 @@ class AddWorkerViewModel @Inject constructor(
         workingTimeEt: TextInputLayout,
         workingScheduleEt: TextInputLayout,
         tgUserNameEt: TextInputLayout,
-        districtLayout: TextInputLayout,
-        jobCategoryLayout: TextInputLayout,
+        district: TextView,
+        category: TextView,
     ): Boolean {
         if (deadlineEt.editText?.text.toString().isEmpty()) {
             deadlineEt.error = resources.getString(R.string.deadline_error)
@@ -236,12 +236,10 @@ class AddWorkerViewModel @Inject constructor(
             tgUserNameEt.isErrorEnabled = true
         }
         if (districtId.isEmpty()) {
-            districtLayout.error = resources.getString(R.string.district_error)
-            districtLayout.isErrorEnabled = true
+            district.setBackgroundResource(R.drawable.disabled_tv_background)
         }
         if (jobCategoryId.isEmpty()) {
-            jobCategoryLayout.error = resources.getString(R.string.job_category_error)
-            jobCategoryLayout.isErrorEnabled = true
+            category.setBackgroundResource(R.drawable.disabled_tv_background)
         }
         return !deadlineEt.isErrorEnabled &&
                 !titleEt.isErrorEnabled &&
@@ -249,7 +247,7 @@ class AddWorkerViewModel @Inject constructor(
                 !workingTimeEt.isErrorEnabled &&
                 !workingScheduleEt.isErrorEnabled &&
                 !tgUserNameEt.isErrorEnabled &&
-                !jobCategoryLayout.isErrorEnabled &&
-                !districtLayout.isErrorEnabled
+                jobCategoryId.isNotEmpty() &&
+                districtId.isNotEmpty()
     }
 }

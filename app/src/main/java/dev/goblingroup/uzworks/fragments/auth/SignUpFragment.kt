@@ -110,7 +110,7 @@ class SignUpFragment : Fragment() {
     private fun signUp() {
         binding.apply {
             lifecycleScope.launch {
-                val (firstName, lastName) = fullNameEt.splitFullName()
+                val (firstName, lastName) = fullNameEt.editText?.text.toString().splitFullName()
                 sharedSignUpViewModel.signup(
                     signupRequest = SignUpRequest(
                         confirmPassword = confirmPasswordEt.editText?.text.toString(),

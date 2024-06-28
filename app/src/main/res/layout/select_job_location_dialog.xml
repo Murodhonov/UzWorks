@@ -17,6 +17,7 @@
         android:id="@+id/cancel_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:background="@drawable/enabled_button_background"
@@ -30,6 +31,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/set_location_btn"
         android:layout_width="0dp"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:background="@drawable/enabled_button_background"
@@ -42,6 +44,7 @@
     <ImageView
         android:id="@+id/find_me_btn"
         android:layout_width="0dp"
+        android:visibility="gone"
         android:layout_height="0dp"
         android:contentDescription="@string/content_description"
         android:padding="@dimen/_5sdp"

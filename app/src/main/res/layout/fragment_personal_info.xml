@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/_15sdp">
 
-        <Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:titleTextColor="@color/black_blue"
-            android:navigationIcon="@drawable/ic_left_arrow"
+            app:navigationIcon="@drawable/ic_left_arrow"
+            app:title="@string/personal_information"
             app:layout_constraintTop_toTopOf="parent"
-            android:title="@string/personal_information"/>
+            app:titleTextColor="@color/black_blue" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/first_name_et"
@@ -81,28 +81,18 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phone_number_et"
+        <TextView
+            android:id="@+id/phone_number"
             android:layout_width="match_parent"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            android:hint="@string/phone_number"
-            app:endIconDrawable="@drawable/ic_copy"
-            app:endIconMode="custom"
-            app:endIconTint="@color/black_blue"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:theme="@style/TextInputEditTextStyle"
-            app:errorEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/email_et">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:editable="false"
-                android:inputType="none"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            android:background="@drawable/enabled_tv_background"
+            android:fontFamily="@font/dm_sans_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/_10sdp"
+            app:drawableEndCompat="@drawable/ic_copy"
+            app:layout_constraintTop_toBottomOf="@id/email_et" />
 
         <include
             android:id="@+id/gender_layout"
@@ -111,116 +101,49 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_12sdp"
-            app:layout_constraintTop_toBottomOf="@id/phone_number_et" />
+            app:layout_constraintTop_toBottomOf="@id/phone_number" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/birthday_et"
+        <TextView
+            android:id="@+id/birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            android:hint="@string/birth_date"
-            app:endIconDrawable="@drawable/ic_calendar"
-            app:endIconMode="custom"
-            app:endIconTint="@color/black_blue"
+            android:background="@drawable/enabled_tv_background"
+            android:fontFamily="@font/dm_sans_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/_10sdp"
             android:layout_marginHorizontal="@dimen/_20sdp"
-            app:errorEnabled="false"
-            android:theme="@style/TextInputEditTextStyle"
-            app:layout_constraintTop_toBottomOf="@id/gender_layout">
+            android:text="@string/deadline"
+            app:drawableEndCompat="@drawable/ic_calendar"
+            app:layout_constraintTop_toBottomOf="@id/gender_layout" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:inputType="none"
-                android:editable="false"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/region_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        <TextView
+            android:id="@+id/region"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:background="@drawable/create_worker_edit_text_background"
-            android:backgroundTint="@android:color/transparent"
-            android:theme="@style/TextInputEditTextStyle"
-            app:endIconMode="dropdown_menu"
-            app:endIconTint="@color/black_blue"
-            app:errorEnabled="false"
-            app:hintEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/birthday_et">
+            android:background="@drawable/enabled_tv_background"
+            android:fontFamily="@font/dm_sans_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/select_region"
+            app:drawableEndCompat="@drawable/ic_down_arrow"
+            app:layout_constraintTop_toBottomOf="@id/birthday" />
 
-            <AutoCompleteTextView
-                android:id="@+id/region_choice"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/create_worker_edit_text_background"
-                android:ellipsize="end"
-                android:hint="@string/select_region"
-                android:inputType="none"
-                android:maxLines="1"
-                android:textColor="@color/black_blue"
-                android:textColorHint="@color/text_color" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ProgressBar
-            android:id="@+id/region_progress"
-            android:visibility="gone"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/region_layout"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHorizontal_bias="0.97"
-            app:layout_constraintLeft_toLeftOf="@id/region_layout"
-            app:layout_constraintRight_toRightOf="@id/region_layout"
-            app:layout_constraintTop_toTopOf="@id/region_layout"
-            app:layout_constraintWidth_percent="0.07" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/district_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        <TextView
+            android:id="@+id/district"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:background="@drawable/create_worker_edit_text_background"
-            android:backgroundTint="@android:color/transparent"
-            android:theme="@style/TextInputEditTextStyle"
-            app:endIconMode="dropdown_menu"
-            app:endIconTint="@color/black_blue"
-            app:errorEnabled="false"
-            app:hintEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/region_layout">
-
-            <AutoCompleteTextView
-                android:id="@+id/district_choice"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/create_worker_edit_text_background"
-                android:ellipsize="end"
-                android:hint="@string/select_region_first"
-                android:inputType="none"
-                android:maxLines="1"
-                android:textColor="@color/black_blue"
-                android:textColorHint="@color/text_color"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ProgressBar
-            android:id="@+id/district_progress"
-            android:visibility="gone"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/district_layout"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHorizontal_bias="0.97"
-            app:layout_constraintLeft_toLeftOf="@id/district_layout"
-            app:layout_constraintRight_toRightOf="@id/district_layout"
-            app:layout_constraintTop_toTopOf="@id/district_layout"
-            app:layout_constraintWidth_percent="0.07" />
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:background="@drawable/enabled_tv_background"
+            android:fontFamily="@font/dm_sans_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/select_region_first"
+            app:drawableEndCompat="@drawable/ic_down_arrow"
+            app:layout_constraintTop_toBottomOf="@id/region" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/save_btn"
@@ -234,7 +157,7 @@
             android:text="@string/save"
             android:theme="@style/ButtonStyle"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/district_layout" />
+            app:layout_constraintTop_toBottomOf="@id/district" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancel_btn"
@@ -249,7 +172,7 @@
             android:text="@string/cancel"
             android:theme="@style/ButtonStyle"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/district_layout" />
+            app:layout_constraintTop_toBottomOf="@id/district" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

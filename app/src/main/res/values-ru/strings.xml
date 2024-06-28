@@ -209,8 +209,10 @@
     <string name="phone_number_copied">Номер телефона скопирован</string>
     <string name="update_user_failed">Что-то пошло не так, повторите попытку позже</string>
     <string name="invalid_deadline">Крайний срок не может быть раньше сегодняшнего дня</string>
-    <string name="working_time_helper">Например: Я могу работать с 08:00 до 18:00</string>
-    <string name="working_schedule_helper">Например: Я могу работать с понедельника по пятницу</string>
+    <string name="worker_working_time_helper">Например: Я могу работать с 08:00 до 18:00</string>
+    <string name="worker_working_schedule_helper">Например: Я могу работать с понедельника по пятницу</string>
+    <string name="job_working_time_helper">Например: Смены доступны с 08:00 до 18:00</string>
+    <string name="job_working_schedule_helper">Например: Рабочие дни с понедельника по пятницу.</string>
     <string name="load_experience_failed">Что-то пошло не так при загрузке опыта</string>
     <string name="invalid_start_date">Вы можете выбрать только один из дней до вчерашнего дня</string>
     <string name="invalid_end_date">Вы можете выбрать только один из дней до сегодняшнего дня</string>
@@ -247,4 +249,6 @@
     <string name="deny">Отрицать</string>
     <string name="pending_explanation">Этот значок означает, что ваше объявление отправлено и в настоящее время ожидает одобрения администратора. После одобрения он будет виден всем пользователям. Пожалуйста, проявите терпение, так как этот процесс гарантирует, что все объявления соответствуют правилам и стандартам нашего сообщества</string>
     <string name="done_explanation">Этот значок означает, что ваше объявление было рассмотрено и одобрено администратором. Теперь он виден всем пользователям. Спасибо за вклад в наше сообщество</string>
+    <string name="open_map_failed">Что-то пошло не так при открытии карты. Нажмите на изображение карты ниже, чтобы открыть ее</string>
+    <string name="could_not_open_map">Не удалось открыть карту. Повторите попытку позже</string>
 </resources>

@@ -209,8 +209,10 @@ Sizga ko\'rsatiladigan ma\'lumotlar tanlagan rolingizga qarab aniqlanadi</string
     <string name="phone_number_copied">Telefon raqami nusxalandi</string>
     <string name="update_user_failed">Nimadir xato ketdi, keyinroq qayta urining</string>
     <string name="invalid_deadline">Muddati bugundan oldin bo\'lishi mumkin emas</string>
-    <string name="working_time_helper">Masalan: Men ertalab 08:00 dan 18:00 gacha ishlay olaman</string>
-    <string name="working_schedule_helper">Masalan: Dushanbadan jumagacha ishlay olaman</string>
+    <string name="worker_working_time_helper">Masalan: Men ertalab 08:00 dan 18:00 gacha ishlay olaman</string>
+    <string name="worker_working_schedule_helper">Masalan: Dushanbadan jumagacha ishlay olaman</string>
+    <string name="job_working_time_helper">Masalan: 9:00 dan 17:00 gacha smenalar mavjud</string>
+    <string name="job_working_schedule_helper">Masalan: Ish kunlari dushanbadan jumagacha</string>
     <string name="load_experience_failed">Tajribani yuklashda xatolik yuz berdi</string>
     <string name="invalid_start_date">Siz faqat kechagacha bo\'lgan kunlardan birini tanlashingiz mumkin</string>
     <string name="invalid_end_date">Siz faqat bugungacha bo\'lgan kunlardan birini tanlashingiz mumkin</string>
@@ -247,4 +249,6 @@ Siz tanlagan koordinatalarni faqat "Tayyor" tugmasini bosganingizdan keyin saqla
     <string name="deny">Rad etish</string>
     <string name="pending_explanation">Bu belgi sizning e\'loningiz yuborilganligini va hozirda administratordan ma\'qullashni kutayotganini bildiradi. Tasdiqlangandan so\'ng, u barcha foydalanuvchilarga ko\'rinadi. Iltimos, sabr qiling, chunki bu jarayon barcha e\'lonlar bizning hamjamiyat qoidalari va standartlarimizga mos kelishini ta\'minlaydi</string>
     <string name="done_explanation">Ushbu belgi sizning e\'loningiz administrator tomonidan ko\'rib chiqilgan va ma\'qullanganligini bildiradi. Endi u barcha foydalanuvchilar uchun ko\'rinadi. Jamiyatimizga hissa qo\'shganingiz uchun tashakkur</string>
+    <string name="open_map_failed">Xaritani ochishda nimadir xatolik yuz berdi, uni ochish uchun quyidagi xarita rasmini bosing</string>
+    <string name="could_not_open_map">Xaritani ochib bo\'lmadi, keyinroq qayta urinib ko\'ring</string>
 </resources>

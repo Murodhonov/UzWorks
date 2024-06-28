@@ -47,47 +47,17 @@ class AddJobViewModel @Inject constructor(
     private val createLiveData =
         MutableLiveData<ApiStatus<JobCreateResponse>>(ApiStatus.Loading())
 
-    private val _title = MutableLiveData("")
-    val title get() = _title
-
-    private val _salary = MutableLiveData(0)
-    val salary get() = _salary
-
     private val _gender = MutableLiveData(GenderEnum.UNKNOWN.code)
     val gender get() = _gender
-
-    private val _workingTime = MutableLiveData("")
-    val workingTime get() = _workingTime
-
-    private val _workingSchedule = MutableLiveData("")
-    val workingSchedule get() = _workingSchedule
-
-    private val _deadline = MutableLiveData("")
-    val deadline get() = _deadline
-
-    private val _tgUserName = MutableLiveData("")
-    val tgUserName get() = _tgUserName
 
     private val _phoneNumber = MutableLiveData(securityRepository.getPhoneNumber())
     val phoneNumber get() = _phoneNumber
 
-    private val _benefit = MutableLiveData("")
-    val benefit get() = _benefit
-
-    private val _requirement = MutableLiveData("")
-    val requirement get() = _requirement
-
-    private val _minAge = MutableLiveData(0)
-    val minAge get() = _minAge
-
-    private val _maxAge = MutableLiveData(0)
-    val maxAge get() = _maxAge
-
-    private val _latitude = MutableLiveData(0.0)
+    private val _latitude = MutableLiveData<Double?>(null)
 
     val latitude get() = _latitude
 
-    private val _longitude = MutableLiveData(0.0)
+    private val _longitude = MutableLiveData<Double?>(null)
 
     val longitude get() = _longitude
 
@@ -99,15 +69,6 @@ class AddJobViewModel @Inject constructor(
 
     private val _regionId = MutableLiveData("")
     val regionId get() = _regionId
-
-    private val _regionName = MutableLiveData("")
-    val regionName get() = _regionName
-
-    private val _districtName = MutableLiveData("")
-    val districtName get() = _districtName
-
-    private val _categoryName = MutableLiveData("")
-    val categoryName get() = _categoryName
 
     fun createJob(jobCreateRequest: JobCreateRequest): LiveData<ApiStatus<JobCreateResponse>> {
         viewModelScope.launch {
@@ -130,7 +91,7 @@ class AddJobViewModel @Inject constructor(
     @SuppressLint("ClickableViewAccessibility")
     fun controlInput(
         context: Context,
-        deadline: TextView,
+        deadlineEt: TextInputLayout,
         benefitEt: TextInputLayout,
         requirementEt: TextInputLayout,
         minAgeEt: TextInputLayout,
@@ -142,41 +103,46 @@ class AddJobViewModel @Inject constructor(
         workingTimeEt: TextInputLayout,
         workingScheduleEt: TextInputLayout
     ) {
+        deadlineEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                val datePickerDialog = DatePickerDialog(
+                    context,
+                    R.style.DatePickerDialogTheme,
+                    { _, year, month, dayOfMonth ->
+                        val selectedCalendar = Calendar.getInstance().apply {
+                            set(year, month, dayOfMonth)
+                        }
 
-        deadline.setOnClickListener {
-            val datePickerDialog = DatePickerDialog(
-                context,
-                R.style.DatePickerDialogTheme,
-                { _, year, month, dayOfMonth ->
-                    val selectedCalendar = Calendar.getInstance().apply {
-                        set(year, month, dayOfMonth)
-                    }
+                        val currentCalendar = Calendar.getInstance()
 
-                    val currentCalendar = Calendar.getInstance()
+                        if (selectedCalendar.before(currentCalendar)) {
+                            Toast.makeText(
+                                context,
+                                context.resources.getString(R.string.invalid_deadline),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            val formatter = SimpleDateFormat(
+                                "dd.MM.yyyy", Locale.getDefault()
+                            )
+                            deadlineEt.isErrorEnabled = false
+                            deadlineEt.editText?.setText(formatter.format(selectedCalendar.time))
+                        }
+                    },
+                    deadlineEt.editText?.text.toString()
+                        .extractDateValue(DateEnum.YEAR.dateLabel),
+                    deadlineEt.editText?.text.toString()
+                        .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
+                    deadlineEt.editText?.text.toString()
+                        .extractDateValue(DateEnum.DATE.dateLabel)
+                )
 
-                    if (selectedCalendar.before(currentCalendar)) {
-                        Toast.makeText(
-                            context,
-                            context.resources.getString(R.string.invalid_deadline),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        val formatter = SimpleDateFormat(
-                            "dd.MM.yyyy", Locale.getDefault()
-                        )
-                        deadline.setBackgroundResource(R.drawable.enabled_tv_background)
-                        deadline.text = formatter.format(selectedCalendar.time)
-                    }
-                },
-                deadline.text.toString()
-                    .extractDateValue(DateEnum.YEAR.dateLabel),
-                deadline.text.toString()
-                    .extractDateValue(DateEnum.MONTH.dateLabel) - 1,
-                deadline.text.toString()
-                    .extractDateValue(DateEnum.DATE.dateLabel)
-            )
+                datePickerDialog.show()
 
-            datePickerDialog.show()
+                datePickerDialog.setOnDismissListener {
+                    deadlineEt.clearFocus()
+                }
+            }
         }
 
         minAgeEt.editText?.addTextChangedListener(object : TextWatcher {
@@ -347,11 +313,6 @@ class AddJobViewModel @Inject constructor(
         }
     }
 
-    fun setBenefit(value: String) {
-        _benefit.value = value
-    }
-
-
     fun setLatitude(value: Double) {
         _latitude.value = value
     }
@@ -360,57 +321,9 @@ class AddJobViewModel @Inject constructor(
         _longitude.value = value
     }
 
-    fun setDeadline(value: String) {
-        _deadline.value = value
-    }
-
-    fun setDistrictName(value: String) {
-        _districtName.value = value
-    }
-
-    fun setRegionName(value: String) {
-        _regionName.value = value
-    }
-
-    fun setCategoryName(value: String) {
-        _categoryName.value = value
-    }
-
-    fun setMaxAge(value: Int) {
-        _maxAge.value = value
-    }
-
-    fun setMinAge(value: Int) {
-        _minAge.value = value
-    }
-
-    fun setRequirement(value: String) {
-        _requirement.value = value
-    }
-
-    fun setSalary(value: Int) {
-        _salary.value = value
-    }
-
-    fun setTgUsername(value: String) {
-        _tgUserName.value = value
-    }
-
-    fun setTitle(value: String) {
-        _title.value = value
-    }
-
-    fun setWorkingSchedule(value: String) {
-        _workingSchedule.value = value
-    }
-
-    fun setWorkingTime(value: String) {
-        _workingTime.value = value
-    }
-
     fun isFormValid(
         context: Context,
-        deadlineInput: TextView,
+        deadlineEt: TextInputLayout,
         titleEt: TextInputLayout,
         salaryEt: TextInputLayout,
         workingTimeEt: TextInputLayout,
@@ -423,9 +336,9 @@ class AddJobViewModel @Inject constructor(
         district: TextView,
         category: TextView
     ): Boolean {
-        if (deadlineInput.text.toString() == context.resources.getString(R.string.deadline)) {
-            deadlineInput.setBackgroundResource(R.drawable.disabled_tv_background)
-            deadlineInput.error = context.resources.getString(R.string.deadline_error)
+        if (deadlineEt.editText?.text.toString().isEmpty()) {
+            deadlineEt.isErrorEnabled = true
+            deadlineEt.error = context.resources.getString(R.string.deadline_error)
         }
         if (titleEt.editText?.text.toString().isEmpty()) {
             titleEt.isErrorEnabled = true
@@ -471,10 +384,10 @@ class AddJobViewModel @Inject constructor(
         if (categoryId.value?.isEmpty() == true) {
             category.setBackgroundResource(R.drawable.disabled_tv_background)
         }
-        if (latitude.value == 0.0 && longitude.value == 0.0) {
+        if (latitude.value == null && longitude.value == null) {
             Toast.makeText(context, context.getString(R.string.select_location), Toast.LENGTH_SHORT).show()
         }
-        return deadlineInput.text.toString() != context.resources.getString(R.string.deadline) &&
+        return !deadlineEt.isErrorEnabled &&
                 !titleEt.isErrorEnabled &&
                 !salaryEt.isErrorEnabled &&
                 !workingTimeEt.isErrorEnabled &&
@@ -485,27 +398,8 @@ class AddJobViewModel @Inject constructor(
                 !maxAgeEt.isErrorEnabled &&
                 districtId.value.toString().isNotEmpty() &&
                 categoryId.value.toString().isNotEmpty() &&
-                latitude.value != 0.0 &&
-                longitude.value != 0.0
+                latitude.value != null &&
+                longitude.value != null
     }
 
-    fun clearLiveData() {
-        _title.value = ""
-        _salary.value = 0
-        _gender.value = GenderEnum.UNKNOWN.code
-        _workingTime.value = ""
-        _workingSchedule.value = ""
-        _deadline.value = ""
-        _tgUserName.value = ""
-        _phoneNumber.value = securityRepository.getPhoneNumber() // Optionally reset to initial value
-        _benefit.value = ""
-        _requirement.value = ""
-        _minAge.value = 0
-        _maxAge.value = 0
-        _latitude.value = 0.0
-        _longitude.value = 0.0
-        _categoryId.value = ""
-        _districtId.value = ""
-        _regionId.value = ""
-    }
 }

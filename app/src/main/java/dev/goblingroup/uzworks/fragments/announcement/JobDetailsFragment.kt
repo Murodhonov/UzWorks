@@ -16,7 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -28,11 +27,12 @@ import dev.goblingroup.uzworks.models.response.JobResponse
 import dev.goblingroup.uzworks.utils.ConstValues.TAG
 import dev.goblingroup.uzworks.utils.GenderEnum
 import dev.goblingroup.uzworks.utils.LanguageEnum
+import dev.goblingroup.uzworks.utils.isoToDmy
 import dev.goblingroup.uzworks.vm.ApiStatus
 import dev.goblingroup.uzworks.vm.JobDetailsViewModel
 
 @AndroidEntryPoint
-class JobDetailsFragment : Fragment(), OnMapReadyCallback {
+class JobDetailsFragment : Fragment() {
 
     private var _binding: FragmentJobDetailsBinding? = null
 
@@ -58,9 +58,6 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            val mapFragment =
-                childFragmentManager.findFragmentById(R.id.job_details_map) as SupportMapFragment
-            mapFragment.getMapAsync(this@JobDetailsFragment)
             loadJob()
 
             backBtn.setOnClickListener {
@@ -107,7 +104,7 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
             jobCategoryTv.isSelected = true
 
             titleTv.text = jobResponse?.title
-            jobCategoryTv.text = jobResponse?.categoryName
+            jobCategoryTv.text = jobResponse?.jobCategory?.title
             genderTv.text =
                 when (jobResponse?.gender) {
                     GenderEnum.MALE.label -> {
@@ -126,7 +123,8 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
                         ""
                     }
                 }
-            addressTv.text = "${jobResponse?.regionName}, ${jobResponse?.districtName}"
+            addressTv.text =
+                "${jobResponse?.district?.region?.name}, ${jobResponse?.district?.name}"
             salaryTv.text = jobResponse?.salary.toString()
             workingTimeTv.text = jobResponse?.workingTime
             workingScheduleTv.text = jobResponse?.workingSchedule
@@ -148,7 +146,8 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
             requirementTv.text = jobResponse?.requirement
             latitude = jobResponse?.latitude ?: 0.0
             longitude = jobResponse?.longitude ?: 0.0
-            dateTv.text = jobDetailsViewModel.getTimeAgo(jobResponse?.createDate.toString(), resources)
+//            dateTv.text = jobDetailsViewModel.getTimeAgo(jobResponse?.createDate.toString(), resources)
+            dateTv.text = jobResponse?.createDate?.isoToDmy()
 
             contactTgBtn.setOnClickListener {
                 openLink("https://t.me/${jobResponse?.tgUserName}")
@@ -184,6 +183,43 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
             igLinkTv.setOnClickListener {
                 openLink("https://www.instagram.com/${jobResponse?.instagramLink}")
             }
+
+            try {
+                val mapFragment =
+                    childFragmentManager.findFragmentById(R.id.job_details_map) as SupportMapFragment
+                mapFragment.getMapAsync { map ->
+                    googleMap = map
+                    val latLng = LatLng(latitude, longitude)
+                    googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(latLng, 15f),
+                        1000,
+                        null
+                    )
+                    googleMap.addMarker(MarkerOptions().position(latLng))
+                    googleMap.setOnMapClickListener {
+                        val geoUri =
+                            Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude(${binding.titleTv.text})")
+                        val mapIntent = Intent(Intent.ACTION_VIEW, geoUri)
+                        mapIntent.setPackage("com.google.android.apps.maps")
+
+                        try {
+                            startActivity(mapIntent)
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                requireContext(),
+                                resources.getString(R.string.open_location_failed),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "setJobDetails: $e")
+                Log.e(TAG, "setJobDetails: ${e.message}")
+                Log.e(TAG, "setJobDetails: ${e.printStackTrace()}")
+                mapAddressTv.text = resources.getString(R.string.open_map_failed)
+                mapIv.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -215,29 +251,4 @@ class JobDetailsFragment : Fragment(), OnMapReadyCallback {
         _binding = null
     }
 
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-        val latLng = LatLng(latitude, longitude)
-        googleMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(latLng, 15f),
-            1000,
-            null
-        )
-        googleMap.addMarker(MarkerOptions().position(latLng))
-        googleMap.setOnMapClickListener {
-            val geoUri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude(${binding.titleTv.text})")
-            val mapIntent = Intent(Intent.ACTION_VIEW, geoUri)
-            mapIntent.setPackage("com.google.android.apps.maps")
-
-            try {
-                startActivity(mapIntent)
-            } catch (e: Exception) {
-                Toast.makeText(
-                    requireContext(),
-                    resources.getString(R.string.open_location_failed),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
 }

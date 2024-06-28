@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationServices
@@ -36,14 +35,14 @@ import dev.goblingroup.uzworks.adapter.RegionAdapter
 import dev.goblingroup.uzworks.databinding.BottomSelectionBinding
 import dev.goblingroup.uzworks.databinding.FragmentAddJobBinding
 import dev.goblingroup.uzworks.databinding.LoadingDialogItemBinding
+import dev.goblingroup.uzworks.databinding.MapFailedDialogBinding
 import dev.goblingroup.uzworks.databinding.SelectJobLocationDialogBinding
 import dev.goblingroup.uzworks.models.request.JobCreateRequest
 import dev.goblingroup.uzworks.utils.ConstValues
-import dev.goblingroup.uzworks.utils.GenderEnum
+import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LATITUDE
+import dev.goblingroup.uzworks.utils.ConstValues.DEFAULT_LONGITUDE
 import dev.goblingroup.uzworks.utils.convertPhoneNumber
 import dev.goblingroup.uzworks.utils.dmyToIso
-import dev.goblingroup.uzworks.utils.selectFemale
-import dev.goblingroup.uzworks.utils.selectMale
 import dev.goblingroup.uzworks.vm.AddJobViewModel
 import dev.goblingroup.uzworks.vm.AddressViewModel
 import dev.goblingroup.uzworks.vm.ApiStatus
@@ -55,7 +54,7 @@ class AddJobFragment : Fragment() {
     private var _binding: FragmentAddJobBinding? = null
     private val binding get() = _binding!!
 
-    private val addJobViewModel: AddJobViewModel by activityViewModels()
+    private val addJobViewModel: AddJobViewModel by viewModels()
 
     private val addressViewModel: AddressViewModel by viewModels()
     private val jobCategoryViewModel: JobCategoryViewModel by viewModels()
@@ -75,8 +74,12 @@ class AddJobFragment : Fragment() {
     private lateinit var categoryDialog: BottomSheetDialog
     private lateinit var categoryDialogItemBinding: BottomSelectionBinding
 
+    private lateinit var openMapFailedDialog: AlertDialog
+    private lateinit var mapFailedDialogBinding: MapFailedDialogBinding
+
     private var previousMarker: Marker? = null
     private lateinit var googleMap: GoogleMap
+    private var selectedLocation = LatLng(0.0, 0.0)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,7 +103,7 @@ class AddJobFragment : Fragment() {
 
             addJobViewModel.controlInput(
                 requireContext(),
-                deadline,
+                deadlineEt,
                 benefitEt,
                 requirementEt,
                 minAgeEt,
@@ -131,7 +134,7 @@ class AddJobFragment : Fragment() {
             saveBtn.setOnClickListener {
                 if (addJobViewModel.isFormValid(
                         requireContext(),
-                        deadline,
+                        deadlineEt,
                         titleEt,
                         salaryEt,
                         workingTimeEt,
@@ -151,12 +154,6 @@ class AddJobFragment : Fragment() {
 
             selectAddress.setOnClickListener {
                 showLocationDialog()
-                /*val bundle = Bundle()
-                bundle.putString(JOB_LOCATION_STATUS, JOB_ADDING)
-                findNavController().navigate(
-                    resId = R.id.action_addJobFragment_to_selectJobLocationFragment,
-                    args = bundle
-                )*/
             }
 
             region.setOnClickListener {
@@ -193,48 +190,57 @@ class AddJobFragment : Fragment() {
         }
 
         locationBinding.apply {
-            var selectedLocation =
+            selectedLocation =
                 LatLng(
-                    addJobViewModel.latitude.value ?: 0.0,
-                    addJobViewModel.longitude.value ?: 0.0
+                    addJobViewModel.latitude.value ?: DEFAULT_LATITUDE,
+                    addJobViewModel.longitude.value ?: DEFAULT_LONGITUDE
                 )
-            val mapFragment =
-                childFragmentManager.findFragmentById(R.id.select_job_map) as SupportMapFragment
-            mapFragment.getMapAsync { map ->
-                updateFindBtn()
-                cancelBtn.visibility = View.VISIBLE
-                setLocationBtn.visibility = View.VISIBLE
-                findMeBtn.visibility = View.VISIBLE
+            try {
+                val mapFragment =
+                    childFragmentManager.findFragmentById(R.id.select_job_map) as SupportMapFragment
+                mapFragment.getMapAsync { map ->
+                    updateFindBtn()
+                    cancelBtn.visibility = View.VISIBLE
+                    setLocationBtn.visibility = View.VISIBLE
+                    findMeBtn.visibility = View.VISIBLE
 
-                googleMap = map
+                    googleMap = map
 
-                previousMarker =
-                    googleMap.addMarker(MarkerOptions().position(selectedLocation))
-                googleMap.moveCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        selectedLocation,
-                        15f
+                    previousMarker =
+                        googleMap.addMarker(MarkerOptions().position(selectedLocation))
+                    googleMap.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            selectedLocation,
+                            15f
+                        )
                     )
-                )
 
-                googleMap.setOnMapClickListener {
-                    previousMarker?.remove()
-                    val newMarker = googleMap.addMarker(MarkerOptions().position(it))
-                    previousMarker = newMarker
-                    selectedLocation = it
+                    googleMap.setOnMapClickListener {
+                        previousMarker?.remove()
+                        val newMarker = googleMap.addMarker(MarkerOptions().position(it))
+                        previousMarker = newMarker
+                        selectedLocation = it
+                    }
                 }
+            } catch (e: Exception) {
+                openMapFailed()
             }
+
             cancelBtn.setOnClickListener {
                 locationDialog.dismiss()
             }
 
             setLocationBtn.setOnClickListener {
-                binding.apply {
-                    selectAddress.text = resources.getString(R.string.change_location)
+                if (selectedLocation.latitude != DEFAULT_LATITUDE && selectedLocation.longitude != DEFAULT_LONGITUDE) {
+                    binding.apply {
+                        selectAddress.text = resources.getString(R.string.change_location)
+                    }
+                    addJobViewModel.setLatitude(selectedLocation.latitude)
+                    addJobViewModel.setLongitude(selectedLocation.longitude)
+                    locationDialog.dismiss()
+                } else {
+                    locationDialog.dismiss()
                 }
-                addJobViewModel.setLatitude(selectedLocation.latitude)
-                addJobViewModel.setLongitude(selectedLocation.longitude)
-                locationDialog.dismiss()
             }
 
             locationDialog.setOnDismissListener {
@@ -251,20 +257,36 @@ class AddJobFragment : Fragment() {
         }
     }
 
+    private fun openMapFailed() {
+        try {
+            openMapFailedDialog.show()
+        } catch (e: Exception) {
+            openMapFailedDialog = AlertDialog.Builder(requireContext()).create()
+            mapFailedDialogBinding = MapFailedDialogBinding.inflate(layoutInflater)
+            openMapFailedDialog.setView(mapFailedDialogBinding.root)
+            openMapFailedDialog.setCancelable(false)
+            openMapFailedDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            openMapFailedDialog.show()
+        }
+        mapFailedDialogBinding.close.setOnClickListener {
+            openMapFailedDialog.dismiss()
+            locationDialog.dismiss()
+        }
+    }
+
     private fun findUser() {
         if (!checkLocationPermission())
             return
         LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation
             .addOnSuccessListener {
                 if (it != null) {
-                    addJobViewModel.setLatitude(it.latitude)
-                    addJobViewModel.setLongitude(it.longitude)
+                    selectedLocation = LatLng(it.latitude, it.longitude)
                     previousMarker?.remove()
                     val cameraUpdate =
                         CameraUpdateFactory.newLatLngZoom(
                             LatLng(
-                                addJobViewModel.latitude.value!!,
-                                addJobViewModel.longitude.value!!
+                                selectedLocation.latitude,
+                                selectedLocation.longitude
                             ), 15f
                         )
                     googleMap.animateCamera(cameraUpdate, 1000, null)
@@ -272,8 +294,8 @@ class AddJobFragment : Fragment() {
                         googleMap.addMarker(
                             MarkerOptions().position(
                                 LatLng(
-                                    addJobViewModel.latitude.value!!,
-                                    addJobViewModel.longitude.value!!
+                                    it.latitude,
+                                    it.longitude
                                 )
                             )
                         )
@@ -462,84 +484,13 @@ class AddJobFragment : Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        binding.apply {
-            addJobViewModel.setTitle(titleEt.editText?.text.toString())
-            addJobViewModel.setSalary(
-                if (salaryEt.editText?.text.toString()
-                        .isNotEmpty()
-                ) salaryEt.editText?.text.toString().filter { !it.isWhitespace() }.toInt() else 0
-            )
-            addJobViewModel.setWorkingTime(workingTimeEt.editText?.text.toString())
-            addJobViewModel.setWorkingSchedule(workingScheduleEt.editText?.text.toString())
-            addJobViewModel.setDeadline(deadline.text.toString())
-            addJobViewModel.setTgUsername(tgUserNameEt.editText?.text.toString())
-            addJobViewModel.setBenefit(benefitEt.editText?.text.toString())
-            addJobViewModel.setRequirement(requirementEt.editText?.text.toString())
-            addJobViewModel.setMinAge(
-                if (minAgeEt.editText?.text.toString()
-                        .isNotEmpty()
-                ) minAgeEt.editText?.text.toString().toInt() else 0
-            )
-            addJobViewModel.setMaxAge(
-                if (maxAgeEt.editText?.text.toString()
-                        .isNotEmpty()
-                ) maxAgeEt.editText?.text.toString().toInt() else 0
-            )
-            addJobViewModel.setRegionName(region.text.toString())
-            addJobViewModel.setDistrictName(district.text.toString())
-            addJobViewModel.setCategoryName(category.text.toString())
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.apply {
-            titleEt.editText?.setText(addJobViewModel.title.value)
-            if (addJobViewModel.salary.value == 0) {
-                salaryEt.editText?.setText("")
-            } else salaryEt.editText?.setText(addJobViewModel.salary.value.toString())
-            when (addJobViewModel.gender.value) {
-                GenderEnum.MALE.code -> genderLayout.selectMale(resources)
-                GenderEnum.FEMALE.code -> genderLayout.selectFemale(resources)
-            }
-            workingTimeEt.editText?.setText(addJobViewModel.workingTime.value)
-            workingScheduleEt.editText?.setText(addJobViewModel.workingSchedule.value)
-            tgUserNameEt.editText?.setText(addJobViewModel.tgUserName.value)
-            benefitEt.editText?.setText(addJobViewModel.benefit.value)
-            requirementEt.editText?.setText(addJobViewModel.requirement.value)
-            if (addJobViewModel.minAge.value == 0) {
-                minAgeEt.editText?.setText("")
-            } else minAgeEt.editText?.setText(addJobViewModel.minAge.value.toString())
-            if (addJobViewModel.maxAge.value == 0) {
-                maxAgeEt.editText?.setText("")
-            } else maxAgeEt.editText?.setText(addJobViewModel.maxAge.value.toString())
-            if (addJobViewModel.latitude.value != 0.0 && addJobViewModel.longitude.value != 0.0) {
-                selectAddress.text = resources.getString(R.string.change_location)
-            }
-            if (addJobViewModel.regionName.value!!.isNotEmpty()) {
-                region.text = addJobViewModel.regionName.value
-            }
-            if (addJobViewModel.districtName.value!!.isNotEmpty()) {
-                district.text = addJobViewModel.districtName.value
-            }
-            if (addJobViewModel.categoryName.value!!.isNotEmpty()) {
-                category.text = addJobViewModel.categoryName.value
-            }
-            if (addJobViewModel.deadline.value!!.isNotEmpty()) {
-                deadline.text = addJobViewModel.deadline.value
-            }
-        }
-    }
-
     private fun add() {
         binding.apply {
             addJobViewModel.createJob(
                 JobCreateRequest(
                     benefit = benefitEt.editText?.text.toString(),
                     categoryId = addJobViewModel.categoryId.value.toString(),
-                    deadline = deadline.text.toString().dmyToIso().toString(),
+                    deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
                     districtId = addJobViewModel.districtId.value.toString(),
                     gender = addJobViewModel.gender.value,
                     instagramLink = "test",
@@ -595,7 +546,6 @@ class AddJobFragment : Fragment() {
     private fun success() {
         loadingDialog.dismiss()
         Toast.makeText(requireContext(), resources.getString(R.string.job_announcement_created), Toast.LENGTH_SHORT).show()
-        addJobViewModel.clearLiveData()
         findNavController().navigate(R.id.action_addJobFragment_to_myAnnouncementsFragment)
     }
 

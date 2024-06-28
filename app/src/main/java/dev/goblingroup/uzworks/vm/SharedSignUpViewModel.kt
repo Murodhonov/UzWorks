@@ -103,7 +103,7 @@ class SharedSignUpViewModel @Inject constructor(
         resources: Resources
     ): Boolean {
         var validation = true
-        val (firstName, lastName) = fullNameEt.splitFullName()
+        val (firstName, lastName) = fullNameEt.editText?.text.toString().splitFullName()
         if (firstName == null && lastName == null) {
             fullNameEt.isErrorEnabled = true
             fullNameEt.error = resources.getString(R.string.enter_full_name)

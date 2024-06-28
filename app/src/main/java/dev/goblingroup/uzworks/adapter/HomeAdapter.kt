@@ -37,8 +37,8 @@ class HomeAdapter(
                         costTv.text = "${announcement.salary.toString().formatSalary()} ${
                             resources.getString(R.string.money_unit)
                         }"
-                        categoryTv.text = announcement.categoryName
-                        addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
+                        categoryTv.text = announcement.jobCategory.title
+                        addressTv.text = "${announcement.district.region.name}, ${announcement.district.name}"
                         iv.setImageResource(
                             getImage(
                                 AnnouncementEnum.JOB.announcementType,
@@ -77,8 +77,8 @@ class HomeAdapter(
                         costTv.text = "${announcement.salary.toString().formatSalary()} ${
                             resources.getString(R.string.money_unit)
                         }"
-                        categoryTv.text = announcement.categoryName
-                        addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
+                        categoryTv.text = announcement.jobCategory.title
+                        addressTv.text = "${announcement.district.region.name}, ${announcement.district.name}"
                         iv.setImageResource(
                             getImage(
                                 AnnouncementEnum.WORKER.announcementType,

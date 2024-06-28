@@ -53,10 +53,10 @@ class EditJobViewModel @Inject constructor(
     private val editLiveData = MutableLiveData<ApiStatus<Unit>>(ApiStatus.Loading())
 
     lateinit var jobId: String
-    lateinit var jobResponse: JobResponse
-    lateinit var regionId: String
-    lateinit var districtId: String
-    lateinit var categoryId: String
+    private lateinit var jobResponse: JobResponse
+    var regionId: String? = null
+    var districtId: String? = null
+    var categoryId: String? = null
     lateinit var latLng: LatLng
     var gender = GenderEnum.UNKNOWN.code
 
@@ -66,8 +66,8 @@ class EditJobViewModel @Inject constructor(
                 val response = announcementRepository.getJobById(jobId)
                 if (response.isSuccessful) {
                     jobResponse = response.body()!!
-                    latLng = LatLng(response.body()!!.latitude, response.body()!!.longitude)
-                    gender = when (response.body()!!.gender) {
+                    latLng = LatLng(jobResponse.latitude, jobResponse.longitude)
+                    gender = when (jobResponse.gender) {
                         GenderEnum.MALE.label -> {
                             GenderEnum.MALE.code
                         }
@@ -84,6 +84,9 @@ class EditJobViewModel @Inject constructor(
                             -1
                         }
                     }
+                    regionId = jobResponse.district.region.id
+                    districtId = jobResponse.district.id
+                    categoryId = jobResponse.jobCategory.id
                     _jobLiveData.postValue(ApiStatus.Success(response.body()))
                 } else {
                     _jobLiveData.postValue(ApiStatus.Error(Throwable(response.message())))
@@ -107,8 +110,8 @@ class EditJobViewModel @Inject constructor(
         minAgeEt: TextInputLayout,
         maxAgeEt: TextInputLayout,
         deadlineEt: TextInputLayout,
-        districtLayout: TextInputLayout,
-        categoryLayout: TextInputLayout
+        district: TextView,
+        category: TextView,
     ): LiveData<ApiStatus<Unit>> {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
@@ -155,11 +158,11 @@ class EditJobViewModel @Inject constructor(
                     maxAgeEt.isErrorEnabled = true
                     maxAgeEt.error = context.resources.getString(R.string.benefit_error)
                 }
-                if (districtId.isEmpty()) {
-                    districtLayout.error = context.resources.getString(R.string.district_error)
+                if (districtId == null) {
+                    district.setBackgroundResource(R.drawable.disabled_tv_background)
                 }
-                if (categoryId.isEmpty()) {
-                    categoryLayout.error = context.resources.getString(R.string.job_category_error)
+                if (categoryId == null) {
+                    category.setBackgroundResource(R.drawable.disabled_tv_background)
                 }
                 if (latLng.latitude == 0.0 && latLng.longitude == 0.0) {
                     Toast.makeText(
@@ -168,7 +171,7 @@ class EditJobViewModel @Inject constructor(
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                if (deadlineEt.isErrorEnabled ||
+                if (deadlineEt.editText?.text.toString().isEmpty() ||
                     titleEt.isErrorEnabled ||
                     salaryEt.isErrorEnabled ||
                     workingTimeEt.isErrorEnabled ||
@@ -177,8 +180,8 @@ class EditJobViewModel @Inject constructor(
                     benefitEt.isErrorEnabled ||
                     minAgeEt.isErrorEnabled ||
                     maxAgeEt.isErrorEnabled ||
-                    districtLayout.isErrorEnabled ||
-                    categoryLayout.isErrorEnabled ||
+                    districtId == null ||
+                    categoryId == null ||
                     latLng.latitude == 0.0 ||
                     latLng.longitude == 0.0
                 ) {
@@ -187,9 +190,9 @@ class EditJobViewModel @Inject constructor(
                     val response = announcementRepository.editJob(
                         JobEditRequest(
                             benefit = benefitEt.editText?.text.toString(),
-                            categoryId = categoryId,
+                            categoryId = categoryId.toString(),
                             deadline = deadlineEt.editText?.text.toString().dmyToIso().toString(),
-                            districtId = districtId,
+                            districtId = districtId.toString(),
                             gender = gender,
                             id = jobId,
                             instagramLink = jobResponse.instagramLink,

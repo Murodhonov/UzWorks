@@ -44,8 +44,8 @@ class AllAnnouncementsAdapter(
                     is JobResponse -> {
                         titleTv.text = announcement.title
                         costTv.text = "${announcement.salary.toString().formatSalary()} ${resources.getString(R.string.money_unit)}"
-                        categoryTv.text = announcement.categoryName
-                        addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
+                        categoryTv.text = announcement.jobCategory.title
+                        addressTv.text = "${announcement.district.region.name}, ${announcement.district.name}"
                         iv.setImageResource(getImage(AnnouncementEnum.JOB.announcementType, announcement.gender, position))
                         Log.d(TAG, "bindAnnouncement: ${announcement.isTop}")
                         if (announcement.isTop) {
@@ -79,8 +79,8 @@ class AllAnnouncementsAdapter(
                     is WorkerResponse -> {
                         titleTv.text = announcement.title
                         costTv.text = "${announcement.salary.toString().formatSalary()} ${resources.getString(R.string.money_unit)}"
-                        categoryTv.text = announcement.categoryName
-                        addressTv.text = "${announcement.regionName}, ${announcement.districtName}"
+                        categoryTv.text = announcement.jobCategory.title
+                        addressTv.text = "${announcement.district.region.name}, ${announcement.district.name}"
                         iv.setImageResource(getImage(AnnouncementEnum.WORKER.announcementType, announcement.gender, position))
                         if (announcement.isTop) {
                             badgeIv.visibility = View.VISIBLE

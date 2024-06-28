@@ -5,7 +5,6 @@ import dev.goblingroup.uzworks.models.request.WorkerEditRequest
 import dev.goblingroup.uzworks.models.response.WorkerCreateResponse
 import dev.goblingroup.uzworks.models.response.WorkerEditResponse
 import dev.goblingroup.uzworks.models.response.WorkerResponse
-import dev.goblingroup.uzworks.utils.ConstValues
 import dev.goblingroup.uzworks.utils.ConstValues.AUTH
 import retrofit2.Response
 import retrofit2.http.Body

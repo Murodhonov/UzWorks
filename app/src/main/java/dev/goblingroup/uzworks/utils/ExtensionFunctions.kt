@@ -185,8 +185,8 @@ fun Float.dpToPx(): Float {
     )
 }
 
-fun TextInputLayout.splitFullName(): Pair<String?, String?> {
-    val fullName = this.editText?.text.toString().trim()
+fun String.splitFullName(): Pair<String?, String?> {
+    val fullName = this.trim()
     val names = fullName.split(" ")
 
     return when {
