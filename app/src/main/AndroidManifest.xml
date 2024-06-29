@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="dev.goblingroup.uzworks">
+    package="com.goblindevs.uzworks">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".MyApp"
+        android:name="com.goblindevs.uzworks.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,7 +22,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD8MVmB8b9b09ckpJi2-Lw7LKnIjCv3ORg" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.goblindevs.uzworks.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible"
             android:exported="true">
