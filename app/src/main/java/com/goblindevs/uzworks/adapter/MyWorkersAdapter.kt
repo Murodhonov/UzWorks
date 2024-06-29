@@ -20,7 +20,7 @@ class MyWorkersAdapter(
 
     inner class MyJobViewHolder(private val itemBinding: MyAnnouncementItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun onBind(workerResponse: WorkerResponse, position: Int) {
+        fun onBind(workerResponse: WorkerResponse) {
             itemBinding.apply {
                 titleTv.isSelected = true
                 addressTv.isSelected = true
@@ -122,7 +122,7 @@ class MyWorkersAdapter(
     override fun getItemCount(): Int = jobList.size
 
     override fun onBindViewHolder(holder: MyJobViewHolder, position: Int) {
-        holder.onBind(jobList[position], position)
+        holder.onBind(jobList[position])
     }
 
 }

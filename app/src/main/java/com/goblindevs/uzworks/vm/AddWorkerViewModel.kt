@@ -76,7 +76,7 @@ class AddWorkerViewModel @Inject constructor(
         workingScheduleEt: TextInputLayout,
         tgUserNameEt: TextInputLayout
     ) {
-        deadlineEt.editText?.setOnFocusChangeListener { view, hasFocus ->
+        deadlineEt.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 val datePickerDialog = DatePickerDialog(
                     fragmentActivity,

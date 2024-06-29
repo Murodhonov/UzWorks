@@ -8,9 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import dagger.hilt.android.AndroidEntryPoint
-import com.goblindevs.uzworks.adapter.ChatUsersAdapter
 import com.goblindevs.uzworks.databinding.FragmentChatsListBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChatsListFragment : Fragment() {
@@ -20,7 +19,6 @@ class ChatsListFragment : Fragment() {
     private var _binding: FragmentChatsListBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: ChatUsersAdapter
     private lateinit var userList: MutableList<Int>
 
     override fun onCreateView(
