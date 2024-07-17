@@ -11,9 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import com.goblindevs.uzworks.databinding.ActivityMainBinding
-import com.goblindevs.uzworks.utils.LanguageManager
 import com.goblindevs.uzworks.vm.MainViewModel
-import com.goblindevs.uzworks.vm.SecurityViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -23,8 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
-
-    private val securityViewModel: SecurityViewModel by viewModels()
 
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -39,10 +35,6 @@ class MainActivity : AppCompatActivity() {
                 connectivityReceiver,
                 IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
             )
-
-            if (securityViewModel.getLanguageCode() != null) {
-                LanguageManager.setLanguage(securityViewModel.getLanguageCode().toString(), this@MainActivity)
-            }
 
             setContentView(root)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

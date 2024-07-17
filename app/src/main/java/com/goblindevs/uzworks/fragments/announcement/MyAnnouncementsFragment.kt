@@ -120,8 +120,8 @@ class MyAnnouncementsFragment : Fragment() {
             myJobsAdapter = MyJobsAdapter(
                 jobList = myAnnouncementsViewModel.jobList,
                 resources = resources,
-            ) { announcementTitle, jobId ->
-                showBottom(announcementTitle, jobId, AnnouncementEnum.JOB.announcementType)
+            ) { jobId ->
+                showBottom(jobId, AnnouncementEnum.JOB.announcementType)
             }
             myAnnouncementsRv.adapter = myJobsAdapter
             if (myJobsAdapter.itemCount == 0) {
@@ -165,8 +165,8 @@ class MyAnnouncementsFragment : Fragment() {
             myWorkersAdapter = MyWorkersAdapter(
                 jobList = myAnnouncementsViewModel.workerList,
                 resources = resources,
-            ) { announcementTitle, jobId ->
-                showBottom(announcementTitle, jobId, AnnouncementEnum.WORKER.announcementType)
+            ) { jobId ->
+                showBottom(jobId, AnnouncementEnum.WORKER.announcementType)
             }
             myAnnouncementsRv.adapter = myWorkersAdapter
             if (myWorkersAdapter.itemCount == 0) {
@@ -178,7 +178,6 @@ class MyAnnouncementsFragment : Fragment() {
     }
 
     private fun showBottom(
-        announcementTitle: String,
         announcementId: String,
         announcementType: String
     ) {
@@ -193,9 +192,6 @@ class MyAnnouncementsFragment : Fragment() {
             myAnnouncementBottomDialog.show()
         }
         myAnnouncementBottomBinding.apply {
-            announcementTitleTv.text = announcementTitle
-            announcementTitleTv.isSelected = true
-
             seeMoreBtn.setOnClickListener {
                 val direction = when (announcementType) {
                     AnnouncementEnum.JOB.announcementType -> {

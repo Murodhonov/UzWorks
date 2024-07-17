@@ -1,6 +1,7 @@
 package com.goblindevs.uzworks.fragments.onboarding
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +12,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import dagger.hilt.android.AndroidEntryPoint
 import com.goblindevs.uzworks.R
 import com.goblindevs.uzworks.databinding.FragmentSplashBinding
+import com.goblindevs.uzworks.utils.ConstValues.TAG
+import com.goblindevs.uzworks.utils.LanguageManager
 import com.goblindevs.uzworks.vm.ApiStatus
 import com.goblindevs.uzworks.vm.SplashViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
@@ -46,6 +50,12 @@ class SplashFragment : Fragment() {
                 }
 
                 override fun onAnimationEnd(animation: Animation?) {
+                    if (splashViewModel.getLanguageCode() == null) {
+                        splashViewModel.setLanguageCode("uz")
+                        LanguageManager.setLocale("uz", requireContext())
+                    } else {
+                        LanguageManager.setLocale(splashViewModel.getLanguageCode().toString(), requireContext())
+                    }
                     login()
                 }
 

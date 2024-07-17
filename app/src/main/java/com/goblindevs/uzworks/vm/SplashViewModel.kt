@@ -41,4 +41,8 @@ class SplashViewModel @Inject constructor(
         }
     }
 
+    fun getLanguageCode() = securityRepository.getLanguageCode()
+
+    fun setLanguageCode(languageCode: String) = securityRepository.setLanguageCode(languageCode)
+
 }

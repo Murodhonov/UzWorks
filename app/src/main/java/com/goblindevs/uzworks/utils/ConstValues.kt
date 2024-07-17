@@ -1,7 +1,7 @@
 package com.goblindevs.uzworks.utils
 
 object ConstValues {
-    const val BASE_URL = "https://visually-informed-manatee.ngrok-free.app/"
+    const val BASE_URL = "http://45.130.148.122:27/"
     const val AUTH = "Authorization"
     const val BEARER = "Bearer"
     const val TAG = "UzWorksLogTag"

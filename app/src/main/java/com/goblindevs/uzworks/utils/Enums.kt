@@ -21,7 +21,7 @@ enum class DateEnum(val dateLabel: String) {
 }
 
 enum class LanguageEnum(val code: String, val languageName: String) {
-    KIRILL_UZB("cyr", "Ўзбекча"),
+    KIRILL_UZB("es", "Ўзбекча"),
     LATIN_UZB("uz", "O'zbekcha"),
     RUSSIAN("ru", "Русский"),
     ENGLISH("en", "English"),

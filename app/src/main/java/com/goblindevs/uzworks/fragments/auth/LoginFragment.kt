@@ -15,10 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import dagger.hilt.android.AndroidEntryPoint
 import com.goblindevs.uzworks.R
 import com.goblindevs.uzworks.databinding.FragmentLoginBinding
+import com.goblindevs.uzworks.databinding.LanguageDialogItemBinding
 import com.goblindevs.uzworks.databinding.LoadingDialogBinding
 import com.goblindevs.uzworks.databinding.NotFoundDialogBinding
 import com.goblindevs.uzworks.databinding.PhoneVerificationDialogBinding
@@ -26,12 +25,15 @@ import com.goblindevs.uzworks.models.request.LoginRequest
 import com.goblindevs.uzworks.models.request.VerifyPhoneRequest
 import com.goblindevs.uzworks.models.response.ErrorResponse
 import com.goblindevs.uzworks.utils.ConstValues.TAG
-import com.goblindevs.uzworks.utils.LanguageSelectionListener
+import com.goblindevs.uzworks.utils.LanguageEnum
+import com.goblindevs.uzworks.utils.LanguageManager
 import com.goblindevs.uzworks.utils.LoginError
 import com.goblindevs.uzworks.utils.addCodeTextWatcher
 import com.goblindevs.uzworks.utils.setFocus
 import com.goblindevs.uzworks.vm.AuthApiStatus
 import com.goblindevs.uzworks.vm.LoginViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -50,6 +52,9 @@ class LoginFragment : Fragment() {
 
     private lateinit var phoneVerificationDialog: BottomSheetDialog
     private lateinit var phoneVerificationDialogBinding: PhoneVerificationDialogBinding
+
+    private lateinit var languageDialog: AlertDialog
+    private lateinit var languageDialogBinding: LanguageDialogItemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -261,21 +266,73 @@ class LoginFragment : Fragment() {
     }
 
     private fun chooseLanguage() {
-        loginViewModel.chooseLanguage(
-            requireContext(),
-            layoutInflater,
-            object : LanguageSelectionListener {
-                override fun onLanguageSelected(languageCode: String?, languageName: String?) {
-                    binding.languageTv.text = languageName
+        try {
+            languageDialog.show()
+        } catch (e: Exception) {
+            languageDialog = AlertDialog.Builder(requireContext()).create()
+            languageDialogBinding = LanguageDialogItemBinding.inflate(layoutInflater)
+            languageDialog.setView(languageDialogBinding.root)
+            languageDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            languageDialog.show()
+        }
+        languageDialogBinding.apply {
+            when (loginViewModel.getLanguageCode()) {
+                LanguageEnum.KIRILL_UZB.code -> {
+                    radioCyr.isChecked = true
+                }
+
+                LanguageEnum.LATIN_UZB.code -> {
+                    radioUz.isChecked = true
+                }
+
+                LanguageEnum.RUSSIAN.code -> {
+                    radioRu.isChecked = true
+                }
+
+                LanguageEnum.ENGLISH.code -> {
+                    radioEn.isChecked = true
+                }
+
+                else -> {}
+            }
+
+            saveBtn.setOnClickListener {
+                if (languageGroup.checkedRadioButtonId != -1) {
+                    languageDialog.dismiss()
+                    when (languageGroup.checkedRadioButtonId) {
+                        R.id.radio_cyr -> {
+                            binding.languageTv.text = LanguageEnum.KIRILL_UZB.languageName
+                            loginViewModel.selectedLanguageCode = LanguageEnum.KIRILL_UZB.code
+                        }
+
+                        R.id.radio_uz -> {
+                            binding.languageTv.text = LanguageEnum.LATIN_UZB.languageName
+                            loginViewModel.selectedLanguageCode = LanguageEnum.LATIN_UZB.code
+                        }
+
+                        R.id.radio_ru -> {
+                            binding.languageTv.text = LanguageEnum.RUSSIAN.languageName
+                            loginViewModel.selectedLanguageCode = LanguageEnum.RUSSIAN.code
+                        }
+
+                        R.id.radio_en -> {
+                            binding.languageTv.text = LanguageEnum.ENGLISH.languageName
+                            loginViewModel.selectedLanguageCode = LanguageEnum.ENGLISH.code
+                        }
+                    }
+                    loginViewModel.setLanguageCode(loginViewModel.selectedLanguageCode)
+                    LanguageManager.setLocale(
+                        loginViewModel.getLanguageCode().toString(),
+                        requireContext()
+                    )
                     updateTexts()
                 }
-
-                override fun onCanceled() {
-
-                }
-
             }
-        )
+
+            cancelBtn.setOnClickListener {
+                languageDialog.dismiss()
+            }
+        }
     }
 
     private fun updateTexts() {

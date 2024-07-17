@@ -1,15 +1,14 @@
 package com.goblindevs.uzworks.utils
 
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Resources
 import java.util.Locale
 
 object LanguageManager {
 
-    fun setLanguage(languageCode: String, context: Context) {
-        updateResources(languageCode, context)
-    }
-
-    private fun updateResources(languageCode: String, context: Context) {
+    fun setLocale(languageCode: String, context: Context) {
+        Locale.ENGLISH.language
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
         val resources = context.resources
@@ -17,5 +16,4 @@ object LanguageManager {
         configuration.setLocale(locale)
         resources.updateConfiguration(configuration, resources.displayMetrics)
     }
-
 }

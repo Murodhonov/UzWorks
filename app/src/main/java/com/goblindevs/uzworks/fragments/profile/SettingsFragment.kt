@@ -1,5 +1,8 @@
 package com.goblindevs.uzworks.fragments.profile
 
+import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,19 +11,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
 import com.goblindevs.uzworks.MainActivity
 import com.goblindevs.uzworks.R
 import com.goblindevs.uzworks.databinding.FragmentSettingsBinding
+import com.goblindevs.uzworks.databinding.LanguageDialogItemBinding
 import com.goblindevs.uzworks.databinding.LogoutDialogItemBinding
+import com.goblindevs.uzworks.utils.LanguageEnum
 import com.goblindevs.uzworks.utils.LanguageManager
-import com.goblindevs.uzworks.utils.LanguageSelectionListener
-import com.goblindevs.uzworks.utils.languageDialog
 import com.goblindevs.uzworks.utils.turnSwitchOff
 import com.goblindevs.uzworks.utils.turnSwitchOn
 import com.goblindevs.uzworks.vm.SecurityViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -36,6 +39,9 @@ class SettingsFragment : Fragment() {
     private var isThemeAnimating = false
 
     private val securityViewModel: SecurityViewModel by viewModels()
+
+    private lateinit var languageDialog: AlertDialog
+    private lateinit var languageDialogBinding: LanguageDialogItemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,24 +88,77 @@ class SettingsFragment : Fragment() {
             }
 
             languageBtn.setOnClickListener {
-                languageDialog(
-                    securityViewModel.getLanguageCode(),
-                    requireContext(),
-                    layoutInflater,
-                    object : LanguageSelectionListener {
-                        override fun onLanguageSelected(
-                            languageCode: String?,
-                            languageName: String?
-                        ) {
-                            securityViewModel.setLanguageCode(languageCode)
-                            LanguageManager.setLanguage(languageCode.toString(), requireContext())
-                            updateTexts()
+                try {
+                    languageDialog.show()
+                } catch (e: Exception) {
+                    languageDialog = AlertDialog.Builder(requireContext()).create()
+                    languageDialogBinding = LanguageDialogItemBinding.inflate(layoutInflater)
+                    languageDialog.setView(languageDialogBinding.root)
+                    languageDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    languageDialog.show()
+                }
+                languageDialogBinding.apply {
+                    when (securityViewModel.getLanguageCode()) {
+                        LanguageEnum.KIRILL_UZB.code -> {
+                            radioCyr.isChecked = true
                         }
 
-                        override fun onCanceled() {
-
+                        LanguageEnum.LATIN_UZB.code -> {
+                            radioUz.isChecked = true
                         }
-                    })
+
+                        LanguageEnum.RUSSIAN.code -> {
+                            radioRu.isChecked = true
+                        }
+
+                        LanguageEnum.ENGLISH.code -> {
+                            radioEn.isChecked = true
+                        }
+
+                        else -> {}
+                    }
+
+                    saveBtn.setOnClickListener {
+                        if (languageGroup.checkedRadioButtonId != -1) {
+                            languageDialog.dismiss()
+                            when (languageGroup.checkedRadioButtonId) {
+                                R.id.radio_cyr -> {
+                                    binding.languageTv.text = LanguageEnum.KIRILL_UZB.languageName
+                                    securityViewModel.selectedLanguageCode =
+                                        LanguageEnum.KIRILL_UZB.code
+                                }
+
+                                R.id.radio_uz -> {
+                                    binding.languageTv.text = LanguageEnum.LATIN_UZB.languageName
+                                    securityViewModel.selectedLanguageCode =
+                                        LanguageEnum.LATIN_UZB.code
+                                }
+
+                                R.id.radio_ru -> {
+                                    binding.languageTv.text = LanguageEnum.RUSSIAN.languageName
+                                    securityViewModel.selectedLanguageCode =
+                                        LanguageEnum.RUSSIAN.code
+                                }
+
+                                R.id.radio_en -> {
+                                    binding.languageTv.text = LanguageEnum.ENGLISH.languageName
+                                    securityViewModel.selectedLanguageCode =
+                                        LanguageEnum.ENGLISH.code
+                                }
+                            }
+                        }
+                        securityViewModel.setLanguageCode(securityViewModel.selectedLanguageCode)
+                        LanguageManager.setLocale(
+                            securityViewModel.getLanguageCode().toString(),
+                            requireContext()
+                        )
+                        updateTexts()
+                    }
+
+                    cancelBtn.setOnClickListener {
+                        languageDialog.dismiss()
+                    }
+                }
             }
 
             passwordBtn.setOnClickListener {

@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -24,13 +23,10 @@ import com.goblindevs.uzworks.repository.AuthRepository
 import com.goblindevs.uzworks.repository.SecurityRepository
 import com.goblindevs.uzworks.utils.ConstValues.TAG
 import com.goblindevs.uzworks.utils.LanguageEnum
-import com.goblindevs.uzworks.utils.LanguageManager
-import com.goblindevs.uzworks.utils.LanguageSelectionListener
 import com.goblindevs.uzworks.utils.NetworkHelper
 import com.goblindevs.uzworks.utils.extractErrorMessage
 import com.goblindevs.uzworks.utils.formatPhoneNumber
 import com.goblindevs.uzworks.utils.isEmpty
-import com.goblindevs.uzworks.utils.languageDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -52,6 +48,8 @@ class LoginViewModel @Inject constructor(
 
     private val _password = MutableLiveData("")
     val password get() = _password
+
+    var selectedLanguageCode: String? = null
 
     fun login(loginRequest: LoginRequest): LiveData<AuthApiStatus<LoginResponse>> {
         val loginLiveData =
@@ -115,7 +113,7 @@ class LoginViewModel @Inject constructor(
         return tokenSaved && userIdSaved && rolesSaved && tokenExpirationSaved && genderSaved && birthdateSaved && phoneNumberSaved
     }
 
-    private fun getLanguageCode() = securityRepository.getLanguageCode()
+    fun getLanguageCode() = securityRepository.getLanguageCode()
 
     fun getLanguageName(): String {
         return when (getLanguageCode()) {
@@ -144,30 +142,6 @@ class LoginViewModel @Inject constructor(
     fun setLanguageCode(languageCode: String?) {
         if (languageCode == null) securityRepository.setLanguageCode(LanguageEnum.KIRILL_UZB.code)
         else securityRepository.setLanguageCode(languageCode)
-    }
-
-    fun chooseLanguage(
-        context: Context,
-        layoutInflater: LayoutInflater,
-        listener: LanguageSelectionListener
-    ) {
-        languageDialog(
-            currentLanguageCode = getLanguageCode(),
-            context = context,
-            layoutInflater = layoutInflater,
-            listener = object : LanguageSelectionListener {
-                override fun onLanguageSelected(languageCode: String?, languageName: String?) {
-                    setLanguageCode(languageCode)
-                    LanguageManager.setLanguage(languageCode.toString(), context)
-                    listener.onLanguageSelected(languageCode, languageName)
-                }
-
-                override fun onCanceled() {
-
-                }
-
-            }
-        )
     }
 
     fun controlInput(

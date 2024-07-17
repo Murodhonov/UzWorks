@@ -15,7 +15,7 @@ import com.goblindevs.uzworks.utils.formatSalary
 class MyWorkersAdapter(
     private val jobList: List<WorkerResponse>,
     private val resources: Resources,
-    private val onItemClick: (String, String) -> Unit
+    private val onItemClick: (String) -> Unit
 ) : RecyclerView.Adapter<MyWorkersAdapter.MyJobViewHolder>() {
 
     inner class MyJobViewHolder(private val itemBinding: MyAnnouncementItemBinding) :
@@ -103,7 +103,7 @@ class MyWorkersAdapter(
                 }
 
                 root.setOnClickListener {
-                    onItemClick.invoke(workerResponse.title, workerResponse.id)
+                    onItemClick.invoke(workerResponse.id)
                 }
             }
         }

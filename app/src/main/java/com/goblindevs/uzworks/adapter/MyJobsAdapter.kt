@@ -17,7 +17,7 @@ import com.goblindevs.uzworks.utils.formatSalary
 class MyJobsAdapter(
     private val jobList: List<JobResponse>,
     private val resources: Resources,
-    private val onItemClick: (String, String) -> Unit
+    private val onItemClick: (String) -> Unit
 ) : RecyclerView.Adapter<MyJobsAdapter.MyJobViewHolder>() {
 
     inner class MyJobViewHolder(private val itemBinding: MyAnnouncementItemBinding) :
@@ -103,7 +103,7 @@ class MyJobsAdapter(
 
                 root.setOnClickListener {
                     Log.d(TAG, "onBind: checking delete job progress ${jobResponse.id} clicked on position $position")
-                    onItemClick.invoke(jobResponse.title, jobResponse.id)
+                    onItemClick.invoke(jobResponse.id)
                 }
             }
         }
