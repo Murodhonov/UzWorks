@@ -24,10 +24,10 @@ UzWorks boasts a sleek and intuitive interface, making it simple for users to na
 ## Banner Images
 
 ### Advertisement Banner 1
-![Advertisement Banner 1](https://github.com/Murodhonov/UzWorks/raw/main/docs/images/page1.png)
+![Advertisement Banner 1](https://github.com/Murodhonov/UzWorks/blob/master/app/src/main/res/raw/page1.png)
 
 ### Advertisement Banner 2
-![Advertisement Banner 2](https://github.com/Murodhonov/UzWorks/raw/main/docs/images/page2.png)
+![Advertisement Banner 2](https://github.com/Murodhonov/UzWorks/blob/master/app/src/main/res/raw/page2.png)
 
 ## How to Get Started
 1. **Download the App**: Available on the Google Play Store.
