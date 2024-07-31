@@ -21,12 +21,8 @@ Welcome to UzWorks, the innovative Android app designed to bridge the gap betwee
 ## User-Friendly Interface
 UzWorks boasts a sleek and intuitive interface, making it simple for users to navigate and utilize all features effectively. The app's design ensures a seamless experience, whether you're browsing job listings or managing applications.
 
-## Banner Images
-
-### Advertisement Banner 1
 ![Advertisement Banner 1](https://github.com/Murodhonov/UzWorks/blob/master/app/src/main/res/raw/page1.png)
 
-### Advertisement Banner 2
 ![Advertisement Banner 2](https://github.com/Murodhonov/UzWorks/blob/master/app/src/main/res/raw/page2.png)
 
 ## How to Get Started
